@@ -12,7 +12,7 @@ $config = [
             'schemaCacheDuration' => 24 * 3600,
             'charset' => 'utf8',
             'tablePrefix' => '',
-            'dsn' => 'mysql:host=localhost;dbname=rky',
+            'dsn' => 'mysql:host=localhost;dbname=app',
             'username' => 'root',
             'password' => '',
         ],

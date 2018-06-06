@@ -7,6 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\System;
 use app\models\LoginForm;
+use app\models\SignupForm;
 
 /**
  * Site controller
@@ -117,5 +118,36 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+    
+    /**
+     * Signs user up.
+     *
+     * @return mixed
+     */
+    public function actionSignup() {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $model = new SignupForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            if ($user = $model->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+        } else {
+            if (System::existValue('captcha_open', '1')) {
+                $model->setScenario("captchaRequired");
+            }
+        }
+        $this->layout = '//main-login';
+        return $this->render('signup', [
+                    'model' => $model,
+        ]);
     }
 }
