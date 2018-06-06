@@ -5,13 +5,18 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use app\models\System;
+use app\models\LoginForm;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+    
+    public $attempts = 3; // allowed 3 attempts
+    public $counter;
+    
     /**
      * {@inheritdoc}
      */
@@ -20,11 +25,8 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login', 'error'],
-                        'allow' => true,
-                    ],
+                'only' => ['logout', 'index'],
+                'rules' => [                    
                     [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
@@ -50,6 +52,16 @@ class SiteController extends Controller
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'successCallback'],
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                'maxLength' => $captcha_length = System::getValue('captcha_length'), //最大显示个数
+                'minLength' => $captcha_length, //最少显示个数
+            ],
         ];
     }
 
@@ -69,21 +81,30 @@ class SiteController extends Controller
      * @return string
      */
     public function actionLogin()
-    {
+    {      
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            $model->password = '';
-
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->login()) {
+                Yii::$app->session->remove('loginCaptchaRequired');
+                return $this->goBack();
+            } else {
+                $this->counter = Yii::$app->session->get('loginCaptchaRequired') + 1;
+                Yii::$app->session->set('loginCaptchaRequired', $this->counter);
+            }
         }
+        $this->counter = Yii::$app->session->get('loginCaptchaRequired') + 1;
+        $captcha_loginfail = System::getValue('captcha_loginfail');
+        if ((($this->counter > $this->attempts && $captcha_loginfail == '1') || $captcha_loginfail != '1') && System::existValue('captcha_open', '2')) {
+            $model->setScenario("captchaRequired");
+        }
+
+        return $this->render('login', [
+                    'model' => $model,
+        ]);
     }
 
     /**

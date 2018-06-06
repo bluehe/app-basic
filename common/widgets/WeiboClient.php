@@ -1,0 +1,89 @@
+<?php
+
+namespace common\widgets;
+
+use yii\authclient\OAuth2;
+
+/**
+ * Weibo allows authentication via Weibo OAuth.
+ *
+ * In order to use Weibo OAuth you must register your application at <http://open.weibo.com/>.
+ *
+ * Example application configuration:
+ *
+ * ~~~
+ * 'components' => [
+ *     'authClientCollection' => [
+ *         'class' => 'yii\authclient\Collection',
+ *         'clients' => [
+ *             'weibo' => [
+ *                 'class' => 'common\widgets\WeiboClient',
+ *                 'clientId' => 'wb_key',
+ *                 'clientSecret' => 'wb_secret',
+ *             ],
+ *         ],
+ *     ]
+ *     ...
+ * ]
+ * ~~~
+ *
+ * @see http://open.weibo.com/
+ * @see http://open.weibo.com/wiki/
+ *
+ */
+class WeiboClient extends OAuth2 {
+
+    /**
+     * @inheritdoc
+     */
+    public $authUrl = 'https://api.weibo.com/oauth2/authorize';
+
+    /**
+     * @inheritdoc
+     */
+    public $tokenUrl = 'https://api.weibo.com/oauth2/access_token';
+
+    /**
+     * @inheritdoc
+     */
+    public $apiBaseUrl = 'https://api.weibo.com';
+
+    protected function initUserAttributes() {
+
+        $openid = $this->api('oauth2/get_token_info', 'POST');
+        return $this->api("2/users/show.json", 'GET', ['uid' => $openid['uid']]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getUser() {
+        $str = file_get_contents('https://api.weibo.com/2/account/get_uid.json?access_token=' . $this->accessToken->token);
+        return json_decode($str);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function defaultName() {
+        return 'weibo';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function defaultTitle() {
+        return '微博';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function defaultViewOptions() {
+        return [
+            'popupWidth' => 800,
+            'popupHeight' => 500,
+        ];
+    }
+
+}

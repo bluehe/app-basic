@@ -49,11 +49,11 @@ a.asc:after, a.desc:after {
 }
 
 a.asc:after {
-    content: /*"\e113"*/ "\e151";
+    content: "\e151";
 }
 
 a.desc:after {
-    content: /*"\e114"*/ "\e152";
+    content: "\e152";
 }
 
 .sort-numerical a.asc:after {
@@ -117,4 +117,116 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+/*第三方登录*/
+.social-icon p{
+    color: #999;
+}
+.social-icon p:after, .social-icon p:before {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 30%;
+    position: relative;
+    background-color: #ebebeb;
+}
+.social-icon p:before {
+    left: 0;
+    top: 10px;
+}
+.social-icon p:after {
+    right:-70%;
+    top: -11px;
+}
+.auth-clients{
+    padding: 0;
+}
+.auth-clients .github{
+    background-color: #000000;
+}
+.auth-clients .weibo{
+    background-color: #D7172E;
+}
+.auth-icon.weibo:before{
+    font-size: 24px;
+    line-height: 32px;
+    content:'\f18a';
+    font-family: FontAwesome;
+    color:#fff;
+}
+.auth-clients .qq{
+    background-color: #12B7F5;
+}
+.auth-icon.qq:before{
+    font-size: 24px;
+    line-height: 32px;
+    content:'\f1d6';
+    font-family: FontAwesome;
+    color:#fff;
+}
+.auth-clients .weixin{
+    background-color: #3caf36;
+}
+.auth-icon.weixin:before{
+    font-size: 24px;
+    line-height: 32px;
+    content:'\f1d7';
+    font-family: FontAwesome;
+    color:#fff;
+}
+.auth-clients .renren{
+    background-color: #2e7cb8;
+}
+.auth-icon.renren:before{
+    font-size: 30px;
+    line-height: 32px;
+    content:'\f18b';
+    font-family: FontAwesome;
+    color:#fff;
+}
+
+.complete>ul.nav-tabs>li{
+    margin-right: 0;
+    text-align: center;
+    width: 50%;
+}
+
+/*用户中心*/
+.box-body .dl-horizontal dt, .box-body .dl-horizontal dd {
+/*    height: 35px;*/
+    line-height: 35px;
+}
+
+/*弹出查看*/
+.repaire-view .timeline>li>.timeline-item {
+    border:1px solid #ddd;
+}
+.repaire-view .timeline:before {
+    left:43px;
+}
+.repaire-view .timeline>li>.fa {left:20px;width:50px;font-size: 14px;}
+.repaire-view .timeline>li>.timeline-item{margin-left: 72px;}
+
+/*首页百度地图*/
+#baidumap{
+    height:600px;
+}
+#baidumap .anchorBL{
+    display: none;
+}
+@media (min-width: 768px){
+    .repaire-view .dl-horizontal dt {width:60px}
+    .repaire-view .dl-horizontal dd {
+        margin-left: 80px;
+    }
+}
+
+/*select2样式*/
+.form-group .select2-container--default .select2-selection--single {  
+    height: 34px;
+}
+.select2-container .select2-selection--single{
+    height: 34px;
+    line-height: 30px;
 }

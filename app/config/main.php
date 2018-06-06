@@ -8,16 +8,50 @@ $params = array_merge(
 
 return [
     'id' => 'app-app',
+    'name' => '管理系统',
+    'version' => '1.0 Beta',
     'basePath' => dirname(__DIR__),
+    'charset' => 'utf-8',
+    'language' => 'zh-CN',
+    'timeZone' => 'Asia/Shanghai',
     'controllerNamespace' => 'app\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'admin' => [
+            'class' => 'mdm\admin\Module',
+            "layout" => "left-menu",
+        ],
+        'gridview' => [
+            'class' => 'kartik\grid\Module'
+        ],
+    ],
+    'aliases' => [
+        '@mdm/admin' => '@vendor/mdmsoft/yii2-admin',
+    ],
     'components' => [
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+            //'class' => 'yii\redis\Cache',
+            'keyPrefix' => 'app',
+        ],
+        'assetManager' => [
+            'appendTimestamp' => true,
+            //'linkAssets' => true,
+            'bundles' => [
+                'dmstr\web\AdminLteAsset' => [
+                    'skin' => 'skin-blue',
+                ],
+            ],
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager', //这里记得用单引号而不是双引号
+            'defaultRoles' => ['guest'],
+        ],
         'request' => [
             'csrfParam' => '_csrf-app',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-app', 'httpOnly' => true],
         ],
@@ -37,14 +71,31 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => true,          
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+        'formatter' => [
+            'dateFormat' => 'yyyy-MM-dd',
+            'datetimeFormat' => 'yyyy-MM-dd HH:mm:ss',
+            'decimalSeparator' => '.',
+            'thousandSeparator' => ',',
+            'currencyCode' => 'CNY',
+        ],
     ],
+     'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            //这里是允许访问的action
+            'common/*',
+            'site/*',
+            'api/*',
+            'debug/*',
+            'gii/*'
+        ]
+    ],
+    'on beforeAction' => ['app\events\initSiteConfig', 'assign'],
     'params' => $params,
 ];
