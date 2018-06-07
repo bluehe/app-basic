@@ -33,7 +33,7 @@ $fieldOptions2 = [
                 $form
                 ->field($model, 'username', $fieldOptions1)
                 ->label(false)
-                ->textInput(['placeholder' => $model->getAttributeLabel('username')])
+                ->textInput(['placeholder' => '用户名/手机号/电子邮件'])
         ?>
 
         <?=

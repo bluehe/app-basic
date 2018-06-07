@@ -8,6 +8,8 @@ use yii\filters\AccessControl;
 use app\models\System;
 use app\models\LoginForm;
 use app\models\SignupForm;
+use app\models\PasswordResetRequestForm;
+use app\models\ResetPasswordForm;
 
 /**
  * Site controller
@@ -148,6 +150,64 @@ class SiteController extends Controller
         $this->layout = '//main-login';
         return $this->render('signup', [
                     'model' => $model,
+        ]);
+    }
+    
+    /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
+    public function actionRequestPasswordReset() {
+        $model = new PasswordResetRequestForm();
+        $model->load(Yii::$app->request->post());
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return \yii\bootstrap\ActiveForm::validate($model);
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', '邮件已经发送，请检查你的邮件并进一步操作。');
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', '对不起，我们不能通过你提供的邮箱进行密码重置。');
+            }
+        } else {
+            if (System::existValue('captcha_open', '3')) {
+                $model->setScenario("captchaRequired");
+            }
+        }
+        $this->layout = '//main-login';
+        return $this->render('requestPasswordResetToken', [
+                    'model' => $model,
+        ]);
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token) {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            Yii::$app->session->setFlash('danger', '链接已过期，请重新操作。');
+
+            return $this->goHome();
+//throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', '新密码已经被保存。');
+
+            return $this->goHome();
+        }
+        $this->layout = '//main-login';
+        return $this->render('resetPassword', [
+            'model' => $model,
         ]);
     }
 }

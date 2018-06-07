@@ -91,9 +91,9 @@ return [
             //这里是允许访问的action
             'common/*',
             'site/*',
-            'api/*',
+//            'api/*',
             'debug/*',
-            'gii/*'
+//            'gii/*'
         ]
     ],
     'on beforeAction' => ['app\events\initSiteConfig', 'assign'],

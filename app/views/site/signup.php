@@ -28,7 +28,7 @@ $fieldOptions4 = [
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-phone form-control-feedback'></span>"
 ];
 ?>
-
+<div id="particles" style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;z-index:-1"></div>
 <div class="login-box">
     <div class="login-logo">
         <?=

@@ -22,6 +22,8 @@ class LoginForm extends Model
     public function rules()
     {
         return [
+            [['username'], 'trim'],
+            [['username'], 'filter','filter'=>'strtolower'],
             // username and password are both required
             ['username', 'required', 'message' => '用户名不能为空'],
             ['password', 'required', 'message' => '密码不能为空'],
@@ -90,7 +92,7 @@ class LoginForm extends Model
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = User::findByLoginname($this->username);
         }
 
         return $this->_user;

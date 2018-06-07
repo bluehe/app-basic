@@ -1,16 +1,13 @@
 <?php
-
 //use domain\assets\AppAsset;
 use yii\helpers\Html;
 use common\widgets\Alert;
-
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-if (class_exists('app\assets\AppAsset')) {
-    app\assets\AppAsset::register($this);
-}
+app\assets\AppAsset::register($this);
 
+//dmstr\web\AdminLteAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

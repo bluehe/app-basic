@@ -25,9 +25,12 @@ class SignupForm extends Model
     {
         return [
             [['username'], 'trim'],
+            [['username'], 'filter','filter'=>'strtolower'],
             ['username', 'required'],
-            [['username'], 'unique', 'targetClass' => '\app\models\User'],
+            [['username'], 'unique', 'targetClass' => '\app\models\User', 'message' => '{attribute}已存在'],
             ['username', 'string', 'min' => 5, 'max' => 255],
+            [['username'], 'match','pattern'=>'/^[A-Za-z0-9]{4,16}$/','message'=>'用户名必须为4-16个字母或数字，不区分大小写'],
+            [['username'], 'match','not'=>true,'pattern'=>'/^[0-9]{1,}$/','message'=>'用户名不能全为数字'],
             [['password', 'password1'], 'required'],
             ['password', 'string', 'min' => 4,],
             ['password1', 'compare', 'compareAttribute' => 'password', 'message' => '两次密码不一致'],

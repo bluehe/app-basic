@@ -2,6 +2,7 @@
 
 use yii\widgets\Breadcrumbs;
 use dmstr\widgets\Alert;
+use yii\helpers\Url;
 
 $system = Yii::$app->cache->get('system_info');
 ?>
@@ -16,7 +17,7 @@ $system = Yii::$app->cache->get('system_info');
                     echo \yii\helpers\Html::encode($this->title);
                 } else {
                     echo \yii\helpers\Inflector::camel2words(
-                            \yii\helpers\Inflector::id2camel($this->context->module->id)
+                        \yii\helpers\Inflector::id2camel($this->context->module->id)
                     );
                     echo ($this->context->module->id !== \Yii::$app->id) ? '<small>Module</small>' : '';
                 }
@@ -26,14 +27,14 @@ $system = Yii::$app->cache->get('system_info');
 
         <?=
         Breadcrumbs::widget(
-                [
+            [
                     'homeLink' => [
-                        'label' => '主页',
-                        'url' => Yii::$app->homeUrl,
+                        'label' => '首页',
+                        'url' => Url::toRoute(['site/index']),
                         'template' => '<li><i class="fa fa-home"></i> {link}</li>'
                     ],
-                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                ]
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]
         )
         ?>
     </section>
@@ -48,7 +49,7 @@ $system = Yii::$app->cache->get('system_info');
     <div class="pull-right hidden-xs">
         <b>Version</b> <?= Yii::$app->version ?>
     </div>
-    <strong>Copyright &copy; 2011-<?= date('Y', time()) ?> <a href="<?= Yii::$app->homeUrl ?>">何文斌</a>.</strong> All rights reserved.
+    <strong>&copy; 2017-<?= date('Y', time()) ?> <a target="_blank" href="http://www.wzgxpt.com">网址共享平台</a>.</strong> All rights reserved.
     <a href = "http://www.miibeian.gov.cn/" target = "_blank"><?= $system['system_icp']; ?></a>
     <?= $system['system_statcode']; ?>
 </footer>
