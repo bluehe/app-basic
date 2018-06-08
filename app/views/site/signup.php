@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
+use app\models\System;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -28,7 +29,6 @@ $fieldOptions4 = [
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-phone form-control-feedback'></span>"
 ];
 ?>
-<div id="particles" style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;z-index:-1"></div>
 <div class="login-box">
     <div class="login-logo">
         <?=
@@ -60,7 +60,7 @@ $fieldOptions4 = [
                 ->label(false)
                 ->passwordInput(['placeholder' => $model->getAttributeLabel('password1')])
         ?>
-
+        
         <?php if ($model->scenario == 'captchaRequired'): ?>
             <?=
             $form->field($model, 'verifyCode')->widget(Captcha::className(), [
@@ -68,8 +68,46 @@ $fieldOptions4 = [
                 'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control', 'autoCompete' => false],
                 'imageOptions' => ['alt' => '点击换图', 'title' => '点击换图', 'style' => 'cursor:pointer', 'height' => 34]])->label(false)
             ?>
+<script>
+<?php $this->beginBlock('captcha') ?>
+    $(document).ready(function () {
+        changeVerifyCode();
+    });
+//更改或者重新加载验证码
+    function changeVerifyCode() {
+        $.ajax({
+            url: "/site/captcha?refresh",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                $("#imgVerifyCode").attr("src", data["url"]);
+            }
+        });
+    }
+<?php $this->endBlock() ?>
+</script>
+<?php $this->registerJs($this->blocks['captcha'], \yii\web\View::POS_END); ?>
         <?php endif; ?>
 
+        <div class="text-center sign-icon">
+            <p>登录或找回密码使用(非必填)</p>
+        </div>
+        <?=
+                $form
+                ->field($model, 'email', $fieldOptions2)
+                ->label(false)
+                ->textInput(['placeholder' => $model->getAttributeLabel('email')])
+        ?>
+
+        <?php if (System::getValue('sms_service')): ?>
+        <?=
+                $form
+                ->field($model, 'tel', $fieldOptions4)
+                ->label(false)
+                ->textInput(['placeholder' => $model->getAttributeLabel('tel')])
+        ?>
+        <?php endif; ?>
+              
         <div class="row">
             <div class="col-xs-8">
                 <?=
@@ -84,24 +122,9 @@ $fieldOptions4 = [
 
 
         <?php ActiveForm::end(); ?>
-        <div class="social-auth-links text-center social-icon">
-            <p>第三方账号注册</p>
-            <?=
-            yii\authclient\widgets\AuthChoice::widget(['baseAuthUrl' => ['site/auth'], 'popupMode' => false,])
-            ?>
-        </div>
+        
 
 
     </div>
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
-<script>
-<?php $this->beginBlock('signup') ?>
- $('#particles').particleground({
-    dotColor: 'rgba(20,140,230,0.15)',
-    lineColor: 'rgba(85,175,230,0.15)'
-  });
-<?php $this->endBlock() ?>
-</script>
-<?php app\assets\AppAsset::addScript($this, '/js/jquery.particleground.min.js'); ?>
-<?php $this->registerJs($this->blocks['signup'], \yii\web\View::POS_END); ?>

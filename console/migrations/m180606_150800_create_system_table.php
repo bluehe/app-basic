@@ -55,11 +55,12 @@ class m180606_150800_create_system_table extends Migration {
             [301, 3, 'captcha_open', '启用验证码', 'checkbox', '{"1":"新用户注册","2":"用户登录","3":"找回密码"}', '', '', 1],
             [302, 3, 'captcha_loginfail', '登录失败显示', 'radio', '{"0":"否","1":"是"}', '', '0', 2],
             [303, 3, 'captcha_length', '验证码长度', 'text', '', '', '6', 3],
-            [401, 4, 'sms_service', '短信平台', 'radio', '{"aliyun":"阿里云"', '', 'aliyun', 1],
-            [402, 4, 'sms_key', 'Key', 'text', '', '', '', 2],
-            [403, 4, 'sms_secret', 'Secret', 'password', '', '', '', 3],
-            [404, 4, 'sms_sign', '短信签名', 'text', '', '', '', 4],
-            [405, 4, 'sms_captcha', '验证码模板', 'text', '', '', '', 5],
+            [401, 4, 'sms_service', '启用短信', 'radio', '{"0":"否","1":"是"}', '', '0', 1],
+            [402, 4, 'sms_platform', '短信平台', 'radio', '{"aliyun":"阿里云"}', '', 'aliyun', 2],
+            [403, 4, 'sms_key', 'Key', 'text', '', '', '', 3],
+            [404, 4, 'sms_secret', 'Secret', 'password', '', '', '', 4],
+            [405, 4, 'sms_sign', '短信签名', 'text', '', '', '', 5],
+            [406, 4, 'sms_captcha', '验证码模板', 'text', '', '', '', 6],
            
         ]);
     }

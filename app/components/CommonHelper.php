@@ -1,54 +1,36 @@
 <?php
 
-namespace dms\components;
+namespace app\components;
 
 use Yii;
-use common\models\UserAuth;
 
 class CommonHelper {
 
-    public function sendWechatTemplate($uid, $template, $param, $model) {
-
-        $wechat = Yii::$app->wechat;
-        $tousers = UserAuth::getTouser($uid);
-        $result = true;
-        if ($template == 'repaire_user') {
-            $data = [
-                'template_id' => 'px-_23ZPiLj9PSKO-Vz2Vn2heXw11djEzZACxxVNjJg',
-                'url' => $param['url'],
-                'data' => [
-                    'first' => ['value' => $param['first'],],
-                    'serial' => ['value' => $model->serial,],
-                    'stat' => ['value' => $model->Stat,],
-                    'created_at' => ['value' => date('Y-m-d H:i:s', $model->created_at),],
-                    'user' => ['value' => $model->name,],
-                    'address' => ['value' => ($model->repair_area ? \dms\models\Forum::get_forum_allname($model->repair_area) : '') . '-' . $model->address],
-                    'type' => ['value' => $model->repair_type ? $model->type->v : $model->repair_type],
-                    'content' => ['value' => $model->content,],
-                    'remark' => ['value' => '点击查看详情！',],
-            ]];
-
-            foreach ($tousers as $touser) {
-                $data['touser'] = $touser;
-                $wechat->sendTemplateMessage($data);
+    public static function hideName($name) {
+        
+        if(strpos($name,'@')){
+            //电子邮箱
+            $a_pos=strpos($name,'@');//@位置
+            $n=mb_substr($name,0,$a_pos);//@前面部分
+            $l= mb_strlen($n);
+            if($l>=3){
+                $n=substr_replace($n, '****', 3);
+            }else{
+                $n=substr_replace($n, '****', 1);
             }
-        } elseif ($template == 'suggest_user') {
-            $data = [
-                'template_id' => 'foaqeedv7YpJ0Y1E7ft1GNOWxG4YQIk12TV1KXS7uxE',
-                'url' => $param['url'],
-                'data' => [
-                    'first' => ['value' => $param['first'],],
-                    'keyword1' => ['value' => date('Y-m-d H:i:s', $model->created_at),],
-                    'keyword2' => ['value' => $model->content,],
-                    'remark' => ['value' => '点击查看详情！',],
-            ]];
-
-            foreach ($tousers as $touser) {
-                $data['touser'] = $touser;
-                $wechat->sendTemplateMessage($data);
-            }
+            $name=$n.mb_substr($name,$a_pos);
+        }elseif(preg_match("/^1[34578]{1}\d{9}$/",$name)){
+            //手机
+            $name=substr_replace($name, '****', 3, 4);
+        }elseif(preg_match("/^[0-9a-zA-Z]{4,}$/",$name)){
+            //用户名
+            
+            $name=substr_replace($name, '****', 2);
+        }else{
+            //其他
+            $name=mb_substr($name, 0, 2).'****';
         }
-        return $result;
+        return $name;
     }
 
 }

@@ -1,0 +1,736 @@
+2018-06-08 16:14:21 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'app\models\Yii' not found' in D:\data\docker\app\models\PasswordFindForm.php:57
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php(72): ::call_user_func:{D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php:72}()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\InlineValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(253): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionPasswordFindEmail()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-08 16:14:21 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'PasswordFindForm' => [
+        'password' => ''
+        'password1' => ''
+        'verifyCode' => '97473'
+    ]
+    'ajax' => 'passwordreset-form'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'secondsremained_login' => '40'
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => '3ufkb8rs4n2i0t6c52iq9b5it6'
+    '_csrf-app' => 'daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'qiji'
+    '__captcha/site/captchacount' => 1
+    'find_password' => 'jdKZkkgPC9OrnR8wuHIr53AQT0XaFHnV_1528437420'
+    'yii\\authclient\\clients\\GitHub_github_authState' => '0a96272cc939bdda8de54de405332eb90d90dc4e87822cd50a66bddd171f7360'
+    'find_password_token' => '1ay4l8QV1SXWHVo3xSkHGJ-ImCs_lru4_1528445216'
+    'verifyCode' => [
+        'type' => 'email'
+        'code' => 974731
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '230'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-find-email'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'secondsremained_login=40; UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=3ufkb8rs4n2i0t6c52iq9b5it6; _csrf-app=daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '58883'
+    'REDIRECT_URL' => '/site/password-find-email'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/password-find-email'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528445661.571
+    'REQUEST_TIME' => 1528445661
+]
+2018-06-08 16:14:25 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'app\models\Yii' not found' in D:\data\docker\app\models\PasswordFindForm.php:57
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php(72): ::call_user_func:{D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php:72}()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\InlineValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(253): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionPasswordFindEmail()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-08 16:14:25 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'PasswordFindForm' => [
+        'password' => ''
+        'password1' => ''
+        'verifyCode' => '97473'
+    ]
+    'ajax' => 'passwordreset-form'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'secondsremained_login' => '36'
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => '3ufkb8rs4n2i0t6c52iq9b5it6'
+    '_csrf-app' => 'daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'qiji'
+    '__captcha/site/captchacount' => 1
+    'find_password' => 'jdKZkkgPC9OrnR8wuHIr53AQT0XaFHnV_1528437420'
+    'yii\\authclient\\clients\\GitHub_github_authState' => '0a96272cc939bdda8de54de405332eb90d90dc4e87822cd50a66bddd171f7360'
+    'find_password_token' => '1ay4l8QV1SXWHVo3xSkHGJ-ImCs_lru4_1528445216'
+    'verifyCode' => [
+        'type' => 'email'
+        'code' => 974731
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '230'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-find-email'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'secondsremained_login=36; UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=3ufkb8rs4n2i0t6c52iq9b5it6; _csrf-app=daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '58892'
+    'REDIRECT_URL' => '/site/password-find-email'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/password-find-email'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528445665.135
+    'REQUEST_TIME' => 1528445665
+]
+2018-06-08 16:14:27 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'app\models\Yii' not found' in D:\data\docker\app\models\PasswordFindForm.php:57
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php(72): ::call_user_func:{D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php:72}()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\InlineValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(253): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionPasswordFindEmail()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-08 16:14:26 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'PasswordFindForm' => [
+        'password' => ''
+        'password1' => ''
+        'verifyCode' => '97473'
+    ]
+    'ajax' => 'passwordreset-form'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'secondsremained_login' => '34'
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => '3ufkb8rs4n2i0t6c52iq9b5it6'
+    '_csrf-app' => 'daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'qiji'
+    '__captcha/site/captchacount' => 1
+    'find_password' => 'jdKZkkgPC9OrnR8wuHIr53AQT0XaFHnV_1528437420'
+    'yii\\authclient\\clients\\GitHub_github_authState' => '0a96272cc939bdda8de54de405332eb90d90dc4e87822cd50a66bddd171f7360'
+    'find_password_token' => '1ay4l8QV1SXWHVo3xSkHGJ-ImCs_lru4_1528445216'
+    'verifyCode' => [
+        'type' => 'email'
+        'code' => 974731
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '230'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-find-email'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'secondsremained_login=34; UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=3ufkb8rs4n2i0t6c52iq9b5it6; _csrf-app=daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '58896'
+    'REDIRECT_URL' => '/site/password-find-email'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/password-find-email'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528445666.938
+    'REQUEST_TIME' => 1528445666
+]
+2018-06-08 16:14:29 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'app\models\Yii' not found' in D:\data\docker\app\models\PasswordFindForm.php:57
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php(72): ::call_user_func:{D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php:72}()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\InlineValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(253): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionPasswordFindEmail()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-08 16:14:29 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'PasswordFindForm' => [
+        'password' => ''
+        'password1' => ''
+        'verifyCode' => '974731'
+    ]
+    'ajax' => 'passwordreset-form'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'secondsremained_login' => '32'
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => '3ufkb8rs4n2i0t6c52iq9b5it6'
+    '_csrf-app' => 'daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'qiji'
+    '__captcha/site/captchacount' => 1
+    'find_password' => 'jdKZkkgPC9OrnR8wuHIr53AQT0XaFHnV_1528437420'
+    'yii\\authclient\\clients\\GitHub_github_authState' => '0a96272cc939bdda8de54de405332eb90d90dc4e87822cd50a66bddd171f7360'
+    'find_password_token' => '1ay4l8QV1SXWHVo3xSkHGJ-ImCs_lru4_1528445216'
+    'verifyCode' => [
+        'type' => 'email'
+        'code' => 974731
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '231'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-find-email'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'secondsremained_login=32; UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=3ufkb8rs4n2i0t6c52iq9b5it6; _csrf-app=daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '58902'
+    'REDIRECT_URL' => '/site/password-find-email'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/password-find-email'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528445669.145
+    'REQUEST_TIME' => 1528445669
+]
+2018-06-08 16:14:31 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'app\models\Yii' not found' in D:\data\docker\app\models\PasswordFindForm.php:57
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php(72): ::call_user_func:{D:\data\docker\vendor\yiisoft\yii2\validators\InlineValidator.php:72}()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\InlineValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(253): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionPasswordFindEmail()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-08 16:14:30 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'PasswordFindForm' => [
+        'password' => ''
+        'password1' => ''
+        'verifyCode' => '974731'
+    ]
+    'ajax' => 'passwordreset-form'
+    'login-button' => 'undefined'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'secondsremained_login' => '30'
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => '3ufkb8rs4n2i0t6c52iq9b5it6'
+    '_csrf-app' => 'daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'qiji'
+    '__captcha/site/captchacount' => 1
+    'find_password' => 'jdKZkkgPC9OrnR8wuHIr53AQT0XaFHnV_1528437420'
+    'yii\\authclient\\clients\\GitHub_github_authState' => '0a96272cc939bdda8de54de405332eb90d90dc4e87822cd50a66bddd171f7360'
+    'find_password_token' => '1ay4l8QV1SXWHVo3xSkHGJ-ImCs_lru4_1528445216'
+    'verifyCode' => [
+        'type' => 'email'
+        'code' => 974731
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '254'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'Sa7Kx3vk5JMdBsjovjpuRfMToMd22rnwoRDWqjoc9_E49KaMK6eip1NpkL_9dhYdrEPGsCevzYeVXYzje2igvw=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-find-email'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'secondsremained_login=30; UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=3ufkb8rs4n2i0t6c52iq9b5it6; _csrf-app=daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '58906'
+    'REDIRECT_URL' => '/site/password-find-email'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/password-find-email'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528445670.909
+    'REQUEST_TIME' => 1528445670
+]
+2018-06-08 16:24:12 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request: site/password-find-email' in D:\data\docker\vendor\yiisoft\yii2\base\Controller.php:128
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('password-find-e...', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('site/password-f...', Array)
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-08 16:24:12 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => '3ufkb8rs4n2i0t6c52iq9b5it6'
+    '_csrf-app' => 'daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'qiji'
+    '__captcha/site/captchacount' => 1
+    'find_password' => 'jdKZkkgPC9OrnR8wuHIr53AQT0XaFHnV_1528437420'
+    'yii\\authclient\\clients\\GitHub_github_authState' => '0a96272cc939bdda8de54de405332eb90d90dc4e87822cd50a66bddd171f7360'
+    'find_password_token' => '1ay4l8QV1SXWHVo3xSkHGJ-ImCs_lru4_1528445216'
+    'verifyCode' => [
+        'type' => 'email'
+        'code' => 974731
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=3ufkb8rs4n2i0t6c52iq9b5it6; _csrf-app=daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '59726'
+    'REDIRECT_URL' => '/site/password-find-email'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/password-find-email'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528446252.617
+    'REQUEST_TIME' => 1528446252
+]
+2018-06-08 16:24:26 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request: site/password-find-email' in D:\data\docker\vendor\yiisoft\yii2\base\Controller.php:128
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('password-find-e...', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('site/password-f...', Array)
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-08 16:24:26 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => '3ufkb8rs4n2i0t6c52iq9b5it6'
+    '_csrf-app' => 'daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'qiji'
+    '__captcha/site/captchacount' => 1
+    'find_password' => 'jdKZkkgPC9OrnR8wuHIr53AQT0XaFHnV_1528437420'
+    'yii\\authclient\\clients\\GitHub_github_authState' => '0a96272cc939bdda8de54de405332eb90d90dc4e87822cd50a66bddd171f7360'
+    'find_password_token' => '1ay4l8QV1SXWHVo3xSkHGJ-ImCs_lru4_1528445216'
+    'verifyCode' => [
+        'type' => 'email'
+        'code' => 974731
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=3ufkb8rs4n2i0t6c52iq9b5it6; _csrf-app=daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '59728'
+    'REDIRECT_URL' => '/site/password-find-email'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/password-find-email'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528446266.212
+    'REQUEST_TIME' => 1528446266
+]
+2018-06-08 17:06:38 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][error][yii\web\HttpException:400] exception 'yii\web\BadRequestHttpException' with message '缺少参数：type' in D:\data\docker\vendor\yiisoft\yii2\web\Controller.php:149
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(51): yii\web\Controller->bindActionParams(Object(yii\base\InlineAction), Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams(Array)
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('send-captcha', Array)
+#3 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('common/send-cap...', Array)
+#4 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#5 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#6 {main}
+2018-06-08 17:06:38 [127.0.0.1][-][3ufkb8rs4n2i0t6c52iq9b5it6][info][application] $_GET = []
+
+$_POST = [
+    'type' => 'tel'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => '3ufkb8rs4n2i0t6c52iq9b5it6'
+    '_csrf-app' => 'daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'qiji'
+    '__captcha/site/captchacount' => 1
+    'find_password' => 'jdKZkkgPC9OrnR8wuHIr53AQT0XaFHnV_1528437420'
+    'yii\\authclient\\clients\\GitHub_github_authState' => '0a96272cc939bdda8de54de405332eb90d90dc4e87822cd50a66bddd171f7360'
+    'find_password_token' => '1ay4l8QV1SXWHVo3xSkHGJ-ImCs_lru4_1528445216'
+    'verifyCode' => [
+        'type' => 'email'
+        'code' => 722293
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '8'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'B3HkRswhzZ-yMF4Aw2QdWxmXrti8Cj6HH6JDLIb2fEF2K4gNnGKLq_xfBleAKGUDRsfIr-1_SvAr7xllx4IrDw=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-find?type=tel'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=3ufkb8rs4n2i0t6c52iq9b5it6; _csrf-app=daef2817cdd412e6ae67db2f7e1a4a4203925f7ba1f82d6963bf6c205a7dc6baa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22qZlKPCF4NoXWCLxX_PfwQutw4MZIAtWN%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '63757'
+    'REDIRECT_URL' => '/common/send-captcha'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/common/send-captcha'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528448798.717
+    'REQUEST_TIME' => 1528448798
+]

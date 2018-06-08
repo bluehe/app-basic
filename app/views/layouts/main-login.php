@@ -20,13 +20,25 @@ app\assets\AppAsset::register($this);
         <?php $this->head() ?>
     </head>
     <body class="login-page">
-
+        
         <?php $this->beginBody() ?>
         <?= Alert::widget() ?>
 
         <?= $content ?>
-
-        <?php $this->endBody() ?>
+        
+<div id="particles" style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;z-index:-1"></div>
+<?php app\assets\AppAsset::addScript($this, '/js/jquery.particleground.min.js'); ?> 
+<script>
+<?php $this->beginBlock('particles') ?>
+ $('#particles').particleground({
+    dotColor: 'rgba(20,140,230,0.15)',
+    lineColor: 'rgba(85,175,230,0.15)'
+  });
+<?php $this->endBlock() ?>
+</script>
+<?php $this->registerJs($this->blocks['particles'], \yii\web\View::POS_END); ?>
+        
+        <?php $this->endBody() ?>        
     </body>
 </html>
 <?php $this->endPage() ?>

@@ -119,6 +119,27 @@ a.desc:after {
     outline: none;
 }
 
+/*注册*/
+.sign-icon p{
+    color: #999;
+}
+.sign-icon p:after, .sign-icon p:before {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 20%;
+    position: relative;
+    background-color: #ebebeb;
+}
+.sign-icon p:before {
+    left: 0;
+    top: 10px;
+}
+.sign-icon p:after {
+    right:-80%;
+    top: -11px;
+}
+
 /*第三方登录*/
 .social-icon p{
     color: #999;

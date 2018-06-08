@@ -142,7 +142,7 @@ class User extends ActiveRecord implements IdentityInterface
     
     public static function findByLoginname($name)
     {
-        return static::findOne(['or','username' => $name,'email' => $name,'tel' => $name]);
+        return static::find()->where(['or',['username' => $name],['email' => $name],['tel' => $name]])->one();
     }
 
     /**
@@ -158,8 +158,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'password_reset_token' => $token
         ]);
     }
 

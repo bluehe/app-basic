@@ -15,7 +15,7 @@ $fieldOptions2 = [
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
 ];
 ?>
-<div id="particles" style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;z-index:-1"></div>
+
 <div class="login-box">
     <div class="login-logo">
         <?=
@@ -49,6 +49,25 @@ $fieldOptions2 = [
                 'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control', 'autoCompete' => false],
                 'imageOptions' => ['alt' => '点击换图', 'title' => '点击换图', 'style' => 'cursor:pointer', 'height' => 34]])->label(false)
             ?>
+        <script>
+<?php $this->beginBlock('captcha') ?>
+    $(document).ready(function () {
+        changeVerifyCode();
+    });
+//更改或者重新加载验证码
+    function changeVerifyCode() {
+        $.ajax({
+            url: "/site/captcha?refresh",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                $("#imgVerifyCode").attr("src", data["url"]);
+            }
+        });
+    }
+<?php $this->endBlock() ?>
+</script>
+<?php $this->registerJs($this->blocks['captcha'], \yii\web\View::POS_END); ?>
         <?php endif; ?>
         <div class="row">
             <div class="col-xs-8">
@@ -64,7 +83,7 @@ $fieldOptions2 = [
 
         <?php ActiveForm::end(); ?>
         <?=
-        Html::a('忘记密码', ['/site/request-password-reset'])
+        Html::a('忘记密码', ['/site/password-reset'])
         ?>
         <?=
         Html::a('注册新账号', ['/site/signup'], ['class' => 'pull-right'])
@@ -78,13 +97,3 @@ $fieldOptions2 = [
     </div>
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
-<script>
-<?php $this->beginBlock('login') ?>
- $('#particles').particleground({
-    dotColor: 'rgba(20,140,230,0.15)',
-    lineColor: 'rgba(85,175,230,0.15)'
-  });
-<?php $this->endBlock() ?>
-</script>
-<?php app\assets\AppAsset::addScript($this, '/js/jquery.particleground.min.js'); ?>
-<?php $this->registerJs($this->blocks['login'], \yii\web\View::POS_END); ?>

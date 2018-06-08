@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\base\InvalidParamException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -10,6 +11,8 @@ use app\models\LoginForm;
 use app\models\SignupForm;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
+use app\models\PasswordResetForm;
+use app\models\PasswordFindForm;
 
 /**
  * Site controller
@@ -209,5 +212,56 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+    
+     /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
+    public function actionPasswordReset() {
+        $model = new PasswordResetForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            if ($model->validate()&&$model->setSession()) {              
+                return $this->redirect(['password-find']);        
+            }
+        }
+        if (System::existValue('captcha_open', '3')) {
+            $model->setScenario("captchaRequired");
+        }
+        $this->layout = '//main-login';
+        return $this->render('passwordReset', [
+                    'model' => $model,
+        ]);
+    }
+    
+    public function actionPasswordFind() {
+        $token=Yii::$app->session->get('find_password_token');
+        try {
+            $model = new PasswordFindForm($token);
+            $model->type=Yii::$app->request->get('type','email');
+        } catch (InvalidParamException $e) {
+            Yii::$app->session->setFlash('danger', $e->getMessage());
+            return $this->redirect(['password-reset']); 
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            if ($model->validate()&&$model->resetPassword()) {   
+                Yii::$app->session->setFlash('success', '新密码已经被保存。');
+                return $this->goHome();        
+            }
+        }
+        $this->layout = '//main-login';
+        return $this->render('passwordFind', [
+                    'model' => $model,
+        ]);
+        
     }
 }
