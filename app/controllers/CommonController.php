@@ -22,7 +22,7 @@ class CommonController extends Controller {
     }
     
     //邮件验证码
-    public function actionSendCaptcha($type) {
+    public function actionSendCaptchaByToken($type) {
         
         $token=Yii::$app->session->get('find_password_token');
         $user=User::findByPasswordResetToken($token);
@@ -57,5 +57,5 @@ class CommonController extends Controller {
             return json_encode(['stat'=>'fail','message'=>'验证码发送失败'],256);
         }
         
-    }
+    }    
 }

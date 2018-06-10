@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b7af568f78130c4cb48c0ecff4ac918",
+    "content-hash": "ec24ab4c13a24e9da5bdb92b9cfce4f9",
     "packages": [
         {
             "name": "2amigos/qrcode-library",
@@ -800,6 +800,49 @@
                 "yii"
             ],
             "time": "2017-01-11T14:05:47+00:00"
+        },
+        {
+            "name": "saviorlv/yii2-dysms",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Mr-sunK/yii2-dysms.git",
+                "reference": "3d03a8c7406576b50bab8a547b6738f073b7b2f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/Mr-sunK/yii2-dysms/3d03a8c7406576b50bab8a547b6738f073b7b2f6.zip",
+                "reference": "3d03a8c7406576b50bab8a547b6738f073b7b2f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "saviorlv\\aliyun\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "saviorlv",
+                    "homepage": "https://saviorlv.github.io/"
+                }
+            ],
+            "description": "Aliyun SMS SDK for Yii2",
+            "homepage": "https://github.com/saviorlv/yii2-dysms",
+            "keywords": [
+                "aliyun",
+                "sdk",
+                "sms",
+                "yii2"
+            ],
+            "time": "2017-10-27T02:48:42+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3740,7 +3783,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "saviorlv/yii2-dysms": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

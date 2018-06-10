@@ -131,7 +131,7 @@ function sendCode(obj){
         async : false,  
         cache : false,  
         type : 'POST',  
-        url : "/common/send-captcha?type="+type,// 请求的action路径
+        url : "/common/send-captcha-by-token?type="+type,// 请求的action路径
         dataType: "json",
         success:function(data){  
             if(data.stat=='success'){ 

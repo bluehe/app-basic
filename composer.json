@@ -21,7 +21,8 @@
         "mdmsoft/yii2-admin": "~2.0",
         "dmstr/yii2-adminlte-asset": "^2.1",
         "yiisoft/yii2-authclient": "~2.1.0",
-        "2amigos/qrcode-library": "~1.1"
+        "2amigos/qrcode-library": "~1.1",
+        "saviorlv/yii2-dysms": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
