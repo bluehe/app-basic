@@ -2113,3 +2113,501 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1528650710.371
     'REQUEST_TIME' => 1528650710
 ]
+2018-06-11 09:03:58 [127.0.0.1][-][-][error][yii\db\Exception] exception 'yii\base\ErrorException' with message 'PDO::__construct(): MySQL server has gone away' in D:\data\docker\vendor\yiisoft\yii2\db\Connection.php:687
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(613): yii\db\Connection->createPdoInstance()
+#1 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(996): yii\db\Connection->open()
+#2 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(983): yii\db\Connection->getMasterPdo()
+#3 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(253): yii\db\Connection->getSlavePdo()
+#4 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(1143): yii\db\Command->prepare()
+#5 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(413): yii\db\Command->queryInternal()
+#6 D:\data\docker\vendor\yiisoft\yii2\db\Query.php(274): yii\db\Command->queryOne()
+#7 D:\data\docker\vendor\yiisoft\yii2\db\ActiveQuery.php(292): yii\db\Query->one()
+#8 D:\data\docker\vendor\yiisoft\yii2\db\BaseActiveRecord.php(112): yii\db\ActiveQuery->one()
+#9 D:\data\docker\app\models\User.php(121): yii\db\BaseActiveRecord::findOne()
+#10 D:\data\docker\vendor\yiisoft\yii2\web\User.php(595): app\models\User::findIdentity()
+#11 D:\data\docker\vendor\yiisoft\yii2\web\User.php(314): yii\web\User->getIdentityAndDurationFromCookie()
+#12 D:\data\docker\vendor\yiisoft\yii2\web\User.php(707): yii\web\User->loginByCookie()
+#13 D:\data\docker\vendor\yiisoft\yii2\web\User.php(192): yii\web\User->renewAuthStatus()
+#14 D:\data\docker\vendor\yiisoft\yii2\web\User.php(360): yii\web\User->getIdentity()
+#15 D:\data\docker\vendor\yiisoft\yii2\base\Component.php(139): yii\web\User->getIsGuest()
+#16 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(81): yii\base\Component->__get()
+#17 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\debug\panels\UserPanel->init()
+#18 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(383): yii\base\BaseObject->__construct()
+#19 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(383): ReflectionClass->newInstanceArgs()
+#20 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build()
+#21 D:\data\docker\vendor\yiisoft\yii2\BaseYii.php(349): yii\di\Container->get()
+#22 D:\data\docker\vendor\yiisoft\yii2-debug\Module.php(177): yii\BaseYii::createObject()
+#23 D:\data\docker\vendor\yiisoft\yii2-debug\Module.php(149): yii\debug\Module->initPanels()
+#24 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\debug\Module->init()
+#25 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(158): yii\base\BaseObject->__construct()
+#26 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(375): yii\base\Module->__construct()
+#27 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(375): ReflectionClass->newInstanceArgs()
+#28 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build()
+#29 D:\data\docker\vendor\yiisoft\yii2\BaseYii.php(349): yii\di\Container->get()
+#30 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(427): yii\BaseYii::createObject()
+#31 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(315): yii\base\Module->getModule()
+#32 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(69): yii\base\Application->bootstrap()
+#33 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(273): yii\web\Application->bootstrap()
+#34 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\base\Application->init()
+#35 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(206): yii\base\BaseObject->__construct()
+#36 D:\data\docker\app\web\index.php(17): yii\base\Application->__construct()
+#37 {main}
+
+Next exception 'PDOException' with message 'SQLSTATE[HY000] [2006] MySQL server has gone away' in D:\data\docker\vendor\yiisoft\yii2\db\Connection.php:687
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(0): PDO->__construct()
+#1 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(613): yii\db\Connection->createPdoInstance()
+#2 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(996): yii\db\Connection->open()
+#3 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(983): yii\db\Connection->getMasterPdo()
+#4 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(253): yii\db\Connection->getSlavePdo()
+#5 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(1143): yii\db\Command->prepare('<span class="ke...')
+#6 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(413): yii\db\Command->queryInternal('<span class="st...', '<span class="ke...')
+#7 D:\data\docker\vendor\yiisoft\yii2\db\Query.php(274): yii\db\Command->queryOne()
+#8 D:\data\docker\vendor\yiisoft\yii2\db\ActiveQuery.php(292): yii\db\Query->one('<span class="ke...')
+#9 D:\data\docker\vendor\yiisoft\yii2\db\BaseActiveRecord.php(112): yii\db\ActiveQuery->one()
+#10 D:\data\docker\app\models\User.php(121): yii\db\BaseActiveRecord::findOne('[<span class="s...')
+#11 D:\data\docker\vendor\yiisoft\yii2\web\User.php(595): app\models\User::findIdentity('<span class="nu...')
+#12 D:\data\docker\vendor\yiisoft\yii2\web\User.php(314): yii\web\User->getIdentityAndDurationFromCookie()
+#13 D:\data\docker\vendor\yiisoft\yii2\web\User.php(707): yii\web\User->loginByCookie()
+#14 D:\data\docker\vendor\yiisoft\yii2\web\User.php(192): yii\web\User->renewAuthStatus()
+#15 D:\data\docker\vendor\yiisoft\yii2\web\User.php(360): yii\web\User->getIdentity()
+#16 D:\data\docker\vendor\yiisoft\yii2\base\Component.php(139): yii\web\User->getIsGuest()
+#17 D:\data\docker\vendor\yiisoft\yii2-debug\panels\UserPanel.php(81): yii\base\Component->__get('<span class="st...')
+#18 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\debug\panels\UserPanel->init()
+#19 [internal function]: yii\base\BaseObject->__construct('[<span class="s...')
+#20 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(383): ReflectionClass->newInstanceArgs('[[<span class="...')
+#21 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build('<span class="st...', '[]', '[<span class="s...')
+#22 D:\data\docker\vendor\yiisoft\yii2\BaseYii.php(349): yii\di\Container->get('<span class="st...', '[]', '[<span class="s...')
+#23 D:\data\docker\vendor\yiisoft\yii2-debug\Module.php(177): yii\BaseYii::createObject('[<span class="s...')
+#24 D:\data\docker\vendor\yiisoft\yii2-debug\Module.php(149): yii\debug\Module->initPanels()
+#25 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\debug\Module->init()
+#26 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(158): yii\base\BaseObject->__construct('[]')
+#27 [internal function]: yii\base\Module->__construct('<span class="st...', Object(yii\web\Application), '[]')
+#28 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(375): ReflectionClass->newInstanceArgs('[<span class="s...')
+#29 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build('<span class="st...', '[<span class="s...', '[]')
+#30 D:\data\docker\vendor\yiisoft\yii2\BaseYii.php(349): yii\di\Container->get('<span class="st...', '[<span class="s...', '[]')
+#31 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(427): yii\BaseYii::createObject('[<span class="s...', '[<span class="s...')
+#32 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(315): yii\base\Module->getModule('<span class="st...')
+#33 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(69): yii\base\Application->bootstrap()
+#34 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(273): yii\web\Application->bootstrap()
+#35 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\base\Application->init()
+#36 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(206): yii\base\BaseObject->__construct('[<span class="s...')
+#37 D:\data\docker\app\web\index.php(17): yii\base\Application->__construct('[<span class="s...')
+#38 {main}
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[HY000] [2006] MySQL server has gone away' in D:\data\docker\vendor\yiisoft\yii2\db\Connection.php:624
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(996): yii\db\Connection->open()
+#1 D:\data\docker\vendor\yiisoft\yii2\db\Connection.php(983): yii\db\Connection->getMasterPdo()
+#2 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(253): yii\db\Connection->getSlavePdo()
+#3 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(1143): yii\db\Command->prepare('<span class="ke...')
+#4 D:\data\docker\vendor\yiisoft\yii2\db\Command.php(413): yii\db\Command->queryInternal('<span class="st...', '<span class="ke...')
+#5 D:\data\docker\vendor\yiisoft\yii2\db\Query.php(274): yii\db\Command->queryOne()
+#6 D:\data\docker\vendor\yiisoft\yii2\db\ActiveQuery.php(292): yii\db\Query->one('<span class="ke...')
+#7 D:\data\docker\vendor\yiisoft\yii2\db\BaseActiveRecord.php(112): yii\db\ActiveQuery->one()
+#8 D:\data\docker\app\models\User.php(121): yii\db\BaseActiveRecord::findOne('[<span class="s...')
+#9 D:\data\docker\vendor\yiisoft\yii2\web\User.php(595): app\models\User::findIdentity('<span class="nu...')
+#10 D:\data\docker\vendor\yiisoft\yii2\web\User.php(314): yii\web\User->getIdentityAndDurationFromCookie()
+#11 D:\data\docker\vendor\yiisoft\yii2\web\User.php(707): yii\web\User->loginByCookie()
+#12 D:\data\docker\vendor\yiisoft\yii2\web\User.php(192): yii\web\User->renewAuthStatus()
+#13 D:\data\docker\vendor\yiisoft\yii2\web\User.php(360): yii\web\User->getIdentity()
+#14 D:\data\docker\vendor\yiisoft\yii2\base\Component.php(139): yii\web\User->getIsGuest()
+#15 D:\data\docker\vendor\yiisoft\yii2-debug\panels\UserPanel.php(81): yii\base\Component->__get('<span class="st...')
+#16 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\debug\panels\UserPanel->init()
+#17 [internal function]: yii\base\BaseObject->__construct('[<span class="s...')
+#18 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(383): ReflectionClass->newInstanceArgs('[[<span class="...')
+#19 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build('<span class="st...', '[]', '[<span class="s...')
+#20 D:\data\docker\vendor\yiisoft\yii2\BaseYii.php(349): yii\di\Container->get('<span class="st...', '[]', '[<span class="s...')
+#21 D:\data\docker\vendor\yiisoft\yii2-debug\Module.php(177): yii\BaseYii::createObject('[<span class="s...')
+#22 D:\data\docker\vendor\yiisoft\yii2-debug\Module.php(149): yii\debug\Module->initPanels()
+#23 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\debug\Module->init()
+#24 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(158): yii\base\BaseObject->__construct('[]')
+#25 [internal function]: yii\base\Module->__construct('<span class="st...', Object(yii\web\Application), '[]')
+#26 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(375): ReflectionClass->newInstanceArgs('[<span class="s...')
+#27 D:\data\docker\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build('<span class="st...', '[<span class="s...', '[]')
+#28 D:\data\docker\vendor\yiisoft\yii2\BaseYii.php(349): yii\di\Container->get('<span class="st...', '[<span class="s...', '[]')
+#29 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(427): yii\BaseYii::createObject('[<span class="s...', '[<span class="s...')
+#30 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(315): yii\base\Module->getModule('<span class="st...')
+#31 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(69): yii\base\Application->bootstrap()
+#32 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(273): yii\web\Application->bootstrap()
+#33 D:\data\docker\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\base\Application->init()
+#34 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(206): yii\base\BaseObject->__construct('[<span class="s...')
+#35 D:\data\docker\app\web\index.php(17): yii\base\Application->__construct('[<span class="s...')
+#36 {main}
+Additional Information:
+
+2018-06-11 09:03:55 [127.0.0.1][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+]
+
+$_SERVER = [
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '62470'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528679034.982
+    'REQUEST_TIME' => 1528679034
+]
+2018-06-11 09:05:12 [127.0.0.1][1][j8ctromlnv7h2fgnd0eku560r2][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'kartik\datetime\DateTimePicker' not found' in D:\data\docker\app\views\system\_form-crontab.php:31
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\View.php(156): yii\base\View->renderFile()
+#2 D:\data\docker\app\views\system\crontab-create.php(14): yii\base\View->render()
+#3 D:\data\docker\vendor\yiisoft\yii2\base\View.php(336): ::unknown()
+#4 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\View.php(156): yii\base\View->renderFile()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(384): yii\base\View->render()
+#7 D:\data\docker\app\controllers\SystemController.php(293): yii\base\Controller->render()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SystemController->actionCrontabCreate()
+#9 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#11 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#12 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#13 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#14 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#15 {main}
+2018-06-11 09:05:12 [127.0.0.1][1][j8ctromlnv7h2fgnd0eku560r2][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+    'advanced-app' => 'j8ctromlnv7h2fgnd0eku560r2'
+    '_csrf-app' => '65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__captcha/site/captcha' => 'mpmaku'
+    '__captcha/site/captchacount' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/system/crontab'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D; advanced-app=j8ctromlnv7h2fgnd0eku560r2; _csrf-app=65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '62522'
+    'REDIRECT_URL' => '/system/crontab-create'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/system/crontab-create'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528679112.521
+    'REQUEST_TIME' => 1528679112
+]
+2018-06-11 09:05:27 [127.0.0.1][1][j8ctromlnv7h2fgnd0eku560r2][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'kartik\datetime\DateTimePicker' not found' in D:\data\docker\app\views\system\_form-crontab.php:31
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\View.php(156): yii\base\View->renderFile()
+#2 D:\data\docker\app\views\system\crontab-create.php(14): yii\base\View->render()
+#3 D:\data\docker\vendor\yiisoft\yii2\base\View.php(336): ::unknown()
+#4 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\View.php(156): yii\base\View->renderFile()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(384): yii\base\View->render()
+#7 D:\data\docker\app\controllers\SystemController.php(293): yii\base\Controller->render()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SystemController->actionCrontabCreate()
+#9 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#11 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#12 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#13 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#14 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#15 {main}
+2018-06-11 09:05:27 [127.0.0.1][1][j8ctromlnv7h2fgnd0eku560r2][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+    'advanced-app' => 'j8ctromlnv7h2fgnd0eku560r2'
+    '_csrf-app' => '65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__captcha/site/captcha' => 'mpmaku'
+    '__captcha/site/captchacount' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/system/crontab'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D; advanced-app=j8ctromlnv7h2fgnd0eku560r2; _csrf-app=65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '62535'
+    'REDIRECT_URL' => '/system/crontab-create'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/system/crontab-create'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528679127.478
+    'REQUEST_TIME' => 1528679127
+]
+2018-06-11 09:09:29 [127.0.0.1][1][j8ctromlnv7h2fgnd0eku560r2][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'dh\models\Crontab' not found' in D:\data\docker\app\views\system\_form-crontab.php:52
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\View.php(156): yii\base\View->renderFile()
+#2 D:\data\docker\app\views\system\crontab-create.php(14): yii\base\View->render()
+#3 D:\data\docker\vendor\yiisoft\yii2\base\View.php(336): ::unknown()
+#4 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\View.php(156): yii\base\View->renderFile()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(384): yii\base\View->render()
+#7 D:\data\docker\app\controllers\SystemController.php(293): yii\base\Controller->render()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SystemController->actionCrontabCreate()
+#9 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#11 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#12 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#13 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#14 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#15 {main}
+2018-06-11 09:09:29 [127.0.0.1][1][j8ctromlnv7h2fgnd0eku560r2][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+    'advanced-app' => 'j8ctromlnv7h2fgnd0eku560r2'
+    '_csrf-app' => '65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__captcha/site/captcha' => 'mpmaku'
+    '__captcha/site/captchacount' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/system/crontab'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D; advanced-app=j8ctromlnv7h2fgnd0eku560r2; _csrf-app=65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '62816'
+    'REDIRECT_URL' => '/system/crontab-create'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/system/crontab-create'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528679369.497
+    'REQUEST_TIME' => 1528679369
+]
+2018-06-11 09:18:32 [127.0.0.1][1][j8ctromlnv7h2fgnd0eku560r2][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined variable: cache' in D:\data\docker\app\views\system\crontab.php:22
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\View.php(156): yii\base\View->renderFile()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(384): yii\base\View->render()
+#3 D:\data\docker\app\controllers\SystemController.php(238): yii\base\Controller->render()
+#4 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SystemController->actionCrontab()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#8 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#10 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#11 {main}
+2018-06-11 09:18:32 [127.0.0.1][1][j8ctromlnv7h2fgnd0eku560r2][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+    'advanced-app' => 'j8ctromlnv7h2fgnd0eku560r2'
+    '_csrf-app' => '65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__captcha/site/captcha' => 'mpmaku'
+    '__captcha/site/captchacount' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/system/crontab-create'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D; advanced-app=j8ctromlnv7h2fgnd0eku560r2; _csrf-app=65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '62890'
+    'REDIRECT_URL' => '/system/crontab'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/system/crontab'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528679912.768
+    'REQUEST_TIME' => 1528679912
+]

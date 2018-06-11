@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use dh\models\Crontab;
-use kartik\datetime\DateTimePicker;
+use app\models\Crontab;
+use kartik\widgets\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $model dh\models\Crontab */

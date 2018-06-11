@@ -17,7 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
 
             <p>
-                <?= Html::a('添加任务', ['crontab-create'], ['class' => 'btn btn-success']) ?>
+                <?=Html::a('添加任务', ['crontab-create'], ['class' => 'btn btn-success']) ?>
+                <?php
+                $event_scheduler = Yii::$app->cache->get('event_scheduler');
+                if ($event_scheduler != 'ON') {
+                    echo Html::a('开启数据库计划任务', ['crontab-open'], ['class' => 'btn btn-warning pull-right']);
+                }
+                ?>
             </p>
             <?php Pjax::begin(); ?>                            <?=
             GridView::widget([

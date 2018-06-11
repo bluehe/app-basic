@@ -293,6 +293,21 @@ class SystemController extends Controller {
             ]);
         }
     }
+    
+    public function actionCrontabOpen() {
+        $event_scheduler = Yii::$app->db->createCommand("SELECT @@event_scheduler;")->queryScalar();
+        if ($event_scheduler != 'ON') {
+            Yii::$app->db->createCommand("set GLOBAL event_scheduler = ON;")->execute();
+            $event_scheduler = Yii::$app->db->createCommand("SELECT @@event_scheduler;")->queryScalar();
+        }
+        if ($event_scheduler != 'ON') {
+            Yii::$app->session->setFlash('danger', '开启失败。');
+        }else{
+            Yii::$app->session->setFlash('success', '开启成功。');
+            Yii::$app->cache->delete('event_scheduler');
+        }
+        return $this->redirect(Yii::$app->request->referrer);
+    }
 
     /**
      * Updates an existing Crontab model.
