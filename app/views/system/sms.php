@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $('.field-sms:not(.field-smtp_service)').show();
             
             var platform = $('.radio-sms_platform:checked').val();
-            if (platform === 'cloudsmser') {
+            if (platform === 'cloudsmser'||platform === 'submail') {
                 $('.field-sms_sign').hide();
             } else {
                 $('.field-sms_sign').show();           
@@ -147,13 +147,13 @@ var result = isPhone();
                 settime(obj);//开始倒计时  
                 $('.content').prepend('<div id="w0-success" class="alert-success alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-check"></i>'+data.message+'</div>');
             }else{  
-                $('.content').prepend('<div id="w0-error" class="alert-error alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-check"></i>'+data.message+'</div>');
+                $('.content').prepend('<div id="w0-error" class="alert-error alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-close"></i>'+data.message+'</div>');
                 return false;  
             }  
         },
         error: function () {
-                    $('.content').prepend('<div id="w0-error" class="alert-error alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-check"></i>测试短信发送失败。</div>');
-                }
+                    $('.content').prepend('<div id="w0-error" class="alert-error alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-close"></i>测试短信发送失败。</div>');
+        },
     });  
     }
 }
@@ -179,7 +179,7 @@ function isPhone(){
     var email = $("#sms-test").val();  
     var myreg = /^(1[34578]{1}\d{9})$/;  
     if(!myreg.test(email.toLowerCase())){  
-        $('.content').prepend('<div id="w0-error" class="alert-error alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-check"></i>请输入有效的测试号码！</div>');
+        $('.content').prepend('<div id="w0-error" class="alert-error alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-close"></i>请输入有效的测试号码！</div>');
         $("#sms-test").focus();  
            return false;  
     }else{  

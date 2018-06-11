@@ -199,16 +199,15 @@ class SystemController extends Controller {
                     'accessKeyId' => $system['sms_key'],
                     'accessKeySecret' => $system['sms_secret'],                
                 ]);
-                $response = Yii::$app->aliyun->sendSms(
+                $response_r = Yii::$app->aliyun->sendSms(
                             $system['sms_sign'], // 短信签名
                             $system['sms_captcha'], // 短信模板编号
                             $smsto, // 短信接收者
-                            Array(  // 短信模板中字段的值
-                                "code"=>"123456"
-                            )
+                            ["code"=>"123456"]
+                            
                         );
-                $sms= json_decode($response,TRUE);
-                $result =$sms['code']==200?'success':$sms['message'];
+                $response= json_decode($response_r,TRUE);
+                $result =$response['code']==200?'success':$response['message'];
             }elseif($system['sms_platform']=='cloudsmser'){
                 Yii::$app->set('cloudsmser', [
                     'class' => 'daixianceng\smser\CloudSmser',
@@ -217,6 +216,20 @@ class SystemController extends Controller {
                     'fileMode' => false,             
                 ]);
                 $result =Yii::$app->cloudsmser->sendByTemplate($smsto, ['code'=>'123456'],$system['sms_captcha']);
+            }elseif($system['sms_platform']=='submail'){
+                $server='https://api.mysubmail.com/';
+                $message_configs['appid']=$system['sms_key'];
+                $message_configs['appkey']=$system['sms_secret'];
+                $message_configs['sign_type']='normal';
+                $message_configs['server']=$server;
+                
+                require_once(Yii::getAlias('@common').'/vendor/smser/submail/SUBMAILAutoload.php');
+                $submail=new \MESSAGEXsend($message_configs);
+                $submail->setTo($smsto);
+                $submail->SetProject($system['sms_captcha']);
+                $submail->AddVar('code',123456); 
+                $xsend=$submail->xsend();
+                $result =$xsend['status']=='success'?'success':$xsend['msg'];
             }
             return $result=='success'?json_encode(['stat'=>'success','message'=>'测试短信发送成功']):json_encode(['stat'=>'fail','message'=>$result]);
             

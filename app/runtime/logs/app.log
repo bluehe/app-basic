@@ -2611,3 +2611,431 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1528679912.768
     'REQUEST_TIME' => 1528679912
 ]
+2018-06-11 11:10:54 [127.0.0.1][-][q599h7ncj2qo11roul1u48ge61][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined index: sms_service' in D:\data\docker\app\components\CommonHelper.php:50
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\CommonController->actionSendCaptchaByToken()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#3 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#4 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#6 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#7 {main}
+2018-06-11 11:10:54 [127.0.0.1][-][q599h7ncj2qo11roul1u48ge61][info][application] $_GET = [
+    'type' => 'tel'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    '_csrf-app' => '65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO\";}'
+    'advanced-app' => 'q599h7ncj2qo11roul1u48ge61'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'find_password_token' => 'FNX0UPVK7IitftBCirL0nH9XH_MJqbtZ_1528686649'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '0'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'rbPrhEbhYrSJaV3zWz3e-Dr-PypJ2m-_peohvW1eUo7ohabINrA9xu0zEpQadpSxb9N5TxqVKPTVjRXvWhYBwQ=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-find?type=tel'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; _csrf-app=65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO%22%3B%7D; advanced-app=q599h7ncj2qo11roul1u48ge61'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '64049'
+    'REDIRECT_URL' => '/common/send-captcha-by-token'
+    'REDIRECT_QUERY_STRING' => 'type=tel'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'type=tel'
+    'REQUEST_URI' => '/common/send-captcha-by-token?type=tel'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528686654.163
+    'REQUEST_TIME' => 1528686654
+]
+2018-06-11 11:12:08 [127.0.0.1][-][q599h7ncj2qo11roul1u48ge61][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined index: sms_service' in D:\data\docker\app\components\CommonHelper.php:50
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\CommonController->actionSendCaptchaByToken()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#3 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#4 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#6 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#7 {main}
+2018-06-11 11:12:07 [127.0.0.1][-][q599h7ncj2qo11roul1u48ge61][info][application] $_GET = [
+    'type' => 'tel'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    '_csrf-app' => '65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO\";}'
+    'advanced-app' => 'q599h7ncj2qo11roul1u48ge61'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'find_password_token' => 'FNX0UPVK7IitftBCirL0nH9XH_MJqbtZ_1528686649'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '0'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'PZi59WciZrBh0Cs8Rz5CUmqD4WCeajey0ohJ7ffKjXF4rvS5F3M5wgWKZFsGdQgbP66nBc0lcPmi732_wILePg=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'HTTP_REFERER' => 'http://www.app.com/site/password-find?type=tel'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; _csrf-app=65f40288c0484e480dd95c617563773bfbaaaf30278c9d9e7864a0e74635164aa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22E6MLpQ_rdZOgAKJIU-FeSOGKpg4R7HSO%22%3B%7D; advanced-app=q599h7ncj2qo11roul1u48ge61'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '64065'
+    'REDIRECT_URL' => '/common/send-captcha-by-token'
+    'REDIRECT_QUERY_STRING' => 'type=tel'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'type=tel'
+    'REQUEST_URI' => '/common/send-captcha-by-token?type=tel'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528686727.953
+    'REQUEST_TIME' => 1528686727
+]
+2018-06-11 16:16:42 [127.0.0.1][1][gp4bp3jip4pv5tpqb7091dj976][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'app\controllers\MESSAGEXsend' not found' in D:\data\docker\app\controllers\SystemController.php:227
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#3 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#4 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#5 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#6 {main}
+2018-06-11 16:16:42 [127.0.0.1][1][gp4bp3jip4pv5tpqb7091dj976][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'vlJLgM7-Ks5ZtEidsZxfxNoBUmRRli-k364uN4yc8MXuB3LB-b1BpgbyePDArh7x4nMGVBj9G8Xt42gA1aS_kg=='
+    'System' => [
+        'sms_service' => '1'
+        'sms_platform' => 'submail'
+        'sms_key' => '24001'
+        'sms_secret' => '8aa13b1914b6d3c3a1d80966d15bb226'
+        'sms_sign' => '网址共享平台'
+        'sms_captcha' => 'zkHFN'
+    ]
+    'tel' => '15161622121'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => 'gp4bp3jip4pv5tpqb7091dj976'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+    '_csrf-app' => 'c5694e2ed200b3d63c2355fdb7ac415b64a3d4966cf41542747753ffd43d2fd7a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"PU9A7Ckh_F0mq2A58rT0Ik4a2MF7Y8OW\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'find_password_token' => 'FNX0UPVK7IitftBCirL0nH9XH_MJqbtZ_1528686649'
+    'verifyCode' => [
+        'type' => 'tel'
+        'code' => 386331
+    ]
+    '__id' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '365'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'vlJLgM7-Ks5ZtEidsZxfxNoBUmRRli-k364uN4yc8MXuB3LB-b1BpgbyePDArh7x4nMGVBj9G8Xt42gA1aS_kg=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/system/sms'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=gp4bp3jip4pv5tpqb7091dj976; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D; _csrf-app=c5694e2ed200b3d63c2355fdb7ac415b64a3d4966cf41542747753ffd43d2fd7a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22PU9A7Ckh_F0mq2A58rT0Ik4a2MF7Y8OW%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '50592'
+    'REDIRECT_URL' => '/system/send-sms'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/system/send-sms'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528705002.17
+    'REQUEST_TIME' => 1528705002
+]
+2018-06-11 17:46:29 [127.0.0.1][1][gp4bp3jip4pv5tpqb7091dj976][error][yii\base\ErrorException:8] exception 'yii\base\ErrorException' with message 'Undefined variable: response' in D:\data\docker\app\controllers\SystemController.php:232
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#3 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#4 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#5 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#6 {main}
+2018-06-11 17:46:28 [127.0.0.1][1][gp4bp3jip4pv5tpqb7091dj976][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => '7DBb1-3SPA59eCSJay2yKY6TnPRxWQonULrkpshghfm8ZWKW2pFXZiI-FOQaH_MctuHIxDgyPkZi96KRkVjKrg=='
+    'System' => [
+        'sms_service' => '1'
+        'sms_platform' => 'submail'
+        'sms_key' => '24001'
+        'sms_secret' => '8aa13b1914b6d3c3a1d80966d15bb226'
+        'sms_sign' => '网址共享平台'
+        'sms_captcha' => 'zkHFN'
+    ]
+    'tel' => '15161622121'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => 'gp4bp3jip4pv5tpqb7091dj976'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+    '_csrf-app' => 'c5694e2ed200b3d63c2355fdb7ac415b64a3d4966cf41542747753ffd43d2fd7a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"PU9A7Ckh_F0mq2A58rT0Ik4a2MF7Y8OW\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'find_password_token' => 'FNX0UPVK7IitftBCirL0nH9XH_MJqbtZ_1528686649'
+    'verifyCode' => [
+        'type' => 'tel'
+        'code' => 386331
+    ]
+    '__id' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '365'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => '7DBb1-3SPA59eCSJay2yKY6TnPRxWQonULrkpshghfm8ZWKW2pFXZiI-FOQaH_MctuHIxDgyPkZi96KRkVjKrg=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/system/sms'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=gp4bp3jip4pv5tpqb7091dj976; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D; _csrf-app=c5694e2ed200b3d63c2355fdb7ac415b64a3d4966cf41542747753ffd43d2fd7a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22PU9A7Ckh_F0mq2A58rT0Ik4a2MF7Y8OW%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '54583'
+    'REDIRECT_URL' => '/system/send-sms'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/system/send-sms'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528710388.951
+    'REQUEST_TIME' => 1528710388
+]
+2018-06-11 17:47:03 [127.0.0.1][1][gp4bp3jip4pv5tpqb7091dj976][error][yii\base\ErrorException:2] exception 'yii\base\ErrorException' with message 'json_decode() expects parameter 1 to be string, array given' in D:\data\docker\app\controllers\SystemController.php:232
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SystemController->actionSendSms()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#3 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#4 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#6 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#7 {main}
+2018-06-11 17:47:03 [127.0.0.1][1][gp4bp3jip4pv5tpqb7091dj976][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'jIuvH1LWt40EnLs-Q81VM9xXQiz88sndJ63xTWFH0nbc3pZeZZXc5Vvai1My_xQG5CUWHLWZ_bwV4Ld6OH-dIQ=='
+    'System' => [
+        'sms_service' => '1'
+        'sms_platform' => 'submail'
+        'sms_key' => '24001'
+        'sms_secret' => '8aa13b1914b6d3c3a1d80966d15bb226'
+        'sms_sign' => '网址共享平台'
+        'sms_captcha' => 'zkHFN'
+    ]
+    'tel' => '15161622121'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'advanced-app' => 'gp4bp3jip4pv5tpqb7091dj976'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+    '_csrf-app' => 'c5694e2ed200b3d63c2355fdb7ac415b64a3d4966cf41542747753ffd43d2fd7a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"PU9A7Ckh_F0mq2A58rT0Ik4a2MF7Y8OW\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'find_password_token' => 'FNX0UPVK7IitftBCirL0nH9XH_MJqbtZ_1528686649'
+    'verifyCode' => [
+        'type' => 'tel'
+        'code' => 386331
+    ]
+    '__id' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '365'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'jIuvH1LWt40EnLs-Q81VM9xXQiz88sndJ63xTWFH0nbc3pZeZZXc5Vvai1My_xQG5CUWHLWZ_bwV4Ld6OH-dIQ=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_REFERER' => 'http://www.app.com/system/sms'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; advanced-app=gp4bp3jip4pv5tpqb7091dj976; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D; _csrf-app=c5694e2ed200b3d63c2355fdb7ac415b64a3d4966cf41542747753ffd43d2fd7a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22PU9A7Ckh_F0mq2A58rT0Ik4a2MF7Y8OW%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '54614'
+    'REDIRECT_URL' => '/system/send-sms'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/system/send-sms'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1528710423.071
+    'REQUEST_TIME' => 1528710423
+]
