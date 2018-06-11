@@ -47,7 +47,9 @@ class CommonController extends Controller {
             if(!$user->tel){
                 return json_encode(['stat'=>'fail','message'=>'未设置手机号'],256);
             }
-            $result= \app\components\CommonHelper::sendSms($user->tel, 'sms_captcha', ['code'=>$num]);
+            $result_json= \app\components\CommonHelper::sendSms($user->tel, 'sms_captcha', ['code'=>$num]);
+            $result_arr= json_decode($result_json,TRUE);
+            $result=$result_arr['stat']=='success'?true:false;
         }
         
         if($result){

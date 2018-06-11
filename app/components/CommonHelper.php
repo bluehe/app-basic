@@ -78,14 +78,14 @@ class CommonHelper {
                 $message_configs['server']=$server;
                 
                 require_once(Yii::getAlias('@common').'/vendor/smser/submail/SUBMAILAutoload.php');
-                $submail=new MESSAGEXsend($message_configs);
+                $submail=new \MESSAGEXsend($message_configs);
                 $submail->setTo($smsto);
                 $submail->SetProject($sms[$type]);
                 foreach($content as $k=>$v){
                     $submail->AddVar($k,$v);
                 }
                 $xsend=$submail->xsend();
-                $result =Yii::$app->cloudsmser->sendByTemplate($smsto, $content,$sms[$type]);
+                $result =$xsend['status']=='success'?'success':$xsend['msg'];               
             }
              return $result=='success'?json_encode(['stat'=>'success','message'=>'短信发送成功']):json_encode(['stat'=>'fail','message'=>$result]);
         }else{
