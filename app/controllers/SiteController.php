@@ -325,6 +325,28 @@ class SiteController extends Controller
     
     public function actionComplete() {
         if (!Yii::$app->user->isGuest) {
+            //创建第三方记录
+            $auth = new UserAuth();
+            $auth->type = Yii::$app->session->get('auth_type');
+            $auth->open_id = Yii::$app->session->get('auth_openid');
+            $auth->uid = Yii::$app->user->identity->id;
+            $auth->created_at = time();
+            if ($auth->save()) {
+                if (!$auth->user->avatar) {
+                    $auth->user->avatar = Yii::$app->session->get('auth_avatar');
+                    $auth->user->save();
+                }
+                $nickname = Yii::$app->session->get('auth_nickname');
+                if (!$auth->user->nickname && (mb_strlen($nickname, "UTF8") >= 5) && !User::exist_nickname($nickname)) {
+                    $auth->user->nickname = $nickname;
+                    $auth->user->save();
+                }
+                Yii::$app->session->remove('auth_type');
+                Yii::$app->session->remove('auth_openid');
+                Yii::$app->session->remove('auth_avatar');
+                Yii::$app->session->remove('auth_nickname');
+                //return $this->goHome();
+            }
             return $this->goHome();
         }
         $model_l = new LoginForm();
