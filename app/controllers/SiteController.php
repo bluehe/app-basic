@@ -13,6 +13,8 @@ use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 use app\models\PasswordResetForm;
 use app\models\PasswordFindForm;
+use app\models\UserAuth;
+use app\models\User;
 
 /**
  * Site controller
@@ -156,6 +158,7 @@ class SiteController extends Controller
         ]);
     }
     
+    //发送邮件方式
     /**
      * Requests password reset.
      *
@@ -214,6 +217,7 @@ class SiteController extends Controller
         ]);
     }
     
+    //验证码方式
      /**
      * Requests password reset.
      *
@@ -263,5 +267,148 @@ class SiteController extends Controller
                     'model' => $model,
         ]);
         
+    }
+    
+    //第三方回调
+    public function successCallback($client) {
+        $type = $client->getId(); // qq | weibo | github |weixin
+        $attributes = $client->getUserAttributes(); // basic info
+
+        $auth = UserAuth::find()->where(['type' => $type, 'open_id' => $attributes['id']])->one();
+        switch ($type) {
+            case 'github':
+                $avatar = $attributes['avatar_url'];
+                $nickname = $attributes['name'];
+                $gender = '';
+                break;
+            case 'weibo':
+                $avatar = $attributes['profile_image_url'];
+                $nickname = $attributes['name'];
+                $gender = $attributes['gender']; //m
+                break;
+            case 'qq':
+                $avatar = $attributes['figureurl_qq_2'];
+                $nickname = $attributes['nickname'];
+                $gender = $attributes['gender']; //男
+                break;
+            default:
+                $avatar = '';
+                $nickname = '';
+                $gender = '';
+                break;
+        }
+        if ($auth) {
+//存在
+            if (Yii::$app->user->login($auth->user)) {
+                if (!$auth->user->avatar) {
+                    $auth->user->avatar = $avatar;
+                    $auth->user->save();
+                }
+                if (!$auth->user->nickname && (mb_strlen($nickname, "UTF8") >= 5) && !User::exist_nickname($nickname)) {
+                    $auth->user->nickname = $nickname;
+                    $auth->user->save();
+                }
+                return $this->goHome();
+            }
+        } else {
+//不存在，注册
+            Yii::$app->session->set('auth_type', $type);
+            Yii::$app->session->set('auth_openid', $attributes['id']);
+            Yii::$app->session->set('auth_avatar', $avatar);
+            Yii::$app->session->set('auth_nickname', $nickname);
+            return $this->redirect('complete');
+        }
+
+
+// user login or signup comes here
+    }
+    
+    public function actionComplete() {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $model_l = new LoginForm();
+        $model_s = new SignupForm();
+        if (Yii::$app->request->isPost) {
+
+            if (Yii::$app->request->post('type') === 'bind') {
+                //登录
+                if ($model_l->load(Yii::$app->request->post()) && $model_l->login()) {
+                    Yii::$app->session->remove('loginCaptchaRequired');
+                    //创建第三方记录
+                    $auth = new UserAuth();
+                    $auth->type = Yii::$app->session->get('auth_type');
+                    $auth->open_id = Yii::$app->session->get('auth_openid');
+                    $auth->uid = Yii::$app->user->identity->id;
+                    $auth->created_at = time();
+                    if ($auth->save()) {
+                        if (!$auth->user->avatar) {
+                            $auth->user->avatar = Yii::$app->session->get('auth_avatar');
+                            $auth->user->save();
+                        }
+                        $nickname = Yii::$app->session->get('auth_nickname');
+                        if (!$auth->user->nickname && (mb_strlen($nickname, "UTF8") >= 5) && !User::exist_nickname($nickname)) {
+                            $auth->user->nickname = $nickname;
+                            $auth->user->save();
+                        }
+                        Yii::$app->session->remove('auth_type');
+                        Yii::$app->session->remove('auth_openid');
+                        Yii::$app->session->remove('auth_avatar');
+                        Yii::$app->session->remove('auth_nickname');
+                        return $this->goHome();
+                    }
+                } else {
+                    $this->counter = Yii::$app->session->get('loginCaptchaRequired') + 1;
+                    Yii::$app->session->set('loginCaptchaRequired', $this->counter);
+                }
+            } else {
+                if ($model_s->load(Yii::$app->request->post())) {
+                    if (Yii::$app->request->isAjax) {
+                        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                        return \yii\bootstrap\ActiveForm::validate($model_s);
+                    }
+                    //创建用户
+                    if ($user = $model_s->signup()) {
+                        //登录
+                        if (Yii::$app->getUser()->login($user)) {
+                            //创建第三方记录
+                            $auth = new UserAuth();
+                            $auth->type = Yii::$app->session->get('auth_type');
+                            $auth->open_id = Yii::$app->session->get('auth_openid');
+                            $auth->uid = Yii::$app->user->identity->id;
+                            $auth->created_at = time();
+                            if ($auth->save()) {
+                                if (!$auth->user->avatar) {
+                                    $auth->user->avatar = Yii::$app->session->get('auth_avatar');
+                                    $auth->user->save();
+                                }
+                                $nickname = Yii::$app->session->get('auth_nickname');
+                                if (!$auth->user->nickname && (mb_strlen($nickname, "UTF8") >= 5) && !User::exist_nickname($nickname)) {
+                                    $auth->user->nickname = $nickname;
+                                    $auth->user->save();
+                                }
+                                Yii::$app->session->remove('auth_type');
+                                Yii::$app->session->remove('auth_openid');
+                                Yii::$app->session->remove('auth_avatar');
+                                Yii::$app->session->remove('auth_nickname');
+                                return $this->goHome();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $this->counter = Yii::$app->session->get('loginCaptchaRequired') + 1;
+        $captcha_loginfail = System::getValue('captcha_loginfail');
+        if ((($this->counter > $this->attempts && $captcha_loginfail == '1') || $captcha_loginfail != '1') && System::existValue('captcha_open', '2')) {
+            $model_l->setScenario("captchaRequired");
+        }
+        if (System::existValue('captcha_open', '1')) {
+            $model_s->setScenario("captchaRequired");
+        }
+
+
+        $this->layout = '//main-login';
+        return $this->render('complete', ['model_l' => $model_l, 'model_s' => $model_s,]);
     }
 }
