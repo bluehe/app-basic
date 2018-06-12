@@ -63,13 +63,9 @@ class CommonHelper {
                 $sms_response= json_decode($response,TRUE);
                 $result =$sms_response['code']==200?'success':$sms_response['message'];
             }elseif($sms['sms_platform']=='cloudsmser'){
-                Yii::$app->set('cloudsmser', [
-                    'class' => 'daixianceng\smser\CloudSmser',
-                    'username' => $sms['sms_key'],
-                    'password' => $sms['sms_secret'],
-                    'fileMode' => false,             
-                ]);
-                $result =Yii::$app->cloudsmser->sendByTemplate($smsto, $content,$sms[$type]);
+                require_once(Yii::getAlias('@common').'/vendor/smser/cloudsmser/smsapi.fun.php');
+                $response=sendSMS($sms['sms_key'],$sms['sms_secret'],$smsto,array_to_json($content),$sms[$type]);
+                $result =$response['stat']==100?'success':$response['message'];
             }elseif($sms['sms_platform']=='submail'){
                 $server='https://api.mysubmail.com/';
                 $message_configs['appid']=$sms['sms_key'];

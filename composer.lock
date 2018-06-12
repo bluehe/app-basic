@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4348570ee02ed6751acc284c5dcd9eaa",
+    "content-hash": "575510c13affef69a0123df27faf5105",
     "packages": [
         {
             "name": "2amigos/qrcode-library",
@@ -485,6 +485,51 @@
                 "zikula"
             ],
             "time": "2017-12-29T09:13:20+00:00"
+        },
+        {
+            "name": "daixianceng/yii2-smser",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/daixianceng/yii2-smser.git",
+                "reference": "189dcf1e977b91c6c02b3759896b43f9c40025bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/daixianceng/yii2-smser/189dcf1e977b91c6c02b3759896b43f9c40025bc.zip",
+                "reference": "189dcf1e977b91c6c02b3759896b43f9c40025bc",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "daixianceng\\smser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Cosmo",
+                    "email": "daixianceng@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Yii2 SMS extension",
+            "homepage": "https://github.com/daixianceng/yii2-smser",
+            "keywords": [
+                "extension",
+                "plugin",
+                "sms",
+                "smser",
+                "yii2"
+            ],
+            "time": "2016-03-19T11:51:11+00:00"
         },
         {
             "name": "dmstr/yii2-adminlte-asset",

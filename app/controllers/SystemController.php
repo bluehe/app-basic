@@ -208,14 +208,10 @@ class SystemController extends Controller {
                         );
                 $response= json_decode($response_r,TRUE);
                 $result =$response['code']==200?'success':$response['message'];
-            }elseif($system['sms_platform']=='cloudsmser'){
-                Yii::$app->set('cloudsmser', [
-                    'class' => 'daixianceng\smser\CloudSmser',
-                    'username' => $system['sms_key'],
-                    'password' => $system['sms_secret'],
-                    'fileMode' => false,             
-                ]);
-                $result =Yii::$app->cloudsmser->sendByTemplate($smsto, ['code'=>'123456'],$system['sms_captcha']);
+            }elseif($system['sms_platform']=='cloudsmser'){           
+                require_once(Yii::getAlias('@common').'/vendor/smser/cloudsmser/smsapi.fun.php');
+                $response=sendSMS($system['sms_key'],$system['sms_secret'],$smsto,array_to_json(['code'=>123456]),$system['sms_captcha']);
+                $result =$response['stat']==100?'success':$response['message'];
             }elseif($system['sms_platform']=='submail'){
                 $server='https://api.mysubmail.com/';
                 $message_configs['appid']=$system['sms_key'];
