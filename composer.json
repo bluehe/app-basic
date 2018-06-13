@@ -23,7 +23,9 @@
         "yiisoft/yii2-authclient": "~2.1.0",
         "2amigos/qrcode-library": "~1.1",
         "saviorlv/yii2-dysms": "dev-master",
-        "kartik-v/yii2-widgets": "*"
+        "kartik-v/yii2-widgets": "*",
+        "yiisoft/yii2-imagine": "^2.1",
+        "bluehe/yii2-jcrop": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -218,6 +218,11 @@ a.desc:after {
 /*    height: 35px;*/
     line-height: 35px;
 }
+/*账号信息-注册信息*/
+.dd-c{
+    display: inline-block;
+    min-width: 250px;
+}
 
 /*弹出查看*/
 .repaire-view .timeline>li>.timeline-item {
