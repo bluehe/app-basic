@@ -16,6 +16,7 @@ class SignupForm extends Model
     public $password;
     public $password1;
     public $verifyCode;
+    public $agreement;
 
 
     /**
@@ -38,6 +39,7 @@ class SignupForm extends Model
             ['password1', 'compare', 'compareAttribute' => 'password', 'message' => '两次密码不一致'],
             // verifyCode needs to be entered correctly
             ['verifyCode', 'captcha', 'message' => '{attribute}不正确', 'on' => 'captchaRequired'],
+            ['agreement', 'compare','compareValue'=>1,'message' => '请同意协议和声明'],
         ];
     }
 
@@ -52,7 +54,8 @@ class SignupForm extends Model
 //            'nickname' => '昵称',
             'password' => '密码',
             'password1' => '确认密码',
-            'verifyCode' => '验证码'
+            'verifyCode' => '验证码',
+            'agreement'=>"我同意<a href='javascript:void(0);' class='agreement' data-code='service'>《服务协议》</a>、<a href='javascript:void(0);' class='agreement' data-code='privacy'>《隐私声明》</a>",
         );
     }
 

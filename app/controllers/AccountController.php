@@ -38,7 +38,7 @@ class AccountController extends Controller {
         ]);
     }
     
-     public function actionChangeNickname() {
+    public function actionChangeNickname() {
 
         if (!Yii::$app->user->isGuest) {
             $model = User::findOne(Yii::$app->user->identity->id);
@@ -47,6 +47,23 @@ class AccountController extends Controller {
             } else {
                 return $this->renderAjax('change-nickname', [
                             'model' => $model,
+                ]);
+            }
+        } else {
+            return false;
+        }
+    }
+    
+     public function actionChangeAuth($type) {
+
+        if (!Yii::$app->user->isGuest) {
+            $model = User::findOne(Yii::$app->user->identity->id);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return json_encode(['stat' => 'success', 'email' => $model->email]);
+            } else {
+                return $this->renderAjax('change-auth', [
+                            'model' => $model,
+                            'type'=>$type,
                 ]);
             }
         } else {

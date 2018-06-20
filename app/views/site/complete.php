@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 use app\models\System;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -139,6 +141,36 @@ $fieldOptions4 = [
                             ->label(false)
                             ->textInput(['placeholder' => $model_s->getAttributeLabel('tel')])
                     ?>
+                    <?php endif; ?>
+                    <?php if (System::getValue('agreement_open')): ?>
+                    <?= $form->field($model_s, 'agreement')->checkbox()->label($model_s->getAttributeLabel('agreement')) ?>
+                    <?php
+Modal::begin([
+    'id' => 'agreement-modal',
+    'header' => '<h4 class="modal-title"></h4>',
+    'options' => [
+        'tabindex' => false
+    ],
+]);
+Modal::end();
+?>
+<script>
+<?php $this->beginBlock('agreement') ?>
+    
+    $('.agreement').on('click', function () {
+        var code =$(this).data('code');
+        var title=$(this).html();
+        $.get('<?= Url::toRoute(['site/agreement']) ?>?code='+code,
+                function (data) {
+                    $('#agreement-modal .modal-title').html(title);
+                    $('#agreement-modal .modal-body').html(data);
+                    $('#agreement-modal').modal('show');
+                }
+        );
+    });
+<?php $this->endBlock() ?>
+</script>
+<?php $this->registerJs($this->blocks['agreement'], \yii\web\View::POS_END); ?>
                     <?php endif; ?>
                     <div class="row">
 

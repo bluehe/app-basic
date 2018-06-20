@@ -50,6 +50,26 @@ Modal::end();
                 }
         );
     });
+    
+    $('.change-email').on('click', function () {
+        $.get('<?= Url::toRoute('account/change-auth?type=email') ?>',
+                function (data) {
+                    $('#account-modal .modal-title').html('修改邮箱');
+                    $('#account-modal .modal-body').html(data);
+                    $('#account-modal').modal('show');
+                }
+        );
+    });
+    
+    $('.change-tel').on('click', function () {
+        $.get('<?= Url::toRoute('account/change-auth?type=tel') ?>',
+                function (data) {
+                    $('#account-modal .modal-title').html('修改手机');
+                    $('#account-modal .modal-body').html(data);
+                    $('#account-modal').modal('show');
+                }
+        );
+    });
 <?php $this->endBlock() ?>
 </script>
 <?php $this->registerJs($this->blocks['user'], \yii\web\View::POS_END); ?>

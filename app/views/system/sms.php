@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
     function changeshow() {
         var service = $('.radio-sms_service:checked').val();
         if (service === '1') {
-            $('.field-sms:not(.field-smtp_service)').show();
+            $('.field-sms:not(.field-sms_service)').show();
             
             var platform = $('.radio-sms_platform:checked').val();
             if (platform === 'cloudsmser'||platform === 'submail') {

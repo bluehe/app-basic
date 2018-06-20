@@ -231,6 +231,36 @@ class SystemController extends Controller {
             
         }
     }
+    
+    /**
+     * 协议设置
+     */
+    public function actionAgreement() {
+
+        if (Yii::$app->request->post()) {
+            $system = Yii::$app->request->post('System');
+
+            $res = 0;
+            foreach ($system as $key => $value) {
+                $r = System::setValue($key, $value);
+                if ($r) {
+                    $res++;
+                } elseif ($r === false) {
+                    $res = false;
+                    break;
+                }
+            }
+            if ($res) {
+                Yii::$app->session->setFlash('success', '更新成功。');
+            } elseif ($res === false) {
+                Yii::$app->session->setFlash('error', '更新失败。');
+            }
+        }
+
+        return $this->render('agreement', [
+                    'model' => System::getChildren('agreement'),
+        ]);
+    }
 
     /**
      * Lists all Crontab models.

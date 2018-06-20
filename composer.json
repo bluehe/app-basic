@@ -25,7 +25,8 @@
         "saviorlv/yii2-dysms": "dev-master",
         "kartik-v/yii2-widgets": "*",
         "yiisoft/yii2-imagine": "^2.1",
-        "bluehe/yii2-jcrop": "dev-master"
+        "bluehe/yii2-jcrop": "dev-master",
+        "yiidoc/yii2-redactor": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

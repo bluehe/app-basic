@@ -137,6 +137,7 @@ class SiteController extends Controller
             return $this->goHome();
         }
         $model = new SignupForm();
+        $model->agreement=1;
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -156,6 +157,18 @@ class SiteController extends Controller
         return $this->render('signup', [
                     'model' => $model,
         ]);
+    }
+    
+    public function actionAgreement($code) {
+        $model= System::getValue('agreement_'.$code);
+        if($model==null){
+            return false;
+        }else{
+            return $this->renderAjax('agreement', [
+                        'model' => $model,
+                ]);
+        }
+        
     }
     
     //发送邮件方式
@@ -351,6 +364,7 @@ class SiteController extends Controller
         }
         $model_l = new LoginForm();
         $model_s = new SignupForm();
+        $model_s->agreement=1;
         if (Yii::$app->request->isPost) {
 
             if (Yii::$app->request->post('type') === 'bind') {

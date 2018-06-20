@@ -24,6 +24,12 @@ return [
         'gridview' => [
             'class' => 'kartik\grid\Module'
         ],
+        'redactor' => [
+            'class' => 'yii\redactor\RedactorModule',
+            'uploadDir' => '@webroot/upload',
+            'uploadUrl' => '@web/upload',            
+            'imageAllowExtensions'=>['jpg','png','gif']
+        ],
     ],
     'aliases' => [
         '@mdm/admin' => '@vendor/mdmsoft/yii2-admin',
