@@ -25,7 +25,7 @@ class m180606_150800_create_system_table extends Migration {
             'tag' => $this->string(20)->notNull()->comment('标签'),
             'type' => $this->string(10)->notNull()->comment('类型'),
             'store_range' => $this->string()->notNull()->comment('范围'),
-            'store_dir' => $this->string()->notNull()->comment('目录'),
+            'hint' => $this->string()->notNull()->comment('提示'),
             'value' => $this->text()->notNull()->comment('值'),
             'sort_order' => $this->smallInteger(3)->notNull()->defaultValue(1)->comment('排序'),
             "FOREIGN KEY ([[parent_id]]) REFERENCES {$table}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
@@ -33,19 +33,22 @@ class m180606_150800_create_system_table extends Migration {
         $this->createIndex('parent_id', $table, 'parent_id');
 
         //插入数据
-        $this->batchInsert($table, ['id', 'parent_id', 'code', 'tag', 'type', 'store_range', 'store_dir', 'value', 'sort_order'], [
+        $this->batchInsert($table, ['id', 'parent_id', 'code', 'tag', 'type', 'store_range', 'hint', 'value', 'sort_order'], [
             [1, NULL, 'system', '系统信息', 'group', '', '', '', 1],
             [2, NULL, 'smtp', '邮件设置', 'group', '', '', '', 2],
             [3, NULL, 'captcha', '验证码设置', 'group', '', '', '', 3],
             [4, NULL, 'sms', '短信设置', 'group', '', '', '', 4],
             [5, NULL, 'agreement', '协议设置', 'group', '', '', '', 5],
-            [101, 1, 'system_name', '网站名称', 'text', '', '', '', 1],
-            [102, 1, 'system_title', '网站标题', 'text', '', '', '', 2],
-            [103, 1, 'system_keywords', '关键字', 'textarea', '3', '', '', 3],
-            [104, 1, 'system_desc', '网站描述', 'textarea', '3', '', '', 4],
-            [105, 1, 'system_icp', '备案信息', 'text', '', '', '', 5],
-            [106, 1, 'system_statcode', '第三方统计', 'textarea', '3', '', '', 6],
-            [201, 2, 'smtp_service', '自定义邮件', 'radio', '{"0":"否","1":"是"}', '', '0', 1],
+            [101, 1, 'system_stat', '系统状态', 'radio', '{"0":"关闭","1":"开放"}', '系统关闭只允许超级管理员登录；关闭将清退除超级管理员外的所有用户', '1', 1],
+            [102, 1, 'system_close', '关闭原因', 'textarea', '3', '', '', 2],
+            [103, 1, 'system_register', '允许注册', 'radio', '{"0":"否","1":"是"}', '', '1', 3],
+            [104, 1, 'system_name', '网站名称', 'text', '', '', '', 4],
+            [105, 1, 'system_title', '网站标题', 'text', '', '', '',5],
+            [106, 1, 'system_keywords', '关键字', 'textarea', '3', '', '', 6],
+            [107, 1, 'system_desc', '网站描述', 'textarea', '3', '', '', 7],
+            [108, 1, 'system_icp', '备案信息', 'text', '', '', '', 8],
+            [109, 1, 'system_statcode', '第三方统计', 'textarea', '3', '', '', 9],
+            [201, 2, 'smtp_service', '自定义邮件', 'radio', '{"0":"否","1":"是"}', '如果您选择了采用系统预设的 Mail 服务，您不需要填写下面的内容。', '0', 1],
             [202, 2, 'smtp_ssl', '加密连接(SSL)', 'radio', '{"0":"否","1":"是"}', '', '0', 2],
             [203, 2, 'smtp_host', 'SMTP服务器', 'text', '', '', '', 3],
             [204, 2, 'smtp_port', 'SMTP端口', 'text', '', '', '', 4],
@@ -54,7 +57,7 @@ class m180606_150800_create_system_table extends Migration {
             [207, 2, 'smtp_password', 'SMTP密码', 'password', '', '', '', 7],
             [208, 2, 'smtp_charset', '邮件编码', 'radio', '{"1":"UTF-8","2":"GB2312"}', '', '1', 8],
             [301, 3, 'captcha_open', '启用验证码', 'checkbox', '{"1":"新用户注册","2":"用户登录","3":"找回密码"}', '', '', 1],
-            [302, 3, 'captcha_loginfail', '登录失败显示', 'radio', '{"0":"否","1":"是"}', '', '0', 2],
+            [302, 3, 'captcha_loginfail', '登录失败显示', 'radio', '{"0":"否","1":"是"}', '选择“是”将在用户登录失败 3 次后才显示验证码，选择“否”将始终在登录时显示验证码。注意：只有在启用了用户登录验证码时本设置才有效', '0', 2],
             [303, 3, 'captcha_length', '验证码长度', 'text', '', '', '6', 3],
             [401, 4, 'sms_service', '启用短信', 'radio', '{"0":"否","1":"是"}', '', '0', 1],
             [402, 4, 'sms_platform', '短信平台', 'radio', '{"aliyun":"阿里云","cloudsmser":"中国云信","submail":"赛邮"}', '', 'aliyun', 2],
@@ -62,9 +65,9 @@ class m180606_150800_create_system_table extends Migration {
             [404, 4, 'sms_secret', 'Secret', 'password', '', '', '', 4],
             [405, 4, 'sms_sign', '短信签名', 'text', '', '', '', 5],
             [406, 4, 'sms_captcha', '验证码模板', 'text', '', '', '', 6],
-            [501, 5, 'agreement_open', '启用协议', 'radio', '{"0":"否","1":"是"}', '', '0', 1],
-            [502, 5, 'agreement_service', '服务协议', 'text', '', '', '', 2],
-            [503, 5, 'agreement_privacy', '隐私声明', 'text', '', '', '', 3],
+            [501, 5, 'agreement_open', '启用协议', 'radio', '{"0":"否","1":"是"}', '', '1', 1],
+            [502, 5, 'agreement_service', '服务协议', 'editor', '', '', '', 2],
+            [503, 5, 'agreement_privacy', '隐私声明', 'editor', '', '', '', 3],
            
         ]);
         

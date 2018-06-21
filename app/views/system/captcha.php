@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 </div>
                             </div>
-                            <div class="col-md-6"><div class="help-block"><?= $one['code'] == 'captcha_loginfail' ? '选择“是”将在用户登录失败 3 次后才显示验证码，选择“否”将始终在登录时显示验证码。注意：只有在启用了用户登录验证码时本设置才有效' : '' ?></div></div>
+                            <div class="col-md-6"><div class="help-block"><?= $one['hint'] ?></div></div>
                         </div>
                         <?php
                     } elseif ($one['type'] == 'checkbox' && $ranges = json_decode($one['store_range'])) {

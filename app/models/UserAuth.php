@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -54,9 +55,18 @@ class UserAuth extends ActiveRecord {
     public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'uid']);
     }
-
-    public static function getTouser($uid) {
-        return static::find()->select(['open_id'])->where(['uid' => $uid, 'type' => 'weixin'])->column();
+    
+    /**
+     *是否已经认证
+     * 
+     * @param type $type
+     * @param type $uid
+     * @return boolean
+     */
+    public static function isAuth($type,$uid= null) {
+        $user_id= $uid===null?Yii::$app->user->identity->id:$uid;
+        return static::find()->where(['type'=>$type,'uid'=>$user_id])->exists();
     }
+
 
 }

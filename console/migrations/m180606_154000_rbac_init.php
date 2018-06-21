@@ -143,8 +143,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/system/crontab', '2', null, null, null, '1482820123', '1482820123'],
             
           
-            ['admin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
+            ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
+            ['frozen', '1', '账号冻结', null, null, '1482820123', '1482820123'],
             ['guest', '1', '游客', null, null, '1482820123', '1482820123'],
  
             
@@ -153,17 +154,18 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
           
         ]);
         $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [                                         
-            ['admin', '/admin/*'],
+            ['superadmin', '/admin/*'],
             
             ['账号信息', '/account/*'],
             ['member', '账号信息'],
+            ['frozen', '账号信息'],
             
             ['系统设置', '/system/*'], 
-            ['admin', '系统设置'],
+            ['superadmin', '系统设置'],
          
         ]);
         $this->batchInsert($authManager->assignmentTable, ['item_name', 'user_id', 'created_at'], [
-            ['admin', '1', '1482481221'],
+            ['superadmin', '1', '1482481221'],
             ['member', '1', '1482481221'],
         ]);
      

@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
  * @property string $code
  * @property string $type
  * @property string $store_range
- * @property string $store_dir
+ * @property string $hint
  * @property string $value
  * @property integer $sort_order
  */
@@ -36,7 +36,7 @@ class System extends ActiveRecord {
             [['code'], 'unique'],
             [['tag'], 'string', 'max' => 20],
             [['type'], 'string', 'max' => 10],
-            [['store_range', 'store_dir'], 'string', 'max' => 255],
+            [['store_range', 'hint'], 'string', 'max' => 255],
         ];
     }
 
@@ -51,7 +51,7 @@ class System extends ActiveRecord {
             'tag' => '标签',
             'type' => '类型',
             'store_range' => '范围',
-            'store_dir' => '目录',
+            'hint' => '提示',
             'value' => '值',
             'sort_order' => '顺序',
         ];

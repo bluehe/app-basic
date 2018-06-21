@@ -63,6 +63,7 @@ class SiteController extends Controller
             'auth' => [
                 'class' => 'yii\authclient\AuthAction',
                 'successCallback' => [$this, 'successCallback'],
+//                'cancelCallback' => [$this, 'cancelCallback'],
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
@@ -89,11 +90,19 @@ class SiteController extends Controller
      * @return string
      */
     public function actionLogin()
-    {      
+    {
+        if (System::getValue('system_stat')=='0') {
+            $notice=System::getValue('system_close');
+            Yii::$app->session->setFlash('warning', $notice?$notice:'管理员临时关闭本站');
+            if(!Yii::$app->user->isGuest){
+                Yii::$app->user->logout();               
+            }
+        }
+        
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
+        
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->login()) {
@@ -134,6 +143,10 @@ class SiteController extends Controller
      */
     public function actionSignup() {
         if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        if (!System::getValue('system_register')) {
+            Yii::$app->session->setFlash('warning', '本站未开放注册权限。');
             return $this->goHome();
         }
         $model = new SignupForm();
@@ -284,7 +297,7 @@ class SiteController extends Controller
     
     //第三方回调
     public function successCallback($client) {
-        $type = $client->getId(); // qq | weibo | github |weixin
+        $type = $client->getId(); // qq | weibo | github
         $attributes = $client->getUserAttributes(); // basic info
 
         $auth = UserAuth::find()->where(['type' => $type, 'open_id' => $attributes['id']])->one();
@@ -311,7 +324,7 @@ class SiteController extends Controller
                 break;
         }
         if ($auth) {
-//存在
+            //存在
             if (Yii::$app->user->login($auth->user)) {
                 if (!$auth->user->avatar) {
                     $auth->user->avatar = $avatar;
@@ -324,7 +337,11 @@ class SiteController extends Controller
                 return $this->goHome();
             }
         } else {
-//不存在，注册
+            //不存在，注册
+            if (!System::getValue('system_register')) {
+                Yii::$app->session->setFlash('warning', '本站未开放注册权限。');
+                return $this->goHome();
+            }
             Yii::$app->session->set('auth_type', $type);
             Yii::$app->session->set('auth_openid', $attributes['id']);
             Yii::$app->session->set('auth_avatar', $avatar);
@@ -333,8 +350,19 @@ class SiteController extends Controller
         }
 
 
-// user login or signup comes here
+        // user login or signup comes here
     }
+    
+//    public function cancelCallback($client) {
+//        $type = $client->getId(); // qq | weibo | github |weixin
+//        $attributes = $client->getUserAttributes(); // basic info
+//
+//        $auth = UserAuth::find()->where(['type' => $type, 'open_id' => $attributes['id']])->one();
+//        if($auth!==null){
+//            $auth->delete();
+//        }
+//        return $this->goHome();
+//    }
     
     public function actionComplete() {
         if (!Yii::$app->user->isGuest) {

@@ -50,6 +50,7 @@ use yii\widgets\ActiveForm;
                 if (data.stat === 'success') {
                     $('#account-modal').modal('hide');
                     $('.nickname').html(data.nickname);
+                    $('.nickname-span a').html('修改昵称').removeClass('btn-success').addClass('btn-primary');
                 }
             }
         });

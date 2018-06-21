@@ -50,7 +50,27 @@ class initSiteConfig extends Event {
             $cache->set('system_info', $system);
         }
         Yii::$app->name = $system['system_name'];
-
+        
+        //系统状态-关闭
+        if($system['system_stat']=='0'){
+                 
+            $is_admin=false;
+            if(!Yii::$app->user->isGuest){
+                $auth = Yii::$app->authManager;
+                $Role_superadmin=$auth->getRole('superadmin');
+                $uid = Yii::$app->user->identity->id;
+                $is_admin=$auth->getAssignment($Role_superadmin->name, $uid);
+            }
+            
+           
+            if(Yii::$app->controller->id=='site'&&Yii::$app->controller->action->id=='login'||$is_admin){
+//                Yii::$app->session->setFlash('warning', $system['system_close']?$system['system_close']:'管理员临时关闭本站');
+            }else{ 
+                Yii::$app->getResponse()->redirect(['site/login']);
+                return false;
+            }
+        }
+      
         //定时任务
         $event_scheduler = $cache->get('event_scheduler');
 

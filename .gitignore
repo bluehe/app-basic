@@ -33,4 +33,5 @@ phpunit.phar
 
 # vagrant runtime
 /.vagrant
+/console/runtime/
 /app/runtime/

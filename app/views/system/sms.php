@@ -23,7 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach ($model as $one) {
                     if ($one['type'] == 'text' || $one['type'] == 'password') {
                         ?>
-                        <div class="form-group field-sms field-<?= $one['code'] ?>"><label class="col-md-2 control-label" for="<?= $one['code'] ?>"><?= $one['tag'] ?></label><div class="col-md-4"><input type="<?= $one['type'] ?>" id="<?= $one['code'] ?>" class="form-control" name="System[<?= $one['code'] ?>]" value="<?= $one['value'] ?>"></div><div class="col-md-6"><div class="help-block"></div></div></div>
+                        <div class="form-group field-sms field-<?= $one['code'] ?>">
+                            <label class="col-md-2 control-label" for="<?= $one['code'] ?>"><?= $one['tag'] ?></label>
+                            <div class="col-md-4"><input type="<?= $one['type'] ?>" id="<?= $one['code'] ?>" class="form-control" name="System[<?= $one['code'] ?>]" value="<?= $one['value'] ?>"></div>
+                            <div class="col-md-6"><div class="help-block"><?= $one['hint'] ?></div></div>                               
+                        </div>
                         <?php
                     } elseif ($one['type'] == 'radio' && $ranges = json_decode($one['store_range'])) {
                         ?>
@@ -40,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 </div>
                             </div>
-                            <div class="col-md-6"><div class="help-block"></div></div>
+                            <div class="col-md-6"><div class="help-block"><?= $one['hint'] ?></div></div>
                         </div>
                         <?php
                     }
