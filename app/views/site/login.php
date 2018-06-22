@@ -33,7 +33,7 @@ $fieldOptions2 = [
                 $form
                 ->field($model, 'username', $fieldOptions1)
                 ->label(false)
-                ->textInput(['placeholder' => '用户名/手机号/电子邮件'])
+                ->textInput(['placeholder' => '用户名/手机号/电子邮件','autocomplete'=>'off'])
         ?>
 
         <?=
@@ -46,7 +46,7 @@ $fieldOptions2 = [
             <?=
             $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                 'template' => '<div class="row"><div class="col-xs-8">{input}</div><div class="col-xs-4">{image}</div></div>',
-                'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control', 'autoCompete' => false],
+                'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control','autocomplete'=>'off'],
                 'imageOptions' => ['alt' => '点击换图', 'title' => '点击换图', 'style' => 'cursor:pointer', 'height' => 34]])->label(false)
             ?>
         <script>
@@ -61,7 +61,7 @@ $fieldOptions2 = [
             dataType: "json",
             cache: false,
             success: function (data) {
-                $("#imgVerifyCode").attr("src", data["url"]);
+//                $("#imgVerifyCode").attr("src", data["url"]);
             }
         });
     }
@@ -82,12 +82,14 @@ $fieldOptions2 = [
 
 
         <?php ActiveForm::end(); ?>
+        <div class="register-t">
         <?=
-        Html::a('忘记密码', ['/site/password-reset'])
+        Html::a('忘记密码', ['/site/password-reset'], ['class' => 'pull-left register-tis'])
         ?>
         <?=
-        Html::a('注册新账号', ['/site/signup'], ['class' => 'pull-right'])
+        Html::a('注册新账号', ['/site/signup'], ['class' => 'pull-right register-tis'])
         ?>
+        </div>
         <div class="social-auth-links text-center social-icon">
             <p>第三方账号登录</p>
             <?=

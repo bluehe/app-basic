@@ -28,6 +28,7 @@ use yii\helpers\Url;
                     </a>
                     <ul class="dropdown-menu">
                         <li class="header"><img src="<?= Url::to(['common/qrcode']) ?>"/></li>
+                        <li class="user-footer text-center"><span style="font-size: 12px;">扫一扫，直接在手机上打开</span></li>
                     </ul>
                 </li>
                 

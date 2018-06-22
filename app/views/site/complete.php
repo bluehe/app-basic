@@ -121,7 +121,7 @@ $fieldOptions4 = [
                         <?=
                         $form->field($model_s, 'verifyCode')->widget(Captcha::className(), [
                             'template' => '<div class="row"><div class="col-xs-8">{input}</div><div class="col-xs-4">{image}</div></div>',
-                            'options' => ['placeholder' => $model_s->getAttributeLabel('verifyCode'), 'class' => 'form-control', 'autoCompete' => false],
+                            'options' => ['placeholder' => $model_s->getAttributeLabel('verifyCode'), 'class' => 'form-control','autocomplete'=>'off'],
                             'imageOptions' => ['alt' => '点击换图', 'title' => '点击换图', 'style' => 'cursor:pointer', 'height' => 34]])->label(false)
                         ?>
                     <?php endif; ?>
@@ -215,7 +215,7 @@ Modal::end();
             dataType: "json",
             cache: false,
             success: function (data) {
-                $("#imgVerifyCode").attr("src", data["url"]);
+//                $("#imgVerifyCode").attr("src", data["url"]);
             }
         });
     }

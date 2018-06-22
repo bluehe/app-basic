@@ -52,7 +52,7 @@ $fieldOptions2 = [
                 
                 ])
                 ->label(false)
-                ->textInput(['placeholder' => $model->getAttributeLabel('verifyCode')])
+                ->textInput(['placeholder' => $model->getAttributeLabel('verifyCode'),'autocomplete'=>'off'])
             ?>
             </div>
             <div class="col-xs-6">
@@ -63,9 +63,9 @@ $fieldOptions2 = [
             <div class="col-xs-8">
                 <?php
                 if($model->type=='email'){
-                    echo System::getValue('sms_service')?Html::a('通过手机找回', ['/site/password-find','type'=>'tel']):'';
+                    echo System::getValue('sms_service')?Html::a('通过手机找回', ['/site/password-find','type'=>'tel'],['class' => 'register-tis pull-left']):'';
                 }elseif($model->type=='tel'){
-                    echo Html::a('通过邮箱找回', ['/site/password-find','type'=>'email']);
+                    echo Html::a('通过邮箱找回', ['/site/password-find','type'=>'email'],['class' => 'register-tis pull-left']);
                 }
                 ?>
             </div>

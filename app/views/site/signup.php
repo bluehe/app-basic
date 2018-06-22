@@ -48,7 +48,7 @@ $fieldOptions4 = [
                 $form
                 ->field($model, 'username', $fieldOptions1)
                 ->label(false)
-                ->textInput(['placeholder' => $model->getAttributeLabel('username')])
+                ->textInput(['placeholder' => $model->getAttributeLabel('username'),'autocomplete'=>'off'])
         ?>
         <?=
                 $form
@@ -67,7 +67,7 @@ $fieldOptions4 = [
             <?=
             $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                 'template' => '<div class="row"><div class="col-xs-8">{input}</div><div class="col-xs-4">{image}</div></div>',
-                'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control', 'autoCompete' => false],
+                'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control','autocomplete'=>'off'],
                 'imageOptions' => ['alt' => '点击换图', 'title' => '点击换图', 'style' => 'cursor:pointer', 'height' => 34]])->label(false)
             ?>
 <script>
@@ -82,7 +82,7 @@ $fieldOptions4 = [
             dataType: "json",
             cache: false,
             success: function (data) {
-                $("#imgVerifyCode").attr("src", data["url"]);
+//                $("#imgVerifyCode").attr("src", data["url"]);
             }
         });
     }
@@ -144,7 +144,7 @@ Modal::end();
         <div class="row">           
             <div class="col-xs-8">
                 <?=
-                Html::a('立即登录', ['/site/login'])
+                Html::a('立即登录', ['/site/login'],['class' => 'register-tis pull-left'])
                 ?>
             </div>
             <div class="col-xs-4">

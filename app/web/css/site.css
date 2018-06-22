@@ -119,6 +119,10 @@ a.desc:after {
     outline: none;
 }
 
+.register-t{
+    display: inline-block;
+    width:100%;
+}
 /*注册*/
 .sign-icon p{
     color: #999;

@@ -23,7 +23,7 @@ class PasswordResetRequestForm extends Model
             ['email', 'required', 'message' => 'E-mail不能为空'],
             ['email', 'email', 'message' => 'E-mail格式不正确'],
             ['email', 'exist',
-                'targetClass' => '\rky\models\User',
+                'targetClass' => '\app\models\User',
                 'filter' => ['status' => User::STATUS_ACTIVE],
                 'message' => 'E-mail不存在.'
             ],

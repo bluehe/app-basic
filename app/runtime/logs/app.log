@@ -2735,3 +2735,1975 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1529566293.379
     'REQUEST_TIME' => 1529566293
 ]
+2018-06-21 17:25:14 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:25:14 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53227'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573114.195
+    'REQUEST_TIME' => 1529573114
+]
+2018-06-21 17:25:14 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "site/image/login/3.jpg".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('site/image/logi...', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:25:14 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/site/login'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53229'
+    'REDIRECT_URL' => '/site/image/login/3.jpg'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/image/login/3.jpg'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573114.192
+    'REQUEST_TIME' => 1529573114
+]
+2018-06-21 17:26:40 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "site/image/login/3.jpg".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('site/image/logi...', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:26:40 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/site/login'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53384'
+    'REDIRECT_URL' => '/site/image/login/3.jpg'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/image/login/3.jpg'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573200.173
+    'REQUEST_TIME' => 1529573200
+]
+2018-06-21 17:26:40 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:26:40 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53386'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573200.176
+    'REQUEST_TIME' => 1529573200
+]
+2018-06-21 17:26:43 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "site/image/login/3.jpg".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('site/image/logi...', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:26:43 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/site/login'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53387'
+    'REDIRECT_URL' => '/site/image/login/3.jpg'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/image/login/3.jpg'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573203.245
+    'REQUEST_TIME' => 1529573203
+]
+2018-06-21 17:27:58 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "site/image/login/3.jpg".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('site/image/logi...', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:27:57 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/site/login'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53529'
+    'REDIRECT_URL' => '/site/image/login/3.jpg'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/image/login/3.jpg'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573277.948
+    'REQUEST_TIME' => 1529573277
+]
+2018-06-21 17:27:58 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:27:57 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53533'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573277.952
+    'REQUEST_TIME' => 1529573277
+]
+2018-06-21 17:28:24 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:28:24 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53584'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573304.869
+    'REQUEST_TIME' => 1529573304
+]
+2018-06-21 17:29:55 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:29:55 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53756'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573395.654
+    'REQUEST_TIME' => 1529573395
+]
+2018-06-21 17:30:04 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:30:04 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53777'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573404.897
+    'REQUEST_TIME' => 1529573404
+]
+2018-06-21 17:31:26 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:31:26 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53917'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573486.126
+    'REQUEST_TIME' => 1529573486
+]
+2018-06-21 17:32:03 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:32:03 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53993'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573523.888
+    'REQUEST_TIME' => 1529573523
+]
+2018-06-21 17:32:33 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:32:33 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'loginCaptchaRequired' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '54054'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573553.642
+    'REQUEST_TIME' => 1529573553
+]
+2018-06-21 17:34:33 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:34:33 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'loginCaptchaRequired' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '54276'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573673.625
+    'REQUEST_TIME' => 1529573673
+]
+2018-06-21 17:34:39 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:34:39 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'loginCaptchaRequired' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '54293'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573679.492
+    'REQUEST_TIME' => 1529573679
+]
+2018-06-21 17:38:12 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "image/progress.gif".' in D:\data\docker\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('image/progress....', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 17:38:12 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'loginCaptchaRequired' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'image/webp,image/apng,image/*,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/css/supersized.css'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '54704'
+    'REDIRECT_URL' => '/image/progress.gif'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/image/progress.gif'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529573892.076
+    'REQUEST_TIME' => 1529573892
+]
+2018-06-21 17:55:57 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'System' not found' in D:\data\docker\app\views\layouts\main-login.php:29
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#1 D:\data\docker\vendor\yiisoft\yii2\base\View.php(156): yii\base\View->renderFile()
+#2 D:\data\docker\app\views\layouts\main.php(15): yii\base\View->render()
+#3 D:\data\docker\vendor\yiisoft\yii2\base\View.php(336): ::unknown()
+#4 D:\data\docker\vendor\yiisoft\yii2\base\View.php(254): yii\base\View->renderPhpFile()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(399): yii\base\View->renderFile()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(385): yii\base\Controller->renderContent()
+#7 D:\data\docker\app\controllers\SiteController.php(124): yii\base\Controller->render()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionLogin()
+#9 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#11 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#12 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#13 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#14 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#15 {main}
+2018-06-21 17:55:57 [127.0.0.1][-][1s9ug2a5l2rqtgdb9mjbur52j0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => '898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh\";}'
+    'advanced-app' => '1s9ug2a5l2rqtgdb9mjbur52j0'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    'loginCaptchaRequired' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://www.app.com/site/signup'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=898534cc5e940a8f14e8262e34708a090e8b4947d6d7ce50fb3c6baa25d08784a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22Mv3QqZqqeKSf0MxihIjOfHqJ9zIxwGJh%22%3B%7D; advanced-app=1s9ug2a5l2rqtgdb9mjbur52j0'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '56625'
+    'REDIRECT_URL' => '/site/login'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/login'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529574957.062
+    'REQUEST_TIME' => 1529574957
+]
+2018-06-21 19:36:17 [127.0.0.1][1][vr4lqsd720c2lv7tg62005dpa0][error][yii\base\ErrorException:2] exception 'yii\base\ErrorException' with message 'mt_rand(): max(20) is smaller than min(64)' in D:\data\docker\vendor\yiisoft\yii2\captcha\CaptchaAction.php:217
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\captcha\CaptchaAction.php(174): yii\captcha\CaptchaAction->generateVerifyCode()
+#1 D:\data\docker\vendor\yiisoft\yii2\captcha\CaptchaAction.php(128): yii\captcha\CaptchaAction->getVerifyCode()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Action.php(94): yii\captcha\CaptchaAction->run()
+#3 D:\data\docker\vendor\yiisoft\yii2\base\Action.php(94): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\Action.php:94}()
+#4 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\Action->runWithParams()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#6 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#8 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#9 {main}
+2018-06-21 19:36:17 [127.0.0.1][1][vr4lqsd720c2lv7tg62005dpa0][info][application] $_GET = [
+    'refresh' => ''
+    '_' => '1529580976988'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    'advanced-app' => 'vr4lqsd720c2lv7tg62005dpa0'
+    '_identity-app' => '57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba:2:{i:0;s:13:\"_identity-app\";i:1;s:45:\"[1,\"BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3\",604800]\";}'
+    '_csrf-app' => 'fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'hteany'
+    '__captcha/site/captchacount' => 1
+    '__id' => 1
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_X_CSRF_TOKEN' => 'jFliELHEeCLf7TPFdBaWYKPlwYqOjvJXkF4wSECg72TUaAd1xZwSVpWvX4Y5XeFXya2Vy-zEqjrgGgIYc_O5Dg=='
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_REFERER' => 'http://www.app.com/system/captcha'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; advanced-app=vr4lqsd720c2lv7tg62005dpa0; _identity-app=57100eb177761e949ae56b6f2e7d956b3f3a980edf16e329a8aec0060c59968ba%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_identity-app%22%3Bi%3A1%3Bs%3A45%3A%22%5B1%2C%22BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3%22%2C604800%5D%22%3B%7D; _csrf-app=fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj%22%3B%7D'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '51558'
+    'REDIRECT_URL' => '/site/captcha'
+    'REDIRECT_QUERY_STRING' => 'refresh&_=1529580976988'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'refresh&_=1529580976988'
+    'REQUEST_URI' => '/site/captcha?refresh&_=1529580976988'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529580977.071
+    'REQUEST_TIME' => 1529580977
+]
+2018-06-21 19:46:07 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request: site/reques-password-reset' in D:\data\docker\vendor\yiisoft\yii2\base\Controller.php:128
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('reques-password...', Array)
+#1 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('site/reques-pas...', Array)
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message '页面未找到。' in D:\data\docker\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#2 {main}
+2018-06-21 19:46:07 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => 'fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj\";}'
+    'advanced-app' => '4qea6q07lppnn8b8fntkihn892'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'hywl'
+    '__captcha/site/captchacount' => 1
+    'find_password_token' => '0BLSwCphO_wBoVJLAVOxFKtNyKgaDnqp_1529580281'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj%22%3B%7D; advanced-app=4qea6q07lppnn8b8fntkihn892'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '52809'
+    'REDIRECT_URL' => '/site/reques-password-reset'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/reques-password-reset'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529581567.49
+    'REQUEST_TIME' => 1529581567
+]
+2018-06-21 19:48:50 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class '\rky\models\User' not found' in D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php:292
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php(108): yii\validators\ExistValidator->checkTargetAttributeExistence()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\ExistValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(198): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionRequestPasswordReset()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-21 19:48:50 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'hhr5NdM4_vNeQ6BwymwPjtTEchocDmanMEeeW9ipHtLeK5xQp2CUhxQBzDOHJ3i5vowmW35EPspAA6wL6_pIuA=='
+    'PasswordResetRequestForm' => [
+        'email' => '179611207@qq.com'
+        'verifyCode' => ''
+    ]
+    'ajax' => 'passwordreset-form'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => 'fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj\";}'
+    'advanced-app' => '4qea6q07lppnn8b8fntkihn892'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'pkhi'
+    '__captcha/site/captchacount' => 1
+    'find_password_token' => '0BLSwCphO_wBoVJLAVOxFKtNyKgaDnqp_1529580281'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '223'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'hhr5NdM4_vNeQ6BwymwPjtTEchocDmanMEeeW9ipHtLeK5xQp2CUhxQBzDOHJ3i5vowmW35EPspAA6wL6_pIuA=='
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_REFERER' => 'http://www.app.com/site/request-password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj%22%3B%7D; advanced-app=4qea6q07lppnn8b8fntkihn892'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53140'
+    'REDIRECT_URL' => '/site/request-password-reset'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/request-password-reset'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529581730.174
+    'REQUEST_TIME' => 1529581730
+]
+2018-06-21 19:48:54 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class '\rky\models\User' not found' in D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php:292
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php(108): yii\validators\ExistValidator->checkTargetAttributeExistence()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\ExistValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(198): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionRequestPasswordReset()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-21 19:48:54 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'hhr5NdM4_vNeQ6BwymwPjtTEchocDmanMEeeW9ipHtLeK5xQp2CUhxQBzDOHJ3i5vowmW35EPspAA6wL6_pIuA=='
+    'PasswordResetRequestForm' => [
+        'email' => '179611207@qq.com'
+        'verifyCode' => 'maoi'
+    ]
+    'ajax' => 'passwordreset-form'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => 'fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj\";}'
+    'advanced-app' => '4qea6q07lppnn8b8fntkihn892'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'pkhi'
+    '__captcha/site/captchacount' => 1
+    'find_password_token' => '0BLSwCphO_wBoVJLAVOxFKtNyKgaDnqp_1529580281'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '227'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'hhr5NdM4_vNeQ6BwymwPjtTEchocDmanMEeeW9ipHtLeK5xQp2CUhxQBzDOHJ3i5vowmW35EPspAA6wL6_pIuA=='
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_REFERER' => 'http://www.app.com/site/request-password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj%22%3B%7D; advanced-app=4qea6q07lppnn8b8fntkihn892'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53152'
+    'REDIRECT_URL' => '/site/request-password-reset'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/request-password-reset'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529581734.494
+    'REQUEST_TIME' => 1529581734
+]
+2018-06-21 19:48:55 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class '\rky\models\User' not found' in D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php:292
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php(108): yii\validators\ExistValidator->checkTargetAttributeExistence()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\ExistValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(198): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionRequestPasswordReset()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-21 19:48:54 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'hhr5NdM4_vNeQ6BwymwPjtTEchocDmanMEeeW9ipHtLeK5xQp2CUhxQBzDOHJ3i5vowmW35EPspAA6wL6_pIuA=='
+    'PasswordResetRequestForm' => [
+        'email' => '179611207@qq.com'
+        'verifyCode' => 'maoi'
+    ]
+    'ajax' => 'passwordreset-form'
+    'login-button' => 'undefined'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => 'fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj\";}'
+    'advanced-app' => '4qea6q07lppnn8b8fntkihn892'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'pkhi'
+    '__captcha/site/captchacount' => 1
+    'find_password_token' => '0BLSwCphO_wBoVJLAVOxFKtNyKgaDnqp_1529580281'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '250'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'hhr5NdM4_vNeQ6BwymwPjtTEchocDmanMEeeW9ipHtLeK5xQp2CUhxQBzDOHJ3i5vowmW35EPspAA6wL6_pIuA=='
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_REFERER' => 'http://www.app.com/site/request-password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj%22%3B%7D; advanced-app=4qea6q07lppnn8b8fntkihn892'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53154'
+    'REDIRECT_URL' => '/site/request-password-reset'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/request-password-reset'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529581734.928
+    'REQUEST_TIME' => 1529581734
+]
+2018-06-21 19:49:27 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class '\rky\models\User' not found' in D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php:292
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php(108): yii\validators\ExistValidator->checkTargetAttributeExistence()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\ExistValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(198): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionRequestPasswordReset()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-21 19:49:27 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'hhr5NdM4_vNeQ6BwymwPjtTEchocDmanMEeeW9ipHtLeK5xQp2CUhxQBzDOHJ3i5vowmW35EPspAA6wL6_pIuA=='
+    'PasswordResetRequestForm' => [
+        'email' => '179611207@qq.com'
+        'verifyCode' => 'maoi'
+    ]
+    'ajax' => 'passwordreset-form'
+    'login-button' => 'undefined'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => 'fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj\";}'
+    'advanced-app' => '4qea6q07lppnn8b8fntkihn892'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'pkhi'
+    '__captcha/site/captchacount' => 1
+    'find_password_token' => '0BLSwCphO_wBoVJLAVOxFKtNyKgaDnqp_1529580281'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '250'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'hhr5NdM4_vNeQ6BwymwPjtTEchocDmanMEeeW9ipHtLeK5xQp2CUhxQBzDOHJ3i5vowmW35EPspAA6wL6_pIuA=='
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_REFERER' => 'http://www.app.com/site/request-password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj%22%3B%7D; advanced-app=4qea6q07lppnn8b8fntkihn892'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53208'
+    'REDIRECT_URL' => '/site/request-password-reset'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/request-password-reset'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529581767.812
+    'REQUEST_TIME' => 1529581767
+]
+2018-06-21 19:51:05 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class '\rky\models\User' not found' in D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php:292
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php(108): yii\validators\ExistValidator->checkTargetAttributeExistence()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\ExistValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(198): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionRequestPasswordReset()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-21 19:51:05 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'vwax0zefvRJxlZdTTlD3hLkt2-EU764dzJWQ3Zt6pSXnN9S2Q8fXZjvX-xADG4Cz02WPoHal9nC80aKNqCnzTw=='
+    'PasswordResetRequestForm' => [
+        'email' => '179611207@qq.com'
+        'verifyCode' => ''
+    ]
+    'ajax' => 'passwordreset-form'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => 'fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj\";}'
+    'advanced-app' => '4qea6q07lppnn8b8fntkihn892'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'zoeu'
+    '__captcha/site/captchacount' => 1
+    'find_password_token' => '0BLSwCphO_wBoVJLAVOxFKtNyKgaDnqp_1529580281'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '223'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'vwax0zefvRJxlZdTTlD3hLkt2-EU764dzJWQ3Zt6pSXnN9S2Q8fXZjvX-xADG4Cz02WPoHal9nC80aKNqCnzTw=='
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_REFERER' => 'http://www.app.com/site/request-password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj%22%3B%7D; advanced-app=4qea6q07lppnn8b8fntkihn892'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53386'
+    'REDIRECT_URL' => '/site/request-password-reset'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/request-password-reset'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529581865.89
+    'REQUEST_TIME' => 1529581865
+]
+2018-06-21 19:51:20 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class '\rky\models\User' not found' in D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php:292
+Stack trace:
+#0 D:\data\docker\vendor\yiisoft\yii2\validators\ExistValidator.php(108): yii\validators\ExistValidator->checkTargetAttributeExistence()
+#1 D:\data\docker\vendor\yiisoft\yii2\validators\Validator.php(267): yii\validators\ExistValidator->validateAttribute()
+#2 D:\data\docker\vendor\yiisoft\yii2\base\Model.php(367): yii\validators\Validator->validateAttributes()
+#3 D:\data\docker\vendor\yiisoft\yii2\widgets\ActiveForm.php(418): yii\base\Model->validate()
+#4 D:\data\docker\app\controllers\SiteController.php(198): yii\widgets\ActiveForm::validate()
+#5 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): app\controllers\SiteController->actionRequestPasswordReset()
+#6 D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php(57): ::call_user_func_array:{D:\data\docker\vendor\yiisoft\yii2\base\InlineAction.php:57}()
+#7 D:\data\docker\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams()
+#8 D:\data\docker\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction()
+#9 D:\data\docker\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction()
+#10 D:\data\docker\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest()
+#11 D:\data\docker\app\web\index.php(17): yii\base\Application->run()
+#12 {main}
+2018-06-21 19:51:20 [127.0.0.1][-][4qea6q07lppnn8b8fntkihn892][info][application] $_GET = []
+
+$_POST = [
+    '_csrf-app' => 'SIOGOYPflZ55o8mBitYrWRsSxvxvxtKsKp0N3vhFEHUQsuNc94f_6jPhpcLHnVxucVqSvQ2MisFa2T-OyxZGHw=='
+    'PasswordResetRequestForm' => [
+        'email' => '179611207@qq.com'
+        'verifyCode' => ''
+    ]
+    'ajax' => 'passwordreset-form'
+]
+
+$_FILES = []
+
+$_COOKIE = [
+    'UM_distinctid' => '163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559'
+    'CNZZDATA1271123357' => '694426212-1528265770-|1528265770'
+    'CNZZDATA1273228045' => '1746464669-1528278402-http%3A%2F%2Fwww.app.com%2F|1528339635'
+    'login' => 'cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a:2:{i:0;s:5:\"login\";i:1;s:9:\"127.0.0.1\";}'
+    '_csrf-app' => 'fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a:2:{i:0;s:9:\"_csrf-app\";i:1;s:32:\"X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj\";}'
+    'advanced-app' => '4qea6q07lppnn8b8fntkihn892'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/'
+    '__captcha/site/captcha' => 'shll'
+    '__captcha/site/captchacount' => 1
+    'find_password_token' => '0BLSwCphO_wBoVJLAVOxFKtNyKgaDnqp_1529580281'
+]
+
+$_SERVER = [
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'www.app.com'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'CONTENT_LENGTH' => '223'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_ORIGIN' => 'http://www.app.com'
+    'HTTP_X_CSRF_TOKEN' => 'SIOGOYPflZ55o8mBitYrWRsSxvxvxtKsKp0N3vhFEHUQsuNc94f_6jPhpcLHnVxucVqSvQ2MisFa2T-OyxZGHw=='
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+    'HTTP_REFERER' => 'http://www.app.com/site/request-password-reset'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'UM_distinctid=163d3cd0be8204-070f0f519e6ac9-39614807-144000-163d3cd0be9559; CNZZDATA1271123357=694426212-1528265770-%7C1528265770; CNZZDATA1273228045=1746464669-1528278402-http%253A%252F%252Fwww.app.com%252F%7C1528339635; login=cc2a2bcbca1f94a4a564e224e7f45b2637dea4fffe124177cacc4d929e5dfef8a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22login%22%3Bi%3A1%3Bs%3A9%3A%22127.0.0.1%22%3B%7D; _csrf-app=fbc36eb09c729c1c07ec35a1b53a36d384028c9469088a91838cf8d1ca388551a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_csrf-app%22%3Bi%3A1%3Bs%3A32%3A%22X1eetXjtJBlCMKw7jHTAbJXmpD2P3SVj%22%3B%7D; advanced-app=4qea6q07lppnn8b8fntkihn892'
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseGit\\bin;D:\\wamp64\\bin\\php\\php5.6.25;C:\\Program Files\\Git\\cmd;D:\\Python\\Python36-32;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;D:\\Git LFS;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.23 (Win64) PHP/5.6.25 Server at www.app.com Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.23 (Win64) PHP/5.6.25'
+    'SERVER_NAME' => 'www.app.com'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/data/docker/app/web'
+    'SERVER_ADMIN' => 'wampserver@wampserver.invalid'
+    'SCRIPT_FILENAME' => 'D:/data/docker/app/web/index.php'
+    'REMOTE_PORT' => '53431'
+    'REDIRECT_URL' => '/site/request-password-reset'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/site/request-password-reset'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1529581880.017
+    'REQUEST_TIME' => 1529581880
+]

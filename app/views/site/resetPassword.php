@@ -36,7 +36,7 @@ $fieldOptions2 = [
         <div class="row">
             <div class="col-xs-8">
                 <?=
-                Html::a('立即登录', ['/site/login'])
+                Html::a('立即登录', ['/site/login'],['class' => 'register-tis pull-left'])
                 ?>
             </div>
             <div class="col-xs-4">

@@ -33,13 +33,13 @@ $fieldOptions1 = [
                 $form
                 ->field($model, 'username', $fieldOptions1)
                 ->label(false)
-                ->textInput(['placeholder' => '用户名/电子邮件/手机号'])
+                ->textInput(['placeholder' => '用户名/电子邮件/手机号','autocomplete'=>'off'])
         ?>
         <?php if ($model->scenario == 'captchaRequired'): ?>
             <?=
             $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                 'template' => '<div class="row"><div class="col-xs-8">{input}</div><div class="col-xs-4">{image}</div></div>',
-                'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control', 'autoCompete' => false],
+                'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control','autocomplete'=>'off'],
                 'imageOptions' => ['alt' => '点击换图', 'title' => '点击换图', 'style' => 'cursor:pointer', 'height' => 34]])->label(false)
             ?>
         
@@ -66,7 +66,7 @@ $fieldOptions1 = [
         <div class="row">
             <div class="col-xs-8">
                 <?=
-                Html::a('立即登录', ['/site/login'])
+                Html::a('立即登录', ['/site/login'],['class' => 'register-tis pull-left'])
                 ?>
             </div>
             <div class="col-xs-4">
