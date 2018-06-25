@@ -4,6 +4,7 @@ use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use app\components\CommonHelper;
 use app\models\UserAuth;
+use app\models\System;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -39,6 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <a class="btn btn-success btn-xs change-email" href="javascript:void(0);">设置邮箱</a>
                         <?php endif; ?>
                         </span></dd>
+                        
+                         <?php if (System::getValue('sms_service')): ?>
                     <dt>联系电话</dt><dd><span class="dd-c"><?= $model->tel?CommonHelper::hideName($model->tel):'<i>未设置手机号</i>' ?></span><span class="dd-a">
                         <?php if(UserAuth::isAuth('tel')):?>
                             <a class="btn btn-primary btn-xs change-tel" href="javascript:void(0);">修改手机号</a>
@@ -48,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <a class="btn btn-success btn-xs change-tel" href="javascript:void(0);">设置手机号</a>
                         <?php endif; ?>
                         </span></dd>
+                         <?php endif; ?>
                     <dt>注册时间</dt><dd><span class="dd-c"><?= Yii::$app->formatter->asDatetime($model->created_at) ?></span></dd>
                 </dl>
             </div>
