@@ -77,9 +77,10 @@ Modal::end();
     });
     
     $('.change-email').on('click', function () {
+        var title=$(this).html();
         $.get('<?= Url::toRoute('account/change-auth?type=email') ?>',
                 function (data) {
-                    $('#account-modal .modal-title').html('修改邮箱');
+                    $('#account-modal .modal-title').html(title);
                     $('#account-modal .modal-body').html(data);
                     $('#account-modal').modal('show');
                 }
@@ -87,9 +88,10 @@ Modal::end();
     });
     
     $('.change-tel').on('click', function () {
+        var title=$(this).html();
         $.get('<?= Url::toRoute('account/change-auth?type=tel') ?>',
                 function (data) {
-                    $('#account-modal .modal-title').html('修改手机');
+                    $('#account-modal .modal-title').html(title);
                     $('#account-modal .modal-body').html(data);
                     $('#account-modal').modal('show');
                 }

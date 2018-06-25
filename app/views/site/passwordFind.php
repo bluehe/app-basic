@@ -84,46 +84,17 @@ $fieldOptions2 = [
     </div>
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
+<?php app\assets\AppAsset::addScript($this, '/js/sendcookie.js'); ?> 
 <script>
 <?php $this->beginBlock('password') ?>
-function addCookie(name,value,expiresHours){      
-    var cookieString=name+"="+escape(value);      
-    //判断是否设置过期时间,0代表关闭浏览器时失效  
-    if(expiresHours>0){  
-        var date=new Date();  
-        date.setTime(date.getTime()+expiresHours*1000);  
-        cookieString=cookieString+";expires=" + date.toUTCString();  
-    }
-    document.cookie=cookieString;  
-}
-function editCookie(name,value,expiresHours){      
-    var cookieString=name+"="+escape(value);   
-    if(expiresHours>0){  
-    var date=new Date();  
-    date.setTime(date.getTime()+expiresHours*1000); //单位毫秒  
-        cookieString=cookieString+";expires=" + date.toGMTString();  
-    }
-    document.cookie=cookieString;  
-}
-function getCookieValue(name){  
-    var strCookie=document.cookie;  
-    var arrCookie=strCookie.split("; ");  
-    for(var i=0;i<arrCookie.length;i++){  
-        var arr=arrCookie[i].split("=");  
-          if(arr[0]==name){   
-             return unescape(arr[1]);  
-           break;  
-        }  
-    }   
-}
-$(function(){  
-    $("#second").on('click',function (){  
-        sendCode($("#second"));  
-    });  
-    var v = getCookieValue("secondsremained_login") ? getCookieValue("secondsremained_login") : 0;//获取cookie值  
-    if(v>0){  
-        settime($("#second"));//开始倒计时  
-    }  
+$(function () {
+        $("#second").on('click', function () {
+            sendCode($("#second"));
+        });
+        var v = getCookieValue("secondsremained_login") ? getCookieValue("secondsremained_login") : 0;//获取cookie值  
+        if (v > 0) {
+            settime($("#second"));//开始倒计时  
+        }
 })
 function sendCode(obj){
     var type=$('#passwordfindform-type').val();
@@ -135,7 +106,7 @@ function sendCode(obj){
         dataType: "json",
         success:function(data){  
             if(data.stat=='success'){ 
-                addCookie("secondsremained_login",60,60);//添加cookie记录,有效时间60s  
+                addCookie("secondsremained_login",60);//添加cookie记录,有效时间60s  
                 settime(obj);//开始倒计时  
                 $('.login-page').prepend('<div id="w0-success" class="alert-success alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-check"></i>'+data.message+'</div>');
             }else{  
@@ -146,22 +117,6 @@ function sendCode(obj){
     });  
     
 }
-//开始倒计时  
-var countdown;  
-function settime(obj) {  
-    countdown=getCookieValue("secondsremained_login") ? getCookieValue("secondsremained_login") : 0;  
-    if (countdown ==0) {  
-        obj.removeAttr("disabled");  
-        obj.val("重新获取验证码");  
-        return;  
-    } else {  
-        obj.attr("disabled", true);  
-        obj.val(countdown + "秒后重新获取");  
-        countdown--;  
-        editCookie("secondsremained_login",countdown,countdown+1);  
-    }  
-    setTimeout(function() { settime(obj) },1000) //每1000毫秒执行一次
-}  
 <?php $this->endBlock() ?>
 </script>
 <?php $this->registerJs($this->blocks['password'], \yii\web\View::POS_END); ?>

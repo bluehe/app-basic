@@ -7,6 +7,8 @@ use yii\web\Controller;
 use yii\imagine\Image;
 use app\models\ChangePassword;
 use app\models\User;
+use app\models\ChangeAuth;
+use app\models\UserAuth;
 
 
 class AccountController extends Controller {
@@ -54,16 +56,46 @@ class AccountController extends Controller {
         }
     }
     
-     public function actionChangeAuth($type) {
-
+     public function actionChangeAuth() {
+         
         if (!Yii::$app->user->isGuest) {
-            $model = User::findOne(Yii::$app->user->identity->id);
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return json_encode(['stat' => 'success', 'email' => $model->email]);
+            $model = new ChangeAuth();
+            $model->type=Yii::$app->request->get('type','email');
+            if ($model->load(Yii::$app->request->post())) {
+                if (Yii::$app->request->isAjax) {
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return \yii\bootstrap\ActiveForm::validate($model);
+                }
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    $auth = UserAuth::findOne(['uid'=>Yii::$app->user->identity->id,'type'=>$model->type]);
+                    if($auth==null){
+                        $auth =new UserAuth();
+                        $auth->uid=Yii::$app->user->identity->id;
+                        $auth->type=$model->type;
+                    }
+                    
+                    $auth->open_id=$model->{$model->type};
+                    $auth->created_at=time();
+                    $auth->save();
+                    
+                    $user = User::findOne(Yii::$app->user->identity->id);
+                    $user->{$model->type}=$model->{$model->type};
+                    $user->save();
+                    
+                    $transaction->commit();
+                    Yii::$app->session->setFlash('success', '操作成功。');
+                } catch (\Exception $e) {
+
+                    $transaction->rollBack();
+//                throw $e;
+                    Yii::$app->session->setFlash('error', '操作失败。');
+                }
+                return $this->redirect(Yii::$app->request->referrer);
+                
             } else {
                 return $this->renderAjax('change-auth', [
-                            'model' => $model,
-                            'type'=>$type,
+                            'model' => $model
                 ]);
             }
         } else {

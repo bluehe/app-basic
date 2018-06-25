@@ -150,20 +150,23 @@ class SystemController extends Controller {
             $system = Yii::$app->request->post('System');
             
             if($system['smtp_service']==1){
+                $range = System::find()->where(['code' => 'smtp_charset'])->select('store_range')->one();
+                $charsets = json_decode($range['store_range'], true);
+                $system['smtpcharset'] = $charsets[$system['smtp_charset']];
                 Yii::$app->set('mailer', [
                 'class' => 'yii\swiftmailer\Mailer',
-                'viewPath' => 'app/mail',
+                'useFileTransport' => false,
                 'transport' => [
                     'class' => 'Swift_SmtpTransport',
-                    'host' => $smtp['smtp_host'],
-                    'username' => $smtp['smtp_username'],
-                    'password' => $smtp['smtp_password'],
-                    'port' => $smtp['smtp_port'],
-                    'encryption' => $smtp['smtp_ssl'] ? 'ssl' : 'tls',
+                    'host' => $system['smtp_host'],
+                    'username' => $system['smtp_username'],
+                    'password' => $system['smtp_password'],
+                    'port' => $system['smtp_port'],
+                    'encryption' => $system['smtp_ssl'] ? 'ssl' : 'tls',
                 ],
                 'messageConfig' => [
-                    'charset' => $smtp['smtpcharset'], //改变
-                    'from' => [$smtp['smtp_from'] => Yii::$app->name]
+                    'charset' => $system['smtpcharset'], //改变
+                    'from' => [$system['smtp_from'] => Yii::$app->name]
                 ],
             ]);
             }

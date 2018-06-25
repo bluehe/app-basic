@@ -26,14 +26,15 @@ class SignupForm extends Model
     {
         return [
             [['username', 'email', 'tel'], 'trim'],
-            [['username'], 'filter','filter'=>'strtolower'],
+            [['username', 'email', 'tel'], 'filter','filter'=>'strtolower'],
             ['username', 'required'],
-            [['username', 'email', 'tel'], 'unique', 'targetClass' => '\app\models\User', 'message' => '{attribute}已存在'],
+            [['username', 'email', 'tel'], 'unique', 'targetClass' => User::className(), 'message' => '{attribute}已存在'],
             ['username', 'string', 'min' => 5, 'max' => 255],
             [['username'], 'match','pattern'=>'/^[A-Za-z0-9]{4,16}$/','message'=>'用户名必须为4-16个字母或数字，不区分大小写'],
             [['username'], 'match','not'=>true,'pattern'=>'/^[0-9]{1,}$/','message'=>'用户名不能全为数字'],
             ['email', 'email', 'message' => '{attribute}格式不正确'],
             ['email', 'string', 'max' => 255],
+            ['tel', 'match', 'pattern'=>'/^1[34578]{1}\d{9}$/','message' => '{attribute}格式不正确'],
             [['password', 'password1'], 'required'],
             ['password', 'string', 'min' => 4,],
             ['password1', 'compare', 'compareAttribute' => 'password', 'message' => '两次密码不一致'],

@@ -68,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php app\assets\AppAsset::addScript($this, '/js/sendcookie.js'); ?> 
 <script>
 <?php $this->beginBlock('sendemail') ?>
     $(document).ready(function () {
@@ -86,46 +87,15 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     }
     
-    
-function addCookie(name,value,expiresHours){      
-    var cookieString=name+"="+escape(value);      
-    //判断是否设置过期时间,0代表关闭浏览器时失效  
-    if(expiresHours>0){  
-        var date=new Date();  
-        date.setTime(date.getTime()+expiresHours*1000);  
-        cookieString=cookieString+";expires=" + date.toUTCString();  
-    }
-    document.cookie=cookieString;  
-}
-function editCookie(name,value,expiresHours){      
-    var cookieString=name+"="+escape(value);   
-    if(expiresHours>0){  
-    var date=new Date();  
-    date.setTime(date.getTime()+expiresHours*1000); //单位毫秒  
-        cookieString=cookieString+";expires=" + date.toGMTString();  
-    }
-    document.cookie=cookieString;  
-}
-function getCookieValue(name){  
-    var strCookie=document.cookie;  
-    var arrCookie=strCookie.split("; ");  
-    for(var i=0;i<arrCookie.length;i++){  
-        var arr=arrCookie[i].split("=");  
-          if(arr[0]==name){   
-             return unescape(arr[1]);  
-           break;  
-        }  
-    }   
-}
-$(function(){  
-    $("#second").on('click',function (){  
-        sendCode($("#second"));  
-    });  
-    var v = getCookieValue("secondsremained_login") ? getCookieValue("secondsremained_login") : 0;//获取cookie值  
-    if(v>0){  
-        settime($("#second"));//开始倒计时  
-    }  
-})
+$(function () {
+        $("#second").on('click', function () {
+            sendCode($("#second"));
+        });
+        var v = getCookieValue("secondsremained_login") ? getCookieValue("secondsremained_login") : 0;//获取cookie值  
+        if (v > 0) {
+            settime($("#second"),"发送测试邮件");//开始倒计时  
+        }
+})    
 function sendCode(obj){
 var result = isEmail();   
     if(result){
@@ -138,8 +108,8 @@ var result = isEmail();
         data: $('form').serialize(),
         success:function(data){  
             if(data.stat=='success'){ 
-                addCookie("secondsremained_login",60,60);//添加cookie记录,有效时间60s  
-                settime(obj);//开始倒计时  
+                addCookie("secondsremained_login",60);//添加cookie记录,有效时间60s  
+                settime(obj,"发送测试邮件");//开始倒计时  
                 $('.content').prepend('<div id="w0-success" class="alert-success alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-check"></i>'+data.message+'</div>');
             }else{  
                 $('.content').prepend('<div id="w0-error" class="alert-error alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-close"></i>'+data.message+'</div>');
@@ -152,22 +122,6 @@ var result = isEmail();
     });  
     }
 }
-//开始倒计时  
-var countdown;  
-function settime(obj) {  
-    countdown=getCookieValue("secondsremained_login") ? getCookieValue("secondsremained_login") : 0;  
-    if (countdown ==0) {  
-        obj.removeAttr("disabled");  
-        obj.val("发送测试邮件");  
-        return;  
-    } else {  
-        obj.attr("disabled", true);  
-        obj.val(countdown + "秒后重新发送");  
-        countdown--;  
-        editCookie("secondsremained_login",countdown,countdown+1);  
-    }  
-    setTimeout(function() { settime(obj) },1000) //每1000毫秒执行一次
-}  
 
 //校验邮箱是否合法  
 function isEmail(){  

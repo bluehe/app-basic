@@ -26,7 +26,7 @@ class initSiteConfig extends Event {
         if ($smtp['smtp_service']) {
             Yii::$app->set('mailer', [
                 'class' => 'yii\swiftmailer\Mailer',
-                'viewPath' => 'app/mail',
+                'useFileTransport' => false,
                 'transport' => [
                     'class' => 'Swift_SmtpTransport',
                     'host' => $smtp['smtp_host'],
@@ -34,11 +34,11 @@ class initSiteConfig extends Event {
                     'password' => $smtp['smtp_password'],
                     'port' => $smtp['smtp_port'],
                     'encryption' => $smtp['smtp_ssl'] ? 'ssl' : 'tls',
-                ],
-                'messageConfig' => [
-                    'charset' => $smtp['smtpcharset'], //改变
-                    'from' => [$smtp['smtp_from'] => Yii::$app->name]
-                ],
+            ],
+            'messageConfig' => [
+                'charset' => $smtp['smtpcharset'], //改变
+                'from' => [$smtp['smtp_from'] => Yii::$app->name]
+            ],
             ]);
         }
         $system = $cache->get('system_info');
