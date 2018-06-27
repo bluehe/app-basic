@@ -46,7 +46,7 @@
      
      >以下命令默认您已全局安装composer，如果您是局部安装的composer:请使用php /path/to/composer.phar来替换以下命令中的composer
      
-     1. 使用composer下创建FeehiCMS项目
+     1. 使用composer下创建项目
         
         ```bash
             $ composer create-project bluehe/app-basic webApp 
