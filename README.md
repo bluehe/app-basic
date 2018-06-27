@@ -2,9 +2,9 @@
 基于yii2的管理系统，运行环境与yii2(php>=5.4)一致。旨在为yii2爱好者提供一个基础功能稳定完善的系统，使开发者更专注于业务功能开发。
 项目没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性用在了项目上。
 
-[![Latest Stable Version](https://poser.pugx.org/feehi/cms/v/stable)](https://packagist.org/packages/feehi/cms)
-[![License](https://poser.pugx.org/feehi/cms/license)](https://packagist.org/packages/feehi/cms)
-[![Build Status](https://www.travis-ci.org/liufee/cms.svg?branch=master)](https://www.travis-ci.org/liufee/cms)
+[![Latest Stable Version](https://poser.pugx.org/bluehe/app-basic/v/stable)](https://packagist.org/packages/bluehe/app-basic)
+[![License](https://poser.pugx.org/bluehe/app-basic/license)](https://packagist.org/packages/bluehe/app-basic)
+[![Build Status](https://www.travis-ci.org/bluehe/app-basic.svg?branch=master)](https://www.travis-ci.org/bluehe/app-basic)
 
 
 更新记录
