@@ -34,14 +34,13 @@
 前置条件: 如未特别说明，本文档已默认您把php命令加入了环境变量，如果您未把php加入环境变量，请把以下命令中的php替换成/path/to/php
 1. 使用归档文件(简单，适合没有yii2经验者)
     >使用此方式安装，后台超管用户名和密码会在安装过程中让您填入
-    1. 下载FeehiCMS源码 [点击此处下载最新版](http://resource-1251086492.file.myqcloud.com/Feehi_CMS.zip)
+    1. 下载源码
     2. 解压到目录 
     3. 配置web服务器(参见下面)
-    4. 浏览器打开 http://localhost/install.php 按照提示完成安装(若使用php内置web服务a器则地址为 http://localhost:8080/install.php )
-    5. 完成
+    4. 完成
     
 2. 使用composer (`推荐使用此方式安装`)
-    >使用此方式安装，默认的后台超级管理员用户名admin密码123456
+    >使用此方式安装，默认的后台超级管理员用户名admin密码1234
     
      >composer的安装以及国内镜像设置请点击 [此处](http://www.phpcomposer.com/)
      
@@ -50,13 +49,13 @@
      1. 使用composer下创建FeehiCMS项目
         
         ```bash
-            $ composer create-project feehi/cms webApp //此命令创建的FeehiCMS项目不能平滑升级新版本(目录结构简单,目前主力维护版本)
+            $ composer create-project bluehe/app-basic webApp 
         ```
      2. 依次执行以下命令初始化yii2框架以及导入数据库
          ```bash
          $ cd webApp
          $ php ./init --env=Development #初始化yii2框架，线上环境请使用--env=Production
-         $ php ./yii migrate/up --interactive=0 #导入FeehiCMS sql数据库，执行此步骤之前请先到common/config/main-local.php修改成正确的数据库配置
+         $ php ./yii migrate/up --interactive=0 #导入 sql数据库，执行此步骤之前请先到common/config/main-local.php修改成正确的数据库配置
          ```
      3. 配置web服务器(参加下面)
      4. 完成
@@ -65,16 +64,15 @@
  
  * php内置web服务器(仅可用于开发环境,当您的环境中没有web服务器时)
  ```bash
-  cd /path/to/cms
+  cd /path/to/app-basic
   php ./yii serve  
   
-  #至此启动成功，可以通过localhost:8080/和localhost:8080/admin来访问了，在线安装即访问localhost:8080/install.php
  ```
  
  * Apache
  ```bash
-  DocumentRoot "path/to/frontend/web"
-  <Directory "path/to/frontend/web">
+  DocumentRoot "path/to/app/web"
+  <Directory "path/to/app/web">
       # 开启 mod_rewrite 用于美化 URL 功能的支持（译注：对应 pretty URL 选项）
       RewriteEngine on
       # 如果请求的是真实存在的文件或目录，直接访问
@@ -91,7 +89,7 @@
  ```bash
  server {
      server_name  localhost;
-     root   /path/to/frontend/web;
+     root   /path/to/app/web;
      index  index.php index.html index.htm;
      try_files $uri $uri/ /index.php?$args;
      
@@ -108,48 +106,3 @@
  }
  ```
  
- 
-运行测试
--------
-1. 仅运行单元测试,功能测试(不需要配置web服务器)
- ```bash
-    cd /path/to/webApp
-    vendor/bin/codecept run
- ```
-2. 运行单元测试,功能测试,验收测试(需要配置完web服务器)
-    1. 分别拷贝backend,frontend,api三个目录下的tests/acceptance.suite.yml.example到各自目录，并均重名为acceptance.suite.yml,且均修改里面的url为各自的访问url地址
-    2. 与上(仅运行单元测试,功能测试)命令一致
-
-
-项目展示
-------------
-* [山东城市服务技师学院](http://www.sdcc.edu.cn/)   
-* [优悦娱乐网](http://www.qqyouyue.com/)  
-* [Usens Dev博客](http://dev.usensinc.com/)  
-* [完美娱乐](http://www.qqwanmei.com/)  
-* [北京大学附属中学](http://group-ht.pkuschool.edu.cn/)  
-* [微信公众号蚂蚁鲜生](http://www.chijidun.com/) 
-* [用友财务软件](http://www.myyonyou.cn/) 
-*  ......
-
-
-运行效果
----------
-![后台](docs/backend.png)
-
-![前台](docs/frontend.png)
-
-![后台文章编辑](docs/backend_article.png)
-
-![后台角色编辑](docs/backend_role.png)
-
-![后台自定义参数](docs/backend_custom_create.png)
-
-![后台文章编辑](docs/backend_custom_setting.png)
-
-![后台文章编辑](docs/backend_log.png)
-
-
-特别鸣谢
----------
-[twitf](https://github.com/twitf) 在后台时间搜索范围提供的建议和代码片段
