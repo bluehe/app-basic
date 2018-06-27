@@ -60,7 +60,7 @@
      3. 配置web服务器(参加下面)
      4. 完成
  
-附:web服务器配置(注意是设置"path/to/frontend/web为根目录)
+附:web服务器配置(注意是设置"path/to/app/web为根目录)
  
  * php内置web服务器(仅可用于开发环境,当您的环境中没有web服务器时)
  ```bash
