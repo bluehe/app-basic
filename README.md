@@ -1,60 +1,155 @@
-<p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h1 align="center">Yii 2 Advanced Project Template</h1>
-    <br>
-</p>
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+基于yii2的管理系统，运行环境与yii2(php>=5.4)一致。旨在为yii2爱好者提供一个基础功能稳定完善的系统，使开发者更专注于业务功能开发。
+项目没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性用在了项目上。
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+[![Latest Stable Version](https://poser.pugx.org/feehi/cms/v/stable)](https://packagist.org/packages/feehi/cms)
+[![License](https://poser.pugx.org/feehi/cms/license)](https://packagist.org/packages/feehi/cms)
+[![Build Status](https://www.travis-ci.org/liufee/cms.svg?branch=master)](https://www.travis-ci.org/liufee/cms)
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+更新记录
+-------
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Build Status](https://travis-ci.org/yiisoft/yii2-app-advanced.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-advanced)
+0.1.0 版本基础功能开发
 
-DIRECTORY STRUCTURE
--------------------
 
-```
-common
-    config/              contains shared configurations
-    mail/                contains view files for e-mails
-    models/              contains model classes used in both backend and frontend
-    tests/               contains tests for common classes    
-console
-    config/              contains console configurations
-    controllers/         contains console controllers (commands)
-    migrations/          contains database migrations
-    models/              contains console-specific model classes
-    runtime/             contains files generated during runtime
-backend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains backend configurations
-    controllers/         contains Web controller classes
-    models/              contains backend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for backend application    
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-frontend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains frontend configurations
-    controllers/         contains Web controller classes
-    models/              contains frontend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for frontend application
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-    widgets/             contains frontend widgets
-vendor/                  contains dependent 3rd-party packages
-environments/            contains environment-based overrides
-```
+帮助
+---------------
+
+1. QQ 395868537
+
+2. Email 395868537@qq.com
+
+
+
+功能
+---------------
+ * 多登录注册
+ * 短信接口
+ * 站点状态控制
+ 
+ 
+安装
+---------------
+前置条件: 如未特别说明，本文档已默认您把php命令加入了环境变量，如果您未把php加入环境变量，请把以下命令中的php替换成/path/to/php
+1. 使用归档文件(简单，适合没有yii2经验者)
+    >使用此方式安装，后台超管用户名和密码会在安装过程中让您填入
+    1. 下载FeehiCMS源码 [点击此处下载最新版](http://resource-1251086492.file.myqcloud.com/Feehi_CMS.zip)
+    2. 解压到目录 
+    3. 配置web服务器(参见下面)
+    4. 浏览器打开 http://localhost/install.php 按照提示完成安装(若使用php内置web服务a器则地址为 http://localhost:8080/install.php )
+    5. 完成
+    
+2. 使用composer (`推荐使用此方式安装`)
+    >使用此方式安装，默认的后台超级管理员用户名admin密码123456
+    
+     >composer的安装以及国内镜像设置请点击 [此处](http://www.phpcomposer.com/)
+     
+     >以下命令默认您已全局安装composer，如果您是局部安装的composer:请使用php /path/to/composer.phar来替换以下命令中的composer
+     
+     1. 使用composer下创建FeehiCMS项目
+        
+        ```bash
+            $ composer create-project feehi/cms webApp //此命令创建的FeehiCMS项目不能平滑升级新版本(目录结构简单,目前主力维护版本)
+        ```
+     2. 依次执行以下命令初始化yii2框架以及导入数据库
+         ```bash
+         $ cd webApp
+         $ php ./init --env=Development #初始化yii2框架，线上环境请使用--env=Production
+         $ php ./yii migrate/up --interactive=0 #导入FeehiCMS sql数据库，执行此步骤之前请先到common/config/main-local.php修改成正确的数据库配置
+         ```
+     3. 配置web服务器(参加下面)
+     4. 完成
+ 
+附:web服务器配置(注意是设置"path/to/frontend/web为根目录)
+ 
+ * php内置web服务器(仅可用于开发环境,当您的环境中没有web服务器时)
+ ```bash
+  cd /path/to/cms
+  php ./yii serve  
+  
+  #至此启动成功，可以通过localhost:8080/和localhost:8080/admin来访问了，在线安装即访问localhost:8080/install.php
+ ```
+ 
+ * Apache
+ ```bash
+  DocumentRoot "path/to/frontend/web"
+  <Directory "path/to/frontend/web">
+      # 开启 mod_rewrite 用于美化 URL 功能的支持（译注：对应 pretty URL 选项）
+      RewriteEngine on
+      # 如果请求的是真实存在的文件或目录，直接访问
+      RewriteCond %{REQUEST_FILENAME} !-f
+      RewriteCond %{REQUEST_FILENAME} !-d
+      # 如果请求的不是真实文件或目录，分发请求至 index.php
+      RewriteRule . index.php
+  
+      # ...其它设置...
+  </Directory>
+  ```
+  
+ * Nginx
+ ```bash
+ server {
+     server_name  localhost;
+     root   /path/to/frontend/web;
+     index  index.php index.html index.htm;
+     try_files $uri $uri/ /index.php?$args;
+     
+     location ~ /api/(?!index.php).*$ {
+        rewrite /api/(.*) /api/index.php?r=$1 last;
+     }
+ 
+     location ~ \.php$ {
+         fastcgi_pass   127.0.0.1:9000;
+         fastcgi_index  index.php;
+         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+         include        fastcgi_params;
+     }
+ }
+ ```
+ 
+ 
+运行测试
+-------
+1. 仅运行单元测试,功能测试(不需要配置web服务器)
+ ```bash
+    cd /path/to/webApp
+    vendor/bin/codecept run
+ ```
+2. 运行单元测试,功能测试,验收测试(需要配置完web服务器)
+    1. 分别拷贝backend,frontend,api三个目录下的tests/acceptance.suite.yml.example到各自目录，并均重名为acceptance.suite.yml,且均修改里面的url为各自的访问url地址
+    2. 与上(仅运行单元测试,功能测试)命令一致
+
+
+项目展示
+------------
+* [山东城市服务技师学院](http://www.sdcc.edu.cn/)   
+* [优悦娱乐网](http://www.qqyouyue.com/)  
+* [Usens Dev博客](http://dev.usensinc.com/)  
+* [完美娱乐](http://www.qqwanmei.com/)  
+* [北京大学附属中学](http://group-ht.pkuschool.edu.cn/)  
+* [微信公众号蚂蚁鲜生](http://www.chijidun.com/) 
+* [用友财务软件](http://www.myyonyou.cn/) 
+*  ......
+
+
+运行效果
+---------
+![后台](docs/backend.png)
+
+![前台](docs/frontend.png)
+
+![后台文章编辑](docs/backend_article.png)
+
+![后台角色编辑](docs/backend_role.png)
+
+![后台自定义参数](docs/backend_custom_create.png)
+
+![后台文章编辑](docs/backend_custom_setting.png)
+
+![后台文章编辑](docs/backend_log.png)
+
+
+特别鸣谢
+---------
+[twitf](https://github.com/twitf) 在后台时间搜索范围提供的建议和代码片段
