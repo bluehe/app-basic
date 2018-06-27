@@ -6,6 +6,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use app\models\System;
+use yii\helpers\Url;
 
 $this->title = '重置密码';
 
@@ -102,7 +103,7 @@ function sendCode(obj){
         async : false,  
         cache : false,  
         type : 'POST',  
-        url : "/common/send-captcha-by-token?type="+type,// 请求的action路径
+        url : "<?= Url::toRoute(['common/send-captcha-by-token'])?>?type="+type,// 请求的action路径
         dataType: "json",
         success:function(data){  
             if(data.stat=='success'){ 

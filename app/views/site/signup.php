@@ -78,7 +78,7 @@ $fieldOptions4 = [
 //更改或者重新加载验证码
     function changeVerifyCode() {
         $.ajax({
-            url: "/site/captcha?refresh",
+            url: "<?= Url::toRoute(['site/captcha'])?>?refresh",
             dataType: "json",
             cache: false,
             success: function (data) {

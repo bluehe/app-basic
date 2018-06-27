@@ -82,7 +82,7 @@ Modal::end();
     
     $('.change-email').on('click', function () {
         var title=$(this).html();
-        $.get('<?= Url::toRoute('account/change-auth?type=email') ?>',
+        $.get('<?= Url::toRoute(['account/change-auth','type'=>'email']) ?>',
                 function (data) {
                     $('#account-modal .modal-title').html(title);
                     $('#account-modal .modal-body').html(data);
@@ -93,7 +93,7 @@ Modal::end();
     
     $('.change-tel').on('click', function () {
         var title=$(this).html();
-        $.get('<?= Url::toRoute('account/change-auth?type=tel') ?>',
+        $.get('<?= Url::toRoute(['account/change-auth','type'=>'tel']) ?>',
                 function (data) {
                     $('#account-modal .modal-title').html(title);
                     $('#account-modal .modal-body').html(data);

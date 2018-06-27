@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -95,7 +96,7 @@ $(function () {
         if (v > 0) {
             settime($("#second"),"发送测试邮件");//开始倒计时  
         }
-})    
+});   
 function sendCode(obj){
 var result = isEmail();   
     if(result){
@@ -103,11 +104,11 @@ var result = isEmail();
         async : false,  
         cache : false,  
         type : 'POST',  
-        url: '/system/send-email',
+        url: '<?= Url::toRoute(['system/send-email'])?>',
         dataType: "json",
         data: $('form').serialize(),
         success:function(data){  
-            if(data.stat=='success'){ 
+            if(data.stat==='success'){ 
                 addCookie("secondsremained_login",60);//添加cookie记录,有效时间60s  
                 settime(obj,"发送测试邮件");//开始倒计时  
                 $('.content').prepend('<div id="w0-success" class="alert-success alert fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><i class="icon fa fa-check"></i>'+data.message+'</div>');

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -94,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //更改或者重新加载验证码
     function changeVerifyCode() {
         $.ajax({
-            url: "/site/captcha?refresh",
+            url: "<?= Url::toRoute(['site/captcha'])?>?refresh",
             dataType: "json",
             cache: false,
             success: function (data) {

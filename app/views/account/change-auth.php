@@ -65,7 +65,7 @@ use app\models\ChangeAuth;
         if (v > 0) {
             settime($("#second"));//开始倒计时  
         }
-    })
+    });
     function sendCode(obj) {
         var type = $('#changeauth-type').val();
         var to='';
@@ -85,10 +85,10 @@ use app\models\ChangeAuth;
             async: false,
             cache: false,
             type: 'POST',
-            url: "/common/send-captcha?to=" + to+"&type="+type, // 请求的action路径
+            url: '<?= Url::toRoute(['common/send-captcha'])?>'+"?to=" + to+"&type="+type, // 请求的action路径
             dataType: "json",
             success: function (data) {
-                if (data.stat == 'success') {
+                if (data.stat === 'success') {
                     addCookie("secondsremained_login", 60);//添加cookie记录,有效时间60s  
                     settime(obj);//开始倒计时  
                     $('.field-changeauth-verifycode .help-block').html(data.message);
