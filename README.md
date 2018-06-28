@@ -3,6 +3,7 @@
 项目没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性用在了项目上。
 
 [![Latest Stable Version](https://poser.pugx.org/bluehe/app-basic/v/stable)](https://packagist.org/packages/bluehe/app-basic)
+[![Latest Unstable Version](https://poser.pugx.org/bluehe/app-basic/v/unstable)](https://packagist.org/packages/bluehe/app-basic)
 [![License](https://poser.pugx.org/bluehe/app-basic/license)](https://packagist.org/packages/bluehe/app-basic)
 [![Build Status](https://www.travis-ci.org/bluehe/app-basic.svg?branch=master)](https://www.travis-ci.org/bluehe/app-basic)
 
