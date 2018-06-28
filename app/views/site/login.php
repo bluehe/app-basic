@@ -90,12 +90,14 @@ $fieldOptions2 = [
         Html::a('注册新账号', ['/site/signup'], ['class' => 'pull-right register-tis'])
         ?>
         </div>
+        <?php if(isset(Yii::$app->authClientCollection)):?>
         <div class="social-auth-links text-center social-icon">
             <p>第三方账号登录</p>
             <?=
             yii\authclient\widgets\AuthChoice::widget(['baseAuthUrl' => ['site/auth'], 'popupMode' => false,])
             ?>
         </div>
+        <?php endif; ?>
     </div>
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
