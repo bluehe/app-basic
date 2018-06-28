@@ -97,7 +97,7 @@ return [
             //这里是允许访问的action
             'common/*',
             'site/*',
-//            'api/*',
+            'page/*',
             'debug/*',
 //            'gii/*'
         ]
