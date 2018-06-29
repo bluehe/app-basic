@@ -123,6 +123,7 @@ class SiteController extends Controller
             $model->setScenario("captchaRequired");
         }
 
+        $this->layout = '//main-login';
         return $this->render('login', [
                     'model' => $model,
         ]);

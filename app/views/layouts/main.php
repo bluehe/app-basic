@@ -4,25 +4,13 @@
 
 use yii\helpers\Html;
 
-if (Yii::$app->controller->action->id === 'login') { 
-/**
- * Do not use this code in your template. Remove it. 
- * Instead, use the code  $this->layout = '//main-login'; in your controller.
- */
-    echo $this->render(
-        'main-login',
-        ['content' => $content]
-    );
-} else {
-
-
-    app\assets\AppAsset::register($this);
+app\assets\AppAsset::register($this);
    
 
-    dmstr\web\AdminLteAsset::register($this);
+dmstr\web\AdminLteAsset::register($this);
 
-    $directoryAsset = Yii::$app->assetManager->getPublishedUrl('app/web');
-    ?>
+$directoryAsset = Yii::$app->assetManager->getPublishedUrl('app/web');
+?>
     <?php $this->beginPage() ?>
     <!DOCTYPE html>
     <html lang="<?= Yii::$app->language ?>">
@@ -59,4 +47,3 @@ if (Yii::$app->controller->action->id === 'login') {
     </body>
     </html>
     <?php $this->endPage() ?>
-<?php } ?>
