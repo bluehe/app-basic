@@ -61,7 +61,8 @@ class User extends ActiveRecord implements IdentityInterface
             [['username', 'nickname'], 'string', 'max' => 16],
             [['username'], 'string', 'min' => 4],
             [['nickname'], 'string', 'min' => 2],
-            [['password_hash', 'password_reset_token', 'email', 'tel', 'avatar'], 'string', 'max' => 255],        
+            [['password_hash', 'password_reset_token', 'email', 'tel', 'avatar'], 'string', 'max' => 255],
+            [['point','project'], 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];

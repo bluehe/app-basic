@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\UserLevel;
+use app\models\User;
 ?>
 
 <?php

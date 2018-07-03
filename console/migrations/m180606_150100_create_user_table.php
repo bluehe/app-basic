@@ -25,7 +25,7 @@ class m180606_150100_create_user_table extends Migration
             'avatar' => $this->string(),
             'gender' => $this->string(8),
             'role'=>$this->string(8),
-            'point'=>$this->integer(),
+            'point'=>$this->integer()->notNull()->defaultValue(0),
             'project'=>$this->smallInteger()->notNull()->defaultValue(0),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'last_login' => $this->integer()->notNull(),
