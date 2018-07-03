@@ -23,7 +23,7 @@ class m180628_192800_create_website extends Migration {
             'sort_order' => $this->smallInteger(),
             'share_status' => $this->smallInteger(),
             'share_id' => $this->integer(),
-            'collect_num' => $this>integer(),  
+            'collect_num' => $this->integer(),  
             'click_num' => $this->integer(),  
             'is_open' => $this->smallInteger(),
             'stat' => $this->smallInteger(),

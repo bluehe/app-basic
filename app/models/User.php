@@ -54,7 +54,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'auth_key', 'password_hash'], 'required'],
-            [['status', 'created_at', 'updated_at', 'last_login'], 'integer'],
+            [['point','status', 'created_at', 'updated_at', 'last_login'], 'integer'],
             [['username', 'email', 'tel'], 'trim'],
             [['username', 'email', 'tel'], 'filter','filter'=>'strtolower'],
             [['username', 'email', 'tel', 'nickname'], 'unique', 'message' => '{attribute}已经存在'],            
@@ -80,6 +80,7 @@ class User extends ActiveRecord implements IdentityInterface
             'avatar' => '头像', 
             'gender' => '性别',
             'role' => '角色',
+            'point' => '积分',
             'project' => '项目',         
             'status' => '状态',
             'last_login' => '上次登录',
@@ -112,6 +113,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getUserLogs() {
         return $this->hasMany(UserLog::className(), ['uid' => 'id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserPoints() {
+        return $this->hasMany(UserPoint::className(), ['uid' => 'id']);
     }
  
     /**

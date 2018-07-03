@@ -25,6 +25,7 @@ class m180606_150100_create_user_table extends Migration
             'avatar' => $this->string(),
             'gender' => $this->string(8),
             'role'=>$this->string(8),
+            'point'=>$this->integer(),
             'project'=>$this->smallInteger()->notNull()->defaultValue(0),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'last_login' => $this->integer()->notNull(),
@@ -32,7 +33,7 @@ class m180606_150100_create_user_table extends Migration
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
         
-        $this->insert($table, ['id' => 1, 'username' => 'admin', 'auth_key' => 'BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3', 'password_hash' => '$2y$13$vmgY.lIfJs2KkjJUnXFDcOzbxvByXmuUbsIkC2E9MSCfKAb08E7qO', 'password_reset_token' => NULL,'nickname'=>NULL, 'email' => NULL,'tel'=>NULL,'avatar'=>NULL,'gender'=>NULL,'role'=>NULL,'project'=>0, 'status' => 10,  'last_login' => 1482391032,'created_at' => 1482391032, 'updated_at' => 1485054242]);
+        $this->insert($table, ['id' => 1, 'username' => 'admin', 'auth_key' => 'BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3', 'password_hash' => '$2y$13$vmgY.lIfJs2KkjJUnXFDcOzbxvByXmuUbsIkC2E9MSCfKAb08E7qO', 'password_reset_token' => NULL,'nickname'=>NULL, 'email' => NULL,'tel'=>NULL,'avatar'=>NULL,'gender'=>NULL,'role'=>NULL,'point'=>0,'project'=>0, 'status' => 10,  'last_login' => 1482391032,'created_at' => 1482391032, 'updated_at' => 1485054242]);
             
     }
 

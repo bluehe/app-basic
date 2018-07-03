@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
+use app\models\Category;
+use app\models\Website;
 
 /**
  * Page controller
