@@ -5,8 +5,7 @@ use yii\db\Migration;
 class m180703_141900_create_user_level extends Migration {
 
     public function up() {
-       $table = '{{%user_level}}';
-        $userTable = '{{%user}}';
+        $table = '{{%user_level}}';
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
