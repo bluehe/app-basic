@@ -49,7 +49,7 @@ class CommonController extends Controller {
             }
             $result_json= \app\components\CommonHelper::sendSms($user->tel, 'sms_captcha', ['code'=>$num]);
             $result_arr= json_decode($result_json,TRUE);
-            $result=$result_arr['stat']=='success'?true:false;
+            $result=$result_arr['stat']=='success';
         }else{
             return json_encode(['stat'=>'fail','message'=>'类型错误'],256);
         }
@@ -82,7 +82,7 @@ class CommonController extends Controller {
         }elseif($type=='tel'){
             $result_json= \app\components\CommonHelper::sendSms($to, 'sms_captcha', ['code'=>$num]);
             $result_arr= json_decode($result_json,TRUE);
-            $result=$result_arr['stat']=='success'?true:false;
+            $result=$result_arr['stat']=='success';
         }else{
             return json_encode(['stat'=>'fail','message'=>'类型错误'],256);
         }

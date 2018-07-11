@@ -21,16 +21,7 @@ class SystemController extends Controller {
 
         if (Yii::$app->request->post()) {
             $system = Yii::$app->request->post('System');
-            $res = 0;
-            foreach ($system as $key => $value) {
-                $r = System::setValue($key, $value);
-                if ($r) {
-                    $res++;
-                } elseif ($r === false) {
-                    $res = false;
-                    break;
-                }
-            }
+            $res = System::setSystem($system);
             if ($res) {
                 Yii::$app->cache->delete('system_info');
                 Yii::$app->session->setFlash('success', '更新成功。');
@@ -52,16 +43,7 @@ class SystemController extends Controller {
         if (Yii::$app->request->post()) {
             $system = Yii::$app->request->post('System');
 
-            $res = 0;
-            foreach ($system as $key => $value) {
-                $r = System::setValue($key, $value);
-                if ($r) {
-                    $res++;
-                } elseif ($r === false) {
-                    $res = false;
-                    break;
-                }
-            }
+            $res = System::setSystem($system);
             if ($res) {
                 Yii::$app->cache->delete('system_smtp');
                 Yii::$app->session->setFlash('success', '更新成功。');
@@ -83,16 +65,7 @@ class SystemController extends Controller {
         if (Yii::$app->request->post()) {
             $system = Yii::$app->request->post('System');
 
-            $res = 0;
-            foreach ($system as $key => $value) {
-                $r = System::setValue($key, $value);
-                if ($r) {
-                    $res++;
-                } elseif ($r === false) {
-                    $res = false;
-                    break;
-                }
-            }
+            $res = System::setSystem($system);
             if ($res) {
                 Yii::$app->cache->delete('system_sms');
                 Yii::$app->session->setFlash('success', '更新成功。');
@@ -114,16 +87,7 @@ class SystemController extends Controller {
         if (Yii::$app->request->post()) {
             $system = Yii::$app->request->post('System');
             $system['captcha_open'] = isset($system['captcha_open']) ? implode(',', $system['captcha_open']) : '';
-            $res = 0;
-            foreach ($system as $key => $value) {
-                $r = System::setValue($key, $value);
-                if ($r) {
-                    $res++;
-                } elseif ($r === false) {
-                    $res = false;
-                    break;
-                }
-            }
+            $res = System::setSystem($system);
             if ($res) {
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
@@ -243,16 +207,7 @@ class SystemController extends Controller {
         if (Yii::$app->request->post()) {
             $system = Yii::$app->request->post('System');
 
-            $res = 0;
-            foreach ($system as $key => $value) {
-                $r = System::setValue($key, $value);
-                if ($r) {
-                    $res++;
-                } elseif ($r === false) {
-                    $res = false;
-                    break;
-                }
-            }
+            $res = System::setSystem($system);
             if ($res) {
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
@@ -317,12 +272,12 @@ class SystemController extends Controller {
                     $model->end_at = strtotime($model->end_at);
                 }
                 if (!$model->save()) {
-                    throw new \Exception("操作失败");
+                    throw new yii\db\Exception("操作失败");
                 }
                 $transaction->commit();
                 Yii::$app->session->setFlash('success', '添加成功。');
                 return $this->redirect(['crontab-update', 'id' => $model->id]);
-            } catch (\Exception $e) {
+            } catch (yii\db\Exception $e) {
 
                 $transaction->rollBack();
 //                throw $e;
@@ -389,11 +344,11 @@ class SystemController extends Controller {
                         $model->end_at = strtotime($model->end_at);
                     }
                     if (!$model->save()) {
-                        throw new \Exception("操作失败");
+                        throw new yii\db\Exception("操作失败");
                     }
                     $transaction->commit();
                     Yii::$app->session->setFlash('success', '操作成功。');
-                } catch (\Exception $e) {
+                } catch (yii\db\Exception $e) {
 
                     $transaction->rollBack();
 //                throw $e;
@@ -420,7 +375,6 @@ class SystemController extends Controller {
             } catch (\Exception $e) {
 
                 $transaction->rollBack();
-//                throw $e;
             }
         }
         return $this->redirect(Yii::$app->request->referrer);
