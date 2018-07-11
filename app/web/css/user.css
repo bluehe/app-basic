@@ -1,0 +1,94 @@
+.box-body .dl-horizontal dt, .box-body .dl-horizontal dd {
+    height: 35px;
+    line-height: 35px;
+}
+.user-menu{padding-right: 15px;}
+.navbar-custom-menu>.navbar-nav>li>.dropdown-menu.myhome{
+    width:117px;
+    min-width: 117px;
+    right: 15px;
+    position: absolute;
+    background-color: #FFF;
+    z-index: 1;
+    border:1px solid #eee;
+}
+.navbar-custom-menu>.navbar-nav>li>.dropdown-menu.myhome a {
+    color:#333;
+    display: block;
+    margin: 0;
+    width: 115px;
+    text-align: left;
+    float: left;
+    padding: 0 20px;
+    line-height:35px;
+    border-bottom: solid 1px #f4f4f4;
+    text-decoration: none;
+}
+.navbar-custom-menu>.navbar-nav>li>.dropdown-menu.myhome a:last-child {
+    border-bottom: none;
+}
+.navbar-custom-menu>.navbar-nav>li>.dropdown-menu.myhome a:hover {
+    background-color: #f3f3f3;
+}
+.navbar-custom-menu>.navbar-nav>li>.dropdown-menu.myhome>a i{
+    float: left;
+    margin-top: 10px;
+    margin-right: 5px;
+}
+.navbar-custom-menu>.navbar-nav>li>.dropdown-menu.myhome>a span {
+    display: block;
+    width: 56px;
+    float: left;
+    text-align: justify;
+    text-align-last: justify;
+    -moz-text-align-last: justify;
+    -webkit-text-align-last: justify;
+}
+.icon_level_c1 {
+    background-color: #ffdd00;
+}
+.icon_level_c2 {
+    background-color: #ffb400;
+}
+
+.icon_level_c3 {
+    background-color: #fe7e00;
+}
+
+.icon_level_c4 {
+    background-color: #fd4d17;
+}
+
+.icon_level_c5 {
+    background-color: #d60000;
+}
+.icon_level_c6 {
+    background-color: #ad0606;
+}
+
+/*百度新闻*/
+.baidunews>div:not(.baidu),.baidu div{
+    display: none;
+}
+
+.baidu{
+    line-height: 24px;
+}
+.baidu span{color:#6f6f6f;font-size:12px}
+
+
+/*弹出查看*/
+.repaire-view .timeline>li>.timeline-item {
+    border:1px solid #ddd;
+}
+.repaire-view .timeline:before {
+    left:43px;
+}
+.repaire-view .timeline>li>.fa {left:20px;width:50px;font-size: 14px;}
+.repaire-view .timeline>li>.timeline-item{margin-left: 72px;}
+@media (min-width: 768px){
+    .repaire-view .dl-horizontal dt {width:60px}
+    .repaire-view .dl-horizontal dd {
+        margin-left: 80px;
+    }
+}
