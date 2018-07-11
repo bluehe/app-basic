@@ -97,6 +97,20 @@ class System extends ActiveRecord {
             return 0;
         }
     }
+    
+    public static function setSystem($system) {
+        $res = 0;
+        foreach ($system as $key => $value) {
+            $r = self::setValue($key, $value);
+            if ($r) {
+                $res++;
+            } elseif ($r === false) {
+                $res = false;
+                break;
+            }
+        }
+        return $res;
+    }
 
    
 

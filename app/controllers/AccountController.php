@@ -15,9 +15,7 @@ class AccountController extends Controller {
 
     //账号信息
     public function actionIndex() {
-        return $this->render('index', [
-                    'model' => Yii::$app->user->identity,
-        ]);
+        return $this->render('index', ['model' => Yii::$app->user->identity,]);
     }
 
     /**
@@ -151,9 +149,6 @@ class AccountController extends Controller {
                 break;
             case 'M':
                 $displayMaxSize = $displayMaxSize * 1024;
-                break;
-            case 'K':
-                $displayMaxSize = $displayMaxSize;
                 break;
             default:;
         }
