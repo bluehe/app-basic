@@ -211,43 +211,43 @@ class Website extends \yii\db\ActiveRecord {
         return $num;
     }
 
-//    public static function get_tab_addlist($num = '') {
-//        $query = static::find()->joinWith('c')->where(['not', ['uid' => NULL]])->andWhere([self::tableName() . '.stat' => self::STAT_OPEN, self::tableName() . '.is_open' => self::ISOPEN_OPEN])->andWhere(['not', ['share_status' => self::SHARE_COLLECT]])->orderBy([self::tableName() . '.created_at' => SORT_DESC]);
-//        if ($num) {
-//            $query->limit($num);
-//        }
-//        $data = [];
-//        foreach ($query->each() as $website) {
-//            $data[] = ['id' => $website->id, 'url' => $website->url, 'img' => Html::img(Aliyunoss::getfav($website->host)?Aliyunoss::getfav($website->host):Url::to(Yii::$app->params['img_url'] . '/api/getfav?url=' . $website->host)), 'title' => $website->title, 'label' => Yii::$app->formatter->asRelativeTime($website->created_at)];
-//        }
-//        return $data;
-//    }
-//
-//    public static function get_tab_addorder($num = '') {
-//        $query = static::find()->select(['id', 'url', 'host', 'title', 'num' => 'SUM(collect_num)'])->andWhere(['is_open' => self::ISOPEN_OPEN])->groupBy(['host'])->orderBy(['num' => SORT_DESC]);
-//        if ($num) {
-//            $query->limit($num);
-//        }
-//        $websites = $query->asArray()->all();
-//        $data = [];
-//        foreach ($websites as $website) {
-//            $data[] = ['id' => $website['id'], 'url' => $website['url'], 'img' => Html::img(Aliyunoss::getfav($website['host'])?Aliyunoss::getfav($website['host']):Url::to(Yii::$app->params['img_url'] . '/api/getfav?url=' . $website['host'])), 'title' => $website['title'], 'label' => $website['num']];
-//        }
-//        return $data;
-//    }
-//
-//    public static function get_tab_clickorder($num = '') {
-//        $query = static::find()->select(['id', 'url', 'host', 'title', 'num' => 'SUM(click_num)'])->andWhere(['is_open' => self::ISOPEN_OPEN])->groupBy(['host'])->orderBy(['num' => SORT_DESC]);
-//        if ($num) {
-//            $query->limit($num);
-//        }
-//        $websites = $query->asArray()->all();
-//        $data = [];
-//        foreach ($websites as $website) {
-//            $data[] = ['id' => $website['id'], 'url' => $website['url'], 'img' => Html::img(Aliyunoss::getfav($website['host'])?Aliyunoss::getfav($website['host']):Url::to(Yii::$app->params['img_url'] . '/api/getfav?url=' . $website['host'])), 'title' => $website['title'], 'label' => $website['num']];
-//        }
-//        return $data;
-//    }
+    public static function get_tab_addlist($num = '') {
+        $query = static::find()->joinWith('c')->where(['not', ['uid' => NULL]])->andWhere([self::tableName() . '.stat' => self::STAT_OPEN, self::tableName() . '.is_open' => self::ISOPEN_OPEN])->andWhere(['not', ['share_status' => self::SHARE_COLLECT]])->orderBy([self::tableName() . '.created_at' => SORT_DESC]);
+        if ($num) {
+            $query->limit($num);
+        }
+        $data = [];
+        foreach ($query->each() as $website) {
+            $data[] = ['id' => $website->id, 'url' => $website->url, 'title' => $website->title, 'label' => Yii::$app->formatter->asRelativeTime($website->created_at),'host' => $website->host];
+        }
+        return $data;
+    }
+
+    public static function get_tab_addorder($num = '') {
+        $query = static::find()->select(['id', 'url', 'host', 'title', 'num' => 'SUM(collect_num)'])->andWhere(['is_open' => self::ISOPEN_OPEN])->groupBy(['host'])->orderBy(['num' => SORT_DESC]);
+        if ($num) {
+            $query->limit($num);
+        }
+        $websites = $query->asArray()->all();
+        $data = [];
+        foreach ($websites as $website) {
+            $data[] = ['id' => $website['id'], 'url' => $website['url'], 'title' => $website['title'], 'label' => $website['num'], 'host' =>$website['host']];
+        }
+        return $data;
+    }
+
+    public static function get_tab_clickorder($num = '') {
+        $query = static::find()->select(['id', 'url', 'host', 'title', 'num' => 'SUM(click_num)'])->andWhere(['is_open' => self::ISOPEN_OPEN])->groupBy(['host'])->orderBy(['num' => SORT_DESC]);
+        if ($num) {
+            $query->limit($num);
+        }
+        $websites = $query->asArray()->all();
+        $data = [];
+        foreach ($websites as $website) {
+            $data[] = ['id' => $website['id'], 'url' => $website['url'], 'label' => $website['num'], 'host' =>$website['host'], 'title' => $website['title']];
+        }
+        return $data;
+    }
 
     //统计-网址每日增加数
     public static function get_day_total($a = 'created_at', $start = '', $end = '', $uid = NULL, $is = '') {

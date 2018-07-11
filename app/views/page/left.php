@@ -4,6 +4,11 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\UserLevel;
 use app\models\User;
+use app\models\UserSign;
+use app\models\UserAtten;
+use app\models\Website;
+use app\components\Tab;
+
 ?>
 
 <?php
@@ -73,7 +78,7 @@ if (Yii::$app->controller->action->id == 'people' || Yii::$app->controller->acti
         <div role="tabpanel" class="tab-pane box active" id="useradd">
             <div class="list-group list">
                 <?=
-                Tab::widget(['items' => User::get_tab_useradd(20)]
+                Tab::widget(['items' => User::get_tab_useradd(20),'template_id'=>'user']
                 )
                 ?>
             </div>
@@ -81,7 +86,7 @@ if (Yii::$app->controller->action->id == 'people' || Yii::$app->controller->acti
         <div role="tabpanel" class="tab-pane" id="userfans">
             <div class="list-group">
                 <?=
-                Tab::widget(['items' => UserAtten::get_tab_userfans(10)]
+                Tab::widget(['items' => UserAtten::get_tab_userfans(10),'template_id'=>'user']
                 )
                 ?>
 
@@ -90,7 +95,7 @@ if (Yii::$app->controller->action->id == 'people' || Yii::$app->controller->acti
         <div role="tabpanel" class="tab-pane" id="userlevel">
             <div class="list-group">
                 <?=
-                Tab::widget(['items' => UserLevel::get_tab_userlevel(10)]
+                Tab::widget(['items' => UserLevel::get_tab_userlevel(10),'template_id'=>'user']
                 )
                 ?>
 
@@ -142,7 +147,7 @@ if (Yii::$app->controller->action->id == 'people' || Yii::$app->controller->acti
     </div>
 
 </div>
-<?php dh\assets\AppAsset::addScript($this,'/js/jquery.cxscroll.min.js') ?>
+<?php app\assets\PageAsset::addScript($this,'/js/jquery.cxscroll.min.js') ?>
 <script>
 <?php $this->beginBlock('left') ?>
     $(function () {

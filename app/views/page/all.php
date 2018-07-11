@@ -4,7 +4,6 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
-use app\components\Aliyunoss;
 
 ?>
 <div class="container">
@@ -25,12 +24,8 @@ use app\components\Aliyunoss;
 
                                 <?php foreach ($cate['website'] as $website) { ?>
                                     <div class="list-group-item" data-id="<?= $website['id'] ?>">
-                                        <?php
-                                        if($img=Aliyunoss::getfav($website['host'])){
-                                            echo Html::img('@web/image/default_e.png', ['class' => 'lazyload', 'data-original' => $img]);
-                                        }else{
-                                            echo Html::img('@web/image/default_ico.png', ['class' => 'lazyload', 'data-original' => Url::to(Yii::$app->params['img_url'] . '/api/getfav?url=' . $website['host'])]);
-                                        }
+                                        <?php 
+                                            echo Html::img('@web/image/default_ico.png', ['class' => 'lazyload', 'data-original' => Url::to(Yii::$app->params['img_url'] . '/api/getfav?url=' . $website['host'])]);                                    
                                         ?>
                                        
                                         <a class="clickurl" target="_blank" href="<?= $website['url'] ?>" title="<?= $website['title'] ?>"><?= $website['title'] ?></a>

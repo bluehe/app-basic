@@ -62,7 +62,8 @@ class User extends ActiveRecord implements IdentityInterface
             [['username'], 'string', 'min' => 4],
             [['nickname'], 'string', 'min' => 2],
             [['password_hash', 'password_reset_token', 'email', 'tel', 'avatar'], 'string', 'max' => 255],
-            [['point','project'], 'default', 'value' => 0],
+            [['point','project','plate'], 'default', 'value' => 0],
+            [['skin'], 'default', 'value' => 'default'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
@@ -81,6 +82,8 @@ class User extends ActiveRecord implements IdentityInterface
             'avatar' => '头像', 
             'gender' => '性别',
             'role' => '角色',
+            'plate' => '版式',
+            'skin' => '皮肤',
             'point' => '积分',
             'project' => '项目',         
             'status' => '状态',
@@ -276,6 +279,18 @@ class User extends ActiveRecord implements IdentityInterface
 
         $query = static::find()->where(['status' => self::STATUS_ACTIVE])->andFilterWhere(['>=', $a, $start])->andFilterWhere(['<=', $a, $end]);
         return $query->groupBy(["FROM_UNIXTIME($a, '%Y-%m-%d')"])->select(['count(*)', "FROM_UNIXTIME($a,'%Y-%m-%d')"])->indexBy("FROM_UNIXTIME($a,'%Y-%m-%d')")->column();
+    }
+    
+    public static function get_tab_useradd($num = '') {
+        $query = static::find()->andWhere(['status' => self::STATUS_ACTIVE])->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC]);
+        if ($num) {
+            $query->limit($num);
+        }
+        $data = [];
+        foreach ($query->each() as $user) {
+            $data[] = ['id' => $user->id, 'title' => $user->nickname ? $user->nickname : $user->username, 'label' => Yii::$app->formatter->asRelativeTime($user->created_at), 'img' => $user->avatar];
+        }
+        return $data;
     }
     
 }

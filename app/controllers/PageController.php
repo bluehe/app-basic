@@ -44,6 +44,7 @@ class PageController extends Controller {
             $cache->set('page_all', $cates, 360);
         }
 
+        $this->layout = '//main-page';
         return $this->render('all', ['cates' => $cates]);
     }
     
@@ -56,6 +57,8 @@ class PageController extends Controller {
             }
         }
         $common = Website::get_website_order(10, Yii::$app->user->identity->id);
+        
+        $this->layout = '//main-page';
         return $this->render('user', ['cates' => $cates, 'common' => $common]);
     }
 }

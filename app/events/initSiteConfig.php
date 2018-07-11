@@ -9,6 +9,8 @@ use app\models\System;
 use app\models\Crontab;
 use app\models\UserLog;
 use app\models\User;
+use app\models\Category;
+use app\models\Website;
 
 class initSiteConfig extends Event {
 
@@ -116,6 +118,28 @@ class initSiteConfig extends Event {
                 }
             }
         }
+        
+        //板式,皮肤
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->params['plate'] = Yii::$app->request->cookies->getValue('plate', 0);
+            Yii::$app->params['skin'] = Yii::$app->request->cookies->getValue('skin', 'default');
+        } else {
+            Yii::$app->params['plate'] = Yii::$app->user->identity->plate;
+            Yii::$app->params['skin'] = Yii::$app->user->identity->skin;
+        }
+        
+        //统计
+        $statistics = $cache->get('statistics');
+        if ($statistics === false) {
+            $statistics['category0'] = Category::get_category_num(NULL);
+            $statistics['category1'] = Category::get_category_num(NULL, 'not');
+            $statistics['website0'] = Website::get_website_num(NULL);
+            $statistics['website1'] = Website::get_website_num(NULL, 'not');
+            $query = Website::find()->select(['count(*)'])->createCommand()->getRawSql();
+            $dependency = new \yii\caching\DbDependency(['sql' => $query]);
+            $cache->set('statistics', $statistics, null, $dependency);
+        }
+        Yii::$app->params['statistics'] = $statistics;
 
         return true;
     }
