@@ -90,8 +90,11 @@ return [
             'thousandSeparator' => ',',
             'currencyCode' => 'CNY',
         ],
+        'siteConfig' => [
+            'class' => app\components\SiteConfig::className(),
+        ],
     ],
-     'as access' => [
+    'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             //这里是允许访问的action
@@ -102,6 +105,7 @@ return [
 //            'gii/*'
         ]
     ],
+    'on beforeRequest' => [app\components\SiteConfig::className(), 'configInit'],
     'on beforeAction' => ['app\events\initSiteConfig', 'assign'],
     'params' => $params,
 ];
