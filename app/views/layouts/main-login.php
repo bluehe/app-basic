@@ -53,9 +53,9 @@ jQuery(function($){
         // Components
         slide_links        : 'blank',    // Individual links for each slide (Options: false, 'num', 'name', 'blank')
         slides             : [    // Slideshow Images
-                                 {image : '../image/login/1.jpg'},
-                                 {image : '../image/login/2.jpg'},
-                                 {image : '../image/login/3.jpg'}
+                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/1.jpg'},
+                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/2.jpg'},
+                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/3.jpg'}
                              ]
 
     });
