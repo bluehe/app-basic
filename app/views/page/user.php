@@ -3,9 +3,9 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use dh\models\Website;
+use app\models\Website;
 use yii\bootstrap\Modal;
-use dh\components\Aliyunoss;
+use app\components\Aliyunoss;
 ?>
 <div class="container">
     <div class="row content">
