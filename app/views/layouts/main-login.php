@@ -7,8 +7,8 @@ use app\models\System;
 /* @var $content string */
 
 app\assets\AppAsset::register($this);
+ 
 
-//dmstr\web\AdminLteAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -28,9 +28,7 @@ app\assets\AppAsset::register($this);
         <?= $content ?>
 
 <?php if(System::getValue('system_loginimg')):?> 
- 
-<?php app\assets\AppAsset::addCss($this, '/css/supersized.css'); ?> 
-<?php app\assets\AppAsset::addScript($this, '/js/supersized.3.2.7.min.js'); ?> 
+<?php app\assets\SupersizedAsset::register($this);?>
 <script>
 <?php $this->beginBlock('supersized') ?>
 jQuery(function($){
@@ -55,9 +53,9 @@ jQuery(function($){
         // Components
         slide_links        : 'blank',    // Individual links for each slide (Options: false, 'num', 'name', 'blank')
         slides             : [    // Slideshow Images
-                                 {image : '../image/login/1.jpg'},
-                                 {image : '../image/login/2.jpg'},
-                                 {image : '../image/login/3.jpg'}
+                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/1.jpg'},
+                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/2.jpg'},
+                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/3.jpg'}
                              ]
 
     });
@@ -67,9 +65,9 @@ jQuery(function($){
 </script>
 <?php $this->registerJs($this->blocks['supersized'], \yii\web\View::POS_END); ?>
 
-<?php else:?>        
+<?php else:?> 
+<?php app\assets\ParticlesAsset::register($this);?>
 <div id="particles" style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;z-index:-1"></div>
-<?php app\assets\AppAsset::addScript($this, '/js/jquery.particleground.min.js'); ?> 
 <script>
 <?php $this->beginBlock('particles') ?>
  $('#particles').particleground({

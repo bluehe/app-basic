@@ -9,7 +9,7 @@ app\assets\AppAsset::register($this);
 
 dmstr\web\AdminLteAsset::register($this);
 
-$directoryAsset = Yii::$app->assetManager->getPublishedUrl('app/web');
+$directoryAsset = defined('APP_STATIC')?APP_STATIC:Yii::$app->assetManager->getPublishedUrl('app/web');
 ?>
     <?php $this->beginPage() ?>
     <!DOCTYPE html>

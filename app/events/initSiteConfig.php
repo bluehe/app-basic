@@ -17,41 +17,33 @@ class initSiteConfig extends Event {
     public static function assign() {
 
         $cache = Yii::$app->cache;
-        $smtp = $cache->get('system_smtp');
-        if ($smtp === false) {
-            $smtp = System::getChildrenValue('smtp');
-            $range = System::find()->where(['code' => 'smtp_charset'])->select('store_range')->one();
-            $charsets = json_decode($range['store_range'], true);
-            $smtp['smtpcharset'] = $charsets[$smtp['smtp_charset']];
-            $cache->set('system_smtp', $smtp);
-        }
-        if ($smtp['smtp_service']) {
-            Yii::$app->set('mailer', [
-                'class' => 'yii\swiftmailer\Mailer',
-                'useFileTransport' => false,
-                'transport' => [
-                    'class' => 'Swift_SmtpTransport',
-                    'host' => $smtp['smtp_host'],
-                    'username' => $smtp['smtp_username'],
-                    'password' => $smtp['smtp_password'],
-                    'port' => $smtp['smtp_port'],
-                    'encryption' => $smtp['smtp_ssl'] ? 'ssl' : 'tls',
-            ],
-            'messageConfig' => [
-                'charset' => $smtp['smtpcharset'], //改变
-                'from' => [$smtp['smtp_from'] => Yii::$app->name]
-            ],
-            ]);
-        }
+//        $smtp = $cache->get('system_smtp');
+//        if ($smtp === false) {
+//            $smtp = System::getChildrenValue('smtp');
+//            $range = System::find()->where(['code' => 'smtp_charset'])->select('store_range')->one();
+//            $charsets = json_decode($range['store_range'], true);
+//            $smtp['smtpcharset'] = $charsets[$smtp['smtp_charset']];
+//            $cache->set('system_smtp', $smtp);
+//        }
+//        if ($smtp['smtp_service']) {
+//            Yii::$app->set('mailer', [
+//                'class' => 'yii\swiftmailer\Mailer',
+//                'useFileTransport' => false,
+//                'transport' => [
+//                    'class' => 'Swift_SmtpTransport',
+//                    'host' => $smtp['smtp_host'],
+//                    'username' => $smtp['smtp_username'],
+//                    'password' => $smtp['smtp_password'],
+//                    'port' => $smtp['smtp_port'],
+//                    'encryption' => $smtp['smtp_ssl'] ? 'ssl' : 'tls',
+//            ],
+//            'messageConfig' => [
+//                'charset' => $smtp['smtpcharset'], //改变
+//                'from' => [$smtp['smtp_from'] => Yii::$app->name]
+//            ],
+//            ]);
+//        }
         $system = $cache->get('system_info');
-        if ($system === false) {
-            $system = System::getChildrenValue('system');
-            if (!$system['system_name']) {
-                $system['system_name'] = Yii::$app->name;
-            }
-            $cache->set('system_info', $system);
-        }
-        Yii::$app->name = $system['system_name'];
         
         //系统状态-关闭
         if($system['system_stat']=='0'){
@@ -72,6 +64,15 @@ class initSiteConfig extends Event {
                 return false;
             }
         }
+        
+//        if ($system === false) {
+//            $system = System::getChildrenValue('system');
+//            if (!$system['system_name']) {
+//                $system['system_name'] = Yii::$app->name;
+//            }
+//            $cache->set('system_info', $system);
+//        }
+//        Yii::$app->name = $system['system_name'];
       
         //定时任务
         $event_scheduler = $cache->get('event_scheduler');
@@ -84,7 +85,7 @@ class initSiteConfig extends Event {
 //            }
             $cache->set('event_scheduler', $event_scheduler);
         }
-
+       
         if ($event_scheduler != 'ON') {
             //未成功，不能通过mysql-event执行定时任务
             self::crontab();
@@ -140,7 +141,7 @@ class initSiteConfig extends Event {
             $cache->set('statistics', $statistics, null, $dependency);
         }
         Yii::$app->params['statistics'] = $statistics;
-
+               
         return true;
     }
 

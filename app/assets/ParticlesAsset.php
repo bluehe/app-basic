@@ -7,18 +7,13 @@ use yii\web\AssetBundle;
 /**
  * Main app application asset bundle.
  */
-class AppAsset extends AssetBundle
+class ParticlesAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
     ];
     public $js = [
-    ];
-    public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
-        'app\assets\CommonAsset',
+        'js/jquery.particleground.min.js',
     ];
 }

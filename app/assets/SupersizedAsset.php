@@ -7,18 +7,14 @@ use yii\web\AssetBundle;
 /**
  * Main app application asset bundle.
  */
-class AppAsset extends AssetBundle
+class SupersizedAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
+        'css/supersized.css',
     ];
     public $js = [
-    ];
-    public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
-        'app\assets\CommonAsset',
+        'js/supersized.3.2.7.min.js',
     ];
 }

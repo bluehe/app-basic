@@ -42,11 +42,50 @@ return [
         ],
         'assetManager' => [
             'appendTimestamp' => true,
-            //'linkAssets' => true,
+            'linkAssets' => false,
             'bundles' => [
                 'dmstr\web\AdminLteAsset' => [
                     'skin' => 'skin-blue',
                 ],
+                app\assets\AppAsset::className() =>[
+                    'sourcePath' => '@app/web',
+                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'css'=>[
+                        'a'=>'css/site.css',
+                    ]                   
+                ],
+                app\assets\CookieAsset::className() =>[
+                    'sourcePath' => '@app/web',
+                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'js'=>[
+                        'a'=>'js/sendcookie.js',
+                    ]                   
+                ],
+                app\assets\ParticlesAsset::className() =>[
+                    'sourcePath' => '@app/web',
+                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'js'=>[
+                        'a'=>'js/jquery.particleground.min.js',
+                    ]                   
+                ],
+                app\assets\SupersizedAsset::className() =>[
+                    'sourcePath' => '@app/web',
+                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'css'=>[
+                        'a'=>'css/supersized.css',
+                    ],
+                    'js'=>[
+                        'a'=>'js/supersized.3.2.7.min.js',
+                    ]                   
+                ],
+                app\assets\CommonAsset::className() =>[
+                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
+                    'js'=>[
+                        'a'=>'jquery-slimscroll/jquery.slimscroll.min.js',
+                        'b'=>'fastclick/lib/fastclick.js',
+                    ]                   
+                ],
+                
             ],
         ],
         'authManager' => [
@@ -90,8 +129,11 @@ return [
             'thousandSeparator' => ',',
             'currencyCode' => 'CNY',
         ],
+        'siteConfig' => [
+            'class' => app\components\SiteConfig::className(),
+        ],
     ],
-     'as access' => [
+    'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             //这里是允许访问的action
@@ -102,6 +144,7 @@ return [
 //            'gii/*'
         ]
     ],
+    'on beforeRequest' => [app\components\SiteConfig::className(), 'configInit'],
     'on beforeAction' => ['app\events\initSiteConfig', 'assign'],
     'params' => $params,
 ];
