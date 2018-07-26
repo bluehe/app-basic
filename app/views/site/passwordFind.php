@@ -85,7 +85,7 @@ $fieldOptions2 = [
     </div>
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
-<?php app\assets\AppAsset::addScript($this, '/js/sendcookie.js'); ?> 
+<?php app\assets\CookieAsset::register($this); ?> 
 <script>
 <?php $this->beginBlock('password') ?>
 $(function () {
