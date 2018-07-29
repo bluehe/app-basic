@@ -24,7 +24,8 @@
         "kartik-v/yii2-widgets": "*",
         "yiisoft/yii2-imagine": "^2.1",
         "bluehe/yii2-jcrop": "dev-master",
-        "yiidoc/yii2-redactor": "*"
+        "yiidoc/yii2-redactor": "*",
+        "feehi/yii2-cdn": "^0.0.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

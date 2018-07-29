@@ -78,6 +78,28 @@ class SystemController extends Controller {
                     'model' => System::getChildren('sms'),
         ]);
     }
+    
+     /**
+     * CDN设置
+     */
+    public function actionCdn() {
+
+        if (Yii::$app->request->post()) {
+            $system = Yii::$app->request->post('System');
+
+            $res = System::setSystem($system);
+            if ($res) {
+                Yii::$app->cache->delete('system_cdn');
+                Yii::$app->session->setFlash('success', '更新成功。');
+            } elseif ($res === false) {
+                Yii::$app->session->setFlash('error', '更新失败。');
+            }
+        }
+
+        return $this->render('cdn', [
+                    'model' => System::getChildren('cdn'),
+        ]);
+    }
 
     /**
      * 验证码设置

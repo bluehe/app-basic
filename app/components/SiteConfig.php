@@ -1,8 +1,6 @@
 <?php
 /**
- * Author: lf
- * Blog: https://blog.feehi.com
- * Email: job@feehi.com
+ * Author: blue
  * Created at: 2017-03-15 21:16
  */
 
@@ -77,6 +75,47 @@ class SiteConfig extends Component
                     'from' => [Yii::$app->siteConfig->smtp_from => Yii::$app->name]
                 ],
             ]);
+        }
+        
+        if (Yii::$app->siteConfig->cdn_service) {
+
+            if(Yii::$app->siteConfig->cdn_platform=='Alioss'){
+                Yii::configure(yii::$app->cdn, [
+                    'class' => feehi\cdn\AliossTarget::className(),
+                    'bucket' => Yii::$app->siteConfig->cdn_bucket,
+                    'accessKey' => Yii::$app->siteConfig->cdn_key,
+                    'accessSecret' => Yii::$app->siteConfig->cdn_secret,
+                    'endPoint' => Yii::$app->siteConfig->cdn_point,
+                    'host' => Yii::$app->siteConfig->cdn_host
+                ]);               
+            }elseif(Yii::$app->siteConfig->cdn_platform=='Qiniu'){
+                Yii::configure(yii::$app->cdn, [
+                    'class' => feehi\cdn\QiniuTarget::className(),                   
+                    'accessKey' => Yii::$app->siteConfig->cdn_key,
+                    'secretKey' => Yii::$app->siteConfig->cdn_secret,
+                    'bucket' => Yii::$app->siteConfig->cdn_bucket,
+                    'host' => Yii::$app->siteConfig->cdn_host
+                ]);  
+            }elseif(Yii::$app->siteConfig->cdn_platform=='Qcloud'){
+                Yii::configure(yii::$app->cdn, [
+                    'class' => feehi\cdn\QcloudTarget::className(),
+                    'appId' => Yii::$app->siteConfig->cdn_appid,
+                    'secretId' => Yii::$app->siteConfig->cdn_key,
+                    'secretKey' => Yii::$app->siteConfig->cdn_secret,
+                    'region' => Yii::$app->siteConfig->cdn_point,
+                    'bucket' => Yii::$app->siteConfig->cdn_bucket,
+                    'host' => Yii::$app->siteConfig->cdn_host
+                ]);  
+            }elseif(Yii::$app->siteConfig->cdn_platform=='Netease'){
+                Yii::configure(yii::$app->cdn, [
+                    'class' => feehi\cdn\NeteaseTarget::className(),
+                    'bucket' => Yii::$app->siteConfig->cdn_bucket,
+                    'accessKey' => Yii::$app->siteConfig->cdn_key,
+                    'accessSecret' => Yii::$app->siteConfig->cdn_secret,
+                    'endPoint' => Yii::$app->siteConfig->cdn_point,
+                    'host' => Yii::$app->siteConfig->cdn_host
+                ]);               
+            }
         }
         
         Yii::$app->name = Yii::$app->siteConfig->system_name?Yii::$app->siteConfig->system_nam:Yii::$app->name;

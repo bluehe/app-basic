@@ -138,6 +138,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/system/index', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/smtp', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/sms', '2', null, null, null, '1482820123', '1482820123'],
+            ['/system/cdn', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/captcha', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/agreement', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/crontab', '2', null, null, null, '1482820123', '1482820123'],
