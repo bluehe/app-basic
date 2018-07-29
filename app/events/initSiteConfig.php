@@ -5,7 +5,6 @@ namespace app\events;
 use Yii;
 use yii\base\Event;
 use yii\web\Cookie;
-use app\models\System;
 use app\models\Crontab;
 use app\models\UserLog;
 use app\models\User;

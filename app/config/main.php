@@ -40,6 +40,9 @@ return [
             //'class' => 'yii\redis\Cache',
             'keyPrefix' => 'app',
         ],
+        'cdn' => [
+            'class' => feehi\cdn\DummyTarget::className(),
+        ],
         'assetManager' => [
             'appendTimestamp' => true,
             'linkAssets' => false,
