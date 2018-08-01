@@ -3,8 +3,6 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
-use yii\base\InvalidParamException;
-use app\components\CommonHelper;
 
 /**
  * Password reset form
@@ -19,10 +17,6 @@ class ChangeAuth extends Model
     const TYPE_EMAIL = 'email';
     const TYPE_TEL = 'tel';
 
-    /**
-     * @var \common\models\User
-     */
-    private $_user;
 
 
     /**
