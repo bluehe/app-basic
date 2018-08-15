@@ -81,7 +81,7 @@ class SiteConfig extends Component
 
             if(Yii::$app->siteConfig->cdn_platform=='Alioss'){
                 Yii::configure(yii::$app->cdn, [
-                    'class' => feehi\cdn\AliossTarget::className(),
+                    'class' => \feehi\cdn\AliossTarget::className(),
                     'bucket' => Yii::$app->siteConfig->cdn_bucket,
                     'accessKey' => Yii::$app->siteConfig->cdn_key,
                     'accessSecret' => Yii::$app->siteConfig->cdn_secret,
@@ -90,7 +90,7 @@ class SiteConfig extends Component
                 ]);               
             }elseif(Yii::$app->siteConfig->cdn_platform=='Qiniu'){
                 Yii::configure(yii::$app->cdn, [
-                    'class' => feehi\cdn\QiniuTarget::className(),                   
+                    'class' => \feehi\cdn\QiniuTarget::className(),                   
                     'accessKey' => Yii::$app->siteConfig->cdn_key,
                     'secretKey' => Yii::$app->siteConfig->cdn_secret,
                     'bucket' => Yii::$app->siteConfig->cdn_bucket,
@@ -98,7 +98,7 @@ class SiteConfig extends Component
                 ]);  
             }elseif(Yii::$app->siteConfig->cdn_platform=='Qcloud'){
                 Yii::configure(yii::$app->cdn, [
-                    'class' => feehi\cdn\QcloudTarget::className(),
+                    'class' => \feehi\cdn\QcloudTarget::className(),
                     'appId' => Yii::$app->siteConfig->cdn_appid,
                     'secretId' => Yii::$app->siteConfig->cdn_key,
                     'secretKey' => Yii::$app->siteConfig->cdn_secret,
@@ -108,7 +108,7 @@ class SiteConfig extends Component
                 ]);  
             }elseif(Yii::$app->siteConfig->cdn_platform=='Netease'){
                 Yii::configure(yii::$app->cdn, [
-                    'class' => feehi\cdn\NeteaseTarget::className(),
+                    'class' => \feehi\cdn\NeteaseTarget::className(),
                     'bucket' => Yii::$app->siteConfig->cdn_bucket,
                     'accessKey' => Yii::$app->siteConfig->cdn_key,
                     'accessSecret' => Yii::$app->siteConfig->cdn_secret,
