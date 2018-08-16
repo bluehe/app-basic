@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use app\models\User;
 
 /**
- * UserSearch represents the model behind the search form about `dh\models\Users`.
+ * UserSearch represents the model behind the search form about `app\models\Users`.
  */
 class UserSearch extends User {
 
@@ -17,7 +17,7 @@ class UserSearch extends User {
     public function rules() {
         return [
             [['id', 'point', 'status'], 'integer'],
-            [['username', 'created_at', 'nickname', 'email', 'tel', 'avatar'], 'safe'],
+            [['username', 'created_at', 'nickname', 'email', 'tel', 'avatar', 'role'], 'safe'],
         ];
     }
 
@@ -60,6 +60,7 @@ class UserSearch extends User {
         $query->andFilterWhere([
             'id' => $this->id,
             'point' => $this->point,
+            'role' => $this->role,
             'status' => $this->status,
         ]);
 

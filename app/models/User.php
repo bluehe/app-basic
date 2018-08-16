@@ -27,6 +27,12 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
     
+    const ROLE_PM = 'pm';
+    const ROLE_SA = 'sa';
+    const ROLE_OB = 'ob';
+    const ROLE_OB_DATA = 'ob_data';
+    const ROLE_BD = 'bd';
+    
 
 
     /**
@@ -82,6 +88,7 @@ class User extends ActiveRecord implements IdentityInterface
             'gender' => '性别',
             'role' => '角色',
             'point' => '积分',
+            'user_color' => '颜色',
             'project' => '项目',         
             'status' => '状态',
             'last_login' => '上次登录',
@@ -95,11 +102,23 @@ class User extends ActiveRecord implements IdentityInterface
             self::STATUS_ACTIVE => "正常",
             self::STATUS_DELETED => "删除"
         ],
+        'role' => [
+            self::ROLE_PM => "项目经理",
+            self::ROLE_SA => "解决方案",
+            self::ROLE_OB => "运营人员",
+            self::ROLE_OB_DATA => "数据运营",
+            self::ROLE_BD => "商务拓展"
+        ],
     ];
 
     public function getStatus() {
         $status = isset(self::$List['status'][$this->status]) ? self::$List['status'][$this->status] : null;
         return $status;
+    }
+    
+    public function getRole() {
+        $role = isset(self::$List['role'][$this->role]) ? self::$List['role'][$this->role] : null;
+        return $role;
     }
       
     /**

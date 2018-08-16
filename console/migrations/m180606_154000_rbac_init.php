@@ -143,18 +143,32 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/system/agreement', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/crontab', '2', null, null, null, '1482820123', '1482820123'],
             
+//            ['/user/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/user/user-list', '2', null, null, null, '1482820123', '1482820123'],
+            
           
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
             ['frozen', '1', '账号冻结', null, null, '1482820123', '1482820123'],
             ['guest', '1', '游客', null, null, '1482820123', '1482820123'],
- 
             
-            ['账号信息', '2', '账号信息', null, null, '1482820123', '1482820123'],
+            ['pm', '1', '项目经理', null, null, '1482820123', '1482820123'],
+            ['sa', '1', '解决方案', null, null, '1482820123', '1482820123'],
+            ['ob', '1', '运营人员', null, null, '1482820123', '1482820123'],
+            ['ob_data', '1', '数据运营', null, null, '1482820123', '1482820123'],
+            ['bd', '1', '商务拓展', null, null, '1482820123', '1482820123'],
+            
             ['系统设置', '2', '系统设置', null, null, '1482820123', '1482820123'],
+            ['账号信息', '2', '账号信息', null, null, '1482820123', '1482820123'],
+                       
+//            ['工作中心', '2', '工作中心', null, null, '1482820123', '1482820123'],
+            ['用户管理', '2', '用户管理', null, null, '1482820123', '1482820123'],
           
         ]);
-        $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [                                         
+        $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [
+            ['ob_data', 'ob'],
+            ['superadmin', 'pm'],
+            
             ['superadmin', '/admin/*'],
             
             ['账号信息', '/account/*'],
@@ -163,7 +177,10 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             
             ['系统设置', '/system/*'], 
             ['superadmin', '系统设置'],
-         
+            
+            ['用户管理', '/user/user-list'],
+            ['pm', '用户管理'],
+                               
         ]);
         $this->batchInsert($authManager->assignmentTable, ['item_name', 'user_id', 'created_at'], [
             ['superadmin', '1', '1482481221'],
