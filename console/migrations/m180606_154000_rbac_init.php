@@ -143,7 +143,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/system/agreement', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/crontab', '2', null, null, null, '1482820123', '1482820123'],
             
-//            ['/user/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/user/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/user/user-list', '2', null, null, null, '1482820123', '1482820123'],
             
           
@@ -178,7 +178,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['系统设置', '/system/*'], 
             ['superadmin', '系统设置'],
             
-            ['用户管理', '/user/user-list'],
+            ['用户管理', '/user/*'],
             ['pm', '用户管理'],
                                
         ]);

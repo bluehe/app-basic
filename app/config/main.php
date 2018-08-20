@@ -81,6 +81,16 @@ return [
                         'a'=>'js/supersized.3.2.7.min.js',
                     ]                   
                 ],
+                app\assets\ColorAsset::className() =>[
+                    'sourcePath' => '@app/web',
+                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'css'=>[
+                        'a'=>'css/colpick.css',
+                    ],
+                    'js'=>[
+                        'a'=>'js/colpick.js',
+                    ]                   
+                ],
                 app\assets\CommonAsset::className() =>[
                     'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
                     'js'=>[

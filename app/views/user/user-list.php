@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\User;
+use app\grid\StatusColumn;
+use app\libs\Constants;
 
 /* @var $this yii\web\View */
 /* @var $searchModel dh\models\UserSearch */
@@ -84,6 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            return date('Y-m-d H:i:s', $model->created_at);   //主要通过此种方式实现
 //                        },
 //                    ],
+              
                     [
                         'attribute' => 'status',
                         'value' =>

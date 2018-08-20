@@ -61,8 +61,8 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['username', 'auth_key', 'password_hash'], 'required'],
             [['point','status', 'created_at', 'updated_at', 'last_login'], 'integer'],
-            [['username', 'email', 'tel'], 'trim'],
-            [['username', 'email', 'tel'], 'filter','filter'=>'strtolower'],
+            [['username', 'email', 'tel','user_color'], 'trim'],
+            [['username', 'email', 'tel','user_color'], 'filter','filter'=>'strtolower'],
             [['username', 'email', 'tel', 'nickname'], 'unique', 'message' => '{attribute}已经存在'],            
             [['username', 'nickname'], 'string', 'max' => 16],
             [['username'], 'string', 'min' => 4],
@@ -71,6 +71,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['point','project'], 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['role','project'], 'safe'],
         ];
     }
 

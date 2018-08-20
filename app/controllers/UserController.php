@@ -85,7 +85,7 @@ class UserController extends Controller {
     
     public function actionUserUpdate($id) {
         $model = User::findOne($id);
-        $model->group = UserGroup::get_user_groupid($model->id);
+//        $model->group = UserGroup::get_user_groupid($model->id);
         $role = $model->role;
 
         if ($model->load(Yii::$app->request->post())) {
@@ -94,19 +94,23 @@ class UserController extends Controller {
                 return \yii\bootstrap\ActiveForm::validate($model);
             }
             
-            $rw = Yii::$app->request->post('User');
-            $groups = $rw['group'] ? $rw['group'] : array();             
-            $group = new UserGroup();
-            $group->user_id = $model->id;   
-                        
+//            $rw = Yii::$app->request->post('User');
+//            $groups = $rw['group'] ? $rw['group'] : array();             
+//            $group = new UserGroup();
+//            $group->user_id = $model->id;   
+                      
             $transaction = Yii::$app->db->beginTransaction();
             try {
+                    $auth = Yii::$app->authManager;
+                    $Role_admin=$auth->getRole('superadmin');
+                    if($model->status == User::STATUS_DELETED && $auth->getAssignment($Role_admin->name, $mode->id)){
+                        $mode->status = User::STATUS_ACTIVE;
+                    }
                     $model->save(false);
 
                     if ($model->role != $role) {
                       
-                        $auth = Yii::$app->authManager;
-                        $Role_admin=$auth->getRole('admin');
+                        
                         if(!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)&&($model->role=='pm'||$role=='pm')){
                             Yii::$app->session->setFlash('warning', '项目经理不能设置和移除同级人员');
                             throw new \Exception("项目经理不能设置和移除同级人员");
@@ -126,24 +130,24 @@ class UserController extends Controller {
                         }
                     }
                    
-                    $t1 = array_diff($groups, $model->group); //新增
-                    $t2 = array_diff($model->group, $groups); //删除
-                    if (count($t1) > 0) {
-                        foreach ($t1 as $t) {
-                            $_group = clone $group;
-                            $_group->group_id = $t;
-                            if (!$_group->save()) {
-                                throw new \Exception("修改失败");
-                            }
-                        }
-                    }
-                    if (count($t2) > 0) {
-                        UserGroup::deleteAll(['user_id' => $model->id, 'group_id' => $t2]);
-                    }
+//                    $t1 = array_diff($groups, $model->group); //新增
+//                    $t2 = array_diff($model->group, $groups); //删除
+//                    if (count($t1) > 0) {
+//                        foreach ($t1 as $t) {
+//                            $_group = clone $group;
+//                            $_group->group_id = $t;
+//                            if (!$_group->save()) {
+//                                throw new \Exception("修改失败");
+//                            }
+//                        }
+//                    }
+//                    if (count($t2) > 0) {
+//                        UserGroup::deleteAll(['user_id' => $model->id, 'group_id' => $t2]);
+//                    }
                    
 
                     $transaction->commit();
-                    $model->group = $groups;
+//                    $model->group = $groups;
                    
                     Yii::$app->session->setFlash('success', '修改成功。');
                 } catch (\Exception $e) {

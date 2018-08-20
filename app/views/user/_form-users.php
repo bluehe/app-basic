@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use rky\models\User;
-use rky\models\Group;
+use app\models\User;
+//use app\models\Group;
 
 /* @var $this yii\web\View */
 /* @var $model dh\models\Users */
@@ -33,11 +33,11 @@ use rky\models\Group;
 
                 <?= $form->field($model, 'tel')->textInput(['maxlength' => true]) ?>
                 
-                <?= $form->field($model, 'user_color')->textInput() ?>
+                <?= $form->field($model, 'user_color')->textInput(['autocomplete'=>'off']) ?>
                 
                 <?= $form->field($model, 'role')->dropDownList(User::$List['role'], ['prompt' => '']) ?>
                                                
-                <?= $form->field($model, 'group')->checkboxList(Group::get_group(), ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
+                <?php //echo $form->field($model, 'group')->checkboxList(Group::get_group(), ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
 
                 <?= $form->field($model, 'status')->radioList(User::$List['status'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
 
@@ -58,6 +58,7 @@ use rky\models\Group;
         </div>
     </div>
 </div>
+<?php app\assets\ColorAsset::register($this);?>
 <script>
 <?php $this->beginBlock('user') ?>
     var color= $('#user-user_color').val();
