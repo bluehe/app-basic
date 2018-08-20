@@ -68,6 +68,7 @@ Modal::begin([
 ]);
 Modal::end();
 ?>
+<?php app\assets\CookieAsset::register($this); ?> 
 <script>
 <?php $this->beginBlock('user') ?>
     $('.change-nickname').on('click', function () {
