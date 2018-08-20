@@ -54,7 +54,6 @@ use app\models\ChangeAuth;
 
     </div>
 </div>
-<?php app\assets\CookieAsset::register($this); ?> 
 <script>
 <?php $this->beginBlock('auth') ?>
    $(function () {
