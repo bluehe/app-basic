@@ -154,7 +154,8 @@ return [
             'site/*',
 //            'api/*',
             'debug/*',
-//            'gii/*'
+            'admin/*',
+            'gii/*'
         ]
     ],
     'on beforeRequest' => [app\components\SiteConfig::className(), 'configInit'],

@@ -146,6 +146,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/user/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/user/user-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            ['/meal/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/meal/meal-list', '2', null, null, null, '1482820123', '1482820123'],
+            
           
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
@@ -163,6 +166,8 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
                        
 //            ['工作中心', '2', '工作中心', null, null, '1482820123', '1482820123'],
             ['用户管理', '2', '用户管理', null, null, '1482820123', '1482820123'],
+            
+            ['套餐管理', '2', '套餐管理', null, null, '1482820123', '1482820123'],
           
         ]);
         $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [
@@ -180,6 +185,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             
             ['用户管理', '/user/*'],
             ['pm', '用户管理'],
+            
+            ['套餐管理', '/meal/*'],
+            ['pm', '套餐管理'],
                                
         ]);
         $this->batchInsert($authManager->assignmentTable, ['item_name', 'user_id', 'created_at'], [
