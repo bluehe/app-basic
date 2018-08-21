@@ -7,6 +7,9 @@ use yii\web\Controller;
 use app\actions\IndexAction;
 use yii\data\ActiveDataProvider;
 use app\models\Meal;
+use app\actions\CreateAction;
+use app\actions\UpdateAction;
+use app\actions\DeleteAction;
 
 
 class MealController extends Controller { 
@@ -28,6 +31,20 @@ class MealController extends Controller {
                         'dataProvider' => $dataProvider,
                     ];
                 }
+            ],
+            'meal-create' => [
+                'class' => CreateAction::className(),
+                'modelClass' => Meal::className(),
+                'successRedirect'=>'meal-list',
+            ],
+            'meal-update' => [
+                'class' => UpdateAction::className(),
+                'modelClass' => Meal::className(),
+                'successRedirect'=>'meal-list',
+            ],
+            'meal-delete' => [
+                'class' => DeleteAction::className(),
+                'modelClass' => Meal::className(),
             ],
 
         ];

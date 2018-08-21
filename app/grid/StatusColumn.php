@@ -33,9 +33,9 @@ class StatusColumn extends DataColumn
 
     public $aOptions = [];
 
-    public $yesClass = "label-primary";
+    public $yesClass = "btn-success";
 
-    public $noClass = "label-default";
+    public $noClass = "btn-danger";
 
     public $formName = "";
 
@@ -92,7 +92,7 @@ class StatusColumn extends DataColumn
                 if( !isset( $this->aOptions['class'] ) ){
                     $class = $model[$field] == Constants::YesNo_Yes ? $this->yesClass : $this->noClass;
                     $aOptions = array_merge([
-                        'class' => 'label ' . $class,
+                        'class' => 'btn btn-xs ' . $class,
                     ],$this->aOptions, $aOptions);
                 }
                 if( !isset( $this->aOptions['data-confirm'] ) ){

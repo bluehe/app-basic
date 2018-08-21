@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\User;
-use app\grid\StatusColumn;
-use app\libs\Constants;
 
 /* @var $this yii\web\View */
 /* @var $searchModel dh\models\UserSearch */

@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\Meal;
+use app\grid\StatusColumn;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -29,8 +32,26 @@ $this->params['breadcrumbs'][] = $this->title;
                     'name',
                     'region',
                     'amount',
-                    'content',
-//                    'order_sort',                                      
+                     [
+                        'attribute' => 'content',
+                        'format' => 'raw',
+                    ],
+//                    'order_sort',  
+//                    [
+//                        'attribute' => 'stat',
+//                        'value' =>
+//                        function($model, $key) {
+//                            return Html::a($model->Stat, ['meal/meal-change', 'id' => $key], ['class' => 'btn btn-xs ' . ($model->stat == Meal::STAT_ACTIVE ? 'btn-success' : 'btn-danger')]);
+//                        },
+//                        'format' => 'raw',
+//                        'headerOptions' => ['width' => '80'],
+//                    ],
+                    [
+                        'class' =>StatusColumn::className(),
+                        'attribute' => 'stat',
+                        'url'=>function($model, $key) {return Url::to(['meal-update', 'id' => $model->id]);},
+                        'text'=> function($model, $key) {return $model->Stat;},
+                    ],
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
                         'template' => '{update} {delete}', //只需要展示删除和更新
@@ -39,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Html::a('<i class="fa fa-pencil"></i> 修改', ['meal-update', 'id' => $key], ['class' => 'btn btn-primary btn-xs',]);
                             },
                             'delete' => function($url, $model, $key) {
-                                return Html::a('<i class="fa fa-trash-o"></i> 删除', ['meal-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs', 'data' => ['confirm' => '你确定要删除吗？',]]);
+                                return Html::a('<i class="fa fa-trash-o"></i> 删除', ['meal-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'确定要删除此项吗？','data-method' => 'post',]);
                             },
                         ],
                     ],
