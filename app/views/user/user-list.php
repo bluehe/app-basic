@@ -72,20 +72,21 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        'headerOptions' => ['width' => '60'],
 //                    ],
                   
-//                    [
-//                        'attribute' => 'last_login',
-//                        'value' =>
-//                        function($model) {
-//                            return $model->last_login > 0 ? date('Y-m-d H:i:s', $model->last_login) : '';
-//                        },
-//                    ],
-//                    [
-//                        'attribute' => 'created_at',
-//                        'value' =>
-//                        function($model) {
-//                            return date('Y-m-d H:i:s', $model->created_at);   //主要通过此种方式实现
-//                        },
-//                    ],
+                    [
+                        'attribute' => 'last_login',
+                        'value' =>
+                        function($model) {
+                            return $model->last_login > 0 ? date('Y-m-d H:i:s', $model->last_login) : '';
+                        },
+                    ],
+                    [
+                        'attribute' => 'created_at',
+                        'value' =>
+                        function($model) {
+                            return date('Y-m-d H:i:s', $model->created_at);   //主要通过此种方式实现
+                        },
+                        'filter' =>false,
+                    ],
               
                     [
                         'attribute' => 'status',
