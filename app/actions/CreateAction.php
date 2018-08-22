@@ -37,8 +37,14 @@ class CreateAction extends \yii\base\Action
         /* @var $model yii\db\ActiveRecord */
         $model = new $this->modelClass;
         $model->setScenario( $this->scenario );
-        if (Yii::$app->getRequest()->getIsPost()) {
-            if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
+        if (Yii::$app->getRequest()->getIsPost()&&$model->load(Yii::$app->getRequest()->post())) {
+            
+            if( Yii::$app->getRequest()->getIsAjax() ){
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+                            
+            if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', '操作成功');
                 return $this->controller->redirect($this->successRedirect);
             } else {

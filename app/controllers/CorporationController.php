@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use app\actions\IndexAction;
 //use bluehe\phpexcel\Excel;
 //use rky\models\Corporation;
 //use rky\models\CorporationSearch;
@@ -37,7 +38,7 @@ class CorporationController extends Controller
      public function actions()
     {
         return [
-            'meal-list' => [
+            'corporation-list' => [
                 'class' => IndexAction::className(),
                 'data' => function(){
                     $searchModel = new Meal();

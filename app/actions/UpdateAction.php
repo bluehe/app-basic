@@ -48,8 +48,14 @@ class UpdateAction extends \yii\base\Action
         if (! $model) throw new BadRequestHttpException("Cannot find model by $id");
         $model->setScenario( $this->scenario );
 
-        if (Yii::$app->getRequest()->getIsPost()) {
-            if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
+        if (Yii::$app->getRequest()->getIsPost()&&$model->load(Yii::$app->getRequest()->post())) {
+            
+            if( Yii::$app->getRequest()->getIsAjax() ){
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            
+            if ($model->save()) {
                 if( Yii::$app->getRequest()->getIsAjax() ){
                     return [];
                 }else {

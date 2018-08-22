@@ -12,6 +12,8 @@ use app\models\Industry;
 
         <?php
         $form = ActiveForm::begin(['id' => 'industry-form',
+            'enableAjaxValidation' => true,
+            'enableClientValidation' => true,
                     'options' => ['class' => 'form-horizontal'],
                     'fieldConfig' => [
                         'template' => "{label}\n<div class=\"col-md-6\">{input}</div>\n<div class=\"col-md-3\">{error}</div>",

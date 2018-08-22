@@ -38,6 +38,7 @@ class Industry extends \yii\db\ActiveRecord
             [['parent_id', 'industry_sort'], 'integer'],
             [['name'], 'required'],
             [['name'], 'string', 'max' => 32],
+            [['name'],'unique','targetAttribute' => ['parent_id', 'name'],'message' => '{attribute}已经存在'],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Industry::className(), 'targetAttribute' => ['parent_id' => 'id']],
             ['industry_sort', 'default', 'value' => 10],
         ];
@@ -96,21 +97,21 @@ class Industry extends \yii\db\ActiveRecord
         }
     }
     
-    public static function get_industry_id() {
-       
-        $parent_id= static::find()->andWhere(['not',['parent_id'=>NULL]])->select(['parent_id'])->distinct()->column();//一级ID
-        
-        //$data= static::find()->andWhere(['parent_id'=>NULL])->andWhere(['not',['id'=>$parent_id]])->select(['name','id'])->indexBy('id')->asArray()->column();//不存在下级的一级
-        $data=[];
-        $parents= static::find()->andWhere(['id'=>$parent_id])->select(['id','name'])->all();
-        foreach($parents as $parent){
-            $data[$parent['name']]=static::find()->andWhere(['parent_id'=>$parent['id']])->orderBy(['industry_sort'=>SORT_ASC,'id'=>SORT_ASC])->select(['name','id'])->indexBy('id')->asArray()->column();
-        }
-        return $data;
-    }
-    
-    public static function get_industry_children() {
-        $items= static::find()->where(['not',['parent_id'=>NULL]])->orderBy(['parent_id'=>SORT_ASC,'industry_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();      
-        return ArrayHelper::map($items, 'id', 'name'); 
-    }
+//    public static function get_industry_id() {
+//       
+//        $parent_id= static::find()->andWhere(['not',['parent_id'=>NULL]])->select(['parent_id'])->distinct()->column();//一级ID
+//        
+//        //$data= static::find()->andWhere(['parent_id'=>NULL])->andWhere(['not',['id'=>$parent_id]])->select(['name','id'])->indexBy('id')->asArray()->column();//不存在下级的一级
+//        $data=[];
+//        $parents= static::find()->andWhere(['id'=>$parent_id])->select(['id','name'])->all();
+//        foreach($parents as $parent){
+//            $data[$parent['name']]=static::find()->andWhere(['parent_id'=>$parent['id']])->orderBy(['industry_sort'=>SORT_ASC,'id'=>SORT_ASC])->select(['name','id'])->indexBy('id')->asArray()->column();
+//        }
+//        return $data;
+//    }
+//    
+//    public static function get_industry_children() {
+//        $items= static::find()->where(['not',['parent_id'=>NULL]])->orderBy(['parent_id'=>SORT_ASC,'industry_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();      
+//        return ArrayHelper::map($items, 'id', 'name'); 
+//    }
 }
