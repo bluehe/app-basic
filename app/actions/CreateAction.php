@@ -24,6 +24,8 @@ class CreateAction extends \yii\base\Action
 
     /** @var  string|array 编辑成功后跳转地址,此参数直接传给yii::$app->controller->redirect() */
     public $successRedirect = ['index'];
+    
+    public $ajax = false;
 
     /**
      * create创建页
@@ -59,7 +61,11 @@ class CreateAction extends \yii\base\Action
             $data = call_user_func_array($this->data, [$model, $this]);
         }
         $this->viewFile === null && $this->viewFile = $this->id;
-        return $this->controller->render($this->viewFile, $data);
+        if($this->ajax){
+            return $this->controller->renderAjax($this->viewFile, $data);
+        }else{
+            return $this->controller->render($this->viewFile, $data);
+        }
     }
 
 }

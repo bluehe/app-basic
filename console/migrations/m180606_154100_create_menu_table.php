@@ -48,7 +48,8 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             
             [30, '业务中心', NULL, '/user/user-list', 3, '{"icon":"fa  fa-briefcase"}'],
             [31, '用户管理', 30, '/user/user-list', 1, '{"icon":"fa fa-user", "multi-action":["user-list", "user-update"]}'], 
-            [32, '套餐管理', 30, '/meal/meal-list', 2, '{"icon":"fa fa-gift", "multi-action":["meal-list", "meal-update"]}'], 
+            [32, '套餐管理', 30, '/meal/meal-list', 2, '{"icon":"fa fa-gift", "multi-action":["meal-list", "meal-create", "meal-update"]}'], 
+            [33, '行业管理', 30, '/industry/industry-list',3, '{"icon":"fa fa-flag-checkered"}'],     
 
 
         ]);

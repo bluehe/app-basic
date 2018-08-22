@@ -27,14 +27,13 @@ use app\models\Meal;
 
                 <?= $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::className()) ?>
+                <?= $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::className(),['clientOptions'=>['lang'=>'zh_cn','maxHeight'=>'400px']]) ?>
 
                 <?= $form->field($model, 'order_sort')->textInput() ?>
 
                 <?= $form->field($model, 'stat')->radioList(Meal::$List['stat'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
                 
                
-
             </div>
             <div class="box-footer">
                 <div class="col-md-1 col-lg-offset-2 col-xs-6 text-right">
@@ -52,27 +51,3 @@ use app\models\Meal;
         </div>
     </div>
 </div>
-<script>
-<?php $this->beginBlock('group') ?>
-    var color= $('#group-groupcolor').val();
-    color=color?'#'+color:'#000000'
-    $('#group-groupcolor').css('border-right','34px solid '+color);
-    
-    
-$('#group-groupcolor').colpick({
-	layout:'hex',
-	submit:0,
-	//colorScheme:'dark',
-	onChange:function(hsb,hex,rgb,el,bySetColor) {
-		$(el).css('border-color','#'+hex);
-		// Fill the text box just if the color was set using the picker, and not the colpickSetColor function.
-		if(!bySetColor) $(el).val(hex);
-	}
-}).keyup(function(){
-
-	$(this).colpickSetColor(this.value);
-
-});
-<?php $this->endBlock() ?>
-</script>
-<?php $this->registerJs($this->blocks['group'], \yii\web\View::POS_END); ?>

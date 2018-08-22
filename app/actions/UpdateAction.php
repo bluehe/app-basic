@@ -30,6 +30,7 @@ class UpdateAction extends \yii\base\Action
     /** @var  string|array 编辑成功后跳转地址,此参数直接传给Yii::$app->controller->redirect() */
     public $successRedirect;
 
+    public $ajax = false;
 
     /**
      * update修改
@@ -80,7 +81,11 @@ class UpdateAction extends \yii\base\Action
         }elseif ($this->data instanceof \Closure){
             $data = call_user_func_array($this->data, [$model, $this]);
         }
-        return $this->controller->render($this->viewFile, $data);
+        if($this->ajax){
+            return $this->controller->renderAjax($this->viewFile, $data);
+        }else{
+            return $this->controller->render($this->viewFile, $data);
+        }
     }
 
 }

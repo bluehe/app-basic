@@ -149,6 +149,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/meal/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/meal/meal-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            ['/industry/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/industry/industry-list', '2', null, null, null, '1482820123', '1482820123'],          
+            
           
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
@@ -164,10 +167,10 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['系统设置', '2', '系统设置', null, null, '1482820123', '1482820123'],
             ['账号信息', '2', '账号信息', null, null, '1482820123', '1482820123'],
                        
-//            ['工作中心', '2', '工作中心', null, null, '1482820123', '1482820123'],
-            ['用户管理', '2', '用户管理', null, null, '1482820123', '1482820123'],
-            
+//            ['业务中心', '2', '业务中心', null, null, '1482820123', '1482820123'],
+            ['用户管理', '2', '用户管理', null, null, '1482820123', '1482820123'],            
             ['套餐管理', '2', '套餐管理', null, null, '1482820123', '1482820123'],
+            ['行业管理', '2', '行业管理', null, null, '1482820123', '1482820123'],
           
         ]);
         $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [
@@ -188,6 +191,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             
             ['套餐管理', '/meal/*'],
             ['pm', '套餐管理'],
+            
+            ['行业管理', '/industry/*'],
+            ['pm', '行业管理'],
                                
         ]);
         $this->batchInsert($authManager->assignmentTable, ['item_name', 'user_id', 'created_at'], [
