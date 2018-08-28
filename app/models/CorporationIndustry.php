@@ -1,6 +1,6 @@
 <?php
 
-namespace rky\models;
+namespace app\models;
 
 use Yii;
 

@@ -88,5 +88,21 @@ class CommonHelper {
             return json_encode(['stat'=>'fail','message'=>'未开启短信功能']);
         }
     }
+    
+    public static function maxSize() {
+        $postMaxSize = ini_get('post_max_size');
+        $fileMaxSize = ini_get('upload_max_filesize');
+        $displayMaxSize = $postMaxSize < $fileMaxSize ? $postMaxSize : $fileMaxSize;
+        switch (substr($displayMaxSize, -1)) {
+            case 'G':
+                $displayMaxSize = $displayMaxSize * 1024 * 1024;
+                break;
+            case 'M':
+                $displayMaxSize = $displayMaxSize * 1024;
+                break;
+            default:;
+        }
+        return $displayMaxSize;
+    }
 
 }

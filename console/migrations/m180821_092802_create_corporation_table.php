@@ -22,7 +22,7 @@ class m180821_092802_create_corporation_table extends Migration {
         $this->createTable($table, [
             'id' => $this->primaryKey()->comment('ID'),
             'base_company_name' => $this->string(32)->comment('公司名称'),
-//            'base_bd' => $this->integer()->comment('客户经理'),
+            'base_bd' => $this->integer()->comment('客户经理'),
             //'base_industry' => $this->string()->comment('行业'),
             'base_company_scale' => $this->integer()->comment('企业规模'),
             'base_registered_capital'=>$this->decimal(10,4)->comment('注册资金'),
@@ -60,7 +60,7 @@ class m180821_092802_create_corporation_table extends Migration {
             'created_at' => $this->integer()->comment('创建时间'),
             'updated_at' => $this->integer()->comment('更新时间'),
             
-//            "FOREIGN KEY ([[base_bd]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
+            "FOREIGN KEY ([[base_bd]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
                 ], $tableOptions);  
     }
 

@@ -35,6 +35,8 @@ class m180606_150100_create_user_table extends Migration
         ], $tableOptions);
         
         $this->insert($table, ['id' => 1, 'username' => 'admin', 'auth_key' => 'BXVEZBxBX8IfnV2ZvZteYALorDvJ7JK3', 'password_hash' => '$2y$13$vmgY.lIfJs2KkjJUnXFDcOzbxvByXmuUbsIkC2E9MSCfKAb08E7qO', 'password_reset_token' => NULL,'nickname'=>NULL, 'email' => NULL,'tel'=>NULL,'avatar'=>NULL,'gender'=>NULL,'role'=>NULL,'point'=>0,'user_color'=>NULL,'project'=>0, 'status' => 10,  'last_login' => 1482391032,'created_at' => 1482391032, 'updated_at' => 1485054242]);
+        
+        $this->insert($table, ['id' => 2, 'username' => 'test1', 'auth_key' => '1_qMbnUekjH50hNmO9sHo3u_HHly6JsL', 'password_hash' => '$13$57VBHLhSSEGsJhrXaNqa.uQM89NER1jf85JA75Iz/7znbn/sQ1Kl.', 'password_reset_token' => NULL,'nickname'=>NULL, 'email' => NULL,'tel'=>NULL,'avatar'=>NULL,'gender'=>NULL,'role'=>'bd','point'=>0,'user_color'=>'d9389b','project'=>0, 'status' => 10,  'last_login' => 1482391032,'created_at' => 1482391032, 'updated_at' => 1485054242]);
             
     }
 

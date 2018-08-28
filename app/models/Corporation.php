@@ -7,11 +7,10 @@ use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "{{%corporation}}".
+ * This is the model class for table "corporation".
  *
  * @property int $id ID
  * @property string $base_company_name 公司名称
- * @property int $base_bd 客户经理
  * @property int $base_company_scale 企业规模
  * @property string $base_registered_capital 注册资金
  * @property int $base_registered_time 注册日期
@@ -20,13 +19,10 @@ use yii\behaviors\TimestampBehavior;
  * @property int $stat 状态
  * @property int $intent_set 意向套餐
  * @property string $huawei_account 华为云账号
- * @property int $allocate_set 下拨套餐
- * @property string $allocate_amount 下拨金额
- * @property int $allocate_time 下拨日期
  * @property string $note 备注
  * @property int $contact_park 所属园区
  * @property string $contact_address 实际地址
- * @property string $contact_location 经纬度
+ * @property string $contact_location 坐标
  * @property string $contact_business_name 商业联系人
  * @property string $contact_business_job 商业联系人职务
  * @property string $contact_business_tel 商业联系人电话
@@ -44,26 +40,24 @@ use yii\behaviors\TimestampBehavior;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  *
- * @property User $baseBd
+ * @property CorporationBd[] $corporationBds
+ * @property CorporationIndustry[] $corporationIndustries
+ * @property Industry[] $industries
  */
 class Corporation extends \yii\db\ActiveRecord
 {
     
     public $base_industry;
     
-//    const STAT_CREATED = 1;
+    const STAT_CREATED = 1;
     const STAT_FOLLOW = 2;
-    const STAT_REFUSE = 3;
     const STAT_REGISTER = 4;
     const STAT_APPLY = 5;
     const STAT_CHECK = 6;
-    const STAT_ALLOCATE = 7;     
-    const STAT_OVERDUE = -10;
-    
-    const ALLOCATE_5 = 5;
-    const ALLOCATE_10 = 10;
-    const ALLOCATE_20 = 20;
-    
+    const STAT_ALLOCATE = 7;
+    const STAT_AGAIN = 8;
+    const STAT_REFUSE = 0;
+    const STAT_OVERDUE = -10;    
     
     /**
      * @inheritdoc
@@ -91,21 +85,21 @@ class Corporation extends \yii\db\ActiveRecord
         return [
             [['base_company_name', 'huawei_account'], 'trim'],
             [['base_company_name','huawei_account'], 'unique', 'message' => '{attribute}已经存在'],
-            [['base_company_name','base_bd', 'base_company_scale','base_registered_capital','contact_park','contact_address','contact_business_name', 'contact_business_job','contact_business_tel','stat'], 'required'],
+            [['base_company_name','stat'], 'required'],
             [['base_industry'], 'required','on'=>'industry'],
             [['intent_set'],'requiredByStat_r','skipOnEmpty' => false],
-            [['huawei_account','allocate_time'],'requiredByStat_a','skipOnEmpty' => false],
-            [['allocate_amount'],'requiredBySetid','skipOnEmpty' => false],
-            [['base_bd', 'base_company_scale', 'stat', 'intent_set', 'allocate_set', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
-            [['base_registered_capital', 'base_last_income','allocate_amount'], 'number'],
-            [['base_registered_time','allocate_time'], 'safe'],
+            [['huawei_account'],'requiredByStat_a','skipOnEmpty' => false],
+            [['base_registered_time'], 'safe'],
+            [['base_bd','base_company_scale', 'stat', 'intent_set', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
+            [['base_registered_capital', 'base_last_income'], 'number'],
             [['base_main_business', 'note', 'develop_current_situation', 'develop_weakness'], 'string'],
             [['base_company_name', 'huawei_account', 'contact_business_tel', 'contact_technology_tel'], 'string', 'max' => 32],
             [['contact_address'], 'string', 'max' => 128],
             [['contact_location'], 'string', 'max' => 64],
             [['contact_business_name', 'contact_business_job', 'contact_technology_name', 'contact_technology_job'], 'string', 'max' => 16],
-//            [['develop_pattern', 'develop_scenario','develop_science', 'develop_IDE'], 'string', 'max' => 255],           
+            [['develop_pattern', 'develop_scenario', 'develop_science', 'develop_language', 'develop_IDE'], 'string', 'max' => 255],
             [['base_bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['base_bd' => 'id']],
+            [['stat'], 'default', 'value' => self::STAT_CREATED],
         ];
     }
     
@@ -124,19 +118,42 @@ class Corporation extends \yii\db\ActiveRecord
             }else{
                 $this->contact_location=null;
             }
-            //下拨金额
-            if($this->stat==self::STAT_ALLOCATE&&$this->allocate_set){
-                 $this->allocate_amount=self::$List['allocate_amount'][$this->allocate_set];
-            }
             return true;
         } else {
             return false;
         }
     }
     
+    /**
+     * @inheritdoc
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        if ($insert) {
+            if($this->base_bd){
+                $bdModel = new CorporationBd();
+                $bdModel->corporation_id=$this->id;
+                $bdModel->bd_id=$this->base_bd;
+                $bdModel->start_time=time();
+                $bdModel->save();
+            }
+            $statModel=new CorporationStat();
+            $statModel->corporation_id=$this->id;
+            $statModel->stat=$this->stat;
+            $statModel->user_id=Yii::$app->user->identity->id;
+            $statModel->created_at=time();
+            $statModel->save();
+        } else {
+            
+        }
+        
+        parent::afterSave($insert, $changedAttributes);
+    }
+    
     public function requiredByStat_r($attribute, $params)
     {
-        if (($this->stat==self::STAT_REGISTER||$this->stat==self::STAT_APPLY)&&!$this->intent_set){
+        if ($this->stat==self::STAT_APPLY&&!$this->intent_set){
                 $this->addError($attribute,'意向套餐不能为空。');            
         }
     }
@@ -144,15 +161,8 @@ class Corporation extends \yii\db\ActiveRecord
     public function requiredByStat_a($attribute, $params)
     {
         if ($this->stat==self::STAT_ALLOCATE&&!$this->$attribute){
-                $this->addError($attribute,'华为账号和下拨时间不能为空。');            
+                $this->addError($attribute,'华为账号不能为空。');            
         }
-    }
-    
-    public function requiredBySetid($attribute, $params)
-    {
-        if ($this->stat==self::STAT_ALLOCATE&&!$this->allocate_set&&!$this->$attribute){
-                $this->addError($attribute,'下拨金额不能为空。');            
-        }        
     }
 
     /**
@@ -169,13 +179,10 @@ class Corporation extends \yii\db\ActiveRecord
             'base_registered_capital' => '注册资金(万元)',
             'base_registered_time' => '注册日期',
             'base_main_business' => '主营业务',
-            'base_last_income' => '近一年营业收入',
+            'base_last_income' => '近一年营收(万元)',
             'stat' => '状态',
             'intent_set' => '意向套餐',
             'huawei_account' => '华为云账号',
-            'allocate_set' => '下拨套餐',
-            'allocate_amount' => '下拨金额(万元)',
-            'allocate_time' => '下拨日期',
             'note' => '备注',
             'contact_park' => '所属园区',
             'contact_address' => '实际地址',
@@ -199,39 +206,20 @@ class Corporation extends \yii\db\ActiveRecord
         ];
     }
     
-     public static $List = [
-        'allocate_set' => [
-            self::ALLOCATE_5 => "5万",
-            self::ALLOCATE_10 => "10万",
-            self::ALLOCATE_20 => "20万",
-        ],
-        'allocate_amount' => [
-            self::ALLOCATE_5 => 4.89,
-            self::ALLOCATE_10 => 9.87,
-            self::ALLOCATE_20 => 19.905
-        ],
+     public static $List = [       
         'stat'=>[
-//            self::STAT_CREATED=>'新创建',
-            self::STAT_FOLLOW=>'跟进中',
-            self::STAT_REFUSE=>'无意愿',
+            self::STAT_CREATED=>'新创建',
+            self::STAT_FOLLOW=>'跟进中',            
             self::STAT_REGISTER=>'已注册',
             self::STAT_APPLY=>'已申请',            
             self::STAT_CHECK=>'已审核',
-            self::STAT_ALLOCATE=>'已下拨',           
+            self::STAT_ALLOCATE=>'已下拨',
+            self::STAT_AGAIN=>'已续拨',
+            self::STAT_REFUSE=>'无意愿',
             self::STAT_OVERDUE=>'已过期'
         ]
        
     ];
-
-    public function getAllocateSet() {
-        $allocate = isset(self::$List['allocate_set'][$this->allocate_set]) ? self::$List['allocate_set'][$this->allocate_set] : null;
-        return $allocate;
-    }
-    
-    public function getIntentSet() {
-        $intent = isset(self::$List['allocate_set'][$this->intent_set]) ? self::$List['allocate_set'][$this->intent_set] : null;
-        return $intent;
-    }
     
     public function getStat() {
         $stat = isset(self::$List['stat'][$this->stat]) ? self::$List['stat'][$this->stat] : null;
@@ -246,71 +234,76 @@ class Corporation extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'base_bd']);
     }
     
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getActivityChanges()
-    {
-       return $this->hasMany(ActivityChange::className(), ['corporation_id' => 'id']);
-    }
-    
-   /**
-    * @return \yii\db\ActiveQuery
-    */
-   public function getActivityDatas()
-   {
-       return $this->hasMany(ActivityData::className(), ['corporation_id' => 'id']);
-   }
-   
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCorporationIndustries()
-    {
-        return $this->hasMany(CorporationIndustry::className(), ['corporation_id' => 'id']);
-    }
-    
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getUploadDatas()
-    {
-        return $this->hasMany(UploadData::className(), ['corporation_id' => 'id']);
-    }
+//    /**
+//     * @return \yii\db\ActiveQuery
+//     */
+//    public function getActivityChanges()
+//    {
+//       return $this->hasMany(ActivityChange::className(), ['corporation_id' => 'id']);
+//    }
+//    
+//   /**
+//    * @return \yii\db\ActiveQuery
+//    */
+//   public function getActivityDatas()
+//   {
+//       return $this->hasMany(ActivityData::className(), ['corporation_id' => 'id']);
+//   }
+//   
+//    /**
+//     * @return \yii\db\ActiveQuery
+//     */
+//    public function getCorporationIndustries()
+//    {
+//        return $this->hasMany(CorporationIndustry::className(), ['corporation_id' => 'id']);
+//    }
+//    
+//    /**
+//    * @return \yii\db\ActiveQuery
+//    */
+//    public function getUploadDatas()
+//    {
+//        return $this->hasMany(UploadData::className(), ['corporation_id' => 'id']);
+//    }
     
     public static function get_industry($id) {
         $industry_id= CorporationIndustry::find()->where(['corporation_id'=>$id])->select(['industry_id'])->column();
-        $industry= Industry::find()->where(['id'=>$industry_id])->orderBy(['parent_id'=>SORT_ASC,'industry_sort'=>SORT_ASC])->select(['name'])->column();
+
+        $industry_name= Industry::getIndustryName($industry_id);
        
-        return implode('，', $industry);
+        return implode('，', $industry_name);
     }
 
     
-    public static function get_existindustry() {
-        $ids = CorporationIndustry::find()->select(['industry_id'])->distinct()->column();
-        $industry= Industry::find()->where(['id'=>$ids])->all();
-        return ArrayHelper::map($industry, 'id', 'name');
+//    public static function get_existindustry() {
+//        $ids = CorporationIndustry::find()->select(['industry_id'])->distinct()->column();
+//        $industry= Industry::find()->where(['id'=>$ids])->all();
+//        return ArrayHelper::map($industry, 'id', 'name');
+//    }
+//    
+    public static function get_existbd() {
+        return Corporation::find()->select(['base_bd'])->distinct()->column();
     }
-    
-    //得到ID-name 键值数组
-    public static function get_corporation_id() {
-        $corporation = static::find()->where(['not',['base_company_name'=>'']])->orderBy(['id'=>SORT_ASC])->all();
-        return ArrayHelper::map($corporation, 'id', 'base_company_name');
-    }
-       
-    public static function get_location() {
-        $data=[];
-        $locations= static::find()->where(['not',['contact_location'=>NULL]])->select(['base_company_name','contact_location','contact_address','id'])->all();
-        $t= ActivityChange::find()->orderBy(['end_time'=>SORT_DESC])->select(['end_time'])->scalar();
-        $corporation_id= ActivityChange::find()->where(['end_time'=>$t,'is_act'=> ActivityChange::ACT_Y])->select(['corporation_id'])->column();
-        foreach($locations as $location){
-            $l= explode(',', $location['contact_location']);
-            $data[]=['name'=>$location['base_company_name'],'address'=>$location['contact_address'],'lng'=>$l[0],'lat'=>$l[1],'activity'=> in_array($location['id'], $corporation_id)];
-        }
-        return $data;
-       
-    }
-    
+//    
+//    //得到ID-name 键值数组
+//    public static function get_corporation_id() {
+//        $corporation = static::find()->where(['not',['base_company_name'=>'']])->orderBy(['id'=>SORT_ASC])->all();
+//        return ArrayHelper::map($corporation, 'id', 'base_company_name');
+//    }
+//       
+//    public static function get_location() {
+//        $data=[];
+//        $locations= static::find()->where(['not',['contact_location'=>NULL]])->select(['base_company_name','contact_location','contact_address','id'])->all();
+//        $t= ActivityChange::find()->orderBy(['end_time'=>SORT_DESC])->select(['end_time'])->scalar();
+//        $corporation_id= ActivityChange::find()->where(['end_time'=>$t,'is_act'=> ActivityChange::ACT_Y])->select(['corporation_id'])->column();
+//        foreach($locations as $location){
+//            $l= explode(',', $location['contact_location']);
+//            $data[]=['name'=>$location['base_company_name'],'address'=>$location['contact_address'],'lng'=>$l[0],'lat'=>$l[1],'activity'=> in_array($location['id'], $corporation_id)];
+//        }
+//        return $data;
+//       
+//    }
+//    
     public static function get_stat_list($stat=self::STAT_FOLLOW) {
         $data=[];
         foreach(self::$List['stat'] as $k=>$v){
@@ -321,43 +314,43 @@ class Corporation extends \yii\db\ActiveRecord
         return $data;
         
     }
-    
-    public static function get_amount_base($start='') {
-        return static::find()->andFilterWhere(['<','allocate_time', $start])->sum('allocate_amount');     
-    }    
-    
-    public static function get_amount_total($start='', $end='',$sum=1,$group=0) {
-        $query= static::find()->andFilterWhere(['and',['>=', 'allocate_time', $start],['<=', 'allocate_time', $end]])->orderBy(['MAX(allocate_time)'=>SORT_ASC]);
-        if($sum==1){
-            //天
-            $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m-%d')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m-%d')"])->indexBy(['time']);
-        }elseif($sum==2){
-            //周
-            $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-W%u')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-W%u')"])->indexBy(['time']);      
-        }else{
-            //月
-            if($group==1){
-                $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m')",'base_bd'])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m')",'base_bd']);
-            }else{
-                $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m')"])->indexBy(['time']);
-            }
-        }
-        return $query->asArray()->all();
-    }
-    
-    public static function get_cost_total($time) {
-        return static::find()->andFilterWhere(['<','allocate_time', $time])->sum("(CASE WHEN ($time-allocate_time)/86400/365<1 THEN allocate_amount*($time-allocate_time)/86400/365 ELSE allocate_amount END)");     
-    }
-    
-    public static function get_allocate_num($start='', $end='') {
-        return static::find()->andFilterWhere(['and',['>=', 'allocate_time', $start],['<=', 'allocate_time', $end]])->select(['allocate_amount','num'=>'count(*)'])->orderBy(['num'=>SORT_DESC])->groupBy(['allocate_amount'])->asArray()->all();
-    }
-    
-    public static function get_capital_total() {
-        return static::find()->andWhere(['>','base_registered_capital',0])->select(["(CASE WHEN base_registered_capital>0 AND base_registered_capital<=500 THEN '0-500万' WHEN base_registered_capital>500 AND base_registered_capital<=3000 THEN '500-3000万' WHEN base_registered_capital>3000 AND base_registered_capital<=5000 THEN '3000-5000万' WHEN base_registered_capital>5000 THEN '5000万以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(base_registered_capital)'=>SORT_ASC])->asArray()->all();
-    }
-    
-     public static function get_scale_total() {
-        return static::find()->andWhere(['>','develop_scale',0])->select(["(CASE WHEN develop_scale>0 AND develop_scale<=10 THEN '1-10人' WHEN develop_scale>10 AND develop_scale<=20 THEN '11-20人' WHEN develop_scale>20 AND develop_scale<=40 THEN '21-40人' WHEN develop_scale>40 THEN '40人以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(develop_scale)'=>SORT_ASC])->asArray()->all();
-    }
+//    
+//    public static function get_amount_base($start='') {
+//        return static::find()->andFilterWhere(['<','allocate_time', $start])->sum('allocate_amount');     
+//    }    
+//    
+//    public static function get_amount_total($start='', $end='',$sum=1,$group=0) {
+//        $query= static::find()->andFilterWhere(['and',['>=', 'allocate_time', $start],['<=', 'allocate_time', $end]])->orderBy(['MAX(allocate_time)'=>SORT_ASC]);
+//        if($sum==1){
+//            //天
+//            $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m-%d')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m-%d')"])->indexBy(['time']);
+//        }elseif($sum==2){
+//            //周
+//            $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-W%u')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-W%u')"])->indexBy(['time']);      
+//        }else{
+//            //月
+//            if($group==1){
+//                $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m')",'base_bd'])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m')",'base_bd']);
+//            }else{
+//                $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m')"])->indexBy(['time']);
+//            }
+//        }
+//        return $query->asArray()->all();
+//    }
+//    
+//    public static function get_cost_total($time) {
+//        return static::find()->andFilterWhere(['<','allocate_time', $time])->sum("(CASE WHEN ($time-allocate_time)/86400/365<1 THEN allocate_amount*($time-allocate_time)/86400/365 ELSE allocate_amount END)");     
+//    }
+//    
+//    public static function get_allocate_num($start='', $end='') {
+//        return static::find()->andFilterWhere(['and',['>=', 'allocate_time', $start],['<=', 'allocate_time', $end]])->select(['allocate_amount','num'=>'count(*)'])->orderBy(['num'=>SORT_DESC])->groupBy(['allocate_amount'])->asArray()->all();
+//    }
+//    
+//    public static function get_capital_total() {
+//        return static::find()->andWhere(['>','base_registered_capital',0])->select(["(CASE WHEN base_registered_capital>0 AND base_registered_capital<=500 THEN '0-500万' WHEN base_registered_capital>500 AND base_registered_capital<=3000 THEN '500-3000万' WHEN base_registered_capital>3000 AND base_registered_capital<=5000 THEN '3000-5000万' WHEN base_registered_capital>5000 THEN '5000万以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(base_registered_capital)'=>SORT_ASC])->asArray()->all();
+//    }
+//    
+//     public static function get_scale_total() {
+//        return static::find()->andWhere(['>','develop_scale',0])->select(["(CASE WHEN develop_scale>0 AND develop_scale<=10 THEN '1-10人' WHEN develop_scale>10 AND develop_scale<=20 THEN '11-20人' WHEN develop_scale>20 AND develop_scale<=40 THEN '21-40人' WHEN develop_scale>40 THEN '40人以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(develop_scale)'=>SORT_ASC])->asArray()->all();
+//    }
 }

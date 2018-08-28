@@ -146,11 +146,17 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/user/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/user/user-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            ['/parameter/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/parameter/parameter-list', '2', null, null, null, '1482820123', '1482820123'],
+            
             ['/meal/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/meal/meal-list', '2', null, null, null, '1482820123', '1482820123'],
             
             ['/industry/*', '2', null, null, null, '1482820123', '1482820123'],
-            ['/industry/industry-list', '2', null, null, null, '1482820123', '1482820123'],          
+            ['/industry/industry-list', '2', null, null, null, '1482820123', '1482820123'], 
+            
+            ['/corporation/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/corporation/corporation-list', '2', null, null, null, '1482820123', '1482820123'],
             
           
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
@@ -168,9 +174,11 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['账号信息', '2', '账号信息', null, null, '1482820123', '1482820123'],
                        
 //            ['业务中心', '2', '业务中心', null, null, '1482820123', '1482820123'],
-            ['用户管理', '2', '用户管理', null, null, '1482820123', '1482820123'],            
+            ['用户管理', '2', '用户管理', null, null, '1482820123', '1482820123'], 
+            ['参数管理', '2', '参数管理', null, null, '1482820123', '1482820123'],
             ['套餐管理', '2', '套餐管理', null, null, '1482820123', '1482820123'],
             ['行业管理', '2', '行业管理', null, null, '1482820123', '1482820123'],
+            ['企业管理', '2', '企业管理', null, null, '1482820123', '1482820123'],
           
         ]);
         $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [
@@ -189,16 +197,30 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['用户管理', '/user/*'],
             ['pm', '用户管理'],
             
+            ['参数管理', '/parameter/*'],
+            ['pm', '参数管理'],
+            ['ob_data', '参数管理'],
+            
             ['套餐管理', '/meal/*'],
             ['pm', '套餐管理'],
             
             ['行业管理', '/industry/*'],
             ['pm', '行业管理'],
+            ['ob_data', '行业管理'],
+            
+            ['企业管理', '/corporation/*'],
+            ['pm', '企业管理'],
+            ['sa', '企业管理'],
+            ['ob', '企业管理'],
+            ['bd', '企业管理'],
                                
         ]);
         $this->batchInsert($authManager->assignmentTable, ['item_name', 'user_id', 'created_at'], [
             ['superadmin', '1', '1482481221'],
             ['member', '1', '1482481221'],
+            
+            ['member', '2', '1482481221'],
+            ['bd', '2', '1482481221'],
         ]);
      
     }

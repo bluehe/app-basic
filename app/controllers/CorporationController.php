@@ -7,9 +7,9 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\actions\IndexAction;
 //use bluehe\phpexcel\Excel;
-//use rky\models\Corporation;
-//use rky\models\CorporationSearch;
-//use rky\models\CorporationIndustry;
+use app\models\Corporation;
+use app\models\CorporationSearch;
+use app\models\CorporationIndustry;
 //use rky\models\Parameter;
 //use rky\models\User;
 //use rky\models\Industry;
@@ -41,7 +41,7 @@ class CorporationController extends Controller
             'corporation-list' => [
                 'class' => IndexAction::className(),
                 'data' => function(){
-                    $searchModel = new Meal();
+                    $searchModel = new CorporationSearch();
                     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
                     return [
                         'dataProvider' => $dataProvider,
@@ -52,40 +52,41 @@ class CorporationController extends Controller
         ];
     }
 
-    /**
-     * Lists all Corporation models.
-     * @return mixed
-     */
-    public function actionCorporationList() {
-        $searchModel = new CorporationSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        $postMaxSize = ini_get('post_max_size');
-        $fileMaxSize = ini_get('upload_max_filesize');
-        $displayMaxSize = $postMaxSize < $fileMaxSize ? $postMaxSize : $fileMaxSize;
-        switch (substr($displayMaxSize, -1)) {
-            case 'G':
-                $displayMaxSize = $displayMaxSize * 1024 * 1024;
-                break;
-            case 'M':
-                $displayMaxSize = $displayMaxSize * 1024;
-                break;
-            case 'K':
-                $displayMaxSize = $displayMaxSize;
-                break;
-            default:;
-        }
-        
-        return $this->render('corporation-list', [  
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'maxsize' => $displayMaxSize,
-        ]);
-    }
+//    /**
+//     * Lists all Corporation models.
+//     * @return mixed
+//     */
+//    public function actionCorporationList() {
+//        $searchModel = new CorporationSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        $postMaxSize = ini_get('post_max_size');
+//        $fileMaxSize = ini_get('upload_max_filesize');
+//        $displayMaxSize = $postMaxSize < $fileMaxSize ? $postMaxSize : $fileMaxSize;
+//        switch (substr($displayMaxSize, -1)) {
+//            case 'G':
+//                $displayMaxSize = $displayMaxSize * 1024 * 1024;
+//                break;
+//            case 'M':
+//                $displayMaxSize = $displayMaxSize * 1024;
+//                break;
+//            case 'K':
+//                $displayMaxSize = $displayMaxSize;
+//                break;
+//            default:;
+//        }
+//        
+//        return $this->render('corporation-list', [  
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//            'maxsize' => $displayMaxSize,
+//        ]);
+//    }
     
      public function actionCorporationCreate() {
         $model = new Corporation();
-        $model->scenario='industry';
+        //$model->scenario='industry';
+        $model->loadDefaultValues();
         if ($model->load(Yii::$app->request->post())) {
             
             if (Yii::$app->request->isAjax) {
@@ -102,7 +103,7 @@ class CorporationController extends Controller
             try {
                 
                 $model->base_registered_time= strtotime($model->base_registered_time);
-                $model->allocate_time= $model->stat== Corporation::STAT_ALLOCATE?strtotime($model->allocate_time):null;               
+//                $model->allocate_time= $model->stat== Corporation::STAT_ALLOCATE?strtotime($model->allocate_time):null;               
                 $model->save(false);
                                                
                 if (count($industrys) > 0) {

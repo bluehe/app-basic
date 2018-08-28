@@ -30,11 +30,11 @@ class Parameter extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type'], 'required'],
+            [['type','code'], 'required'],
             [['sort_p', 'code'], 'integer'],
             [['type', 'title'], 'string', 'max' => 32],
             [['description'], 'string', 'max' => 255],
-            [['type', 'code'], 'unique', 'targetAttribute' => ['type', 'code']],
+            [['code'], 'unique', 'targetAttribute' => ['type', 'code'],'message' => '{attribute}已经存在'],
         ];
     }
 
@@ -53,15 +53,15 @@ class Parameter extends \yii\db\ActiveRecord
     }
     
     
-//    public static function get_type($type='') {
-//        $p = static::find()->andFilterWhere(['type'=>$type])->orderBy(['type'=>SORT_ASC,'sort_p'=>SORT_ASC])->all();
-//        return ArrayHelper::map($p, 'code', 'title');
-//    }
-//    
-//        
-//    public static function get_para_value($type,$code) {
-//        return static::find()->where(['type'=>$type,'code'=>$code])->orderBy(['sort_p'=>SORT_ASC])->select(['title'])->column();
-//    }
+    public static function get_type($type='') {
+        $p = static::find()->andFilterWhere(['type'=>$type])->orderBy(['type'=>SORT_ASC,'sort_p'=>SORT_ASC])->all();
+        return ArrayHelper::map($p, 'code', 'title');
+    }
+    
+        
+    public static function get_para_value($type,$code) {
+        return static::find()->where(['type'=>$type,'code'=>$code])->orderBy(['sort_p'=>SORT_ASC])->select(['title'])->column();
+    }
 //    
 //    public static function add_type($type,$title,$code=null) {
 //        

@@ -298,4 +298,14 @@ class User extends ActiveRecord implements IdentityInterface
         return $query->groupBy(["FROM_UNIXTIME($a, '%Y-%m-%d')"])->select(['count(*)', "FROM_UNIXTIME($a,'%Y-%m-%d')"])->indexBy("FROM_UNIXTIME($a,'%Y-%m-%d')")->column();
     }
     
+     public static function get_bd($stat=null,$id=null) {
+        $data=[];
+        $users = static::find()->where(['role'=>'bd'])->andFilterWhere(['status'=>$stat,'id'=>$id])->all();
+        foreach($users as $user){
+            $data[$user['id']]=$user['nickname']?$user['nickname']:$user['username'];
+        }
+        return $data;
+       
+    }
+    
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace rky\models;
+namespace app\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use rky\models\Corporation;
+use app\models\Corporation;
 
 /**
  * CorporationSearch represents the model behind the search form about `rky\models\Corporation`.
@@ -20,9 +20,9 @@ class CorporationSearch extends Corporation
     public function rules()
     {
         return [
-            [['id', 'base_bd', 'base_company_scale', 'base_registered_time', 'stat', 'intent_set', 'allocate_set', 'allocate_time', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
-            [['base_company_name', 'base_main_business', 'huawei_account', 'note', 'contact_address', 'contact_location', 'contact_business_name', 'contact_business_job', 'contact_business_tel', 'contact_technology_name', 'contact_technology_job', 'contact_technology_tel', 'develop_pattern', 'develop_scenario', 'develop_language', 'develop_IDE', 'develop_current_situation', 'develop_weakness','base_industry'], 'safe'],
-            [['base_registered_capital', 'base_last_income', 'allocate_amount'], 'number'],
+            [['id', 'base_company_scale', 'base_registered_time', 'stat', 'intent_set', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
+            [['base_company_name', 'base_main_business', 'huawei_account', 'note', 'contact_address', 'contact_location', 'contact_business_name', 'contact_business_job', 'contact_business_tel', 'contact_technology_name', 'contact_technology_job', 'contact_technology_tel', 'develop_pattern', 'develop_scenario', 'develop_science', 'develop_language', 'develop_IDE', 'develop_current_situation', 'develop_weakness','base_industry','base_bd'], 'safe'],
+            [['base_registered_capital', 'base_last_income'], 'number'],
         ];
     }
 
@@ -44,29 +44,29 @@ class CorporationSearch extends Corporation
      */
     public function search($params,$pageSize = '')
     {
-        $query = Corporation::find()->joinWith(['baseBd']);
+        $query = Corporation::find();
 
         // add conditions that should always apply here
 
       
          if ($pageSize > 0) {
-                 $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-                      'pagination' => [
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                    'pagination' => [
                     'pageSize' => $pageSize,
                 ],
-              'sort' => ['defaultOrder' => [
+                'sort' => ['defaultOrder' => [
                     'id' => SORT_DESC,
                 ]],
-        ]);
+            ]);
         }else{
             $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-             'sort' => ['defaultOrder' => [
+                'query' => $query,
+                'sort' => ['defaultOrder' => [
                     'id' => SORT_DESC,
                 ]],
-        ]);
-         }
+            ]);
+        }
 
         $this->load($params);
 
@@ -79,16 +79,12 @@ class CorporationSearch extends Corporation
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'base_bd' => $this->base_bd,
             'base_company_scale' => $this->base_company_scale,
             'base_registered_capital' => $this->base_registered_capital,
             'base_registered_time' => $this->base_registered_time,
             'base_last_income' => $this->base_last_income,
             'stat' => $this->stat,
-            'intent_set' => $this->intent_set,
-            'allocate_set' => $this->allocate_set,
-            'allocate_amount' => $this->allocate_amount,
-            'allocate_time' => $this->allocate_time,
+            'intent_set' => $this->intent_set,          
             'contact_park' => $this->contact_park,
             'develop_scale' => $this->develop_scale,
             'created_at' => $this->created_at,
@@ -114,7 +110,9 @@ class CorporationSearch extends Corporation
             ->andFilterWhere(['like', 'develop_weakness', $this->develop_weakness]);
         
         if($this->base_industry){
-            $corporation= CorporationIndustry::find()->where(['industry_id'=>$this->base_industry])->select(['corporation_id'])->column();
+            $industry= Industry::find()->where(['parent_id'=>$this->base_industry])->select(['id'])->column();
+            $industry[]=$this->base_industry;
+            $corporation= CorporationIndustry::find()->where(['industry_id'=>$industry])->select(['corporation_id'])->column();
             $query->andWhere([Corporation::tableName(). '.id'=>$corporation]);
         }
         

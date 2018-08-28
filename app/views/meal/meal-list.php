@@ -36,16 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'content',
                         'format' => 'raw',
                     ],
-//                    'order_sort',  
-//                    [
-//                        'attribute' => 'stat',
-//                        'value' =>
-//                        function($model, $key) {
-//                            return Html::a($model->Stat, ['meal/meal-change', 'id' => $key], ['class' => 'btn btn-xs ' . ($model->stat == Meal::STAT_ACTIVE ? 'btn-success' : 'btn-danger')]);
-//                        },
-//                        'format' => 'raw',
-//                        'headerOptions' => ['width' => '80'],
-//                    ],
                     [
                         'class' =>StatusColumn::className(),
                         'attribute' => 'stat',

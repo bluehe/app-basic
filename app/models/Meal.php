@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%meal}}".
@@ -71,6 +72,11 @@ class Meal extends \yii\db\ActiveRecord
     public function getStat() {
         $stat = isset(self::$List['stat'][$this->stat]) ? self::$List['stat'][$this->stat] : null;
         return $stat;
+    }
+    
+    public static function get_meal() {
+        $meals = static::find()->where(['stat'=> self::STAT_ACTIVE])->orderBy(['order_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();
+        return ArrayHelper::map($meals, 'id', 'name');
     }
     
 }
