@@ -130,7 +130,9 @@ class initSiteConfig extends Event {
             try {
                 foreach ($sqls as $sql) {
                     //执行操作
-                    Yii::$app->db->createCommand($sql)->execute();
+                    if($sql){
+                        Yii::$app->db->createCommand($sql)->execute();
+                    }
                 }
                 $NOW = time();
                 if ($crontab->interval_time == null) {
