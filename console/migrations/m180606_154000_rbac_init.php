@@ -124,6 +124,11 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
                     END
             END;");
         }
+        
+         $this->batchInsert($authManager->ruleTable, ['name', 'data', 'created_at', 'updated_at'], [           
+            ['企业修改', 'O:41:"app\components\rule\CorporationUpdateRule":3:{s:4:"name";s:12:"企业修改";s:9:"createdAt";i:1535507767;s:9:"updatedAt";i:1535507767;}', '1521085145','1521085145'],
+            ['企业删除', 'O:41:"app\components\rule\CorporationDeleteRule":3:{s:4:"name";s:12:"企业删除";s:9:"createdAt";i:1535507794;s:9:"updatedAt";i:1535507794;}', '1521085145','1521085145'],
+        ]);
 
         //插入数据
         $this->batchInsert($authManager->itemTable, ['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'], [
@@ -179,6 +184,8 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['套餐管理', '2', '套餐管理', null, null, '1482820123', '1482820123'],
             ['行业管理', '2', '行业管理', null, null, '1482820123', '1482820123'],
             ['企业管理', '2', '企业管理', null, null, '1482820123', '1482820123'],
+            ['企业修改', '2', '企业修改', '企业修改', null, '1482820123', '1482820123'],
+            ['企业删除', '2', '企业删除', '企业删除', null, '1482820123', '1482820123'],
           
         ]);
         $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [
@@ -209,6 +216,8 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['ob_data', '行业管理'],
             
             ['企业管理', '/corporation/*'],
+            ['企业管理', '企业修改'],
+            ['企业管理', '企业删除'],
             ['pm', '企业管理'],
             ['sa', '企业管理'],
             ['ob', '企业管理'],
@@ -220,7 +229,31 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['member', '1', '1482481221'],
             
             ['member', '2', '1482481221'],
-            ['bd', '2', '1482481221'],
+            ['ob_data', '2', '1482481221'],
+            
+            ['member', '3', '1482481221'],
+            ['ob', '3', '1482481221'],
+            
+            ['member', '4', '1482481221'],
+            ['ob', '4', '1482481221'],
+            
+            ['member', '5', '1482481221'],
+            ['sa', '5', '1482481221'],
+            
+            ['member', '6', '1482481221'],
+            ['sa', '6', '1482481221'],
+            
+            ['member', '7', '1482481221'],
+            ['bd', '7', '1482481221'],
+            
+            ['member', '8', '1482481221'],
+            ['bd', '8', '1482481221'],
+            
+            ['member', '9', '1482481221'],
+            ['bd', '9', '1482481221'],
+            
+            ['member', '10', '1482481221'],
+            ['pm', '10', '1482481221'],
         ]);
      
     }

@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Html::a('<i class="fa fa-pencil"></i> 修改', ['meal-update', 'id' => $key], ['class' => 'btn btn-primary btn-xs',]);
                             },
                             'delete' => function($url, $model, $key) {
-                                return Html::a('<i class="fa fa-trash-o"></i> 删除', ['meal-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'确定要删除此项吗？','data-method' => 'post',]);
+                                return Meal::get_corporationmeal_exist($model->id)?'':Html::a('<i class="fa fa-trash-o"></i> 删除', ['meal-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'确定要删除此项吗？','data-method' => 'post',]);
                             },
                         ],
                     ],

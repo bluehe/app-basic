@@ -23,7 +23,7 @@ class m180821_092800_create_meal_table extends Migration {
             'region' => $this->string(32)->notNull()->comment('地区'),
             'amount'=>$this->decimal(10,2)->notNull()->comment('金额（元）'),
             'content' => $this->text()->notNull()->comment('内容'),            
-            'order_sort' =>  $this->smallInteger()->notNull()->defaultValue(10),
+            'order_sort' =>  $this->smallInteger()->notNull()->defaultValue(10)->comment('排序'),
             'stat' => $this->smallInteger()->notNull()->defaultValue(1)->comment('状态'),
                 ], $tableOptions); 
     }

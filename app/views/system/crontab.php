@@ -22,6 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 $event_scheduler = Yii::$app->cache->get('event_scheduler');
                 if ($event_scheduler != 'ON') {
                     echo Html::a('开启数据库计划任务', ['crontab-open'], ['class' => 'btn btn-warning pull-right']);
+                }else{
+                    echo Html::a('关闭数据库计划任务', ['crontab-close'], ['class' => 'btn btn-danger pull-right']);
                 }
                 ?>
             </p>

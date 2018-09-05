@@ -1,7 +1,9 @@
 <?php
 
-use rky\models\Parameter;
-use rky\models\Corporation;
+use app\models\Parameter;
+use app\models\Corporation;
+use app\models\CorporationMeal;
+use app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model rky\models\Corporation */
@@ -11,15 +13,18 @@ use rky\models\Corporation;
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-tabs">
-                 <li class="active"><a href="#base" data-toggle="tab">基础信息</a></li>
-                 <li><a href="#develop" data-toggle="tab">开发信息</a></li>
-<!--                 <li><a href="#visit" data-toggle="tab">拜访信息</a></li>-->
-                 <li class="pull-right header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></li>
+            <li class="active"><a href="#base" data-toggle="tab">基础信息</a></li>
+            <?php if(in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN])&&CorporationMeal::get_allocate($model->id)):?>
+            <li><a href="#allocate" data-toggle="tab">下拨信息</a></li>
+            <?php endif;?>
+            <li><a href="#contact" data-toggle="tab">联系信息</a></li>
+            <li><a href="#develop" data-toggle="tab">开发信息</a></li>
+            <li class="pull-right header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></li>
                 
-                 </ul>
+        </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="base">
-                     <dl class="dl-horizontal">
+                    <dl class="dl-horizontal">
                     <dt><?= $model->getAttributeLabel('base_company_name') ?></dt><dd><?= $model->base_company_name ?></dd>
                     <dt><?= $model->getAttributeLabel('base_bd') ?></dt><dd><?= $model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'' ?></dd>
                     <dt><?= $model->getAttributeLabel('base_industry') ?></dt><dd><?= $model->get_industry($model->id) ?></dd>                  
@@ -28,6 +33,30 @@ use rky\models\Corporation;
                     <dt><?= $model->getAttributeLabel('base_registered_time') ?></dt><dd><?= $model->base_registered_time>0?date('Y-m-d',$model->base_registered_time):'' ?></dd>
                     <dt><?= $model->getAttributeLabel('base_main_business') ?></dt><dd><?= $model->base_main_business ?></dd>
                     <dt><?= $model->getAttributeLabel('base_last_income') ?></dt><dd><?= $model->base_last_income>0?floatval($model->base_last_income):'' ?></dd>
+                    
+                    <dt><?= $model->getAttributeLabel('stat') ?></dt><dd><?= $model->Stat ?></dd>
+                    <?php if(in_array($model->stat,[Corporation::STAT_APPLY,Corporation::STAT_CHECK])): ?>
+                    <dt><?= $model->getAttributeLabel('intent_set') ?></dt><dd><?= $model->intentSet->name ?></dd>
+                    <dt><?= $model->getAttributeLabel('intent_number') ?></dt><dd><?= $model->intent_number ?></dd>
+                    <dt><?= $model->getAttributeLabel('intent_amount') ?></dt><dd><?= $model->intent_amount ?></dd>         
+                    <?php endif;?>
+                </dl>
+                </div>
+                <?php if(in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN])&&$allocate=CorporationMeal::get_allocate($model->id)):?>
+                <div class="tab-pane" id="allocate">
+                <dl class="dl-horizontal">
+                    <dt><?= $allocate->getAttributeLabel('huawei_account') ?></dt><dd><?= $allocate->huawei_account ?></dd>
+                    <dt><?= $allocate->getAttributeLabel('bd') ?></dt><dd><?= $allocate->bd?User::get_nickname($allocate->bd):'<span class="not-set">系统</span>' ?></dd>
+                    <dt><?= $allocate->getAttributeLabel('meal_id') ?></dt><dd><?= $allocate->meal_id?$allocate->meal->name:'其他' ?></dd>
+                    <dt><?= $allocate->getAttributeLabel('number') ?></dt><dd><?= $allocate->number ?></dd>
+                    <dt><?= $allocate->getAttributeLabel('amount') ?></dt><dd><?= $allocate->amount ?></dd>
+                    <dt><?= $allocate->getAttributeLabel('start_time') ?></dt><dd><?= date('Y-m-d',$allocate->start_time) ?></dd>
+                    <dt><?= $allocate->getAttributeLabel('end_time') ?></dt><dd><?= date('Y-m-d',$allocate->end_time) ?></dd>
+                </dl>
+                </div>
+                <?php endif;?>
+                <div class="tab-pane" id="contact">
+                <dl class="dl-horizontal">
                     <dt><?= $model->getAttributeLabel('contact_park') ?></dt><dd><?= implode(',', Parameter::get_para_value('contact_park',$model->contact_park)) ?></dd>
                     <dt><?= $model->getAttributeLabel('contact_address') ?></dt><dd><?= $model->contact_address ?></dd>
                     <dt><?= $model->getAttributeLabel('contact_business_name') ?></dt><dd><?= $model->contact_business_name ?></dd>
@@ -35,15 +64,7 @@ use rky\models\Corporation;
                     <dt><?= $model->getAttributeLabel('contact_business_tel') ?></dt><dd><?= $model->contact_business_tel ?></dd>
                     <dt><?= $model->getAttributeLabel('contact_technology_name') ?></dt><dd><?= $model->contact_technology_name ?></dd>
                     <dt><?= $model->getAttributeLabel('contact_technology_job') ?></dt><dd><?= $model->contact_technology_job ?></dd>
-                    <dt><?= $model->getAttributeLabel('contact_technology_tel') ?></dt><dd><?= $model->contact_technology_tel ?></dd>
-                    <dt><?= $model->getAttributeLabel('stat') ?></dt><dd><?= $model->Stat ?></dd>
-                    <?php if($model->stat==Corporation::STAT_REGISTER||$model->stat==Corporation::STAT_APPLY): ?>
-                    <dt><?= $model->getAttributeLabel('intent_set') ?></dt><dd><?= $model->IntentSet ?></dd>
-                    <?php elseif($model->stat==Corporation::STAT_ALLOCATE):?>
-                    <dt><?= $model->getAttributeLabel('huawei_account') ?></dt><dd><?= $model->huawei_account ?></dd>
-                    <dt><?= $model->getAttributeLabel('allocate_amount') ?></dt><dd><?= floatval($model->allocate_amount) ?></dd>
-                    <dt><?= $model->getAttributeLabel('allocate_time') ?></dt><dd><?= $model->allocate_time>0?date('Y-m-d',$model->allocate_time):'' ?></dd>
-                    <?php endif;?>
+                    <dt><?= $model->getAttributeLabel('contact_technology_tel') ?></dt><dd><?= $model->contact_technology_tel ?></dd>                                      
                 </dl>
             </div>
             <div class="tab-pane" id="develop">
@@ -59,6 +80,7 @@ use rky\models\Corporation;
                 </dl>
  
             </div>
+            
                 <div class="tab-pane" id="visit">
                     <ul class="timeline">
                     <!-- timeline time label -->

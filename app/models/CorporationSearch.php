@@ -20,7 +20,7 @@ class CorporationSearch extends Corporation
     public function rules()
     {
         return [
-            [['id', 'base_company_scale', 'base_registered_time', 'stat', 'intent_set', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
+            [['id','base_bd', 'base_company_scale', 'base_registered_time', 'stat', 'intent_set', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
             [['base_company_name', 'base_main_business', 'huawei_account', 'note', 'contact_address', 'contact_location', 'contact_business_name', 'contact_business_job', 'contact_business_tel', 'contact_technology_name', 'contact_technology_job', 'contact_technology_tel', 'develop_pattern', 'develop_scenario', 'develop_science', 'develop_language', 'develop_IDE', 'develop_current_situation', 'develop_weakness','base_industry','base_bd'], 'safe'],
             [['base_registered_capital', 'base_last_income'], 'number'],
         ];
@@ -79,6 +79,7 @@ class CorporationSearch extends Corporation
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'base_bd' => $this->base_bd,
             'base_company_scale' => $this->base_company_scale,
             'base_registered_capital' => $this->base_registered_capital,
             'base_registered_time' => $this->base_registered_time,

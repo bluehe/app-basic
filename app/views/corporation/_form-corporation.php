@@ -61,10 +61,12 @@ use app\models\Meal;
 
             <?= $form->field($model, 'base_last_income')->textInput(['maxlength' => true]) ?>
                               
-            <?php // $form->field($model, 'stat')->dropDownList(Corporation::get_stat_list($model->stat), ['prompt' => '']) ?>
+            <?= $form->field($model, 'stat')->dropDownList(Corporation::get_stat_list($model->stat), ['prompt' => '','disabled'=>true]) ?>
              
             <div class="stat_c stat_intent">
             <?= $form->field($model, 'intent_set')->dropDownList(Meal::get_meal(), ['prompt' => '']) ?>
+            
+            <?= $form->field($model, 'intent_number')->textInput() ?>
             </div>
             <div class="stat_c stat_allocate">
             <?= $form->field($model, 'huawei_account')->textInput(['maxlength' => true]) ?>
@@ -114,10 +116,10 @@ use app\models\Meal;
                <div class="col-md-6 col-xs-6 text-left"><?= Html::resetButton('取消', ['class' => 'btn btn-default', 'data-dismiss' => "modal"]) ?></div>
 
             </div>
-            </div>
+        </div>
                    
-            <?php ActiveForm::end(); ?>
-</div>
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>
 
 <?php
@@ -138,7 +140,7 @@ $this->registerCss($cssString);
     
     function change_stat(){
         var s=$('#corporation-stat').val();
-        if(s==<?= Corporation::STAT_REGISTER?>||s==<?= Corporation::STAT_APPLY?>){
+        if(s==<?= Corporation::STAT_APPLY?>){
             $('.stat_c').hide();
             $('.stat_intent').show();
         }else if(s==<?= Corporation::STAT_ALLOCATE?>){

@@ -32,7 +32,7 @@ class CorporationBd extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corporation_id', 'bd_id'], 'required'],
+            [['corporation_id'], 'required'],
             [['corporation_id', 'bd_id', 'start_time', 'end_time'], 'integer'],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
             [['bd_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['bd_id' => 'id']],

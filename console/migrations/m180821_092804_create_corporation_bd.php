@@ -22,11 +22,11 @@ class m180821_092804_create_corporation_bd extends Migration {
         $this->createTable($table, [
             'id' => $this->primaryKey(),
             'corporation_id' => $this->integer()->notNull(),
-            'bd_id' => $this->integer()->notNull(),
+            'bd_id' => $this->integer(),
             'start_time' => $this->integer(),
             'end_time' => $this->integer(),
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
-            "FOREIGN KEY ([[bd_id]]) REFERENCES {$bdTable}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
+            "FOREIGN KEY ([[bd_id]]) REFERENCES {$bdTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
                 ], $tableOptions);
 
        

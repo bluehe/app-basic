@@ -14,6 +14,7 @@ class m180821_092802_create_corporation_table extends Migration {
     public function up() {
         $table = '{{%corporation}}';
         $userTable = Configs::instance()->userTable;
+        $mealTable = '{{%meal}}';
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
@@ -28,10 +29,11 @@ class m180821_092802_create_corporation_table extends Migration {
             'base_registered_capital'=>$this->decimal(10,4)->comment('注册资金'),
             'base_registered_time'=>$this->integer()->comment('注册日期'),
             'base_main_business'=>$this->text()->comment('主营业务'),
-            'base_last_income'=>$this->decimal(10,4)->comment('近一年营业收入'),
+            'base_last_income'=>$this->decimal(10,4)->comment('近一年营业收入(万元)'),
             'stat' => $this->smallInteger()->notNull()->defaultValue(1)->comment('状态'),
             'intent_set'=>$this->integer()->comment('意向套餐'),
-            //'intent_amount'=>$this->decimal(10,4)->comment('意向金额'),
+            'intent_number'=>$this->integer()->defaultValue(1)->comment('意向套餐数量'),
+            'intent_amount'=>$this->decimal(10,2)->comment('意向金额(元)'),
             'huawei_account' => $this->string(32)->comment('华为云账号'),
 //            'allocate_set'=>$this->integer()->comment('下拨套餐'),
 //            'allocate_amount'=>$this->decimal(10,4)->comment('下拨金额'),
@@ -61,6 +63,7 @@ class m180821_092802_create_corporation_table extends Migration {
             'updated_at' => $this->integer()->comment('更新时间'),
             
             "FOREIGN KEY ([[base_bd]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
+            "FOREIGN KEY ([[intent_set]]) REFERENCES {$mealTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
                 ], $tableOptions);  
     }
 

@@ -25,7 +25,7 @@ use app\models\Meal;
 
                 <?= $form->field($model, 'region')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'amount')->textInput(['maxlength' => true,'disabled'=> Meal::get_meal_exist($model->id)]) ?>
 
                 <?= $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::className(),['clientOptions'=>['lang'=>'zh_cn','maxHeight'=>'400px']]) ?>
 

@@ -87,10 +87,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'base_bd',
                         'value' =>
                         function($model) {
-                            return $model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'';   //主要通过此种方式实现
+                            return '<span class="bd-list" data-toggle="modal" data-target="#list-modal">'.($model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'<span class="not-set">(未设置)</span>').'</span>';   //主要通过此种方式实现
                         },
+                        'format'=>'raw',
                         'filter' => User::get_bd(null, Corporation::get_existbd()), //此处我们可以将筛选项组合成key-value形式
                 ],
+                'huawei_account',
                 [
                         'attribute' => 'base_industry',
                         'value' =>
@@ -120,25 +122,58 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'stat',
                         'value' =>
                             function($model) {
-                                return Html::tag('span', $model->Stat,['class' => ($model->stat== Corporation::STAT_OVERDUE ? 'text-red' : ($model->stat== Corporation::STAT_CHECK ? 'text-yellow' : ($model->stat== Corporation::STAT_ALLOCATE ? 'text-green' : '')))]);
+                                switch($model->stat){
+                                    case Corporation::STAT_CREATED:$color='text-green';break;
+                                    case Corporation::STAT_FOLLOW:$color='text-aqua';break;
+                                    case Corporation::STAT_REFUSE:$color='text-gray';break;
+                                    case Corporation::STAT_APPLY:$color='text-blue';break;
+                                    case Corporation::STAT_CHECK:$color='text-yellow';break;
+                                    case Corporation::STAT_ALLOCATE:$color='text-maroon';break;
+                                    case Corporation::STAT_AGAIN:$color='text-purple';break;
+                                    default: $color='';
+
+                                }
+                                return Html::tag('span', $model->Stat,['data-toggle'=>'modal','data-target'=>'#list-modal', 'class' =>'stat-list '.$color]);
                             },
                         'format' => 'raw',
                         'filter' => Corporation::$List['stat'],    
                 ],
                
                 ['class' => 'yii\grid\ActionColumn',
-                        'header' => '操作',
-                        'template' => '{update} {check} {delete}',
-                        'buttons' => [                           
-                            'update' => function($url, $model, $key) {
-                                return Yii::$app->user->can('公司修改',['id'=>$key])?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-warning btn-xs corporation-update',]):'';
+                        'header' => '',
+                        'template' => '{follow} {apply} {check} {allocate} {again} {refuse}',
+                        'buttons' => [                                                     
+                            'follow' => function($url, $model, $key) {
+                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_CREATED,Corporation::STAT_REFUSE])?Html::a('<i class="fa fa-hourglass-2"></i> 跟进中', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_FOLLOW], ['class' => 'btn bg-aqua btn-xs','data-method' => 'post',]):'';
+                            }, 
+                            'refuse' => function($url, $model, $key) {
+                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_FOLLOW,Corporation::STAT_OVERDUE])?Html::a('<i class="fa fa-times"></i> 无意愿', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_REFUSE], ['class' => 'btn bg-gray btn-xs','data-method' => 'post',]):'';
+                            },
+                            'apply' => function($url, $model, $key) {
+                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_FOLLOW])?Html::a('<i class="fa fa-check"></i> 已申请', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-light-blue btn-xs corporation-apply',]):'';
                             },
                             'check' => function($url, $model, $key) {
-                                return $model->stat== Corporation::STAT_APPLY&&Yii::$app->user->identity->role=='pm'?Html::a('<i class="fa fa-check"></i> 审核通过', ['corporation-check', 'id' => $key], ['class' => 'btn btn-info btn-xs']):'';
+                                return Yii::$app->user->can('企业删除',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_APPLY])?Html::a('<i class="fa fa-check-square-o"></i> 已审核', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_CHECK], ['class' => 'btn bg-yellow btn-xs','data-method' => 'post','data-confirm' =>'确定完成审核？',]):'';
+                            },
+                            'allocate'=>function($url, $model, $key) {
+                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_CHECK])?Html::a('<i class="fa fa-trophy"></i> 已下拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-maroon btn-xs corporation-allocate',]):'';
+                            },
+                            'again'=>function($url, $model, $key) {
+                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_OVERDUE,Corporation::STAT_AGAIN])?Html::a('<i class="fa fa-refresh"></i> 已续拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-purple btn-xs corporation-again',]):'';
+                            },
+                            
+                        ],
+                    ],
+                     ['class' => 'yii\grid\ActionColumn',
+                        'header' => '操作',
+                        'template' => '{update} {delete}',
+                        'buttons' => [                           
+                            'update' => function($url, $model, $key) {
+                                return Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-warning btn-xs corporation-update',]):'';
                             },
                             'delete' => function($url, $model, $key) {
-                                return Yii::$app->user->can('公司删除',['id'=>$key])?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs', 'data' => ['confirm' => '删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？',]]):'';
-                            },
+                                return Yii::$app->user->can('企业删除',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_CREATED, Corporation::STAT_FOLLOW])?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？','data-method' => 'post',]):'';
+                            },                           
                         ],
                     ],
                 ],
@@ -149,8 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 Modal::begin([
     'id' => 'corporation-modal',
-    'header' => null,
-    'closeButton'=>false,    
+    'header' => '<h4 class="modal-title"></h4>',  
     'options' => [
         'tabindex' => false,
         'data-backdrop'=>'static',//点击空白处不关闭弹窗
@@ -158,11 +192,19 @@ Modal::begin([
     ],
 ]);
 Modal::end();
+Modal::begin([
+    'id' => 'list-modal',
+    'header' => '<h4 class="modal-title"></h4>',
+    'options' => [
+        'tabindex' => false
+    ],
+]);
+Modal::end();
 ?>
 <script>
 <?php $this->beginBlock('corporation') ?>
     $('.corporation-index').on('click', '.corporation-view', function () {
-        //$('.modal-title').html('企业查看');
+        $('#corporation-modal .modal-header').hide();
         $('.modal-body').html('');
         $.get('<?= Url::toRoute('corporation-view') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
@@ -172,7 +214,7 @@ Modal::end();
     });
     
     $('.corporation-index').on('click', '.corporation-create', function () {
-        //$('.modal-title').html('企业添加');
+        $('#corporation-modal .modal-header').hide();
         $('.modal-body').html('');
         $.get('<?= Url::toRoute('corporation-create') ?>',
                 function (data) {
@@ -181,8 +223,8 @@ Modal::end();
         );
     });
     
-        $('.corporation-index').on('click', '.corporation-update', function () {
-        $('.modal-title').html('企业更新');
+    $('.corporation-index').on('click', '.corporation-update', function () {
+        $('#corporation-modal .modal-header').hide();
         $('.modal-body').html('');
         $.get('<?= Url::toRoute('corporation-update') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
@@ -190,7 +232,58 @@ Modal::end();
                 }
         );
     });
-
+    
+    $('.corporation-index').on('click', '.corporation-apply', function () {
+        $('#corporation-modal .modal-title').html('企业申请');
+        $('#corporation-modal .modal-header').show();
+        $('.modal-body').html('');
+        $.get('<?= Url::toRoute('corporation-apply') ?>',{id: $(this).closest('tr').data('key')},
+                function (data) {
+                    $('.modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.corporation-index').on('click', '.corporation-allocate', function () {
+        $('#corporation-modal .modal-title').html('企业下拨');
+        $('#corporation-modal .modal-header').show();
+        $('.modal-body').html('');
+        $.get('<?= Url::toRoute('corporation-allocate') ?>',{id: $(this).closest('tr').data('key')},
+                function (data) {
+                    $('.modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.corporation-index').on('click', '.corporation-again', function () {
+        $('#corporation-modal .modal-title').html('企业续拨');
+        $('#corporation-modal .modal-header').show();
+        $('.modal-body').html('');
+        $.get('<?= Url::toRoute('corporation-allocate') ?>',{id: $(this).closest('tr').data('key')},
+                function (data) {
+                    $('.modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.corporation-index').on('click', '.bd-list', function () {
+        $('.modal-title').html('历史记录');
+        $('.modal-body').html('');
+        $.get('<?= Url::toRoute('corporation-bd') ?>',{id: $(this).closest('tr').data('key')},
+                function (data) {
+                    $('.modal-body').html(data);
+                }
+        );
+    });
+    $('.corporation-index').on('click', '.stat-list', function () {
+        $('.modal-title').html('状态记录');
+        $('.modal-body').html('');
+        $.get('<?= Url::toRoute('corporation-stat') ?>',{id: $(this).closest('tr').data('key')},
+                function (data) {
+                    $('.modal-body').html(data);
+                }
+        );
+    });
 <?php $this->endBlock() ?>
 </script>
 <?php $this->registerJs($this->blocks['corporation'], \yii\web\View::POS_END); ?>

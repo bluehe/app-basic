@@ -85,7 +85,7 @@ class initSiteConfig extends Event {
        
         //登录记录
         $user_ip = Yii::$app->request->userIP;
-        if (Yii::$app->request->cookies->getValue('login', false) != $user_ip && !Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest&&Yii::$app->request->cookies->getValue('login_'.Yii::$app->user->identity->id, false) != $user_ip) {
             $time = strtotime(date('Y-m-d', time()));
             $exists = UserLog::find()->where(['and', ['>', 'created_at', $time], ['uid' => Yii::$app->user->identity->id, 'ip' => $user_ip]])->exists();
             if (!$exists) {
@@ -101,7 +101,7 @@ class initSiteConfig extends Event {
                 if ($log->save()) {
                     User::updateAll(['last_login' => time()], ['id' => Yii::$app->user->identity->id]);
                     $cookie = new Cookie([
-                        'name' => 'login',
+                        'name' => 'login_'.Yii::$app->user->identity->id,
                         'expire' => $time + 86400,
                         'value' => $user_ip,
                         'httpOnly' => true

@@ -21,7 +21,8 @@ class ViewAction extends \yii\base\Action
 
     /** @var string 模板路径，默认为action id  */
     public $viewFile = 'view';
-
+    
+    public $ajax = false;
 
     /**
      * view详情页
@@ -36,9 +37,16 @@ class ViewAction extends \yii\base\Action
         $model = call_user_func([$this->modelClass, 'findOne'], $id);
         if (! $model) throw new BadRequestHttpException("Cannot find model by $id");
         $model->setScenario( $this->scenario );
-        return $this->controller->render($this->viewFile, [
-            'model' => $model,
-        ]);
+        if($this->ajax){
+            return $this->controller->renderAjax($this->viewFile, [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->controller->render($this->viewFile, [
+                'model' => $model,
+            ]);
+        }
+        
     }
 
 }

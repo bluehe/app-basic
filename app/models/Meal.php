@@ -45,6 +45,14 @@ class Meal extends \yii\db\ActiveRecord
             ['stat', 'in', 'range' => [self::STAT_ACTIVE, self::STAT_DISABLED]],
         ];
     }
+    
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+   public function getCorporationMeals()
+   {
+       return $this->hasMany(CorporationMeal::className(), ['meal_id' => 'id']);
+   }
 
     /**
      * {@inheritdoc}
@@ -77,6 +85,14 @@ class Meal extends \yii\db\ActiveRecord
     public static function get_meal() {
         $meals = static::find()->where(['stat'=> self::STAT_ACTIVE])->orderBy(['order_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();
         return ArrayHelper::map($meals, 'id', 'name');
+    }
+    
+    public static function get_corporationmeal_exist($id) {
+        return CorporationMeal::find()->where(['meal_id'=>$id])->exists();
+    }
+    
+    public static function get_meal_amount($id) {
+        return static::find()->where(['id'=>$id])->select(['amount'])->scalar();
     }
     
 }

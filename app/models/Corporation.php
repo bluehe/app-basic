@@ -51,7 +51,7 @@ class Corporation extends \yii\db\ActiveRecord
     
     const STAT_CREATED = 1;
     const STAT_FOLLOW = 2;
-    const STAT_REGISTER = 4;
+//    const STAT_REGISTER = 4;
     const STAT_APPLY = 5;
     const STAT_CHECK = 6;
     const STAT_ALLOCATE = 7;
@@ -87,11 +87,12 @@ class Corporation extends \yii\db\ActiveRecord
             [['base_company_name','huawei_account'], 'unique', 'message' => '{attribute}已经存在'],
             [['base_company_name','stat'], 'required'],
             [['base_industry'], 'required','on'=>'industry'],
-            [['intent_set'],'requiredByStat_r','skipOnEmpty' => false],
+            [['intent_set','intent_number'],'requiredByStat_r','skipOnEmpty' => false],
             [['huawei_account'],'requiredByStat_a','skipOnEmpty' => false],
+            [['base_bd'],'requiredByStat_b','skipOnEmpty' => false],
             [['base_registered_time'], 'safe'],
-            [['base_bd','base_company_scale', 'stat', 'intent_set', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
-            [['base_registered_capital', 'base_last_income'], 'number'],
+            [['base_bd','base_company_scale', 'stat', 'intent_set','intent_number', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
+            [['base_registered_capital', 'base_last_income','intent_amount'], 'number'],
             [['base_main_business', 'note', 'develop_current_situation', 'develop_weakness'], 'string'],
             [['base_company_name', 'huawei_account', 'contact_business_tel', 'contact_technology_tel'], 'string', 'max' => 32],
             [['contact_address'], 'string', 'max' => 128],
@@ -99,6 +100,7 @@ class Corporation extends \yii\db\ActiveRecord
             [['contact_business_name', 'contact_business_job', 'contact_technology_name', 'contact_technology_job'], 'string', 'max' => 16],
             [['develop_pattern', 'develop_scenario', 'develop_science', 'develop_language', 'develop_IDE'], 'string', 'max' => 255],
             [['base_bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['base_bd' => 'id']],
+            [['intent_set'], 'exist', 'skipOnError' => true, 'targetClass' => Meal::className(), 'targetAttribute' => ['intent_set' => 'id']],
             [['stat'], 'default', 'value' => self::STAT_CREATED],
         ];
     }
@@ -118,6 +120,14 @@ class Corporation extends \yii\db\ActiveRecord
             }else{
                 $this->contact_location=null;
             }
+            if(!$this->base_bd){
+                $this->base_bd=null;
+            }
+            
+            //意向金额
+            if($this->stat==self::STAT_APPLY&&$this->intent_set&&$this->intent_number){
+                 $this->intent_amount = $this->intent_number*Meal::get_meal_amount($this->intent_set);
+            }
             return true;
         } else {
             return false;
@@ -131,13 +141,15 @@ class Corporation extends \yii\db\ActiveRecord
     {
 
         if ($insert) {
-            if($this->base_bd){
-                $bdModel = new CorporationBd();
-                $bdModel->corporation_id=$this->id;
-                $bdModel->bd_id=$this->base_bd;
-                $bdModel->start_time=time();
-                $bdModel->save();
-            }
+    
+            //BD
+            $bdModel = new CorporationBd();
+            $bdModel->corporation_id=$this->id;
+            $bdModel->bd_id=$this->base_bd;
+            $bdModel->start_time=time();
+            $bdModel->save();
+            
+            //状态
             $statModel=new CorporationStat();
             $statModel->corporation_id=$this->id;
             $statModel->stat=$this->stat;
@@ -145,7 +157,26 @@ class Corporation extends \yii\db\ActiveRecord
             $statModel->created_at=time();
             $statModel->save();
         } else {
+            if(array_key_exists('base_bd', $changedAttributes)&&$changedAttributes['base_bd']!=$this->base_bd){
+                //BD变动，修改历史记录表
+                CorporationBd::updateAll(['end_time'=>time()], ['corporation_id'=>$this->id,'bd_id'=>$changedAttributes['base_bd']]);
+                $bdModel = new CorporationBd();
+                $bdModel->corporation_id=$this->id;
+                $bdModel->bd_id=$this->base_bd;
+                $bdModel->start_time=time();
+                $bdModel->save();               
+            }
             
+            if(array_key_exists('stat', $changedAttributes)&&$changedAttributes['stat']!=$this->stat){
+                //状态变动，修改历史记录表
+                $statModel=new CorporationStat();
+                $statModel->corporation_id=$this->id;
+                $statModel->stat=$this->stat;
+                $statModel->user_id=Yii::$app->user->identity->id;
+                $statModel->created_at=time();
+                $statModel->save();               
+            }
+                      
         }
         
         parent::afterSave($insert, $changedAttributes);
@@ -153,15 +184,22 @@ class Corporation extends \yii\db\ActiveRecord
     
     public function requiredByStat_r($attribute, $params)
     {
-        if ($this->stat==self::STAT_APPLY&&!$this->intent_set){
-                $this->addError($attribute,'意向套餐不能为空。');            
+        if ($this->stat==self::STAT_APPLY&&!$this->$attribute){
+                $this->addError($attribute,'不能为空。');            
         }
     }
     
     public function requiredByStat_a($attribute, $params)
     {
         if ($this->stat==self::STAT_ALLOCATE&&!$this->$attribute){
-                $this->addError($attribute,'华为账号不能为空。');            
+                $this->addError($attribute,'华为云账号不能为空。');            
+        }
+    }
+    
+    public function requiredByStat_b($attribute, $params)
+    {
+        if ($this->stat!=self::STAT_CREATED&&!$this->$attribute){
+                $this->addError($attribute,'客户经理不能为空。');            
         }
     }
 
@@ -182,6 +220,8 @@ class Corporation extends \yii\db\ActiveRecord
             'base_last_income' => '近一年营收(万元)',
             'stat' => '状态',
             'intent_set' => '意向套餐',
+            'intent_number' => '意向数量',
+            'intent_amount' => '意向金额',
             'huawei_account' => '华为云账号',
             'note' => '备注',
             'contact_park' => '所属园区',
@@ -210,7 +250,7 @@ class Corporation extends \yii\db\ActiveRecord
         'stat'=>[
             self::STAT_CREATED=>'新创建',
             self::STAT_FOLLOW=>'跟进中',            
-            self::STAT_REGISTER=>'已注册',
+//            self::STAT_REGISTER=>'已注册',
             self::STAT_APPLY=>'已申请',            
             self::STAT_CHECK=>'已审核',
             self::STAT_ALLOCATE=>'已下拨',
@@ -232,6 +272,14 @@ class Corporation extends \yii\db\ActiveRecord
     public function getBaseBd()
     {
         return $this->hasOne(User::className(), ['id' => 'base_bd']);
+    }
+    
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getIntentSet()
+    {
+        return $this->hasOne(Meal::className(), ['id' => 'intent_set']);
     }
     
 //    /**

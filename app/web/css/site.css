@@ -260,3 +260,25 @@ a.desc:after {
     height: 34px;
     line-height: 30px;
 }
+
+/*时间轴*/
+.bd-list .timeline>li>.timeline-item,.stat-list .timeline>li>.timeline-item {
+    border:1px solid #ddd;
+}
+/*.timeline-list .timeline:before {
+    left:43px;
+}*/
+.stat-list .timeline>.time-label>span {
+    min-width: 66px;
+    text-align: center;
+    font-weight: 500;
+}
+/*.timeline-list .timeline>li>.fa {left:20px;width:50px;font-size: 14px;}*/
+.timeline-list .timeline>li>.timeline-item{margin-left: 72px;}
+
+@media (min-width: 768px){
+    .timeline-list .dl-horizontal dt {width:60px}
+    .timeline-list .dl-horizontal dd {
+        margin-left: 80px;
+    }
+}
