@@ -282,7 +282,7 @@ class SystemController extends Controller {
                 $sql .= "
                         DO
                         BEGIN
-                            {$model->content};
+                            {$model->content}
                             UPDATE {{%crontab}} SET exc_at=unix_timestamp(now()) WHERE name='{$model->name}';
                         END";
 
@@ -327,6 +327,21 @@ class SystemController extends Controller {
         }
         return $this->redirect(Yii::$app->request->referrer);
     }
+    
+    public function actionCrontabClose() {
+        $event_scheduler = Yii::$app->db->createCommand("SELECT @@event_scheduler;")->queryScalar();
+        if ($event_scheduler == 'ON') {
+            Yii::$app->db->createCommand("set GLOBAL event_scheduler = OFF;")->execute();
+            $event_scheduler = Yii::$app->db->createCommand("SELECT @@event_scheduler;")->queryScalar();
+        }
+        if ($event_scheduler == 'ON') {
+            Yii::$app->session->setFlash('danger', '关闭失败。');
+        }else{
+            Yii::$app->session->setFlash('success', '关闭成功。');
+            Yii::$app->cache->delete('event_scheduler');
+        }
+        return $this->redirect(Yii::$app->request->referrer);
+    }
 
     /**
      * Updates an existing Crontab model.
@@ -354,7 +369,7 @@ class SystemController extends Controller {
                     $sql .= "
                         DO
                         BEGIN
-                            {$model->content};
+                            {$model->content}
                             UPDATE {{%crontab}} SET exc_at=unix_timestamp(now()) WHERE name='{$model->name}';
                         END";
 
