@@ -6,7 +6,7 @@
  * Created at: 2016-10-16 17:15
  */
 
-namespace app\libs;
+namespace project\libs;
 
 use yii;
 use yii\base\InvalidParamException;

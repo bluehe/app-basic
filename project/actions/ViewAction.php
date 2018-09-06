@@ -6,7 +6,7 @@
  * Created at: 2017-08-13 10:10
  */
 
-namespace app\actions;
+namespace project\actions;
 
 
 use Yii;

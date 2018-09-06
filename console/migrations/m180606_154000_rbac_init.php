@@ -126,8 +126,8 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
         }
         
          $this->batchInsert($authManager->ruleTable, ['name', 'data', 'created_at', 'updated_at'], [           
-            ['企业修改', 'O:41:"app\components\rule\CorporationUpdateRule":3:{s:4:"name";s:12:"企业修改";s:9:"createdAt";i:1535507767;s:9:"updatedAt";i:1535507767;}', '1521085145','1521085145'],
-            ['企业删除', 'O:41:"app\components\rule\CorporationDeleteRule":3:{s:4:"name";s:12:"企业删除";s:9:"createdAt";i:1535507794;s:9:"updatedAt";i:1535507794;}', '1521085145','1521085145'],
+            ['企业修改', 'O:41:"project\components\rule\CorporationUpdateRule":3:{s:4:"name";s:12:"企业修改";s:9:"createdAt";i:1535507767;s:9:"updatedAt";i:1535507767;}', '1521085145','1521085145'],
+            ['企业删除', 'O:41:"project\components\rule\CorporationDeleteRule":3:{s:4:"name";s:12:"企业删除";s:9:"createdAt";i:1535507794;s:9:"updatedAt";i:1535507794;}', '1521085145','1521085145'],
         ]);
 
         //插入数据

@@ -1,11 +1,11 @@
 <?php
 
-namespace app\models;
+namespace project\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Corporation;
+use project\models\Corporation;
 
 /**
  * CorporationSearch represents the model behind the search form about `rky\models\Corporation`.

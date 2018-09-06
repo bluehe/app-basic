@@ -1,14 +1,14 @@
 <?php
 
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
 use yii\web\Controller;
 use yii\imagine\Image;
-use app\models\ChangePassword;
-use app\models\User;
-use app\models\ChangeAuth;
-use app\models\UserAuth;
+use project\models\ChangePassword;
+use project\models\User;
+use project\models\ChangeAuth;
+use project\models\UserAuth;
 
 
 class AccountController extends Controller {

@@ -2,13 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\User;
-use app\models\Industry;
+use project\models\User;
+use project\models\Industry;
 use kartik\widgets\Select2;
 use kartik\widgets\DatePicker;
-use app\models\Parameter;
-use app\models\Corporation;
-use app\models\Meal;
+use project\models\Parameter;
+use project\models\Corporation;
+use project\models\Meal;
 
 /* @var $this yii\web\View */
 /* @var $model rky\models\Corporation */

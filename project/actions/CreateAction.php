@@ -5,7 +5,7 @@
  * Email: job@feehi.com
  * Created at: 2017-08-13 00:06
  */
-namespace app\actions;
+namespace project\actions;
 
 use Closure;
 use Yii;

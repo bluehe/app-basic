@@ -1,9 +1,9 @@
 <?php
 
-namespace app\components;
+namespace project\components;
 
 use Yii;
-use app\models\System;
+use project\models\System;
 
 class CommonHelper {
 

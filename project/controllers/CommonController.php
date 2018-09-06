@@ -1,12 +1,13 @@
 <?php
 
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
 use yii\web\Controller;
 use Da\QrCode\QrCode;
-use app\models\User;
-use app\models\System;
+use project\models\User;
+use project\models\System;
+use project\components\CommonHelper;
 
 /**
  * Common controller
@@ -47,7 +48,7 @@ class CommonController extends Controller {
             if(!$user->tel){
                 return json_encode(['stat'=>'fail','message'=>'未设置手机号'],256);
             }
-            $result_json= \app\components\CommonHelper::sendSms($user->tel, 'sms_captcha', ['code'=>$num]);
+            $result_json= CommonHelper::sendSms($user->tel, 'sms_captcha', ['code'=>$num]);
             $result_arr= json_decode($result_json,TRUE);
             $result=$result_arr['stat']=='success';
         }else{
@@ -80,7 +81,7 @@ class CommonController extends Controller {
                         ->send();
         
         }elseif($type=='tel'){
-            $result_json= \app\components\CommonHelper::sendSms($to, 'sms_captcha', ['code'=>$num]);
+            $result_json= CommonHelper::sendSms($to, 'sms_captcha', ['code'=>$num]);
             $result_arr= json_decode($result_json,TRUE);
             $result=$result_arr['stat']=='success';
         }else{

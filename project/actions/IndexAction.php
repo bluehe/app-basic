@@ -6,7 +6,7 @@
  * Created at: 2017-08-13 01:00
  */
 
-namespace app\actions;
+namespace project\actions;
 
 use Closure;
 

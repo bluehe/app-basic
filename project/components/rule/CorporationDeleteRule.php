@@ -1,11 +1,11 @@
 <?php
 
-namespace app\components\rule;
+namespace project\components\rule;
 
 use Yii;
 use yii\rbac\Rule;
-use app\models\Corporation;
-use app\models\User;
+use project\models\Corporation;
+use project\models\User;
 
 class CorporationDeleteRule extends Rule {
 

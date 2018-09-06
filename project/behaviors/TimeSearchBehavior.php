@@ -5,9 +5,9 @@
  * Email: job@feehi.com
  * Created at: 2018-01-22 17:23
  */
-namespace app\behaviors;
+namespace project\behaviors;
 
-use app\components\search\SearchEvent;
+use project\components\search\SearchEvent;
 
 class TimeSearchBehavior extends \yii\base\Behavior
 {

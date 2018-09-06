@@ -6,7 +6,7 @@
  * Created at: 2017-08-13 00:31
  */
 
-namespace app\actions;
+namespace project\actions;
 
 use Yii;
 use yii\web\BadRequestHttpException;

@@ -1,20 +1,20 @@
 <?php
 
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\actions\IndexAction;
+use project\actions\IndexAction;
 //use bluehe\phpexcel\Excel;
-use app\models\Corporation;
-use app\models\CorporationSearch;
-use app\models\CorporationIndustry;
-use app\actions\DeleteAction;
-use app\actions\ViewAction;
-use app\models\CorporationBd;
-use app\models\CorporationStat;
-use app\models\CorporationMeal;
+use project\models\Corporation;
+use project\models\CorporationSearch;
+use project\models\CorporationIndustry;
+use project\actions\DeleteAction;
+use project\actions\ViewAction;
+use project\models\CorporationBd;
+use project\models\CorporationStat;
+use project\models\CorporationMeal;
 //use rky\models\Parameter;
 //use rky\models\User;
 //use rky\models\Industry;

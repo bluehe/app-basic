@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-<?php app\assets\CookieAsset::register($this); ?> 
+<?php project\assets\CookieAsset::register($this); ?> 
 <script>
 <?php $this->beginBlock('sendemail') ?>
     $(document).ready(function () {

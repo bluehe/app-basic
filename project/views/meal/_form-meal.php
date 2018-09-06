@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\Meal;
+use project\models\Meal;
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
@@ -25,7 +25,7 @@ use app\models\Meal;
 
                 <?= $form->field($model, 'region')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'amount')->textInput(['maxlength' => true,'disabled'=> Meal::get_meal_exist($model->id)]) ?>
+                <?= $form->field($model, 'amount')->textInput(['maxlength' => true,'disabled'=> Meal::get_corporationmeal_exist($model->id)]) ?>
 
                 <?= $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::className(),['clientOptions'=>['lang'=>'zh_cn','maxHeight'=>'400px']]) ?>
 

@@ -1,9 +1,8 @@
 <?php
 
-namespace app\models;
+namespace project\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 
 /**

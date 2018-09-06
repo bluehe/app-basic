@@ -1,4 +1,4 @@
-namespace: app\tests
+namespace: project\tests
 actor_suffix: Tester
 paths:
     tests: tests

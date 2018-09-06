@@ -6,7 +6,7 @@
  * Created at: 2016-03-21 19:32
  */
 
-namespace app\grid;
+namespace project\grid;
 
 use Yii;
 use yii\helpers\Html;

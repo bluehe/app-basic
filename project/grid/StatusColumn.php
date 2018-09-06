@@ -6,12 +6,12 @@
  * Created at: 2016-03-21 19:36
  */
 
-namespace app\grid;
+namespace project\grid;
 
 use Closure;
 use Yii;
 use InvalidArgumentException;
-use app\libs\Constants;
+use project\libs\Constants;
 use yii\helpers\Html;
 use yii\helpers\Url;
 

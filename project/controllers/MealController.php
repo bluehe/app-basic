@@ -1,15 +1,15 @@
 <?php
 
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\actions\IndexAction;
 use yii\data\ActiveDataProvider;
-use app\models\Meal;
-use app\actions\CreateAction;
-use app\actions\UpdateAction;
-use app\actions\DeleteAction;
+use project\actions\IndexAction;
+use project\models\Meal;
+use project\actions\CreateAction;
+use project\actions\UpdateAction;
+use project\actions\DeleteAction;
 
 
 class MealController extends Controller { 

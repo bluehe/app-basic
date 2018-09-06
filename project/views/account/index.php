@@ -2,9 +2,9 @@
 
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
-use app\components\CommonHelper;
-use app\models\UserAuth;
-use app\models\System;
+use project\components\CommonHelper;
+use project\models\UserAuth;
+use project\models\System;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php endif; ?>
                         </span></dd>
                     
-                    <dt>电子邮箱</dt><dd><span class="dd-c"><?= $model->email?CommonHelper::hideName($model->email):'<span class="not-set">(未设置)</span>'; ?></span><span class="dd-a">
+                    <dt>电子邮箱</dt><dd><span class="dd-c"><?= $model->email?CommonHelper::hideName($model->email):'<i>未设置邮箱</i>'; ?></span><span class="dd-a">
                         <?php if(UserAuth::isAuth('email')):?>
                             <a class="btn btn-primary btn-xs change-email" href="javascript:void(0);">修改邮箱</a>
                         <?php elseif($model->email):?>
@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </span></dd>
                         
                          <?php if (System::getValue('sms_service')): ?>
-                    <dt>联系电话</dt><dd><span class="dd-c"><?= $model->tel?CommonHelper::hideName($model->tel):'<span class="not-set">(未设置)</span>' ?></span><span class="dd-a">
+                    <dt>联系电话</dt><dd><span class="dd-c"><?= $model->tel?CommonHelper::hideName($model->tel):'<i>未设置手机号</i>' ?></span><span class="dd-a">
                         <?php if(UserAuth::isAuth('tel')):?>
                             <a class="btn btn-primary btn-xs change-tel" href="javascript:void(0);">修改手机号</a>
                         <?php elseif($model->tel):?>
@@ -68,7 +68,7 @@ Modal::begin([
 ]);
 Modal::end();
 ?>
-<?php app\assets\CookieAsset::register($this); ?> 
+<?php project\assets\CookieAsset::register($this); ?> 
 <script>
 <?php $this->beginBlock('user') ?>
     $('.change-nickname').on('click', function () {

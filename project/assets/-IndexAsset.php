@@ -1,6 +1,6 @@
 <?php
 
-namespace app\assets;
+namespace project\assets;
 
 use yii\web\AssetBundle;
 
@@ -16,7 +16,7 @@ class IndexAsset extends AssetBundle {
          'jquery-ui/jquery-ui.min.js',
     ];
     public $depends = [
-        'app\assets\CommonAsset', //依赖关系
+        'project\assets\CommonAsset', //依赖关系
     ];
 
 }

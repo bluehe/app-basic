@@ -1,13 +1,13 @@
 <?php
 
-namespace app\events;
+namespace project\events;
 
 use Yii;
 use yii\base\Event;
 use yii\web\Cookie;
-use app\models\Crontab;
-use app\models\UserLog;
-use app\models\User;
+use project\models\Crontab;
+use project\models\UserLog;
+use project\models\User;
 
 class initSiteConfig extends Event {
 
@@ -85,7 +85,7 @@ class initSiteConfig extends Event {
        
         //登录记录
         $user_ip = Yii::$app->request->userIP;
-        if (!Yii::$app->user->isGuest&&Yii::$app->request->cookies->getValue('login_'.Yii::$app->user->identity->id, false) != $user_ip) {
+        if (!Yii::$app->user->isGuest&&Yii::$app->request->cookies->getValue('login_'.Yii::$app->user->identity->id, false) != $user_ip ) {
             $time = strtotime(date('Y-m-d', time()));
             $exists = UserLog::find()->where(['and', ['>', 'created_at', $time], ['uid' => Yii::$app->user->identity->id, 'ip' => $user_ip]])->exists();
             if (!$exists) {

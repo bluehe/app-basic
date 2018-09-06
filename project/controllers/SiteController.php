@@ -1,20 +1,20 @@
 <?php
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\System;
-use app\models\LoginForm;
-use app\models\SignupForm;
-use app\models\PasswordResetRequestForm;
-use app\models\ResetPasswordForm;
-use app\models\PasswordResetForm;
-use app\models\PasswordFindForm;
-use app\models\UserAuth;
-use app\models\User;
+use project\models\System;
+use project\models\LoginForm;
+use project\models\SignupForm;
+use project\models\PasswordResetRequestForm;
+use project\models\ResetPasswordForm;
+use project\models\PasswordResetForm;
+use project\models\PasswordFindForm;
+use project\models\UserAuth;
+use project\models\User;
 
 /**
  * Site controller

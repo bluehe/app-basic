@@ -4,13 +4,13 @@
  * Created at: 2017-03-15 21:16
  */
 
-namespace app\components;
+namespace project\components;
 
 use Yii;
 use yii\base\Component;
 use common\helpers\FileDependencyHelper;
 use yii\caching\FileDependency;
-use app\models\System;
+use project\models\System;
 
 class SiteConfig extends Component
 {
@@ -36,7 +36,7 @@ class SiteConfig extends Component
             $data = System::find()->asArray()->select(['code','value','store_range'])->indexBy("code")->all();
             $cacheDependencyObject = Yii::createObject([
                 'class' => FileDependencyHelper::className(),
-                'rootDir' => '@app/runtime/cache/file_dependency/',
+                'rootDir' => '@project/runtime/cache/file_dependency/',
                 'fileName' => 'system.txt',
             ]);
             $fileName = $cacheDependencyObject->createFile();

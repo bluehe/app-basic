@@ -1,6 +1,6 @@
 <?php
 
-namespace app\assets;
+namespace project\assets;
 
 use yii\web\AssetBundle;
 
@@ -19,6 +19,6 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-        'app\assets\CommonAsset',
+        'project\assets\CommonAsset',
     ];
 }

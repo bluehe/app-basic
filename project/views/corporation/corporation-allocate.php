@@ -2,11 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\Meal;
+use project\models\Meal;
 use kartik\widgets\DatePicker;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Corporation */
+/* @var $model project\models\Corporation */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

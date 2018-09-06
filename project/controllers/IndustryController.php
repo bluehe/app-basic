@@ -1,15 +1,15 @@
 <?php
 
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\actions\IndexAction;
 use yii\data\ArrayDataProvider;
-use app\models\Industry;
-use app\actions\CreateAction;
-use app\actions\UpdateAction;
-use app\actions\DeleteAction;
+use project\actions\IndexAction;
+use project\models\Industry;
+use project\actions\CreateAction;
+use project\actions\UpdateAction;
+use project\actions\DeleteAction;
 
 
 class IndustryController extends Controller { 

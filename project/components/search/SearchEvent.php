@@ -5,7 +5,7 @@
  * Email: job@feehi.com
  * Created at: 2018-01-22 17:17
  */
-namespace app\components\search;
+namespace project\components\search;
 
 class SearchEvent extends \yii\base\Event
 {

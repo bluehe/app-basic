@@ -7,14 +7,14 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-app',
+    'id' => 'app-project',
     'name' => '管理系统',
     'version' => '1.0 Beta',
     'basePath' => dirname(__DIR__),
     'charset' => 'utf-8',
     'language' => 'zh-CN',
     'timeZone' => 'Asia/Shanghai',
-    'controllerNamespace' => 'app\controllers',
+    'controllerNamespace' => 'project\controllers',
     'bootstrap' => ['log'],
     'modules' => [
         'admin' => [
@@ -38,7 +38,7 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
             //'class' => 'yii\redis\Cache',
-            'keyPrefix' => 'app',
+            'keyPrefix' => 'project',
         ],
         'cdn' => [
             'class' => feehi\cdn\DummyTarget::className(),
@@ -50,29 +50,29 @@ return [
                 'dmstr\web\AdminLteAsset' => [
                     'skin' => 'skin-blue',
                 ],
-                app\assets\AppAsset::className() =>[
-                    'sourcePath' => '@app/web',
+                project\assets\AppAsset::className() =>[
+                    'sourcePath' => '@project/web',
                     'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
                     'css'=>[
                         'a'=>'css/site.css',
                     ]                   
                 ],
-                app\assets\CookieAsset::className() =>[
-                    'sourcePath' => '@app/web',
+                project\assets\CookieAsset::className() =>[
+                    'sourcePath' => '@project/web',
                     'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
                     'js'=>[
                         'a'=>'js/sendcookie.js',
                     ]                   
                 ],
-                app\assets\ParticlesAsset::className() =>[
-                    'sourcePath' => '@app/web',
+                project\assets\ParticlesAsset::className() =>[
+                    'sourcePath' => '@project/web',
                     'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
                     'js'=>[
                         'a'=>'js/jquery.particleground.min.js',
                     ]                   
                 ],
-                app\assets\SupersizedAsset::className() =>[
-                    'sourcePath' => '@app/web',
+                project\assets\SupersizedAsset::className() =>[
+                    'sourcePath' => '@project/web',
                     'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
                     'css'=>[
                         'a'=>'css/supersized.css',
@@ -81,8 +81,8 @@ return [
                         'a'=>'js/supersized.3.2.7.min.js',
                     ]                   
                 ],
-                app\assets\ColorAsset::className() =>[
-                    'sourcePath' => '@app/web',
+                project\assets\ColorAsset::className() =>[
+                    'sourcePath' => '@project/web',
                     'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
                     'css'=>[
                         'a'=>'css/colpick.css',
@@ -91,7 +91,7 @@ return [
                         'a'=>'js/colpick.js',
                     ]                   
                 ],
-                app\assets\CommonAsset::className() =>[
+                project\assets\CommonAsset::className() =>[
                     'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
                     'js'=>[
                         'a'=>'jquery-slimscroll/jquery.slimscroll.min.js',
@@ -106,16 +106,16 @@ return [
             'defaultRoles' => ['guest'],
         ],
         'request' => [
-            'csrfParam' => '_csrf-app',
+            'csrfParam' => '_csrf-project',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'project\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-app', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-project', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the app
-            'name' => 'advanced-app',
+            'name' => 'advanced-project',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -143,7 +143,7 @@ return [
             'currencyCode' => 'CNY',
         ],
         'siteConfig' => [
-            'class' => app\components\SiteConfig::className(),
+            'class' => project\components\SiteConfig::className(),
         ],
     ],
     'as access' => [
@@ -158,7 +158,7 @@ return [
             'gii/*'
         ]
     ],
-    'on beforeRequest' => [app\components\SiteConfig::className(), 'configInit'],
-    'on beforeAction' => ['app\events\initSiteConfig', 'assign'],
+    'on beforeRequest' => [project\components\SiteConfig::className(), 'configInit'],
+    'on beforeAction' => ['project\events\initSiteConfig', 'assign'],
     'params' => $params,
 ];

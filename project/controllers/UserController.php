@@ -1,12 +1,12 @@
 <?php
 
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\models\User;
-use app\models\UserSearch;
-use app\actions\IndexAction;
+use project\models\User;
+use project\models\UserSearch;
+use project\actions\IndexAction;
 use mdm\admin\components\Helper;
 
 class UserController extends Controller { 

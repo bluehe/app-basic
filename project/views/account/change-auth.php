@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-use app\models\ChangeAuth;
+use project\models\ChangeAuth;
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */

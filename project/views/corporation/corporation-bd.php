@@ -1,11 +1,9 @@
 <?php
 
-use app\models\User;
+use project\models\User;
 //use yii\widgets\DetailView;
-//use dms\models\RepairOrder;
 
 /* @var $this yii\web\View */
-/* @var $model dms\models\RepairOrder */
 ?>
 <div class="row bd-list">
     <div class="col-md-12">

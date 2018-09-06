@@ -1,9 +1,9 @@
 <?php
 
-use app\models\Parameter;
-use app\models\Corporation;
-use app\models\CorporationMeal;
-use app\models\User;
+use project\models\Parameter;
+use project\models\Corporation;
+use project\models\CorporationMeal;
+use project\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model rky\models\Corporation */

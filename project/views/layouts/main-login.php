@@ -2,11 +2,11 @@
 //use domain\assets\AppAsset;
 use yii\helpers\Html;
 use common\widgets\Alert;
-use app\models\System;
+use project\models\System;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-app\assets\AppAsset::register($this);
+project\assets\AppAsset::register($this);
  
 
 ?>
@@ -28,7 +28,7 @@ app\assets\AppAsset::register($this);
         <?= $content ?>
 
 <?php if(System::getValue('system_loginimg')):?> 
-<?php app\assets\SupersizedAsset::register($this);?>
+<?php project\assets\SupersizedAsset::register($this);?>
 <script>
 <?php $this->beginBlock('supersized') ?>
 jQuery(function($){
@@ -66,7 +66,7 @@ jQuery(function($){
 <?php $this->registerJs($this->blocks['supersized'], \yii\web\View::POS_END); ?>
 
 <?php else:?> 
-<?php app\assets\ParticlesAsset::register($this);?>
+<?php project\assets\ParticlesAsset::register($this);?>
 <div id="particles" style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;z-index:-1"></div>
 <script>
 <?php $this->beginBlock('particles') ?>

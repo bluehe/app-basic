@@ -1,10 +1,10 @@
 <?php
 
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
-use app\models\System;
-use app\models\Crontab;
+use project\models\System;
+use project\models\Crontab;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 

@@ -1,5 +1,5 @@
 <?php
-namespace app\models;
+namespace project\models;
 
 use Yii;
 use yii\base\Model;
@@ -23,7 +23,7 @@ class PasswordResetRequestForm extends Model
             ['email', 'required', 'message' => 'E-mail不能为空'],
             ['email', 'email', 'message' => 'E-mail格式不正确'],
             ['email', 'exist',
-                'targetClass' => '\app\models\User',
+                'targetClass' => '\project\models\User',
                 'filter' => ['status' => User::STATUS_ACTIVE],
                 'message' => 'E-mail不存在.'
             ],

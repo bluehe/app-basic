@@ -1,14 +1,14 @@
 <?php
 
-namespace app\controllers;
+namespace project\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\actions\IndexAction;
 use yii\data\ActiveDataProvider;
-use app\models\Parameter;
-use app\actions\CreateAction;
-use app\actions\UpdateAction;
+use project\actions\IndexAction;
+use project\models\Parameter;
+use project\actions\CreateAction;
+use project\actions\UpdateAction;
 
 
 class ParameterController extends Controller { 

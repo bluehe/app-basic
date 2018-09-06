@@ -5,7 +5,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use app\models\System;
+use project\models\System;
 use yii\helpers\Url;
 
 $this->title = '重置密码';
@@ -85,7 +85,7 @@ $fieldOptions2 = [
     </div>
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
-<?php app\assets\CookieAsset::register($this); ?> 
+<?php project\assets\CookieAsset::register($this); ?> 
 <script>
 <?php $this->beginBlock('password') ?>
 $(function () {

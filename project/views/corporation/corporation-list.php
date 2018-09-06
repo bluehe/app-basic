@@ -3,14 +3,14 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use app\models\User;
+use project\models\User;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
-use app\models\Corporation;
-use app\models\Parameter;
+use project\models\Corporation;
+use project\models\Parameter;
 use kartik\file\FileInput;
-use app\components\CommonHelper;
-use app\models\Industry;
+use project\components\CommonHelper;
+use project\models\Industry;
 /* @var $this yii\web\View */
 /* @var $searchModel rky\models\CorporationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */

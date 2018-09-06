@@ -1,10 +1,10 @@
 <?php
-namespace app\models;
+namespace project\models;
 
 use Yii;
 use yii\base\Model;
 use yii\base\InvalidParamException;
-use app\components\CommonHelper;
+use project\components\CommonHelper;
 
 /**
  * Password reset form

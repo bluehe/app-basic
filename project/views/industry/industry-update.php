@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\Industry;
+use project\models\Industry;
 
 /* @var $this yii\web\View */
 /* @var $model dms\models\RepairOrder */

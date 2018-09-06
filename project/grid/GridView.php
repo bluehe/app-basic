@@ -6,7 +6,7 @@
  * Created at: 2016-03-21 18:45
  */
 
-namespace app\grid;
+namespace project\grid;
 
 use yii;
 use yii\helpers\ArrayHelper;
@@ -20,8 +20,8 @@ use yii\widgets\BaseListView;
  */
 class GridView extends \yii\grid\GridView
 {
-    /* @var $dataColumnClass \app\grid\DataColumn */
-    public $dataColumnClass = 'app\grid\DataColumn';
+    /* @var $dataColumnClass \project\grid\DataColumn */
+    public $dataColumnClass = 'project\grid\DataColumn';
 
     public $options = ['class' => 'fixed-table-header', 'style' => 'margin-right: 0px;'];
 

@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\User;
-//use app\models\Group;
+use project\models\User;
+//use project\models\Group;
 
 /* @var $this yii\web\View */
 /* @var $model dh\models\Users */
@@ -58,7 +58,7 @@ use app\models\User;
         </div>
     </div>
 </div>
-<?php app\assets\ColorAsset::register($this);?>
+<?php project\assets\ColorAsset::register($this);?>
 <script>
 <?php $this->beginBlock('user') ?>
     var color= $('#user-user_color').val();

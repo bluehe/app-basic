@@ -1,7 +1,7 @@
 <?php
 
 //use dmstr\widgets\Menu;
-use app\components\Menu;
+use project\components\Menu;
 use mdm\admin\components\MenuHelper;
 
 $callback = function($menu) {

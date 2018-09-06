@@ -1,13 +1,10 @@
 <?php
 
-use app\models\User;
-use app\models\Corporation;
-use app\models\CorporationMeal;
-//use yii\widgets\DetailView;
-//use dms\models\RepairOrder;
+use project\models\User;
+use project\models\Corporation;
+use project\models\CorporationMeal;
 
 /* @var $this yii\web\View */
-/* @var $model dms\models\RepairOrder */
 ?>
 <div class="row stat-list">
     <div class="col-md-12">

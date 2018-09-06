@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\models\Meal;
-use app\grid\StatusColumn;
+use project\models\Meal;
+use project\grid\StatusColumn;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */

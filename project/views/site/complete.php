@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
-use app\models\System;
+use project\models\System;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 
