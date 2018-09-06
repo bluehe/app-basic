@@ -11,6 +11,7 @@ use project\models\Parameter;
 use kartik\file\FileInput;
 use project\components\CommonHelper;
 use project\models\Industry;
+use project\models\CorporationMeal;
 /* @var $this yii\web\View */
 /* @var $searchModel rky\models\CorporationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -172,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-warning btn-xs corporation-update',]):'';
                             },
                             'delete' => function($url, $model, $key) {
-                                return Yii::$app->user->can('企业删除',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_CREATED, Corporation::STAT_FOLLOW])?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？','data-method' => 'post',]):'';
+                                return Yii::$app->user->can('企业删除',['id'=>$key])&&!CorporationMeal::get_allocate($model->id)?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？','data-method' => 'post',]):'';
                             },                           
                         ],
                     ],

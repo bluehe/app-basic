@@ -44,6 +44,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
             [['amount'], 'number'],
             [['amount'],'requiredBySetid','skipOnEmpty' => false],
             [['huawei_account'], 'string', 'max' => 32],
+            [['huawei_account'], 'unique','filter'=>['not',['corporation_id'=>$this->corporation_id]], 'message' => '{attribute}已存在'],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
             [['meal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Meal::className(), 'targetAttribute' => ['meal_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
