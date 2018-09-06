@@ -33,7 +33,7 @@ class ChangeAuth extends Model
             ['tel', 'match', 'pattern'=>'/^1[34578]{1}\d{9}$/','message' => '{attribute}格式不正确'],
             ['email', 'required', 'when' => function($model){return $model->type==self::TYPE_EMAIL;}, 'whenClient' => "function (attribute, value) {return $('#changeauth-type').val() == '".self::TYPE_EMAIL."';}"],
             ['tel', 'required', 'when' => function($model){return $model->type==self::TYPE_TEL;}, 'whenClient' => "function (attribute, value) {return $('#changeauth-type').val() == '".self::TYPE_TEL."';}"],
-            [['email', 'tel'], 'unique', 'targetClass' => User::className(),'filter'=>['not','uid'=>Yii::$app->user->identity->id], 'message' => '{attribute}已存在'],
+            [['email', 'tel'], 'unique', 'targetClass' => User::className(),'filter'=>['not',['id'=>Yii::$app->user->identity->id]], 'message' => '{attribute}已存在'],
             ['type', 'in', 'range' => [self::TYPE_EMAIL, self::TYPE_TEL]],
             // verifyCode needs to be entered correctly
             ['verifyCode', 'captchaCompare'],
