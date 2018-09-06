@@ -22,11 +22,7 @@ use kartik\widgets\DatePicker;
                         'labelOptions' => ['class' => 'col-md-3 control-label'],
                         ],
             ]); ?>
-
-        
-
-        
-        
+       
         <?= $form->field($model, 'huawei_account')->textInput(['maxlength' => true]) ?>
         
         <?= $form->field($model, 'meal_id')->dropDownList(Meal::get_meal(), ['prompt' => '其他']) ?>

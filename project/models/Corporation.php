@@ -86,7 +86,7 @@ class Corporation extends \yii\db\ActiveRecord
             [['base_company_name','huawei_account'], 'unique', 'message' => '{attribute}已经存在'],
             [['base_company_name','stat'], 'required'],
             [['base_industry'], 'required','on'=>'industry'],
-            [['intent_set','intent_number'],'requiredByStat_r','skipOnEmpty' => false],
+            [['huawei_account','intent_set','intent_number'],'requiredByStat_r','skipOnEmpty' => false],
             [['huawei_account'],'requiredByStat_a','skipOnEmpty' => false],
             [['base_bd'],'requiredByStat_b','skipOnEmpty' => false],
             [['base_registered_time'], 'safe'],

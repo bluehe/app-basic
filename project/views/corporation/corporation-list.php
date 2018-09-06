@@ -132,7 +132,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     case Corporation::STAT_ALLOCATE:$color='text-maroon';break;
                                     case Corporation::STAT_AGAIN:$color='text-purple';break;
                                     default: $color='';
-
                                 }
                                 return Html::tag('span', $model->Stat,['data-toggle'=>'modal','data-target'=>'#list-modal', 'class' =>'stat-list '.$color]);
                             },
@@ -145,22 +144,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{follow} {apply} {check} {allocate} {again} {refuse}',
                         'buttons' => [                                                     
                             'follow' => function($url, $model, $key) {
-                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_CREATED,Corporation::STAT_REFUSE])?Html::a('<i class="fa fa-hourglass-2"></i> 跟进中', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_FOLLOW], ['class' => 'btn bg-aqua btn-xs','data-method' => 'post',]):'';
+                                return in_array($model->stat,[Corporation::STAT_CREATED,Corporation::STAT_REFUSE])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-hourglass-2"></i> 跟进中', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_FOLLOW], ['class' => 'btn bg-aqua btn-xs','data-method' => 'post',]):'';
                             }, 
                             'refuse' => function($url, $model, $key) {
-                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_FOLLOW,Corporation::STAT_OVERDUE])?Html::a('<i class="fa fa-times"></i> 无意愿', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_REFUSE], ['class' => 'btn bg-gray btn-xs','data-method' => 'post',]):'';
+                                return in_array($model->stat,[Corporation::STAT_FOLLOW,Corporation::STAT_OVERDUE])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-times"></i> 无意愿', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_REFUSE], ['class' => 'btn bg-gray btn-xs','data-method' => 'post',]):'';
                             },
                             'apply' => function($url, $model, $key) {
-                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_FOLLOW])?Html::a('<i class="fa fa-check"></i> 已申请', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-light-blue btn-xs corporation-apply',]):'';
+                                return in_array($model->stat,[Corporation::STAT_FOLLOW])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-check"></i> 已申请', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-light-blue btn-xs corporation-apply',]):'';
                             },
                             'check' => function($url, $model, $key) {
-                                return Yii::$app->user->can('企业删除',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_APPLY])?Html::a('<i class="fa fa-check-square-o"></i> 已审核', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_CHECK], ['class' => 'btn bg-yellow btn-xs','data-method' => 'post','data-confirm' =>'确定完成审核？',]):'';
+                                return in_array($model->stat,[Corporation::STAT_APPLY])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-check-square-o"></i> 已审核', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_CHECK], ['class' => 'btn bg-yellow btn-xs','data-method' => 'post','data-confirm' =>'确定完成审核？',]):'';
                             },
                             'allocate'=>function($url, $model, $key) {
-                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_CHECK])?Html::a('<i class="fa fa-trophy"></i> 已下拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-maroon btn-xs corporation-allocate',]):'';
+                                return in_array($model->stat,[Corporation::STAT_CHECK])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-trophy"></i> 已下拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-maroon btn-xs corporation-allocate',]):'';
                             },
                             'again'=>function($url, $model, $key) {
-                                return Yii::$app->user->can('企业修改',['id'=>$key])&&in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_OVERDUE,Corporation::STAT_AGAIN])?Html::a('<i class="fa fa-refresh"></i> 已续拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-purple btn-xs corporation-again',]):'';
+                                return in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_OVERDUE,Corporation::STAT_AGAIN])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-refresh"></i> 已续拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-purple btn-xs corporation-again',]):'';
                             },
                             
                         ],
@@ -173,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-warning btn-xs corporation-update',]):'';
                             },
                             'delete' => function($url, $model, $key) {
-                                return Yii::$app->user->can('企业删除',['id'=>$key])&&!CorporationMeal::get_allocate($model->id)?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？','data-method' => 'post',]):'';
+                                return !CorporationMeal::get_allocate($model->id)&&Yii::$app->user->can('企业删除',['id'=>$key])?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？','data-method' => 'post',]):'';
                             },                           
                         ],
                     ],

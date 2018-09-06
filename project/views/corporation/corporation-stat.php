@@ -42,6 +42,7 @@ use project\models\CorporationMeal;
                         ?>
                     <div class="timeline-body">
                         <dl class="dl-horizontal">
+                            <dt><?= $stat->corporation->getAttributeLabel('huawei_account') ?></dt><dd><?= $stat->corporation->huawei_account ?></dd>
                             <dt><?= $stat->corporation->getAttributeLabel('intent_set') ?></dt><dd><?= $stat->corporation->intentSet->name ?></dd>
                             <dt><?= $stat->corporation->getAttributeLabel('intent_number') ?></dt><dd><?= $stat->corporation->intent_number ?></dd>
                             <dt><?= $stat->corporation->getAttributeLabel('intent_amount') ?></dt><dd><?= $stat->corporation->intent_amount ?></dd>

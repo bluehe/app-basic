@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => '企业管理', 'url' => ['corporat
 
     <?= $this->render('_form-corporation', [
     'model' => $model,
+        'allocate'=>$allocate,
     ]) ?>
 
 </div>

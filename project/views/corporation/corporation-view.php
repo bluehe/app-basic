@@ -14,7 +14,10 @@ use project\models\User;
     <div class="col-md-12">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#base" data-toggle="tab">基础信息</a></li>
-            <?php if(in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN])&&CorporationMeal::get_allocate($model->id)):?>
+            <?php if(in_array($model->stat,[Corporation::STAT_APPLY,Corporation::STAT_CHECK])): ?>
+            <li><a href="#apply" data-toggle="tab">申请信息</a></li>
+            <?php endif;?>
+            <?php if(in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN,Corporation::STAT_OVERDUE])&&CorporationMeal::get_allocate($model->id)):?>
             <li><a href="#allocate" data-toggle="tab">下拨信息</a></li>
             <?php endif;?>
             <li><a href="#contact" data-toggle="tab">联系信息</a></li>
@@ -35,14 +38,20 @@ use project\models\User;
                     <dt><?= $model->getAttributeLabel('base_last_income') ?></dt><dd><?= $model->base_last_income>0?floatval($model->base_last_income):'' ?></dd>
                     
                     <dt><?= $model->getAttributeLabel('stat') ?></dt><dd><?= $model->Stat ?></dd>
-                    <?php if(in_array($model->stat,[Corporation::STAT_APPLY,Corporation::STAT_CHECK])): ?>
+                    </dl>
+                </div>
+                <?php if(in_array($model->stat,[Corporation::STAT_APPLY,Corporation::STAT_CHECK])): ?>
+                <div class="tab-pane" id="apply">
+                <dl class="dl-horizontal">
+                    <dt><?= $model->getAttributeLabel('huawei_account') ?></dt><dd><?= $model->huawei_account ?></dd>
                     <dt><?= $model->getAttributeLabel('intent_set') ?></dt><dd><?= $model->intentSet->name ?></dd>
                     <dt><?= $model->getAttributeLabel('intent_number') ?></dt><dd><?= $model->intent_number ?></dd>
                     <dt><?= $model->getAttributeLabel('intent_amount') ?></dt><dd><?= $model->intent_amount ?></dd>         
-                    <?php endif;?>
+                   
                 </dl>
                 </div>
-                <?php if(in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN])&&$allocate=CorporationMeal::get_allocate($model->id)):?>
+                 <?php endif;?>
+                <?php if(in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN,Corporation::STAT_OVERDUE])&&$allocate=CorporationMeal::get_allocate($model->id)):?>
                 <div class="tab-pane" id="allocate">
                 <dl class="dl-horizontal">
                     <dt><?= $allocate->getAttributeLabel('huawei_account') ?></dt><dd><?= $allocate->huawei_account ?></dd>

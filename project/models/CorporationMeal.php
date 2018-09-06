@@ -130,7 +130,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
         if($time){
             $model->andWhere(['between','created_at',$time-2,$time+2]);
         }else{
-            $model->orderBy(['created_at'=>SORT_DESC]);
+            $model->orderBy(['end_time'=>SORT_DESC]);
         }
         return  $model->one();  
     }

@@ -116,6 +116,7 @@ class CorporationController extends Controller
             $model->base_bd=Yii::$app->user->identity->id;
             return $this->renderAjax('corporation-create', [
                         'model' => $model,
+                'allocate'=>null,
         ]);
             
         }
@@ -127,11 +128,16 @@ class CorporationController extends Controller
         //$model->scenario='industry';
         if($model !== null&&Yii::$app->user->can('企业修改',['id'=>$id])){
             $model->base_industry =$old_industry= CorporationIndustry::get_corporation_industryid($model->id);
-            if ($model->load(Yii::$app->request->post())) {
+            $allocate =in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])?CorporationMeal::get_allocate($model->id):null;
+            if($allocate){
+                $allocate->start_time=$allocate->start_time>0?date('Y-m-d',$allocate->start_time):'';
+            }
+           
+            if ($model->load(Yii::$app->request->post())&&$allocate->load(Yii::$app->request->post())) {
             
                 if (Yii::$app->request->isAjax) {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                    return \yii\bootstrap\ActiveForm::validate($model);
+                    return \yii\bootstrap\ActiveForm::validate($model)&&\yii\bootstrap\ActiveForm::validate($allocate);
                 }
             
                 $rw = Yii::$app->request->post('Corporation');
@@ -179,6 +185,7 @@ class CorporationController extends Controller
             }
             return $this->renderAjax('corporation-update', [
                     'model' => $model,
+                    'allocate'=>$allocate,
             ]);
         
         }else{
