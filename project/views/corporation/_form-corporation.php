@@ -37,87 +37,87 @@ use project\models\Meal;
                  </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="base">
-            <?= $form->field($model, 'base_company_name')->textInput(['maxlength' => true]) ?>
-                
-            <?= $form->field($model, 'base_bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE), ['prompt' => '']) ?>
-                
-            <?= $form->field($model, 'base_industry')->widget(Select2::classname(), ['data' => Industry::get_industry_id(),'options' => ['prompt' => '','multiple'=>false],'showToggleAll'=>false]); ?>
+                <?= $form->field($model, 'base_company_name')->textInput(['maxlength' => true]) ?>
 
-            <?= $form->field($model, 'base_company_scale')->textInput() ?>
+                <?= $form->field($model, 'base_bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE), ['prompt' => '']) ?>
 
-            <?= $form->field($model, 'base_registered_capital')->textInput(['maxlength' => true]) ?>
-                
-            <?= $form->field($model, 'base_registered_time')->widget(DatePicker::classname(), [
-            'options' => ['placeholder' => '','autocomplete'=>'off'],
-            'removeButton' => false,
-            'pluginOptions' => [
-                'autoclose' => true,
-                'todayHighlight' => true,
-                'format' => 'yyyy-mm-dd'
-             ]
-            ]) ?>
-              
-            <?= $form->field($model, 'base_main_business')->textarea(['rows' => 3]) ?>
+                <?= $form->field($model, 'base_industry')->widget(Select2::classname(), ['data' => Industry::get_industry_id(),'options' => ['prompt' => '','multiple'=>false],'showToggleAll'=>false]); ?>
 
-            <?= $form->field($model, 'base_last_income')->textInput(['maxlength' => true]) ?>
-                              
-            <?= $form->field($model, 'stat')->dropDownList(Corporation::get_stat_list($model->stat), ['prompt' => '','disabled'=>true]) ?>
+                <?= $form->field($model, 'base_company_scale')->textInput() ?>
 
-            <div class="stat_c stat_intent"> 
-            <?= $form->field($model, 'huawei_account')->textInput(['maxlength' => true]) ?>
-                
-            <?= $form->field($model, 'intent_set')->dropDownList(Meal::get_meal(), ['prompt' => '']) ?>
-            
-            <?= $form->field($model, 'intent_number')->textInput() ?>
-            </div>
-            
-            <?php if($allocate){?>
-            <?= $form->field($allocate, 'huawei_account')->textInput(['maxlength' => true]) ?>
-        
-            <?= $form->field($allocate, 'meal_id')->dropDownList(Meal::get_meal(), ['prompt' => '其他']) ?>
+                <?= $form->field($model, 'base_registered_capital')->textInput(['maxlength' => true]) ?>
 
-            <?= $form->field($allocate, 'number')->textInput() ?>
-
-            <?= $form->field($allocate, 'amount')->textInput(['maxlength' => true]) ?>
-
-            <?= $form->field($allocate, 'start_time')->widget(DatePicker::classname(), [
+                <?= $form->field($model, 'base_registered_time')->widget(DatePicker::classname(), [
                 'options' => ['placeholder' => '','autocomplete'=>'off'],
                 'removeButton' => false,
                 'pluginOptions' => [
                     'autoclose' => true,
                     'todayHighlight' => true,
                     'format' => 'yyyy-mm-dd'
-                ]
-                ]) ?>  
-            <script>
-            <?php $this->beginBlock('form-allocate') ?>
+                 ]
+                ]) ?>
+              
+                <?= $form->field($model, 'base_main_business')->textarea(['rows' => 3]) ?>
 
-                function change_allocate_set(){
-                    var v=$('#corporationmeal-meal_id').val();
-                    if(v){
-                        $('.field-corporationmeal-amount').hide();
-                        $('.field-corporationmeal-number').show();
-                    }else{
-                        $('.field-corporationmeal-amount').show();
-                        $('.field-corporationmeal-number').hide();
+                <?= $form->field($model, 'base_last_income')->textInput(['maxlength' => true]) ?>
+
+                <?= $form->field($model, 'stat')->dropDownList(Corporation::get_stat_list($model->stat), ['prompt' => '','disabled'=>true]) ?>
+
+                <div class="stat_c stat_intent"> 
+                <?= $form->field($model, 'huawei_account')->textInput(['maxlength' => true]) ?>
+
+                <?= $form->field($model, 'intent_set')->dropDownList(Meal::get_meal(), ['prompt' => '']) ?>
+
+                <?= $form->field($model, 'intent_number')->textInput() ?>
+                </div>
+
+                <?php if($allocate){?>
+                <?= $form->field($allocate, 'huawei_account')->textInput(['maxlength' => true]) ?>
+                    
+                <?= $form->field($allocate, 'bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE), ['prompt' => '']) ?>
+
+                <?= $form->field($allocate, 'meal_id')->dropDownList(Meal::get_meal(), ['prompt' => '其他']) ?>
+
+                <?= $form->field($allocate, 'number')->textInput() ?>
+
+                <?= $form->field($allocate, 'amount')->textInput(['maxlength' => true]) ?>
+
+                <?= $form->field($allocate, 'start_time')->widget(DatePicker::classname(), [
+                    'options' => ['placeholder' => '','autocomplete'=>'off'],
+                    'removeButton' => false,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'todayHighlight' => true,
+                        'format' => 'yyyy-mm-dd'
+                    ]
+                    ]) ?>  
+                <script>
+                <?php $this->beginBlock('form-allocate') ?>
+
+                    function change_allocate_set(){
+                        var v=$('#corporationmeal-meal_id').val();
+                        if(v){
+                            $('.field-corporationmeal-amount').hide();
+                            $('.field-corporationmeal-number').show();
+                        }else{
+                            $('.field-corporationmeal-amount').show();
+                            $('.field-corporationmeal-number').hide();
+                        }
                     }
-                }
 
-                $(function () {
-                    change_allocate_set();
-
-                    $('#corporationmeal-meal_id').change(function(){
+                    $(function () {
                         change_allocate_set();
-                    });
 
-                });
-            <?php $this->endBlock() ?>
-            </script>
-            <?php $this->registerJs($this->blocks['form-allocate'], \yii\web\View::POS_END); ?>
-            <?php }?>
-            <div class="stat_c stat_allocate">
-            
-            </div>
+                        $('#corporationmeal-meal_id').change(function(){
+                            change_allocate_set();
+                        });
+
+                    });
+                <?php $this->endBlock() ?>
+                </script>
+                <?php $this->registerJs($this->blocks['form-allocate'], \yii\web\View::POS_END); ?>
+                <?php }?>
+  
             
             </div>
             <div class="tab-pane" id="contact">

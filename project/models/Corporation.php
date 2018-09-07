@@ -89,7 +89,7 @@ class Corporation extends \yii\db\ActiveRecord
             [['huawei_account','intent_set','intent_number'],'requiredByStat_r','skipOnEmpty' => false],
             [['huawei_account'],'requiredByStat_a','skipOnEmpty' => false],
             [['base_bd'],'requiredByStat_b','skipOnEmpty' => false],
-            [['base_registered_time'], 'safe'],
+            [['base_registered_time','base_industry'], 'safe'],
             [['base_bd','base_company_scale', 'stat', 'intent_set','intent_number', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
             [['base_registered_capital', 'base_last_income','intent_amount'], 'number'],
             [['base_main_business', 'note', 'develop_current_situation', 'develop_weakness'], 'string'],

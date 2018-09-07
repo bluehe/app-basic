@@ -39,10 +39,11 @@ class CorporationMeal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corporation_id', 'start_time', 'number','huawei_account'], 'required'],
+            [['corporation_id', 'start_time','huawei_account'], 'required'],
             [['corporation_id', 'meal_id', 'number', 'bd', 'user_id', 'created_at'], 'integer'],
             [['amount'], 'number'],
-            [['amount'],'requiredBySetid','skipOnEmpty' => false],
+            [['amount'],'requiredByNoSetid','skipOnEmpty' => false],
+            [['number'],'requiredBySetid','skipOnEmpty' => false],
             [['huawei_account'], 'string', 'max' => 32],
             [['huawei_account'], 'unique','filter'=>['not',['corporation_id'=>$this->corporation_id]], 'message' => '{attribute}已存在'],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
@@ -57,8 +58,12 @@ class CorporationMeal extends \yii\db\ActiveRecord
         // 注意，重载之后要调用父类同名函数
         if (parent::beforeSave($insert)) {           
             //下拨金额
-            if($this->meal_id&&$this->number){
-                 $this->amount = $this->number*Meal::get_meal_amount($this->meal_id);
+            if($this->meal_id){
+                if($this->number){
+                    $this->amount = $this->number*Meal::get_meal_amount($this->meal_id);
+                }
+            }else{
+                $this->number=1;
             }
             return true;
         } else {
@@ -66,10 +71,17 @@ class CorporationMeal extends \yii\db\ActiveRecord
         }
     }
     
-    public function requiredBySetid($attribute, $params)
+    public function requiredByNoSetid($attribute, $params)
     {
         if (!$this->meal_id&&!$this->$attribute){
                 $this->addError($attribute,'金额不能为空。');            
+        }        
+    }
+    
+    public function requiredBySetid($attribute, $params)
+    {
+        if ($this->meal_id&&!$this->$attribute){
+                $this->addError($attribute,'数量不能为空。');            
         }        
     }
 

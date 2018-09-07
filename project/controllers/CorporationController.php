@@ -133,13 +133,25 @@ class CorporationController extends Controller
                 $allocate->start_time=$allocate->start_time>0?date('Y-m-d',$allocate->start_time):'';
             }
            
-            if ($model->load(Yii::$app->request->post())&&$allocate->load(Yii::$app->request->post())) {
-            
+            if ($model->load(Yii::$app->request->post())) {
+                
+                if($allocate){
+                    $allocate->load(Yii::$app->request->post());
+                }
                 if (Yii::$app->request->isAjax) {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                    return \yii\bootstrap\ActiveForm::validate($model)&&\yii\bootstrap\ActiveForm::validate($allocate);
+                    if($allocate){         
+                        $re = \yii\widgets\ActiveForm::validate($allocate);
+                        if($re){
+                            return $re;
+                        }
+                    }                     
+                    
+                    return \yii\widgets\ActiveForm::validate($model);
+                    
                 }
             
+                
                 $rw = Yii::$app->request->post('Corporation');
                 $industrys = $rw['base_industry']&&!is_array($rw['base_industry']) ? explode(',',$rw['base_industry']) : array();
                 $model->develop_language = $rw['develop_language'] ? implode(',',$rw['develop_language']) : '';
@@ -147,6 +159,12 @@ class CorporationController extends Controller
             
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
+                    if($allocate){
+                        $allocate->start_time=strtotime($allocate->start_time);
+                        $allocate->end_time = strtotime('+1 year', $allocate->start_time)-1;                       
+                        $allocate->user_id = Yii::$app->user->identity->id;
+                        $allocate->save(false);
+                    }
                     $model->base_registered_time= strtotime($model->base_registered_time);
                     //$model->allocate_time= $model->stat== Corporation::STAT_ALLOCATE?strtotime($model->allocate_time):null;               
                     $model->save(false);
