@@ -60,6 +60,10 @@ class ColumnSetting extends \yii\db\ActiveRecord
     
     //得到ID-name 键值数组
     public static function get_column($user,$type) {
+        return static::find()->where(['uid'=>$user,'type'=>$type])->one();
+
+    }   
+    public static function get_column_content($user,$type) {
         $data=null;
         $column = self::find()->where(['uid'=>$user,'type'=>$type])->one();
         if($column!==null){
@@ -67,4 +71,5 @@ class ColumnSetting extends \yii\db\ActiveRecord
         }
         return $data;
     }
+    
 }

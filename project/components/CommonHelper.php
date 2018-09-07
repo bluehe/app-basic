@@ -104,5 +104,20 @@ class CommonHelper {
         }
         return $displayMaxSize;
     }
+    
+    public static function searchNumber($query,$attribute,$value) {
+       
+        if(preg_match('/[~|-]{1}/',$value)){
+            $v= explode('~', $value);
+            if(count($v)<2){
+                $v= explode('-', $value);
+            }
+            $query->andFilterWhere(['between',$attribute,$v[0],$v[1]]);
+            
+        }else{
+            $query->andFilterCompare($attribute, $value);
+        }
+        return $query;
+    }
 
 }

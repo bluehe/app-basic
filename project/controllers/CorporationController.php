@@ -15,6 +15,7 @@ use project\actions\ViewAction;
 use project\models\CorporationBd;
 use project\models\CorporationStat;
 use project\models\CorporationMeal;
+use project\models\ColumnSetting;
 //use rky\models\Parameter;
 //use rky\models\User;
 //use rky\models\Industry;
@@ -48,9 +49,11 @@ class CorporationController extends Controller
                 'data' => function(){
                     $searchModel = new CorporationSearch();
                     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                    $column= ColumnSetting::get_column_content(Yii::$app->user->identity->id,'corporation');
                     return [
                         'dataProvider' => $dataProvider,
                         'searchModel' => $searchModel,
+                        'column'=>$column,
                     ];
                 }
             ],
@@ -340,6 +343,37 @@ class CorporationController extends Controller
 
         return $this->redirect(Yii::$app->getRequest()->headers['referer']); 
         
+    }
+    
+    public function actionCorporationColumn() {
+
+        $model=ColumnSetting::get_column(Yii::$app->user->identity->id,'corporation');
+        if($model==null){
+            $model=new ColumnSetting();
+            $model->uid=Yii::$app->user->identity->id;
+            $model->type='corporation';
+            
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $column = Yii::$app->request->post('ColumnSetting');
+            $model->content= json_encode($column['content']);
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', '操作成功。');
+            } else {
+                Yii::$app->session->setFlash('error', '操作失败。');
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+          
+            $model->content= json_decode($model->content);
+                
+            return $this->renderAjax('corporation-column', [
+                'model' => $model,
+            ]);
+      
+        }
     }
     
 //    public function actionCorporationImport1() {
