@@ -247,6 +247,10 @@ class CorporationController extends Controller
     public function actionCorporationAllocate($id) {
         $corporation = Corporation::findOne($id);
         if($corporation !== null&&in_array($corporation->stat,[Corporation::STAT_CHECK,Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN,Corporation::STAT_OVERDUE])&&Yii::$app->user->can('企业修改',['id'=>$id])){
+            $stat =0;
+            if($corporation->stat==Corporation::STAT_AGAIN){
+                $stat=1;
+            }
             $corporation->stat= $corporation->stat==Corporation::STAT_CHECK?Corporation::STAT_ALLOCATE:Corporation::STAT_AGAIN;
             $model = new CorporationMeal();
             $model->loadDefaultValues();
@@ -270,6 +274,17 @@ class CorporationController extends Controller
                 
                 $corporation->huawei_account=$model->huawei_account;
                 
+      
+                if($stat){
+                    //续拨继续下拨需要手动添加状态
+                    $statModel=new CorporationStat();
+                    $statModel->corporation_id=$corporation->id;
+                    $statModel->stat=$corporation->stat;
+                    $statModel->user_id=Yii::$app->user->identity->id;
+                    $statModel->created_at=$model->created_at;
+                    $statModel->save();         
+                }
+                
                 if($model->save()&&$corporation->save()){
                     Yii::$app->session->setFlash('success', '下拨成功。');
                 }else{
@@ -286,26 +301,7 @@ class CorporationController extends Controller
             return $this->redirect(Yii::$app->request->referrer);
         }
     }
-    
-//    public function actionCorporationDelete($id) {
-//        $model = Corporation::findOne($id);
-//        if ($model !== null&&Yii::$app->user->can('公司删除',['id'=>$id])) {
-//            $model->delete();           
-//        }
-//
-//        return $this->redirect(Yii::$app->request->referrer);
-//    }
-    
-//    public function actionCorporationCheck($id) {
-//        $model = Corporation::findOne($id);
-//        if ($model !== null&&$model->stat== Corporation::STAT_APPLY&&Yii::$app->user->identity->role=='pm') {           
-//            $model->stat = Corporation::STAT_CHECK;
-//            $model->save(false);             
-//        }
-//
-//        return $this->redirect(Yii::$app->request->referrer);
-//    }
-//    
+       
     public function actionCorporationBd($id) {
 
         $model = CorporationBd::find()->where(['corporation_id'=>$id])->orderBy(['start_time'=>SORT_ASC])->all();

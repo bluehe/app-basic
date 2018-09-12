@@ -54,7 +54,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
         ];
     }
     
-     public function beforeSave($insert) {
+    public function beforeSave($insert) {
         // 注意，重载之后要调用父类同名函数
         if (parent::beforeSave($insert)) {           
             //下拨金额
@@ -69,6 +69,24 @@ class CorporationMeal extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+    
+    public function beforeDelete() {
+        
+        if(self::get_end_time($this->corporation_id)==$this->end_time){
+            $stat = CorporationStat::find()->where(['corporation_id'=>$this->corporation_id])->andWhere(['<','created_at',$this->created_at])->orderBy(['id'=>SORT_DESC])->one();
+            if($stat){
+                $corporation=Corporation::findOne($this->corporation_id);
+                $corporation->stat=$stat->stat;
+                $corporation->save();
+                CorporationStat::deleteAll(['AND',['corporation_id'=>$this->corporation_id],['>','id',$stat->id]]);
+            }
+            return true;
+            
+        }else{
+            return false;
+        }
+       
     }
     
     public function requiredByNoSetid($attribute, $params)
@@ -94,7 +112,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
             'id' => 'ID',
             'corporation_id' => '企业',
             'meal_id' => '下拨套餐',
-            'start_time' => '下拨时间',
+            'start_time' => '下拨日期',
             'end_time' => '到期时间',
             'number' => '下拨数量',
             'amount' => '下拨金额',
@@ -140,10 +158,26 @@ class CorporationMeal extends \yii\db\ActiveRecord
     public static function get_allocate($corporation_id,$time=null) {
         $model= static::find()->where(['corporation_id'=>$corporation_id]);
         if($time){
-            $model->andWhere(['between','created_at',$time-2,$time+2]);
+            $model->andWhere(['created_at'=>$time]);
         }else{
             $model->orderBy(['end_time'=>SORT_DESC]);
         }
         return  $model->one();  
     }
+    
+    public static function get_end_date($corporation_id,$id=null) {
+        $time= static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['not',['id'=>$id]])->select(['end_time'])->orderBy(['end_time'=>SORT_DESC])->scalar();
+        return $time>0?date('Y-m-d',$time+1):null;       
+    }
+    
+    public static function get_end_time($corporation_id,$id=null) {
+        $time= static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['not',['id'=>$id]])->select(['end_time'])->orderBy(['end_time'=>SORT_DESC])->scalar();
+        return $time>0?$time:null;       
+    }
+    
+    public static function get_created_time($corporation_id,$id=null) {
+        $time= static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['not',['id'=>$id]])->select(['created_at'])->orderBy(['id'=>SORT_DESC])->scalar();
+        return $time>0?$time:null;       
+    }
+    
 }

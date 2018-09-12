@@ -92,10 +92,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'base_bd',
                             'value' =>
                             function($model) {
-                                return '<span class="bd-list" data-toggle="modal" data-target="#list-modal">'.($model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'<span class="not-set">(未设置)</span>').'</span>';   //主要通过此种方式实现
+                                return '<span class="bd-list" data-toggle="modal" data-target="#list-modal">'.($model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'<span class="not-set">(未设置)</span>').'</span>';
                             },
                             'format'=>'raw',
-                            'filter' => User::get_bd(null, Corporation::get_existbd()), //此处我们可以将筛选项组合成key-value形式
+                            'filter' => User::get_bd(null, Corporation::get_existbd()), 
                     ],
                     ['attribute' =>'huawei_account','visible'=> is_array($column)&&in_array('huawei_account',$column),],  
                     [

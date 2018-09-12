@@ -44,7 +44,7 @@ class CorporationSearch extends Corporation
      */
     public function search($params,$pageSize = '')
     {
-        $query = Corporation::find();
+        $query = Corporation::find()->joinWith(['baseBd']);
 
         // add conditions that should always apply here
 

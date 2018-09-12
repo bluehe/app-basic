@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use project\models\Meal;
 use kartik\widgets\DatePicker;
+use project\models\CorporationMeal;
 
 /* @var $this yii\web\View */
 /* @var $model project\models\Corporation */
@@ -37,7 +38,8 @@ use kartik\widgets\DatePicker;
             'pluginOptions' => [
                 'autoclose' => true,
                 'todayHighlight' => true,
-                'format' => 'yyyy-mm-dd'
+                'format' => 'yyyy-mm-dd',
+                'startDate'=> CorporationMeal::get_end_date($model->corporation_id)
             ]
             ]) ?>
                      

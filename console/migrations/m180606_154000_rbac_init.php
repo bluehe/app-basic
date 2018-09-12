@@ -163,6 +163,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/corporation/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/corporation/corporation-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            ['/allocate/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/allocate/allocate-list', '2', null, null, null, '1482820123', '1482820123'],
+            
           
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
@@ -186,6 +189,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['企业管理', '2', '企业管理', null, null, '1482820123', '1482820123'],
             ['企业修改', '2', '企业修改', '企业修改', null, '1482820123', '1482820123'],
             ['企业删除', '2', '企业删除', '企业删除', null, '1482820123', '1482820123'],
+            ['下拨管理', '2', '下拨管理', null, null, '1482820123', '1482820123'],
           
         ]);
         $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [
@@ -222,6 +226,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['sa', '企业管理'],
             ['ob', '企业管理'],
             ['bd', '企业管理'],
+            
+            ['下拨管理', '/allocate/*'],
+            ['pm', '下拨管理'],
                                
         ]);
         $this->batchInsert($authManager->assignmentTable, ['item_name', 'user_id', 'created_at'], [

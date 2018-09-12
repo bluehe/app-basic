@@ -82,8 +82,8 @@ class Meal extends \yii\db\ActiveRecord
         return $stat;
     }
     
-    public static function get_meal() {
-        $meals = static::find()->where(['stat'=> self::STAT_ACTIVE])->orderBy(['order_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();
+    public static function get_meal($stat=self::STAT_ACTIVE) {
+        $meals = static::find()->filterWhere(['stat'=> $stat])->orderBy(['order_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();
         return ArrayHelper::map($meals, 'id', 'name');
     }
     

@@ -172,7 +172,7 @@ class Corporation extends \yii\db\ActiveRecord
                 $statModel->corporation_id=$this->id;
                 $statModel->stat=$this->stat;
                 $statModel->user_id=Yii::$app->user->identity->id;
-                $statModel->created_at=time();
+                $statModel->created_at=in_array($this->stat,[self::STAT_ALLOCATE, self::STAT_AGAIN])? CorporationMeal::get_created_time($this->id):time();
                 $statModel->save();               
             }
                       
@@ -366,7 +366,7 @@ class Corporation extends \yii\db\ActiveRecord
 //    }
 //    
     public static function get_existbd() {
-        return Corporation::find()->select(['base_bd'])->distinct()->column();
+        return static::find()->select(['base_bd'])->distinct()->column();
     }
 //    
 //    //得到ID-name 键值数组
