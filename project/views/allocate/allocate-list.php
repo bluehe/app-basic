@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use project\models\CorporationMeal;
-use project\grid\StatusColumn;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use project\models\User;
