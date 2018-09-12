@@ -22,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box box-primary">
         <div class="box-body">
 
-            
+            <p class="clearfix">
+            <?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['allocate-export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning pull-right']) ?>
+            </p>
             <?=
             GridView::widget([
                 'dataProvider' => $dataProvider,

@@ -26,7 +26,8 @@
         "bluehe/yii2-jcrop": "dev-master",
         "yiidoc/yii2-redactor": "*",
         "feehi/yii2-cdn": "^0.0.3",
-        "kartik-v/yii2-date-range": "dev-master"
+        "kartik-v/yii2-date-range": "dev-master",
+        "phpoffice/phpexcel": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
