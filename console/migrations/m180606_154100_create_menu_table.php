@@ -53,6 +53,7 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [34, '行业管理', 30, '/industry/industry-list',4, '{"icon":"fa fa-flag-checkered"}'],
             [35, '企业管理', 30, '/corporation/corporation-list', 5, '{"icon":"fa fa-newspaper-o"}'],
             [36, '下拨管理', 30, '/allocate/allocate-list', 6, '{"icon":"fa fa-trophy"}'],
+            [37, '补贴管理', 30, '/subsidy/subsidy-list', 7, '{"icon":"fa fa-tint"}'],
 
 
         ]);

@@ -8,6 +8,7 @@ use Da\QrCode\QrCode;
 use project\models\User;
 use project\models\System;
 use project\components\CommonHelper;
+use project\models\Corporation;
 
 /**
  * Common controller
@@ -94,6 +95,18 @@ class CommonController extends Controller {
         }else{
             return json_encode(['stat'=>'fail','message'=>'验证码发送失败'],256);
         }
+        
+    }
+    
+    public function actionCorporationInfo($id) {
+        $model = Corporation::findOne($id);
+        $data=[];
+       
+        if ($model !== null) {
+            $data['bd']=$model->base_bd;
+            
+        }
+        return json_encode($data);
         
     }
 }

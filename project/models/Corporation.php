@@ -4,6 +4,7 @@ namespace project\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "corporation".
@@ -368,13 +369,13 @@ class Corporation extends \yii\db\ActiveRecord
     public static function get_existbd() {
         return static::find()->select(['base_bd'])->distinct()->column();
     }
-//    
-//    //得到ID-name 键值数组
-//    public static function get_corporation_id() {
-//        $corporation = static::find()->where(['not',['base_company_name'=>'']])->orderBy(['id'=>SORT_ASC])->all();
-//        return ArrayHelper::map($corporation, 'id', 'base_company_name');
-//    }
-//       
+    
+    //得到ID-name 键值数组
+    public static function get_corporation_id() {
+        $corporation = static::find()->where(['not',['base_company_name'=>'']])->orderBy(['id'=>SORT_ASC])->all();
+        return ArrayHelper::map($corporation, 'id', 'base_company_name');
+    }
+       
 //    public static function get_location() {
 //        $data=[];
 //        $locations= static::find()->where(['not',['contact_location'=>NULL]])->select(['base_company_name','contact_location','contact_address','id'])->all();

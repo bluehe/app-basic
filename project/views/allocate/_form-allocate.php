@@ -5,7 +5,6 @@ use yii\widgets\ActiveForm;
 use project\models\User;
 use project\models\Meal;
 use kartik\widgets\DatePicker;
-use project\models\Corporation;
 use project\models\CorporationMeal;
 
 /* @var $this yii\web\View */

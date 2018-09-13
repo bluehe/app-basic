@@ -115,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'useWithAddon' => true,
                         'presetDropdown' => true,
                         'convertFormat' => true,
-                        'value' => Yii::$app->request->get('CorporationSearch')['base_registered_time'],
+                        'value' => isset(Yii::$app->request->get('CorporationSearch')['base_registered_time'])?Yii::$app->request->get('CorporationSearch')['base_registered_time']:'',
                         'pluginOptions' => [
                             'timePicker' => false,
                             'locale' => [
@@ -209,6 +209,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
 
                         ],
+                        'visible'=> in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),
                     ],
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
@@ -221,6 +222,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return !CorporationMeal::get_allocate($model->id)&&Yii::$app->user->can('企业删除',['id'=>$key])?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？','data-method' => 'post',]):'';
                             },                           
                         ],
+                        'visible'=> in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),
                     ],
                 ],
             ]); ?>

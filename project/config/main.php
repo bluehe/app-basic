@@ -98,6 +98,16 @@ return [
                         'b'=>'fastclick/lib/fastclick.js',
                     ]                   
                 ],
+                project\assets\Select2Asset::className() =>[
+                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
+                    'css'=>[
+                        'a'=>'select2/dist/css/select2.min.css',
+                    ],
+                    'js'=>[
+                        'a'=>'select2/dist/js/select2.full.min.js',
+                        
+                    ]
+                ],
                 
             ],
         ],

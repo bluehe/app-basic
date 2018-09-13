@@ -91,7 +91,7 @@ class CorporationSearch extends Corporation
             'develop_IDE' => $this->develop_IDE,
         ]);
 
-        $query->andFilterWhere(['like', 'base_company_name', explode('|', trim($this->base_company_name))])
+        $query->andFilterWhere(['or like', 'base_company_name', explode('|', trim($this->base_company_name))])
             ->andFilterWhere(['like', 'base_main_business', $this->base_main_business])
             ->andFilterWhere(['like', 'huawei_account', $this->huawei_account])
             ->andFilterWhere(['like', 'note', $this->note])
