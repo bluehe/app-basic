@@ -54,8 +54,13 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [35, '企业管理', 30, '/corporation/corporation-list', 5, '{"icon":"fa fa-newspaper-o"}'],
             [36, '下拨管理', 30, '/allocate/allocate-list', 6, '{"icon":"fa fa-trophy"}'],
             [37, '补贴管理', 30, '/subsidy/subsidy-list', 7, '{"icon":"fa fa-tint"}'],
-
-
+            
+            [70, '数据统计', NULL, '/statistics/activity', 7, '{"icon":"fa  fa-bar-chart"}'],
+            [71, '用户统计', 70, '/statistics/user', 1, '{"icon":"fa fa-user"}'],
+            [72, '企业统计', 70, '/statistics/corporation', 2, '{"icon":"fa fa-pie-chart"}'],
+            [73, '活跃统计', 70, '/statistics/activity', 3, '{"icon":"fa fa-bar-chart"}'],            
+            [74, '培训统计', 70, '/statistics/train', 4, '{"icon":"fa fa-line-chart"}'],
+            
         ]);
     }
 

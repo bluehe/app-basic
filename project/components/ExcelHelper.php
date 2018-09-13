@@ -29,19 +29,19 @@ class ExcelHelper {
                 -> setFormula1('"'.$line_bd.'"'); 
         }
         
-        $line_industry= implode(',', Industry::getIndustriesName());
-        for($i=2;$i<=$line_num;$i++){
-            $objSheet->getCell('F'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
-                -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
-                -> setAllowBlank(false)  
-                -> setShowInputMessage(true)  
-                -> setShowErrorMessage(true)  
-                -> setShowDropDown(true)  
-                -> setErrorTitle('输入的值有误')  
-                -> setError('您输入的值不在下拉框列表内.')  
-                -> setPromptTitle('行业')  
-                -> setFormula1('"'.$line_industry.'"'); 
-        }
+//        $line_industry= implode(',', Industry::getIndustryName());
+//        for($i=2;$i<=$line_num;$i++){
+//            $objSheet->getCell('F'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+//                -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
+//                -> setAllowBlank(false)  
+//                -> setShowInputMessage(true)  
+//                -> setShowErrorMessage(true)  
+//                -> setShowDropDown(true)  
+//                -> setErrorTitle('输入的值有误')  
+//                -> setError('您输入的值不在下拉框列表内.')  
+//                -> setPromptTitle('行业')  
+//                -> setFormula1('"'.$line_industry.'"'); 
+//        }
         
         $line_stat= implode(',', Corporation::$List['stat']);
         for($i=2;$i<=$line_num;$i++){

@@ -107,22 +107,22 @@ class ClouldSubsidy extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'subsidy_bd']);
     }
     
-//    public static function get_amount_base($start='') {
-//        return static::find()->andFilterWhere(['<','subsidy_time', $start])->sum('subsidy_amount');     
-//    }
-//    
-//    public static function get_amount_total($start='', $end='',$sum=1) {
-//         $query= static::find()->andFilterWhere(['and',['>=', 'subsidy_time', $start],['<=', 'subsidy_time', $end]])->orderBy(['MAX(subsidy_time)'=>SORT_ASC]);
-//        if($sum==1){
-//            //天
-//            $query->groupBy(["FROM_UNIXTIME(subsidy_time, '%Y-%m-%d')"])->select(['amount'=>'SUM(subsidy_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(subsidy_time, '%Y-%m-%d')"])->indexBy(['time']);
-//        }elseif($sum==2){
-//            //周
-//            $query->groupBy(["FROM_UNIXTIME(subsidy_time, '%Y-W%u')"])->select(['amount'=>'SUM(subsidy_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(subsidy_time, '%Y-W%u')"])->indexBy(['time']);      
-//        }else{
-//            //月
-//            $query->groupBy(["FROM_UNIXTIME(subsidy_time, '%Y-%m')"])->select(['amount'=>'SUM(subsidy_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(subsidy_time, '%Y-%m')"])->indexBy(['time']);
-//        }
-//        return $query->asArray()->all();
-//    }
+    public static function get_amount_base($start='') {
+        return static::find()->andFilterWhere(['<','subsidy_time', $start])->sum('subsidy_amount');     
+    }
+    
+    public static function get_amount_total($start='', $end='',$sum=1) {
+         $query= static::find()->andFilterWhere(['and',['>=', 'subsidy_time', $start],['<=', 'subsidy_time', $end]])->orderBy(['MAX(subsidy_time)'=>SORT_ASC]);
+        if($sum==1){
+            //天
+            $query->groupBy(["FROM_UNIXTIME(subsidy_time, '%Y-%m-%d')"])->select(['amount'=>'SUM(subsidy_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(subsidy_time, '%Y-%m-%d')"])->indexBy(['time']);
+        }elseif($sum==2){
+            //周
+            $query->groupBy(["FROM_UNIXTIME(subsidy_time, '%Y-W%u')"])->select(['amount'=>'SUM(subsidy_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(subsidy_time, '%Y-W%u')"])->indexBy(['time']);      
+        }else{
+            //月
+            $query->groupBy(["FROM_UNIXTIME(subsidy_time, '%Y-%m')"])->select(['amount'=>'SUM(subsidy_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(subsidy_time, '%Y-%m')"])->indexBy(['time']);
+        }
+        return $query->asArray()->all();
+    }
 }

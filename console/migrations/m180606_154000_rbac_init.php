@@ -168,6 +168,12 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             
             ['/subsidy/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/subsidy/subsidy-list', '2', null, null, null, '1482820123', '1482820123'],
+            
+            ['/statistics/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/statistics/user', '2', null, null, null, '1482820123', '1482820123'],
+            ['/statistics/activity', '2', null, null, null, '1482820123', '1482820123'],            
+            ['/statistics/train', '2', null, null, null, '1482820123', '1482820123'],
+            ['/statistics/corporation', '2', null, null, null, '1482820123', '1482820123'],
                       
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
@@ -193,6 +199,12 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['企业删除', '2', '企业删除', '企业删除', null, '1482820123', '1482820123'],
             ['下拨管理', '2', '下拨管理', null, null, '1482820123', '1482820123'],
             ['补贴管理', '2', '补贴管理', null, null, '1482820123', '1482820123'],
+            
+            ['数据统计', '2', '数据统计', null, null, '1482820123', '1482820123'],
+            ['用户统计', '2', '用户统计', null, null, '1482820123', '1482820123'],
+            ['活跃统计', '2', '活跃统计', null, null, '1482820123', '1482820123'],
+            ['企业统计', '2', '企业统计', null, null, '1482820123', '1482820123'],
+            ['培训统计', '2', '培训统计', null, null, '1482820123', '1482820123'],
           
         ]);
         $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [
@@ -239,6 +251,19 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['pm', '补贴管理'],
             ['ob_data', '补贴管理'],
             ['bd', '补贴管理'],
+            
+            ['用户统计', '/statistics/user'],
+            ['活跃统计', '/statistics/activity'],            
+            ['培训统计', '/statistics/train'],
+            ['企业统计', '/statistics/corporation'],
+            ['数据统计', '活跃统计'],
+            ['数据统计', '企业统计'],
+            ['数据统计', '培训统计'],
+            ['superadmin', '用户统计'],
+            ['pm', '数据统计'],
+            ['sa', '数据统计'],
+            ['ob', '数据统计'],
+            ['bd', '数据统计'],
                                
         ]);
         $this->batchInsert($authManager->assignmentTable, ['item_name', 'user_id', 'created_at'], [

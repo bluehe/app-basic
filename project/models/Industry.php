@@ -106,15 +106,15 @@ class Industry extends \yii\db\ActiveRecord
         return $data;
     }
     
-        /**
+    /**
      * @return array
      */
-    public static function getIndustryName($id)
+    public static function getIndustryName($id=null)
     {
-        $industries = static::find()->where(['id'=>$id])->asArray()->all();
+        $industries = static::find()->andFilterWhere(['id'=>$id])->orderBy(['parent_id'=>SORT_ASC,'industry_sort'=>SORT_ASC,'id'=>SORT_ASC])->asArray()->all();
         $data = [];
         if($industries!=null){
-            $parent_ids= static::find()->where(['id'=>$id])->select(['parent_id'])->distinct()->column();
+            $parent_ids= static::find()->andFilterWhere(['id'=>$id])->select(['parent_id'])->distinct()->column();
             $parent_name= static::find()->where(['id'=>$parent_ids])->select(['name','id'])->indexBy('id')->column();
             foreach ($industries as $k => $industry){
                 if($industry['parent_id']){

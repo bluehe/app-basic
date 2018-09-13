@@ -27,7 +27,8 @@
         "yiidoc/yii2-redactor": "*",
         "feehi/yii2-cdn": "^0.0.3",
         "kartik-v/yii2-date-range": "dev-master",
-        "phpoffice/phpexcel": "*"
+        "phpoffice/phpexcel": "*",
+        "miloschuman/yii2-highcharts-widget": "v5.0.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

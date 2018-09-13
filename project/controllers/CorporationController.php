@@ -565,7 +565,7 @@ class CorporationController extends Controller
             $datas = ExcelHelper::execute_array_label($dataArray);
                 
             $bd=User::get_bd();
-            $base_industry= Industry::getIndustriesName();
+            $base_industry= Industry::getIndustryName();
             $stat= Corporation::$List['stat'];
             $intent_set= Meal::get_meal();
             $contact_park=Parameter::get_type('contact_park');

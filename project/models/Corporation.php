@@ -353,7 +353,7 @@ class Corporation extends \yii\db\ActiveRecord
     public static function get_industry($id) {
         $industry_id= CorporationIndustry::find()->where(['corporation_id'=>$id])->select(['industry_id'])->column();
 
-        $industry_name= Industry::getIndustryName($industry_id);
+        $industry_name= $industry_id?Industry::getIndustryName($industry_id):[];
        
         return implode('，', $industry_name);
     }
@@ -398,43 +398,14 @@ class Corporation extends \yii\db\ActiveRecord
         return $data;
         
     }
-//    
-//    public static function get_amount_base($start='') {
-//        return static::find()->andFilterWhere(['<','allocate_time', $start])->sum('allocate_amount');     
-//    }    
-//    
-//    public static function get_amount_total($start='', $end='',$sum=1,$group=0) {
-//        $query= static::find()->andFilterWhere(['and',['>=', 'allocate_time', $start],['<=', 'allocate_time', $end]])->orderBy(['MAX(allocate_time)'=>SORT_ASC]);
-//        if($sum==1){
-//            //天
-//            $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m-%d')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m-%d')"])->indexBy(['time']);
-//        }elseif($sum==2){
-//            //周
-//            $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-W%u')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-W%u')"])->indexBy(['time']);      
-//        }else{
-//            //月
-//            if($group==1){
-//                $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m')",'base_bd'])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m')",'base_bd']);
-//            }else{
-//                $query->select(['amount'=>'SUM(allocate_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(allocate_time, '%Y-%m')"])->groupBy(["FROM_UNIXTIME(allocate_time, '%Y-%m')"])->indexBy(['time']);
-//            }
-//        }
-//        return $query->asArray()->all();
-//    }
-//    
-//    public static function get_cost_total($time) {
-//        return static::find()->andFilterWhere(['<','allocate_time', $time])->sum("(CASE WHEN ($time-allocate_time)/86400/365<1 THEN allocate_amount*($time-allocate_time)/86400/365 ELSE allocate_amount END)");     
-//    }
-//    
-//    public static function get_allocate_num($start='', $end='') {
-//        return static::find()->andFilterWhere(['and',['>=', 'allocate_time', $start],['<=', 'allocate_time', $end]])->select(['allocate_amount','num'=>'count(*)'])->orderBy(['num'=>SORT_DESC])->groupBy(['allocate_amount'])->asArray()->all();
-//    }
-//    
-//    public static function get_capital_total() {
-//        return static::find()->andWhere(['>','base_registered_capital',0])->select(["(CASE WHEN base_registered_capital>0 AND base_registered_capital<=500 THEN '0-500万' WHEN base_registered_capital>500 AND base_registered_capital<=3000 THEN '500-3000万' WHEN base_registered_capital>3000 AND base_registered_capital<=5000 THEN '3000-5000万' WHEN base_registered_capital>5000 THEN '5000万以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(base_registered_capital)'=>SORT_ASC])->asArray()->all();
-//    }
-//    
-//     public static function get_scale_total() {
-//        return static::find()->andWhere(['>','develop_scale',0])->select(["(CASE WHEN develop_scale>0 AND develop_scale<=10 THEN '1-10人' WHEN develop_scale>10 AND develop_scale<=20 THEN '11-20人' WHEN develop_scale>20 AND develop_scale<=40 THEN '21-40人' WHEN develop_scale>40 THEN '40人以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(develop_scale)'=>SORT_ASC])->asArray()->all();
-//    }
+   
+
+    
+    public static function get_capital_total() {
+        return static::find()->andWhere(['>','base_registered_capital',0])->select(["(CASE WHEN base_registered_capital>0 AND base_registered_capital<=500 THEN '0-500万' WHEN base_registered_capital>500 AND base_registered_capital<=3000 THEN '500-3000万' WHEN base_registered_capital>3000 AND base_registered_capital<=5000 THEN '3000-5000万' WHEN base_registered_capital>5000 THEN '5000万以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(base_registered_capital)'=>SORT_ASC])->asArray()->all();
+    }
+    
+     public static function get_scale_total() {
+        return static::find()->andWhere(['>','develop_scale',0])->select(["(CASE WHEN develop_scale>0 AND develop_scale<=10 THEN '1-10人' WHEN develop_scale>10 AND develop_scale<=20 THEN '11-20人' WHEN develop_scale>20 AND develop_scale<=40 THEN '21-40人' WHEN develop_scale>40 THEN '40人以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(develop_scale)'=>SORT_ASC])->asArray()->all();
+    }
 }

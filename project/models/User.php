@@ -298,11 +298,33 @@ class User extends ActiveRecord implements IdentityInterface
         return $query->groupBy(["FROM_UNIXTIME($a, '%Y-%m-%d')"])->select(['count(*)', "FROM_UNIXTIME($a,'%Y-%m-%d')"])->indexBy("FROM_UNIXTIME($a,'%Y-%m-%d')")->column();
     }
     
-     public static function get_bd($stat=null,$id=null) {
+    public static function get_bd($stat=null,$id=null) {
         $data=[];
         $users = static::find()->where(['role'=>'bd'])->andFilterWhere(['status'=>$stat,'id'=>$id])->all();
         foreach($users as $user){
             $data[$user['id']]=$user['nickname']?$user['nickname']:$user['username'];
+        }
+        return $data;
+       
+    }
+    
+    public static function get_bd_color() {
+        $data=[];
+        $users = static::find()->where(['role'=>'bd'])->all();
+        foreach($users as $user){
+            $data[$user['id']]['name']=$user['nickname']?$user['nickname']:$user['username'];
+            $data[$user['id']]['color']=$user['user_color'];
+        }
+        return $data;
+       
+    }
+    
+    public static function get_user_color() {
+        $data=[];
+        $users = static::find()->where(['status'=>self::STATUS_ACTIVE])->all();
+        foreach($users as $user){
+            $data[$user['id']]['name']=$user['nickname']?$user['nickname']:$user['username'];
+            $data[$user['id']]['color']=$user['user_color'];
         }
         return $data;
        
