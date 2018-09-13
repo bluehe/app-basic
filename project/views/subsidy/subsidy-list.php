@@ -74,10 +74,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{update} {delete}', //只需要展示删除和更新
                         'buttons' => [
                             'update' => function($url, $model, $key) {
-                                return in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)||$model->bd==Yii::$app->user->identity->id?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#subsidy-modal', 'class' => 'btn btn-primary btn-xs subsidy-update',]):'';
+                                return in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)||$model->subsidy_bd==Yii::$app->user->identity->id?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#subsidy-modal', 'class' => 'btn btn-primary btn-xs subsidy-update',]):'';
                             },
                             'delete' => function($url, $model, $key) {
-                                return in_array(Yii::$app->user->identity->role, [User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)||$model->bd==Yii::$app->user->identity->id?Html::a('<i class="fa fa-trash-o"></i> 删除', ['subsidy-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'确定删除吗？','data-method' => 'post',]):'';
+                                return in_array(Yii::$app->user->identity->role, [User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)||$model->subsidy_bd==Yii::$app->user->identity->id?Html::a('<i class="fa fa-trash-o"></i> 删除', ['subsidy-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'确定删除吗？','data-method' => 'post',]):'';
                             },
                         ],
                         'visible'=> in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),
