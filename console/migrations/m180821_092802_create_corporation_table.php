@@ -32,7 +32,7 @@ class m180821_092802_create_corporation_table extends Migration {
             'base_last_income'=>$this->decimal(10,4)->comment('近一年营业收入(万元)'),
             'stat' => $this->smallInteger()->notNull()->defaultValue(1)->comment('状态'),
             'intent_set'=>$this->integer()->comment('意向套餐'),
-            'intent_number'=>$this->integer()->defaultValue(1)->comment('意向套餐数量'),
+            'intent_number'=>$this->integer()->comment('意向套餐数量'),
             'intent_amount'=>$this->decimal(10,2)->comment('意向金额(元)'),
             'huawei_account' => $this->string(32)->comment('华为云账号'),
 //            'allocate_set'=>$this->integer()->comment('下拨套餐'),

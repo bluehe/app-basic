@@ -99,14 +99,37 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     ['attribute' =>'huawei_account','visible'=> is_array($column)&&in_array('huawei_account',$column),],  
                     [
-                            'attribute' => 'base_industry',
-                            'value' =>
-                            function($model) {
-                                return $model->get_industry($model->id);   //主要通过此种方式实现
-                            },
-                            'filter' => Industry::getIndustriesName(), //此处我们可以将筛选项组合成key-value形式
-                            'visible'=> is_array($column)&&in_array('base_industry',$column),
+                        'attribute' => 'base_industry',
+                        'value' =>
+                        function($model) {
+                            return $model->get_industry($model->id);   //主要通过此种方式实现
+                        },
+                        'filter' => Industry::getIndustriesName(), //此处我们可以将筛选项组合成key-value形式
+                        'visible'=> is_array($column)&&in_array('base_industry',$column),
                     ],
+                    [
+                        'attribute' => 'contact_park',
+                        'value' =>
+                        function($model) {
+                            return implode(',', Parameter::get_para_value('contact_park',$model->contact_park));   //主要通过此种方式实现
+                        },
+                        'filter' => Parameter::get_type('contact_park'),
+                        'visible'=> is_array($column)&&in_array('contact_park',$column),
+                    ],
+                    ['attribute' =>'contact_address','visible'=> is_array($column)&&in_array('contact_address',$column),],
+                    [
+                        'attribute' => 'contact_location',
+                        'value' =>
+                        function($model) {
+                            return $model->contact_location?'<span class="text-green">是</span>':'<span class="text-red">否</span>';   //主要通过此种方式实现
+                        },
+                        'format' => 'raw',
+                        'filter' => [1=>'是',2=>'否'], 
+                        'visible'=> is_array($column)&&in_array('contact_location',$column),
+                    ],
+                    ['attribute' =>'intent_set','value' =>function($model) {return $model->intent_set?$model->intentSet->name:$model->intent_set;},'filter' => Meal::get_meal(),'visible'=> is_array($column)&&in_array('intent_set',$column),],
+                    ['attribute' =>'intent_number','visible'=> is_array($column)&&in_array('intent_number',$column),],
+                    ['attribute' =>'intent_amount','visible'=> is_array($column)&&in_array('intent_amount',$column),],
                     ['attribute' =>'base_company_scale','visible'=> is_array($column)&&in_array('base_company_scale',$column),],  
                     ['attribute' =>'base_registered_capital','value' =>function($model) {return $model->base_registered_capital?floatval($model->base_registered_capital):$model->base_registered_capital;},'visible'=> is_array($column)&&in_array('base_registered_capital',$column),],
                     ['attribute' =>'base_registered_time','value' =>function($model) {return $model->base_registered_time>0?date('Y-m-d',$model->base_registered_time):'';},
@@ -129,29 +152,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'visible'=> is_array($column)&&in_array('base_registered_time',$column), ],
                     ['attribute' =>'base_main_business','visible'=> is_array($column)&&in_array('base_main_business',$column),],
                     ['attribute' =>'base_last_income','value' =>function($model) {return $model->base_last_income?floatval($model->base_last_income):$model->base_last_income;},'visible'=> is_array($column)&&in_array('base_last_income',$column),],
-                    ['attribute' =>'intent_set','value' =>function($model) {return $model->intent_set?$model->intentSet->name:$model->intent_set;},'filter' => Meal::get_meal(),'visible'=> is_array($column)&&in_array('intent_set',$column),],
-                    ['attribute' =>'intent_number','visible'=> is_array($column)&&in_array('intent_number',$column),],
-                    ['attribute' =>'intent_amount','visible'=> is_array($column)&&in_array('intent_amount',$column),],              
-                    [
-                        'attribute' => 'contact_park',
-                        'value' =>
-                        function($model) {
-                            return implode(',', Parameter::get_para_value('contact_park',$model->contact_park));   //主要通过此种方式实现
-                        },
-                        'filter' => Parameter::get_type('contact_park'),
-                        'visible'=> is_array($column)&&in_array('contact_park',$column),
-                    ],
-                    ['attribute' =>'contact_address','visible'=> is_array($column)&&in_array('contact_address',$column),],
-                    [
-                        'attribute' => 'contact_location',
-                        'value' =>
-                        function($model) {
-                            return $model->contact_location?'<span class="text-green">是</span>':'<span class="text-red">否</span>';   //主要通过此种方式实现
-                        },
-                        'format' => 'raw',
-                        'filter' => [1=>'是',2=>'否'], 
-                        'visible'=> is_array($column)&&in_array('contact_location',$column),
-                    ],
                     ['attribute' =>'contact_business_name','visible'=> is_array($column)&&in_array('contact_business_name',$column),],
                     ['attribute' =>'contact_business_job','visible'=> is_array($column)&&in_array('contact_business_job',$column),],
                     ['attribute' =>'contact_business_tel','visible'=> is_array($column)&&in_array('contact_business_tel',$column),],

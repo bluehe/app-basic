@@ -155,7 +155,7 @@ class Industry extends \yii\db\ActiveRecord
         }
         return $data;
     }
-//    
+    
 //    public static function get_industry_children() {
 //        $items= static::find()->where(['not',['parent_id'=>NULL]])->orderBy(['parent_id'=>SORT_ASC,'industry_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();      
 //        return ArrayHelper::map($items, 'id', 'name'); 

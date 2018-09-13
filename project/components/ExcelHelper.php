@@ -8,6 +8,7 @@ use project\models\User;
 use project\models\Corporation;
 use project\models\Parameter;
 use project\models\Industry;
+use project\models\Meal;
 
 
 class ExcelHelper {
@@ -16,7 +17,7 @@ class ExcelHelper {
         $line_bd= implode(',', User::get_bd());
         for($i=2;$i<=$line_num;$i++){
             //BD选择
-            $objSheet->getCell('B'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('D'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(false)  
                 -> setShowInputMessage(true)  
@@ -28,9 +29,9 @@ class ExcelHelper {
                 -> setFormula1('"'.$line_bd.'"'); 
         }
         
-        $line_industry= implode(',', Industry::get_industry_children());
+        $line_industry= implode(',', Industry::getIndustriesName());
         for($i=2;$i<=$line_num;$i++){
-            $objSheet->getCell('C'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('F'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(false)  
                 -> setShowInputMessage(true)  
@@ -42,10 +43,10 @@ class ExcelHelper {
                 -> setFormula1('"'.$line_industry.'"'); 
         }
         
-        $line_stat= implode(',', Corporation::get_stat_list());
+        $line_stat= implode(',', Corporation::$List['stat']);
         for($i=2;$i<=$line_num;$i++){
             //状态选择
-            $objSheet->getCell('D'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('C'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(false)  
                 -> setShowInputMessage(true)  
@@ -57,10 +58,10 @@ class ExcelHelper {
                 -> setFormula1('"'.$line_stat.'"'); 
         }
         
-        $line_set = implode(',',Corporation::$List['allocate_set']);
+        $line_set = implode(',', Meal::get_meal());
         for($i=2;$i<=$line_num;$i++){
             //意向套餐选择
-            $objSheet->getCell('E'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('I'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(true)  
                 -> setShowInputMessage(true)  
@@ -74,7 +75,7 @@ class ExcelHelper {
         
         $line_park = implode(',', Parameter::get_type('contact_park'));
         for($i=2;$i<=$line_num;$i++){
-            $objSheet->getCell('N'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('G'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(false)  
                 -> setShowInputMessage(true)  
@@ -88,7 +89,7 @@ class ExcelHelper {
         
         $line_develop_pattern = implode(',', Parameter::get_type('develop_pattern'));
         for($i=2;$i<=$line_num;$i++){
-            $objSheet->getCell('W'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('X'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(true)  
                 -> setShowInputMessage(true)  
@@ -102,7 +103,7 @@ class ExcelHelper {
         
         $line_develop_scenario = implode(',', Parameter::get_type('develop_scenario'));
         for($i=2;$i<=$line_num;$i++){
-            $objSheet->getCell('X'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('Y'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(true)  
                 -> setShowInputMessage(true)  
@@ -116,7 +117,7 @@ class ExcelHelper {
         
         $line_develop_science = implode(',', Parameter::get_type('develop_science'));
         for($i=2;$i<=$line_num;$i++){
-            $objSheet->getCell('Y'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('Z'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(true)  
                 -> setShowInputMessage(true)  
@@ -130,7 +131,7 @@ class ExcelHelper {
         
         $line_develop_language = implode(',', Parameter::get_type('develop_language'));
         for($i=2;$i<=$line_num;$i++){
-            $objSheet->getCell('Z'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('AA'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(true)  
                 -> setShowInputMessage(true)  
@@ -144,7 +145,7 @@ class ExcelHelper {
         
         $line_develop_IDE = implode(',', Parameter::get_type('develop_IDE'));
         for($i=2;$i<=$line_num;$i++){
-            $objSheet->getCell('AA'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
+            $objSheet->getCell('AB'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
                 -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
                 -> setAllowBlank(true)  
                 -> setShowInputMessage(true)  
