@@ -17,8 +17,9 @@ use project\models\CorporationMeal;
 use project\models\ColumnSetting;
 use project\components\ExcelHelper;
 use project\models\Parameter;
-//use rky\models\User;
-//use rky\models\Industry;
+use project\models\User;
+use project\models\Industry;
+use project\models\Meal;
 
 
 /**
@@ -383,6 +384,37 @@ class CorporationController extends Controller
   
         $objSheet = $objectPhpExcel->getSheetByName('企业信息'); //这一句为要设置数据有效性的单元格  
         ExcelHelper::set_corporation_excel($objSheet);
+        $searchModel = new CorporationSearch();
+        $objSheet->setCellValue( 'A1', '序号')
+                ->setCellValue( 'B1', $searchModel->getAttributeLabel('base_company_name'))
+                ->setCellValue( 'C1', $searchModel->getAttributeLabel('stat'))
+                ->setCellValue( 'D1', $searchModel->getAttributeLabel('base_bd'))
+                ->setCellValue( 'E1', $searchModel->getAttributeLabel('huawei_account'))
+                ->setCellValue( 'F1', $searchModel->getAttributeLabel('base_industry'))
+                ->setCellValue( 'G1', $searchModel->getAttributeLabel('contact_park'))
+                ->setCellValue( 'H1', $searchModel->getAttributeLabel('contact_address'))
+                ->setCellValue( 'I1', $searchModel->getAttributeLabel('intent_set'))
+                ->setCellValue( 'J1', $searchModel->getAttributeLabel('intent_number'))
+                ->setCellValue( 'K1', $searchModel->getAttributeLabel('intent_amount'))
+                ->setCellValue( 'L1', $searchModel->getAttributeLabel('base_company_scale'))
+                ->setCellValue( 'M1', $searchModel->getAttributeLabel('base_registered_capital'))
+                ->setCellValue( 'N1', $searchModel->getAttributeLabel('base_registered_time'))
+                ->setCellValue( 'O1', $searchModel->getAttributeLabel('base_main_business'))
+                ->setCellValue( 'P1', $searchModel->getAttributeLabel('base_last_income'))
+                ->setCellValue( 'Q1', $searchModel->getAttributeLabel('contact_business_name'))
+                ->setCellValue( 'R1', $searchModel->getAttributeLabel('contact_business_job'))
+                ->setCellValue( 'S1', $searchModel->getAttributeLabel('contact_business_tel'))
+                ->setCellValue( 'T1', $searchModel->getAttributeLabel('contact_technology_name'))
+                ->setCellValue( 'U1', $searchModel->getAttributeLabel('contact_technology_job'))
+                ->setCellValue( 'V1', $searchModel->getAttributeLabel('contact_technology_tel'))
+                ->setCellValue( 'W1', $searchModel->getAttributeLabel('develop_scale'))
+                ->setCellValue( 'X1', $searchModel->getAttributeLabel('develop_pattern'))
+                ->setCellValue( 'Y1', $searchModel->getAttributeLabel('develop_scenario'))
+                ->setCellValue( 'Z1', $searchModel->getAttributeLabel('develop_science'))
+                ->setCellValue( 'AA1', $searchModel->getAttributeLabel('develop_language'))
+                ->setCellValue( 'AB1', $searchModel->getAttributeLabel('develop_IDE'))
+                ->setCellValue( 'AC1', $searchModel->getAttributeLabel('develop_current_situation'))
+                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'));
         $end_time= microtime(true);
         if($end_time-$start_time<1){
             sleep(1);
@@ -412,7 +444,7 @@ class CorporationController extends Controller
         $objSheet = $objectPhpExcel->getSheetByName('企业信息'); //这一句为要设置数据有效性的单元格  
         ExcelHelper::set_corporation_excel($objSheet);
         
-        $objectPhpExcel->getActiveSheet()->setCellValue( 'A1', '序号')
+        $objSheet->setCellValue( 'A1', '序号')
                 ->setCellValue( 'B1', $searchModel->getAttributeLabel('base_company_name'))
                 ->setCellValue( 'C1', $searchModel->getAttributeLabel('stat'))
                 ->setCellValue( 'D1', $searchModel->getAttributeLabel('base_bd'))
@@ -504,250 +536,286 @@ class CorporationController extends Controller
         exit();
     }
     
-//    public function actionCorporationImport() {
-//        //判断是否Ajax
-//        if (Yii::$app->request->isAjax) {
-//
-//            if (empty($_FILES['files'])) {
-//                $postMaxSize = ini_get('post_max_size');
-//                $fileMaxSize = ini_get('upload_max_filesize');
-//                $displayMaxSize = $postMaxSize < $fileMaxSize ? $postMaxSize : $fileMaxSize;
-//
-//                return json_encode(['error' => '没有文件上传,文件最大为' . $displayMaxSize], JSON_UNESCAPED_UNICODE);
-//                // or you can throw an exception
-//            }
-//
-//
-////            $start_time= microtime(true);
-//
-//            $files = $_FILES['files'];  
-//            
-//            $fileName= $files['tmp_name'][0];
-//            //$fileName= Yii::getAlias('@webroot').'/excel/1.xlsx';
-//            $format = \PHPExcel_IOFactory::identify($fileName);
-//            $objectreader = \PHPExcel_IOFactory::createReader($format);
-//            $objectPhpExcel = $objectreader->load($fileName);
-//            
-//            $dataArray = $objectPhpExcel->getActiveSheet()->toArray(null, true, true, true);
-//            
-//            $datas = ExcelHelper::execute_array_label($dataArray);
-//                
-//            $bd=User::get_bd();
-//            $base_industry= Industry::get_industry_children();
-//            $stat= Corporation::$List['stat'];
-//            $allocate_set= Corporation::$List['allocate_set'];
-//            $amount=Corporation::$List['allocate_amount'];
-//            $contact_park=Parameter::get_type('contact_park');
-//            $develop_pattern=Parameter::get_type('develop_pattern');
-//            $develop_scenario=Parameter::get_type('develop_scenario');
-//            $develop_science=Parameter::get_type('develop_science');
-//            $develop_language=Parameter::get_type('develop_language');
-//            $develop_IDE=Parameter::get_type('develop_IDE');
-//                
-//            $num=['add'=>0,'update'=>0,'fail'=>0];
-//               
-//            $notice_error=[];    
-//            foreach ($datas as $key=>$data) {
-////                    Yii::$app->session->setFlash('success', json_encode($datas,256));
-////                    return true;
-//                if($key==0){
-//                    //项目处理
-//                    $keys= array_filter(array_keys($data));
-//                    if(!in_array('公司名称', $keys)){
-//                        Yii::$app->session->setFlash('error', '文件首行不存在<<公司名称>>字段');
-//                        break;
+    public function actionCorporationImport() {
+        //判断是否Ajax
+        if (Yii::$app->request->isAjax) {
+
+            if (empty($_FILES['files'])) {
+                $postMaxSize = ini_get('post_max_size');
+                $fileMaxSize = ini_get('upload_max_filesize');
+                $displayMaxSize = $postMaxSize < $fileMaxSize ? $postMaxSize : $fileMaxSize;
+
+                return json_encode(['error' => '没有文件上传,文件最大为' . $displayMaxSize], JSON_UNESCAPED_UNICODE);
+                // or you can throw an exception
+            }
+
+
+//            $start_time= microtime(true);
+
+            $files = $_FILES['files'];  
+            
+            $fileName= $files['tmp_name'][0];
+            //$fileName= Yii::getAlias('@webroot').'/excel/1.xlsx';
+            $format = \PHPExcel_IOFactory::identify($fileName);
+            $objectreader = \PHPExcel_IOFactory::createReader($format);
+            $objectPhpExcel = $objectreader->load($fileName);
+            
+            $dataArray = $objectPhpExcel->getActiveSheet()->toArray(null, true, true, true);
+            
+            $datas = ExcelHelper::execute_array_label($dataArray);
+                
+            $bd=User::get_bd();
+            $base_industry= Industry::getIndustriesName();
+            $stat= Corporation::$List['stat'];
+            $intent_set= Meal::get_meal();
+            $contact_park=Parameter::get_type('contact_park');
+            $develop_pattern=Parameter::get_type('develop_pattern');
+            $develop_scenario=Parameter::get_type('develop_scenario');
+            $develop_science=Parameter::get_type('develop_science');
+            $develop_language=Parameter::get_type('develop_language');
+            $develop_IDE=Parameter::get_type('develop_IDE');
+                
+            $num=['add'=>0,'update'=>0,'fail'=>0];
+               
+            $notice_error=[];
+            $parameter_add=false;
+            $searchModel = new CorporationSearch();
+            $index=[
+                'base_company_name'=>$searchModel->getAttributeLabel('base_company_name'),
+                'stat'=>$searchModel->getAttributeLabel('stat'),
+                'base_bd'=>$searchModel->getAttributeLabel('base_bd'),
+                'huawei_account'=>$searchModel->getAttributeLabel('huawei_account'),
+                'base_industry'=>$searchModel->getAttributeLabel('base_industry'),
+                'contact_park'=>$searchModel->getAttributeLabel('contact_park'),
+                'contact_address'=>$searchModel->getAttributeLabel('contact_address'),
+                'intent_set'=>$searchModel->getAttributeLabel('intent_set'),
+                'intent_number'=>$searchModel->getAttributeLabel('intent_number'),
+                'intent_amount'=>$searchModel->getAttributeLabel('intent_amount'),
+                'base_company_scale'=>$searchModel->getAttributeLabel('base_company_scale'),
+                'base_registered_capital'=>$searchModel->getAttributeLabel('base_registered_capital'),
+                'base_registered_time'=>$searchModel->getAttributeLabel('base_registered_time'),
+                'base_main_business'=>$searchModel->getAttributeLabel('base_main_business'),
+                'base_last_income'=>$searchModel->getAttributeLabel('base_last_income'),
+                'contact_business_name'=>$searchModel->getAttributeLabel('contact_business_name'),
+                'contact_business_job'=>$searchModel->getAttributeLabel('contact_business_job'),
+                'contact_business_tel'=>$searchModel->getAttributeLabel('contact_business_tel'),
+                'contact_technology_name'=>$searchModel->getAttributeLabel('contact_technology_name'),
+                'contact_technology_job'=>$searchModel->getAttributeLabel('contact_technology_job'),
+                'contact_technology_tel'=>$searchModel->getAttributeLabel('contact_technology_tel'),
+                'develop_scale'=>$searchModel->getAttributeLabel('develop_scale'),
+                'develop_pattern'=>$searchModel->getAttributeLabel('develop_pattern'),
+                'develop_scenario'=>$searchModel->getAttributeLabel('develop_scenario'),
+                'develop_science'=>$searchModel->getAttributeLabel('develop_science'),
+                'develop_language'=>$searchModel->getAttributeLabel('develop_language'),
+                'develop_IDE'=>$searchModel->getAttributeLabel('develop_IDE'),
+                'develop_current_situation'=>$searchModel->getAttributeLabel('develop_current_situation'),
+                'develop_weakness'=>$searchModel->getAttributeLabel('develop_weakness'),
+                ];
+            foreach ($datas as $key=>$data) {
+//                    Yii::$app->session->setFlash('success', json_encode($datas,256));
+//                    return true;
+                if($key==0){
+                    //项目处理
+                    $keys= array_filter(array_keys($data));
+                    if(!in_array($index['base_company_name'], $keys)){
+                        Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['base_company_name'].'>>字段');
+                        break;
+                    }
+                }                            
+                //数据处理
+                
+                $data= array_filter($data);//去除0值和空值
+                
+               
+                   
+                if(isset($data[$index['base_company_name']])){
+                    $corporation = Corporation::findOne(['base_company_name'=>trim($data[$index['base_company_name']])]);
+
+                    if($corporation===null){
+                        //不存在
+                        $num_key='add';
+                        $corporation=new Corporation();
+                        $corporation->loadDefaultValues();
+                        $corporation->base_company_name=trim($data[$index['base_company_name']]);
+                    }else{
+                        $num_key='update';
+                    }
+                    
+//                    if(isset($data[$index['stat']])&&array_search(trim($data[$index['stat']]), $stat)){
+//                        $corporation->stat= array_search(trim($data[$index['stat']]), $stat);
 //                    }
-//                }                            
-//                //数据处理
-//                
-//                $data= array_filter($data);//去除0值和空值
-//                   
-//                if(isset($data['公司名称'])){
-//                    $company = Corporation::findOne(['base_company_name'=>trim($data['公司名称'])]);
-//
-//                    if($company===null){
-//                        //不存在
-//                        $num_key='add';
-//                        $company=new Corporation();
-//                        $company->base_company_name=trim($data['公司名称']);
-//                    }else{
-//                        $num_key='update';
-//                    }
-//                            
-//                    if(isset($data['客户经理'])&&array_search(trim($data['客户经理']), $bd)){
-//                        $company->base_bd= array_search(trim($data['客户经理']), $bd);
-//                    }
-//                    if(isset($data['状态'])&&array_search(trim($data['状态']), $stat)){
-//                        $company->stat= array_search(trim($data['状态']), $stat);
-//                    }
-//                    if(isset($data['意向套餐'])&&array_search(trim($data['意向套餐']), $allocate_set)){
-//                        $company->intent_set= array_search(trim($data['意向套餐']), $allocate_set);
-//                    }
-//                    if(isset($data['华为云账号'])){
-//                        $company->huawei_account= trim($data['华为云账号']);
-//                    }
-//                    if(isset($data['下拨金额(万元)'])){
-//                        $data['下拨金额(万元)']=trim($data['下拨金额(万元)']);
-//                        $company->allocate_set= array_search($data['下拨金额(万元)'], $amount)?array_search($data['下拨金额(万元)'], $amount):null;
-//                        $company->allocate_amount=$data['下拨金额(万元)'];
-//                    }
-//                    if(isset($data['下拨日期'])&&strtotime($data['下拨日期'])){
-//                        $company->allocate_time= strtotime($data['下拨日期']);
-//                    }
-//                    if(isset($data['主营业务'])){
-//                        $company->base_main_business= trim($data['主营业务']);
-//                    }
-//                    if(isset($data['注册日期'])&&strtotime($data['注册日期'])){
-//                        $company->base_registered_time= strtotime($data['注册日期']);
-//                    }
-//                    if(isset($data['近一年营业收入'])){
-//                        $company->base_last_income= trim($data['近一年营业收入']);
-//                    }
-//                    if(isset($data['注册资金(万元)'])){
-//                        $company->base_registered_capital= trim($data['注册资金(万元)']);
-//                    }
-//                           
-//                    if(isset($data['企业规模'])){
-//                        $company->base_company_scale= trim($data['企业规模']);
-//                    }
-//                    if(isset($data['所属园区'])){
-//                        $data['所属园区']=trim($data['所属园区']);
-//                        if(array_search($data['所属园区'], $contact_park)){
-//                            $company->contact_park= array_search($data['所属园区'], $contact_park);
-//                        }else{
-//                            $company->contact_park= Parameter::add_type('contact_park', $data['所属园区']);
-//                            $contact_park[$company->contact_park]=$data['所属园区'];
-//                        }
-//                    }
-//                    if(isset($data['实际地址'])){
-//                        $company->contact_address= trim($data['实际地址']);
-//                    }
-//                    if(isset($data['商业联系人'])){
-//                        $company->contact_business_name= trim($data['商业联系人']);
-//                    }
-//                    if(isset($data['商业联系人职务'])){
-//                        $company->contact_business_job= trim($data['商业联系人职务']);
-//                    }
-//                    if(isset($data['商业联系人电话'])){
-//                        $company->contact_business_tel= trim((string)$data['商业联系人电话']);
-//                    }
-//                    if(isset($data['技术联系人'])){
-//                        $company->contact_technology_name= trim($data['技术联系人']);
-//                    }
-//                    if(isset($data['技术联系人职务'])){
-//                        $company->contact_technology_job= trim($data['技术联系人职务']);
-//                    }
-//                    if(isset($data['技术联系人电话'])){
-//                        $company->contact_technology_tel= trim((string)$data['技术联系人电话']);
-//                    }
-//                    if(isset($data['研发规模'])){
-//                        $company->develop_scale= trim($data['研发规模']);
-//                    }
-//                    if(isset($data['开发模式'])){
-//                        $data['开发模式']=trim($data['开发模式']);
-//                        if(array_search($data['开发模式'], $develop_pattern)){
-//                            $company->develop_pattern= array_search($data['开发模式'], $develop_pattern);
-//                        }else{
-//                            $company->develop_pattern= Parameter::add_type('develop_pattern', $data['开发模式']);
-//                            $develop_pattern[$company->develop_pattern]=$data['开发模式'];
-//                        }
-//                    }
-//                    if(isset($data['开发场景'])){
-//                        $data['开发场景']=trim($data['开发场景']);
-//                        if(array_search($data['开发场景'], $develop_scenario)){
-//                            $company->develop_scenario= array_search($data['开发场景'], $develop_scenario);
-//                        }else{
-//                            $company->develop_scenario= Parameter::add_type('develop_scenario', $data['开发场景']);
-//                            $develop_scenario[$company->develop_scenario]=$data['开发场景'];
-//                        }
-//                    }
-//                    if(isset($data['开发环境'])){
-//                        $data['开发环境']=trim($data['开发环境']);
-//                        if(array_search($data['开发环境'], $develop_science)){
-//                            $company->develop_science= array_search($data['开发环境'], $develop_science);
-//                        }else{
-//                            $company->develop_science= Parameter::add_type('develop_science', $data['开发环境']);
-//                            $develop_science[$company->develop_science]=$data['开发环境'];
-//                        }
-//                    }
-//                    if(isset($data['开发语言'])){
-//                        $ls= explode(',', str_replace('、',',',str_replace('，',',',$data['开发语言'])));
-//                        $dl=[];
-//                        foreach($ls as $l){
-//                            $l=trim($l);
-//                            if(array_search($l, $develop_language)){
-//                                $dl[]=array_search($l, $develop_language);
-//                            }else{
-//                                $lid=Parameter::add_type('develop_language', $l);
-//                                $dl[]=$lid;
-//                                $develop_language[$lid]=$l;
-//                            }
-//                        }
-//                        $company->develop_language= implode(',', $dl);
-//                    }
-//                    if(isset($data['开发IDE'])){
-//                        $data['开发IDE']=trim($data['开发IDE']);
-//                        if(array_search($data['开发IDE'], $develop_IDE)){
-//                            $company->develop_IDE= array_search($data['开发IDE'], $develop_IDE);
-//                        }else{
-//                            $company->develop_IDE= Parameter::add_type('develop_IDE', $data['开发IDE']);
-//                            $develop_IDE[$company->develop_IDE]=$data['开发IDE'];
-//                        }
-//                    }
-//                    if(isset($data['研发工具现状'])){
-//                        $company->develop_current_situation= trim($data['研发工具现状']);
-//                    }
-//                    if(isset($data['研发痛点'])){
-//                        $company->develop_weakness= trim($data['研发痛点']);
-//                    }
-//                    if($company->save()){
-//                       
-//                        if(isset($data['行业'])){
-//                            CorporationIndustry::deleteAll(['corporation_id'=>$company->id]);
-//                            $industry= new CorporationIndustry();
-//                            $industry->corporation_id=$company->id;
-//                            $industrys= explode(',', str_replace('、',',',str_replace('，',',',$data['行业'])));
-//                               
-//                            foreach($industrys as $i){
-//                                $i=trim($i);
-//                                if(array_search($i, $base_industry)){
-//                                    $_industry =clone $industry;
-//                                    $_industry->industry_id=array_search($i, $base_industry);
-//                                    $_industry->save();
-//                                }
-//                            }                              
-//                        }
-//                        $num[$num_key]++;
-//                    }else{
-//                        $errors=$company->getErrors();
-//                   
-//                        if($errors){
-//                            $error=[];
-//                            foreach($errors as $e){
-//                                $error[]=$e[0];
-//                            }
-//                            $notice_error[]=$data['公司名称']. ' {'. implode(' ', $error).'}';
-//                        }
-//                        $num['fail']++;
-//                    }
-//                }else{
-//                    $num['fail']++;
-//                }
-//                                    
-//            }
-//            if($notice_error){
-//                Yii::$app->session->setFlash('error', $notice_error);
-//            }
-//            Yii::$app->session->setFlash('warning', '新增'.$num['add'].'家，更新'.$num['update'].'家，失败'.$num['fail'].'家。');
-//                  
-//         
-//        } else {
-//            Yii::$app->session->setFlash('error', '上传失败。');
-//        }
-//        return true;
-//        
-//    }
-//    
+                    if(isset($data[$index['base_bd']])&&array_search(trim($data[$index['base_bd']]), $bd)){
+                        $corporation->base_bd= array_search(trim($data[$index['base_bd']]), $bd);
+                    }
+                    if(isset($data[$index['huawei_account']])){
+                        $corporation->huawei_account= trim($data[$index['huawei_account']]);
+                    }
+                    if(isset($data[$index['contact_park']])){
+                        $data[$index['contact_park']]=trim($data[$index['contact_park']]);
+                        if(array_search($data[$index['contact_park']], $contact_park)){
+                            $corporation->contact_park= array_search($data[$index['contact_park']], $contact_park);
+                        }elseif($parameter_add){
+                            $corporation->contact_park= Parameter::add_type('contact_park', $data[$index['contact_park']]);
+                            $contact_park[$corporation->contact_park]=$data[$index['contact_park']];
+                        }
+                    }
+                    if(isset($data[$index['contact_address']])){
+                        $corporation->contact_address= trim($data[$index['contact_address']]);
+                    }                   
+                    if(isset($data[$index['intent_set']])&&array_search(trim($data[$index['intent_set']]), $intent_set)){
+                        $corporation->intent_set= array_search(trim($data[$index['intent_set']]), $intent_set);
+                    }
+                    if(isset($data[$index['intent_number']])){
+                        $corporation->intent_number= trim($data[$index['intent_number']]);
+                    }                   
+                    if($corporation->intent_set&&$corporation->intent_number){
+                        $corporation->intent_amount=$corporation->intent_number*Meal::get_meal_amount($corporation->intent_set);
+                    }elseif(isset($data[$index['intent_amount']])){
+                        $corporation->intent_amount=trim($data[$index['intent_amount']]);
+                    }
+                    if(isset($data[$index['base_company_scale']])){
+                        $corporation->base_company_scale= trim($data[$index['base_company_scale']]);
+                    }
+                    if(isset($data[$index['base_registered_capital']])){
+                        $corporation->base_registered_capital= trim($data[$index['base_registered_capital']]);
+                    }
+                    if(isset($data[$index['base_registered_time']])&&strtotime($data[$index['base_registered_time']])){
+                        $corporation->base_registered_time= strtotime($data[$index['base_registered_time']]);
+                    }
+                    if(isset($data[$index['base_main_business']])){
+                        $corporation->base_main_business= trim($data[$index['base_main_business']]);
+                    }                    
+                    if(isset($data[$index['base_last_income']])){
+                        $corporation->base_last_income= trim($data[$index['base_last_income']]);
+                    }               
+                    if(isset($data[$index['contact_business_name']])){
+                        $corporation->contact_business_name= trim($data[$index['contact_business_name']]);
+                    }
+                    if(isset($data[$index['contact_business_job']])){
+                        $corporation->contact_business_job= trim($data[$index['contact_business_job']]);
+                    }
+                    if(isset($data[$index['contact_business_tel']])){
+                        $corporation->contact_business_tel= trim((string)$data[$index['contact_business_tel']]);
+                    }
+                    if(isset($data[$index['contact_technology_name']])){
+                        $corporation->contact_technology_name= trim($data[$index['contact_technology_name']]);
+                    }
+                    if(isset($data[$index['contact_technology_job']])){
+                        $corporation->contact_technology_job= trim($data[$index['contact_technology_job']]);
+                    }
+                    if(isset($data[$index['contact_technology_tel']])){
+                        $corporation->contact_technology_tel= trim((string)$data[$index['contact_technology_tel']]);
+                    }       
+                    if(isset($data[$index['develop_scale']])){
+                        $corporation->develop_scale= trim($data[$index['develop_scale']]);
+                    }
+                    
+                    if(isset($data[$index['develop_pattern']])){
+                        $data[$index['develop_pattern']]=trim($data[$index['develop_pattern']]);
+                        if(array_search($data[$index['develop_pattern']], $develop_pattern)){
+                            $corporation->develop_pattern= array_search($data[$index['develop_pattern']], $develop_pattern);
+                        }elseif($parameter_add){
+                            $corporation->develop_pattern= Parameter::add_type('develop_pattern', $data[$index['develop_pattern']]);
+                            $develop_pattern[$corporation->develop_pattern]=$data[$index['develop_pattern']];
+                        }
+                    }
+                    if(isset($data[$index['develop_scenario']])){
+                        $data[$index['develop_scenario']]=trim($data[$index['develop_scenario']]);
+                        if(array_search($data[$index['develop_scenario']], $develop_scenario)){
+                            $corporation->develop_scenario= array_search($data[$index['develop_scenario']], $develop_scenario);
+                        }elseif($parameter_add){
+                            $corporation->develop_scenario= Parameter::add_type('develop_scenario', $data[$index['develop_scenario']]);
+                            $develop_scenario[$corporation->develop_scenario]=$data[$index['develop_scenario']];
+                        }
+                    }
+                    if(isset($data[$index['develop_science']])){
+                        $data[$index['develop_science']]=trim($data[$index['develop_science']]);
+                        if(array_search($data[$index['develop_science']], $develop_science)){
+                            $corporation->develop_science= array_search($data[$index['develop_science']], $develop_science);
+                        }elseif($parameter_add){
+                            $corporation->develop_science= Parameter::add_type('develop_science', $data[$index['develop_science']]);
+                            $develop_science[$corporation->develop_science]=$data[$index['develop_science']];
+                        }
+                    }
+                    if(isset($data[$index['develop_language']])){
+                        $ls= explode(',', str_replace('、',',',str_replace('，',',',$data[$index['develop_language']])));
+                        $dl=[];
+                        foreach($ls as $l){
+                            $l=trim($l);
+                            if(array_search($l, $develop_language)){
+                                $dl[]=array_search($l, $develop_language);
+                            }elseif($parameter_add){
+                                $lid=Parameter::add_type('develop_language', $l);
+                                $dl[]=$lid;
+                                $develop_language[$lid]=$l;
+                            }
+                        }
+                        $corporation->develop_language= implode(',', $dl);
+                    }
+                    if(isset($data[$index['develop_IDE']])){
+                        $data[$index['develop_IDE']]=trim($data[$index['develop_IDE']]);
+                        if(array_search($data[$index['develop_IDE']], $develop_IDE)){
+                            $corporation->develop_IDE= array_search($data[$index['develop_IDE']], $develop_IDE);
+                        }elseif($parameter_add){
+                            $corporation->develop_IDE= Parameter::add_type('develop_IDE', $data[$index['develop_IDE']]);
+                            $develop_IDE[$corporation->develop_IDE]=$data[$index['develop_IDE']];
+                        }
+                    }
+                    if(isset($data[$index['develop_current_situation']])){
+                        $corporation->develop_current_situation= trim($data[$index['develop_current_situation']]);
+                    }
+                    if(isset($data[$index['develop_weakness']])){
+                        $corporation->develop_weakness= trim($data[$index['develop_weakness']]);
+                    }
+                    
+                    if($corporation->save()){
+                       
+                        if(isset($data[$index['base_industry']])){
+                            CorporationIndustry::deleteAll(['corporation_id'=>$corporation->id]);
+                            $industry= new CorporationIndustry();
+                            $industry->corporation_id=$corporation->id;
+                            $industrys= explode(',', str_replace('、',',',str_replace('，',',',$data[$index['base_industry']])));
+                               
+                            foreach($industrys as $i){
+                                $i=trim($i);
+                                if(array_search($i, $base_industry)){
+                                    $_industry =clone $industry;
+                                    $_industry->industry_id=array_search($i, $base_industry);
+                                    $_industry->save();
+                                }
+                            }                              
+                        }
+                        $num[$num_key]++;
+                    }else{
+                        $errors=$corporation->getErrors();
+                   
+                        if($errors){
+                            $error=[];
+                            foreach($errors as $e){
+                                $error[]=$e[0];
+                            }
+                            $notice_error[]=$data[$index['base_company_name']]. ' {'. implode(' ', $error).'}';
+                        }
+                        $num['fail']++;
+                    }
+                }else{
+                    $num['fail']++;
+                }
+                                    
+            }
+            if($notice_error){
+                Yii::$app->session->setFlash('error', $notice_error);
+            }
+            Yii::$app->session->setFlash('warning', '新增'.$num['add'].'家，更新'.$num['update'].'家，失败'.$num['fail'].'家。');
+                  
+         
+        } else {
+            Yii::$app->session->setFlash('error', '上传失败。');
+        }
+        return true;
+        
+    }
+    
 //    public function actionCorporationImportTest() {
 //        //判断是否Ajax
 //        if (Yii::$app->request->isAjax) {

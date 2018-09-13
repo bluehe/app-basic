@@ -62,30 +62,30 @@ class Parameter extends \yii\db\ActiveRecord
     public static function get_para_value($type,$code) {
         return static::find()->where(['type'=>$type,'code'=>$code])->orderBy(['sort_p'=>SORT_ASC])->select(['title'])->column();
     }
-//    
-//    public static function add_type($type,$title,$code=null) {
-//        
-//        $p= static::findOne(['type'=>$type,'title'=>$type]);
-//        if($p==null){
-//        if(!$code){
-//            $max= static::find()->where(['type'=>$type])->orderBy(['code'=>SORT_DESC])->select('code')->scalar();
-//            $code=$max+1;
-//        }
-//        
-//        $model=new Parameter();
-//        $model->type=$type;
-//        $model->title=$title;
-//        $model->code=$code;
-//        $model->sort_p=10;
-//        if($model->save()){
-//            return $code;
-//        }else{
-//            return false;
-//        }
-//        
-//        }else{
-//            return $p->code;
-//        }
-//        
-//    }
+    
+    public static function add_type($type,$title,$code=null) {
+        
+        $p= static::findOne(['type'=>$type,'title'=>$title]);
+        if($p==null){
+            if(!$code){
+                $max= static::find()->where(['type'=>$type])->orderBy(['code'=>SORT_DESC])->select('code')->scalar();
+                $code=$max+1;
+            }
+
+            $model=new Parameter();
+            $model->type=$type;
+            $model->title=$title;
+            $model->code=$code;
+            $model->sort_p=10;
+            if($model->save()){
+                return $code;
+            }else{
+                return false;
+            }
+        
+        }else{
+            return $p->code;
+        }
+        
+    }
 }

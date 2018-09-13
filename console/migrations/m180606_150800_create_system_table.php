@@ -43,7 +43,7 @@ class m180606_150800_create_system_table extends Migration {
             [101, 1, 'system_stat', '系统状态', 'radio', '{"0":"关闭","1":"开放"}', '系统关闭只允许超级管理员登录；关闭将清退除超级管理员外的所有用户', '1', 1],
             [102, 1, 'system_close', '关闭原因', 'textarea', '3', '', '', 2],
             [103, 1, 'system_register', '允许注册', 'radio', '{"0":"否","1":"是"}', '', '1', 3],
-            [104, 1, 'system_loginimg', '登录背景图', 'radio', '{"0":"关闭","1":"启用"}', '', '0', 4],
+            [104, 1, 'system_loginimg', '登录背景图', 'radio', '{"0":"关闭","1":"启用"}', '', '1', 4],
             [105, 1, 'system_name', '网站名称', 'text', '', '', '', 5],
             [106, 1, 'system_title', '网站标题', 'text', '', '', '',6],
             [107, 1, 'system_keywords', '关键字', 'textarea', '3', '', '', 7],
