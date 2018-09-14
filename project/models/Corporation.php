@@ -158,13 +158,25 @@ class Corporation extends \yii\db\ActiveRecord
             $statModel->save();
         } else {
             if(array_key_exists('base_bd', $changedAttributes)&&$changedAttributes['base_bd']!=$this->base_bd){
-                //BD变动，修改历史记录表
+                //BD变动，修改历史记录表,删除权限缓存
                 CorporationBd::updateAll(['end_time'=>time()], ['corporation_id'=>$this->id,'bd_id'=>$changedAttributes['base_bd']]);
                 $bdModel = new CorporationBd();
                 $bdModel->corporation_id=$this->id;
                 $bdModel->bd_id=$this->base_bd;
                 $bdModel->start_time=time();
-                $bdModel->save();               
+                $bdModel->save();
+                
+                $cache = Yii::$app->cache;
+                $corporation_update = $cache->get('corporation_update');
+                if ($corporation_update !== false&&isset($corporation_update[$this->id])) {
+                    unset($corporation_update[$this->id]);                
+                    $cache->set('corporation_update', $corporation_update);
+                }
+                $corporation_delete = $cache->get('corporation_delete');
+                if ($corporation_delete !== false&&isset($corporation_delete[$this->id])) {
+                    unset($corporation_delete[$this->id]);                
+                    $cache->set('corporation_delete', $corporation_delete);
+                }
             }
             
             if(array_key_exists('stat', $changedAttributes)&&$changedAttributes['stat']!=$this->stat){

@@ -637,8 +637,10 @@ class CorporationController extends Controller
                         $corporation=new Corporation();
                         $corporation->loadDefaultValues();
                         $corporation->base_company_name=trim($data[$index['base_company_name']]);
-                    }else{
+                    }elseif(Yii::$app->user->can('企业修改',['id'=>$corporation->id])){
                         $num_key='update';
+                    }else{
+                        continue;
                     }
                     
 //                    if(isset($data[$index['stat']])&&array_search(trim($data[$index['stat']]), $stat)){

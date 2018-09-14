@@ -27,11 +27,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box box-primary">
         <div class="box-body">
             <?php Pjax::begin(); ?>
-            <div style="margin-bottom:10px;">
+            <div class="clearfix" style="margin-bottom:10px;">
                 
-                <?= Html::a('添加企业', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-success corporation-create']) ?>
+                <?= in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)?Html::a('添加企业', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-success corporation-create']):'' ?>
                 <?= Html::a('<i class="fa fa-filter" title="选择需要显示的列"></i>', ['#'], ['data-toggle' => 'modal', 'data-target' => '#list-modal', 'class' => 'btn btn-danger pull-right column-change','style'=>'margin-left:15px']) ?>
                 <?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['corporation-export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning pull-right']) ?>
+                <?php if(in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)):?>
                  <div style="display: inline-block;margin:0 15px;" class="pull-right"><?=
                     FileInput::widget([
                         'name' => 'files[]',
@@ -68,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                 </div>
                 <?= Html::a('<i class="fa fa-download"></i>下载模板', ['corporation-temple'], ['class' => 'pull-right','style'=>'margin-top:10px']) ?>
-              
+              <?php endif;?>
               
             </div>
              
@@ -190,22 +191,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{follow} {apply} {check} {allocate} {again} {refuse}',
                         'buttons' => [                                                     
                             'follow' => function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_CREATED,Corporation::STAT_REFUSE])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-hourglass-2"></i> 跟进中', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_FOLLOW], ['class' => 'btn bg-aqua btn-xs','data-method' => 'post',]):'';
+                                return in_array($model->stat,[Corporation::STAT_CREATED,Corporation::STAT_REFUSE])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-hourglass-2"></i> 跟进中', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_FOLLOW], ['class' => 'btn bg-aqua btn-xs','data-method' => 'post',]):'';
                             }, 
                             'refuse' => function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_FOLLOW,Corporation::STAT_OVERDUE])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-times"></i> 无意愿', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_REFUSE], ['class' => 'btn bg-gray btn-xs','data-method' => 'post',]):'';
+                                return in_array($model->stat,[Corporation::STAT_FOLLOW,Corporation::STAT_OVERDUE])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-times"></i> 无意愿', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_REFUSE], ['class' => 'btn bg-gray btn-xs','data-method' => 'post',]):'';
                             },
                             'apply' => function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_FOLLOW])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-check"></i> 已申请', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-light-blue btn-xs corporation-apply',]):'';
+                                return in_array($model->stat,[Corporation::STAT_FOLLOW])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-check"></i> 已申请', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-light-blue btn-xs corporation-apply',]):'';
                             },
                             'check' => function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_APPLY])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-check-square-o"></i> 已审核', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_CHECK], ['class' => 'btn bg-yellow btn-xs','data-method' => 'post','data-confirm' =>'确定完成审核？',]):'';
+                                return in_array($model->stat,[Corporation::STAT_APPLY])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-check-square-o"></i> 已审核', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_CHECK], ['class' => 'btn bg-yellow btn-xs','data-method' => 'post','data-confirm' =>'确定完成审核？',]):'';
                             },
                             'allocate'=>function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_CHECK])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-trophy"></i> 已下拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-maroon btn-xs corporation-allocate',]):'';
+                                return in_array($model->stat,[Corporation::STAT_CHECK])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-trophy"></i> 已下拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-maroon btn-xs corporation-allocate',]):'';
                             },
                             'again'=>function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_OVERDUE,Corporation::STAT_AGAIN])&&Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-refresh"></i> 已续拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-purple btn-xs corporation-again',]):'';
+                                return in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_OVERDUE,Corporation::STAT_AGAIN])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-refresh"></i> 已续拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-purple btn-xs corporation-again',]):'';
                             },
 
                         ],
@@ -216,10 +217,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{update} {delete}',
                         'buttons' => [                           
                             'update' => function($url, $model, $key) {
-                                return Yii::$app->user->can('企业修改',['id'=>$key])?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-warning btn-xs corporation-update',]):'';
+                                return CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-warning btn-xs corporation-update',]):'';
                             },
                             'delete' => function($url, $model, $key) {
-                                return !CorporationMeal::get_allocate($model->id)&&Yii::$app->user->can('企业删除',['id'=>$key])?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？','data-method' => 'post',]):'';
+                                return !CorporationMeal::get_allocate($model->id)&&CommonHelper::corporationRule('delete', $key)?Html::a('<i class="fa fa-trash-o"></i> 删除', ['corporation-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'删除企业将会影响相关活跃记录，此操作不能恢复，你确定要删除企业吗？','data-method' => 'post',]):'';
                             },                           
                         ],
                         'visible'=> in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),

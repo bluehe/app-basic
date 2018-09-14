@@ -101,34 +101,36 @@ class UserController extends Controller {
                       
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                    $auth = Yii::$app->authManager;
-                    $Role_admin=$auth->getRole('superadmin');
-                    if($model->status == User::STATUS_DELETED && $auth->getAssignment($Role_admin->name, $mode->id)){
-                        $mode->status = User::STATUS_ACTIVE;
-                    }
-                    $model->save(false);
+                $auth = Yii::$app->authManager;
+                $Role_admin=$auth->getRole('superadmin');
+                if($model->status == User::STATUS_DELETED && $auth->getAssignment($Role_admin->name, $mode->id)){
+                    $mode->status = User::STATUS_ACTIVE;
+                }
+                $model->save(false);
 
-                    if ($model->role != $role) {
-                      
-                        
-                        if(!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)&&($model->role=='pm'||$role=='pm')){
-                            Yii::$app->session->setFlash('warning', '项目经理不能设置和移除同级人员');
-                            throw new \Exception("项目经理不能设置和移除同级人员");
-                        }
-                        if($role!=''){
-                            $Role_old = $auth->getRole($role);                      
-                            $auth->revoke($Role_old, $id);
+                if ($model->role != $role) {
+
+
+                    if(!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)&&($model->role=='pm'||$role=='pm')){
+                        Yii::$app->session->setFlash('warning', '项目经理不能设置和移除同级人员');
+                        throw new \Exception("项目经理不能设置和移除同级人员");
+                    }
+                    if($role!=''){
+                        $Role_old = $auth->getRole($role);                      
+                        $auth->revoke($Role_old, $id);
+                        Helper::invalidate();
+                    }
+                    if($model->role!=''){
+                        $Role_new = $auth->getRole($model->role);
+                        if (!$auth->getAssignment($Role_new->name, $id)) {
+                            $auth->assign($Role_new, $id);
                             Helper::invalidate();
-                        }
-                        if($model->role!=''){
-                            $Role_new = $auth->getRole($model->role);
-                            if (!$auth->getAssignment($Role_new->name, $id)) {
-                                $auth->assign($Role_new, $id);
-                                Helper::invalidate();
-                                 
-                            }
+
                         }
                     }
+                    Yii::$app->cache->delete('corporation_update');
+                    Yii::$app->cache->delete('corporation_delete');
+                }
                    
 //                    $t1 = array_diff($groups, $model->group); //新增
 //                    $t2 = array_diff($model->group, $groups); //删除
@@ -146,16 +148,16 @@ class UserController extends Controller {
 //                    }
                    
 
-                    $transaction->commit();
+                $transaction->commit();
 //                    $model->group = $groups;
-                   
-                    Yii::$app->session->setFlash('success', '修改成功。');
-                } catch (\Exception $e) {
 
-                    $transaction->rollBack();
+                Yii::$app->session->setFlash('success', '修改成功。');
+            } catch (\Exception $e) {
+
+                $transaction->rollBack();
 //                throw $e;
-                    Yii::$app->session->setFlash('error', '修改失败。');
-                }
+                Yii::$app->session->setFlash('error', '修改失败。');
+            }
  
         }
         return $this->render('user-update', [

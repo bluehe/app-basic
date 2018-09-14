@@ -119,5 +119,21 @@ class CommonHelper {
         }
         return $query;
     }
+    
+    public static function corporationRule($rule='update',$key=null){
+        $cache = Yii::$app->cache;
+        $corporation = $cache->get('corporation_'.$rule);
+        if ($corporation === false||!isset($corporation[$key][Yii::$app->user->identity->id])) {
+            if($rule=='update'){
+                $corporation[$key][Yii::$app->user->identity->id]=Yii::$app->user->can('企业修改',['id'=>$key]);
+            }elseif($rule=='delete'){
+                $corporation[$key][Yii::$app->user->identity->id]=Yii::$app->user->can('企业删除',['id'=>$key]);
+            }
+                           
+            $cache->set('corporation_'.$rule, $corporation);
+        }
+        return $corporation[$key][Yii::$app->user->identity->id];
+        
+    }
 
 }

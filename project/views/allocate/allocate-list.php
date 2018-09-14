@@ -8,6 +8,8 @@ use yii\bootstrap\Modal;
 use project\models\User;
 use project\models\Meal;
 use kartik\daterange\DateRangePicker;
+use kartik\file\FileInput;
+use project\components\CommonHelper;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -21,9 +23,47 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box box-primary">
         <div class="box-body">
 
-            <p class="clearfix">
+             <div class="clearfix" style="margin-bottom:10px;">
             <?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['allocate-export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning pull-right']) ?>
-            </p>
+            <?php if(in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)):?>
+                 <div style="display: inline-block;margin:0 15px;" class="pull-right"><?=
+                    FileInput::widget([
+                        'name' => 'files[]',
+                        'pluginOptions' => [
+                            'language' => 'zh',
+                            'layoutTemplates' => ['progress' => ''],
+                            //关闭按钮
+                            'showPreview' => false,
+                            'showCancel' => false,
+                            'showCaption' => false,
+                            'showRemove' => false,
+                            'showUpload' => false,
+                            //浏览按钮样式
+                            'browseClass' => 'btn btn-primary',
+                            'browseLabel' => '导入数据',
+                            //错误提示
+                            'elErrorContainer' => false,
+                            //进度条
+                            //'progressClass' => 'hide',
+                            //'progressUploadThreshold' => 'hide',
+                            //上传
+                            'uploadAsync' => true,
+                            'uploadUrl' => Url::toRoute(['allocate-import']),
+                            'maxFileSize' => CommonHelper::maxSize(),
+                        ],
+                        'options' => ['accept' => 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+                        'pluginEvents' => [
+                            //选择后直接上传
+                            'change' => 'function() {$(this).fileinput("upload");}',
+                            //上传成功
+                            'fileuploaded' => 'function(event, data) {window.location.reload();}',
+                        ],
+                    ]);
+                    ?>
+                </div>
+                <?= Html::a('<i class="fa fa-download"></i>下载模板', ['allocate-temple'], ['class' => 'pull-right','style'=>'margin-top:10px']) ?>
+              <?php endif;?>
+            </div>
             <?=
             GridView::widget([
                 'dataProvider' => $dataProvider,
@@ -85,10 +125,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{update} {delete}', //只需要展示删除和更新
                         'buttons' => [
                             'update' => function($url, $model, $key) {
-                                return Yii::$app->user->can('企业修改',['id'=>$model->corporation_id])?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#allocate-modal', 'class' => 'btn btn-primary btn-xs allocate-update',]):'';
+                                return CommonHelper::corporationRule('update', $model->corporation_id)?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#allocate-modal', 'class' => 'btn btn-primary btn-xs allocate-update',]):'';
                             },
                             'delete' => function($url, $model, $key) {
-                                return CorporationMeal::get_end_time($model->corporation_id)==$model->end_time&&Yii::$app->user->can('企业删除',['id'=>$model->corporation_id])?Html::a('<i class="fa fa-trash-o"></i> 删除', ['allocate-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'企业状态及记录会回退并不能恢复，确定删除吗？','data-method' => 'post',]):'';
+                                return CorporationMeal::get_end_time($model->corporation_id)==$model->end_time&&CommonHelper::corporationRule('delete', $model->corporation_id)?Html::a('<i class="fa fa-trash-o"></i> 删除', ['allocate-delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'企业状态及记录会回退并不能恢复，确定删除吗？','data-method' => 'post',]):'';
                             },
                         ],
                         'visible'=> in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),

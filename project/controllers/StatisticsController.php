@@ -183,7 +183,7 @@ class StatisticsController extends Controller {
                         $cost_total[$i]=$cost;
                     }
                     
-                    $data_amount_cost[] = ['name' => $j, 'y' => $cost/10000];
+                    $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
                 }
                 $series['amount'][] = ['type' => 'areaspline','zIndex'=>2, 'name' => '累计消耗额','color'=>'#90EE7E', 'data' => $data_amount_cost];
                 if($old_cost_num!=count($cost_total)){
@@ -264,7 +264,7 @@ class StatisticsController extends Controller {
                        
                     
                     $cost=$cost_total[$l+86400]-$cost_total[$i];
-                    $data_amount_cost[] = ['name' => $j, 'y' => $cost/10000];
+                    $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
                     
                    
                 }
@@ -340,7 +340,7 @@ class StatisticsController extends Controller {
                     }
                   
                     $cost=$cost_total[$l+86400]-$cost_total[$i];
-                    $data_amount_cost[] = ['name' => $j, 'y' => $cost/10000];
+                    $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
                   
                 }
                 $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
