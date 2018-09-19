@@ -64,7 +64,10 @@ class m180821_092802_create_corporation_table extends Migration {
             
             "FOREIGN KEY ([[base_bd]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[intent_set]]) REFERENCES {$mealTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
-                ], $tableOptions);  
+                ], $tableOptions);
+            
+            $this->createIndex('base_company_name',$table, ['base_company_name']);
+            $this->createIndex('stat',$table, ['stat']);
     }
 
     /**

@@ -252,7 +252,7 @@ class CorporationController extends Controller
             if($corporation->stat==Corporation::STAT_AGAIN){
                 $stat=1;
             }
-            $corporation->stat= $corporation->stat==Corporation::STAT_CHECK?Corporation::STAT_ALLOCATE:Corporation::STAT_AGAIN;
+            $corporation->stat= CorporationMeal::get_allocate($corporation->id)?Corporation::STAT_AGAIN:Corporation::STAT_ALLOCATE;
             $model = new CorporationMeal();
             $model->loadDefaultValues();
             $model->corporation_id=$id;
@@ -566,7 +566,6 @@ class CorporationController extends Controller
                 
             $bd=User::get_bd();
             $base_industry= Industry::getIndustryName();
-            $stat= Corporation::$List['stat'];
             $intent_set= Meal::get_meal();
             $contact_park=Parameter::get_type('contact_park');
             $develop_pattern=Parameter::get_type('develop_pattern');

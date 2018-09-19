@@ -62,16 +62,25 @@ class StatisticsController extends Controller {
         $parent=$sum=[];
         
         foreach($industry_num as $key=>$num){
-            $parent[$industrys[$key]['parent_id']][]=[$industrys[$key]['name'],(int)$num];
-            $sum[$industrys[$key]['parent_id']]=isset($sum[$industrys[$key]['parent_id']])?$sum[$industrys[$key]['parent_id']]+$num:(int)$num;           
+            if($industrys[$key]['parent_id']){
+                $parent[$industrys[$key]['parent_id']][]=[$industrys[$key]['name'],(int)$num];
+                $sum[$industrys[$key]['parent_id']]=isset($sum[$industrys[$key]['parent_id']])?$sum[$industrys[$key]['parent_id']]+$num:(int)$num;
+            }else{
+                //$parent[$industrys[$key]['id']][]=[$industrys[$key]['name'],(int)$num];
+                $sum[$industrys[$key]['id']]=isset($sum[$industrys[$key]['id']])?$sum[$industrys[$key]['id']]+$num:(int)$num;
+            }
         }
         
         $parents= Industry::find()->where(['id'=> array_keys($sum)])->indexBy('id')->all();
         arsort($sum);
         $serie_data=$drilldown_data=[];
         foreach($sum as $k=>$s){
-            $serie_data[]=['name'=>$parents[$k]['name'],'y'=>$s,'drilldown'=>$parents[$k]['name']];
-            $drilldown_data[]=['name'=>$parents[$k]['name'],'id'=>$parents[$k]['name'],'data'=>$parent[$k]];
+            if(isset($parent[$k])){
+                $serie_data[]=['name'=>$parents[$k]['name'],'y'=>$s,'drilldown'=>$parents[$k]['name']];
+                $drilldown_data[]=['name'=>$parents[$k]['name'],'id'=>$parents[$k]['name'],'data'=>$parent[$k]];
+            }else{
+                $serie_data[]=['name'=>$parents[$k]['name'],'y'=>$s,'drilldown'=>false];
+            }
         }
         
         $series['industry'][]=['name'=>'一级分类','colorByPoint'=>true,'data'=>$serie_data];

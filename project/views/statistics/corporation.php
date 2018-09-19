@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val();g=$('input[name=group]:checked').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&group='+g;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s;}",
                     ]
                     ]);
                     ?>
