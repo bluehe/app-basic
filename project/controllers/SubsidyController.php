@@ -37,7 +37,7 @@ class SubsidyController extends Controller
             'subsidy-create' => [
                 'class' => CreateAction::className(),
                 'modelClass' => ClouldSubsidy::className(),
-                'successRedirect'=>'subsidy-list',
+                'successRedirect'=>Yii::$app->request->referrer,
                 'ajax'=>true,
             ],
             'subsidy-update' => [

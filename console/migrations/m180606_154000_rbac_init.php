@@ -148,26 +148,41 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/system/agreement', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/crontab', '2', null, null, null, '1482820123', '1482820123'],
             
+            //用户管理
             ['/user/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/user/user-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            //参数管理
             ['/parameter/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/parameter/parameter-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            //套餐管理
             ['/meal/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/meal/meal-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            //行业管理
             ['/industry/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/industry/industry-list', '2', null, null, null, '1482820123', '1482820123'], 
             
+            //企业管理
             ['/corporation/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/corporation/corporation-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            //下拨管理
             ['/allocate/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/allocate/allocate-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            //补贴管理
             ['/subsidy/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/subsidy/subsidy-list', '2', null, null, null, '1482820123', '1482820123'],
+            
+            //字段管理
+            ['/field/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/field/index', '2', null, null, null, '1482820123', '1482820123'],
+            
+            //历史数据
+            ['/history/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/history/history-list', '2', null, null, null, '1482820123', '1482820123'],
             
             ['/statistics/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/statistics/user', '2', null, null, null, '1482820123', '1482820123'],
@@ -199,6 +214,10 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['企业删除', '2', '企业删除', '企业删除', null, '1482820123', '1482820123'],
             ['下拨管理', '2', '下拨管理', null, null, '1482820123', '1482820123'],
             ['补贴管理', '2', '补贴管理', null, null, '1482820123', '1482820123'],
+            
+//            ['数据中心', '2', '数据中心', null, null, '1482820123', '1482820123'],
+            ['字段管理', '2', '字段管理', null, null, '1482820123', '1482820123'],
+            ['历史数据', '2', '历史数据', null, null, '1482820123', '1482820123'],            
             
             ['数据统计', '2', '数据统计', null, null, '1482820123', '1482820123'],
             ['用户统计', '2', '用户统计', null, null, '1482820123', '1482820123'],
@@ -246,18 +265,32 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['pm', '下拨管理'],
             ['ob_data', '下拨管理'],
             ['bd', '下拨管理'],
+            ['sa', '下拨管理'],
+            ['ob', '下拨管理'],
             
             ['补贴管理', '/subsidy/*'],
             ['pm', '补贴管理'],
             ['ob_data', '补贴管理'],
             ['bd', '补贴管理'],
+            ['sa', '补贴管理'],
+            ['ob', '补贴管理'],
+            
+            ['字段管理', '/field/*'],
+            ['superadmin', '字段管理'],
+            ['ob_data', '字段管理'],
+            
+            ['历史数据', '/history/*'],
+            ['pm', '历史数据'],
+            ['bd', '历史数据'],
+            ['sa', '历史数据'],
+            ['ob', '历史数据'],
             
             ['用户统计', '/statistics/user'],
+            ['企业统计', '/statistics/corporation'],
             ['活跃统计', '/statistics/activity'],            
             ['培训统计', '/statistics/train'],
-            ['企业统计', '/statistics/corporation'],
-            ['数据统计', '活跃统计'],
             ['数据统计', '企业统计'],
+            ['数据统计', '活跃统计'],           
             ['数据统计', '培训统计'],
             ['superadmin', '用户统计'],
             ['pm', '数据统计'],

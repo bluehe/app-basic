@@ -46,7 +46,7 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [22, '修改密码', 20, '/account/change-password', 2, '{"icon":"fa fa-unlock-alt"}'],
             [23, '头像设置', 20, '/account/thumb', 3, '{"icon":"fa fa-camera-retro"}'],
             
-            [30, '业务中心', NULL, '/user/user-list', 3, '{"icon":"fa  fa-briefcase"}'],
+            [30, '业务中心', NULL, '/user/user-list', 3, '{"icon":"fa fa-briefcase"}'],
             [31, '用户管理', 30, '/user/user-list', 1, '{"icon":"fa fa-user", "multi-action":["user-list", "user-update"]}'], 
             [32, '参数管理', 30, '/parameter/parameter-list', 2, '{"icon":"fa fa-code"}'], 
             [33, '套餐管理', 30, '/meal/meal-list', 3, '{"icon":"fa fa-gift", "multi-action":["meal-list", "meal-create", "meal-update"]}'], 
@@ -54,6 +54,12 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [35, '企业管理', 30, '/corporation/corporation-list', 5, '{"icon":"fa fa-newspaper-o"}'],
             [36, '下拨管理', 30, '/allocate/allocate-list', 6, '{"icon":"fa fa-trophy"}'],
             [37, '补贴管理', 30, '/subsidy/subsidy-list', 7, '{"icon":"fa fa-tint"}'],
+            
+            [40, '数据中心', NULL, '/field/index', 4, '{"icon":"fa fa-wrench"}'],
+            [41, '字段管理', 40, '/field/index', 1, '{"icon":"fa fa-suitcase"}'],
+//            [42, '上传记录', 40, '/upload/upload-list', 2, '{"icon":"fa fa-upload"}'],
+            [43, '历史数据', 40, '/history/history-list', 3, '{"icon":"fa fa-database", "multi-action":["history-list", "history-create", "history-update"]}'],
+//            [44, '活跃数据', 40, '/work/activity-change', 4, '{"icon":"fa fa-heartbeat"}'],
             
             [70, '数据统计', NULL, '/statistics/activity', 7, '{"icon":"fa  fa-bar-chart"}'],
             [71, '用户统计', 70, '/statistics/user', 1, '{"icon":"fa fa-user"}'],
