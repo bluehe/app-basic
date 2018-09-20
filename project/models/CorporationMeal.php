@@ -51,6 +51,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['bd' => 'id']],
             [['number'], 'default', 'value' => 1],
+            [['end_time'],'safe'],
         ];
     }
     

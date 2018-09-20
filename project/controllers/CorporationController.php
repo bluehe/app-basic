@@ -610,17 +610,23 @@ class CorporationController extends Controller
                 'develop_current_situation'=>$searchModel->getAttributeLabel('develop_current_situation'),
                 'develop_weakness'=>$searchModel->getAttributeLabel('develop_weakness'),
                 ];
+            
+            //项目处理
+            if(isset($datas[0])){
+                $keys= array_filter(array_keys($datas[0]));
+                if(!in_array($index['base_company_name'], $keys)){
+                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['base_company_name'].'>>字段');
+                    return false;
+                }
+               
+            }else{
+                Yii::$app->session->setFlash('error', '没有有效数据');
+                return false;
+            }
+            
             foreach ($datas as $key=>$data) {
 //                    Yii::$app->session->setFlash('success', json_encode($datas,256));
-//                    return true;
-                if($key==0){
-                    //项目处理
-                    $keys= array_filter(array_keys($data));
-                    if(!in_array($index['base_company_name'], $keys)){
-                        Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['base_company_name'].'>>字段');
-                        break;
-                    }
-                }                            
+//                    return true;                          
                 //数据处理
                 
                 $data= array_filter($data);//去除0值和空值

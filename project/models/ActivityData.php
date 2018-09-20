@@ -83,7 +83,7 @@ class ActivityData extends \yii\db\ActiveRecord
             'projectman_membercount' => '当前项目成员数',
             'projectman_versioncount' => '当前迭代数',
             'projectman_issuecount' => '工作项数',
-            'projectman_storagecount' => '项目存储空间（M）',
+            'projectman_storagecount' => '项目存储空间',
             'codehub_all_usercount' => '配置管理用户数',
             'codehub_repositorycount' => '当前代码仓库数',
             'codehub_commitcount' => '提交次数',
@@ -100,7 +100,7 @@ class ActivityData extends \yii\db\ActiveRecord
             'codeci_usercount' => '编译构建用户数',
             'codeci_buildcount' => '当前构建任务数',
             'codeci_allbuildcount' => '构建次数',
-            'codeci_buildtotaltime' => '构建时长（秒）',
+            'codeci_buildtotaltime' => '构建时长',
             'testman_usercount' => '测试管理用户数',
             'testman_casecount' => '用例总数',
             'testman_totalexecasecount' => '用例执行次数',
@@ -126,25 +126,26 @@ class ActivityData extends \yii\db\ActiveRecord
        unset($fields['id']);
        unset($fields['corporation_id']);
        unset($fields['statistics_time']);
-       return $fields;
+       
+       return array_merge(['huawei_account'=>'华为云账号','corporation_name'=>'企业名称'],$fields);
     }
     
         
-//    public static function get_corporationid_by_time($statistics_time='') {   
-//       return static::find()->andFilterWhere(['statistics_time'=>$statistics_time])->select(['corporation_id'])->column();
-//
-//    }
+    public static function get_corporationid_by_time($statistics_time='') {   
+       return static::find()->andFilterWhere(['statistics_time'=>$statistics_time])->select(['corporation_id'])->column();
+
+    }
     
-//    public static function get_pre_time($statistics_time='',$corporation_id='') {   
-//       return static::find()->andFilterWhere(['<','statistics_time',$statistics_time])->andFilterWhere(['corporation_id'=>$corporation_id])->select(['statistics_time'])->orderBy(['statistics_time'=>SORT_DESC])->distinct()->scalar();
-//
-//    }
-//    
-//    public static function get_next_time($statistics_time='',$corporation_id='') {   
-//       return static::find()->andFilterWhere(['>','statistics_time',$statistics_time])->andFilterWhere(['corporation_id'=>$corporation_id])->select(['statistics_time'])->orderBy(['statistics_time'=>SORT_ASC])->distinct()->scalar();
-//
-//    }
-//    
+    public static function get_pre_time($statistics_time='',$corporation_id='') {   
+       return static::find()->andFilterWhere(['<','statistics_time',$statistics_time])->andFilterWhere(['corporation_id'=>$corporation_id])->select(['statistics_time'])->orderBy(['statistics_time'=>SORT_DESC])->distinct()->scalar();
+
+    }
+    
+    public static function get_next_time($statistics_time='',$corporation_id='') {   
+       return static::find()->andFilterWhere(['>','statistics_time',$statistics_time])->andFilterWhere(['corporation_id'=>$corporation_id])->select(['statistics_time'])->orderBy(['statistics_time'=>SORT_ASC])->distinct()->scalar();
+
+    }
+    
 //    public static function get_data_by_time($statistics_time='',$corporation_id='') {   
 //       return static::find()->where(['statistics_time'=>$statistics_time])->andFilterWhere(['corporation_id'=>$corporation_id])->indexBy(['corporation_id'])->asArray()->all();
 //

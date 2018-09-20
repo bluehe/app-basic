@@ -2,10 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use project\models\User;
-use project\models\Meal;
-use kartik\widgets\DatePicker;
-use project\models\CorporationMeal;
 use project\models\Field;
 use project\models\ActivityData;
 

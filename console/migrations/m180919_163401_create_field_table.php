@@ -25,9 +25,11 @@ class m180919_163401_create_field_table extends Migration {
             'type' => $this->integer(),
             "FOREIGN KEY ([[parent]]) REFERENCES {$table}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
           
-                ], $tableOptions);
-
-       
+        ], $tableOptions);
+            
+//        $this->createIndex('code',$table, ['code']);
+        $this->createIndex('name',$table, ['name']);
+              
     }
 
     /**

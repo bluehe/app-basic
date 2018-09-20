@@ -65,7 +65,7 @@ class ClouldSubsidy extends \yii\db\ActiveRecord
     public function afterFind()
     {
         parent::afterFind();
-        $this->subsidy_time=date('Y-m-d',$this->subsidy_time);
+        $this->subsidy_time=$this->subsidy_time>0?date('Y-m-d',$this->subsidy_time):'';
     }
     
     public function requiredByCorporationid($attribute, $params)

@@ -90,18 +90,28 @@ class Field extends \yii\db\ActiveRecord
     
     //得到一级项目ID-name 键值数组
     public static function get_parents_id($id=0) {
-        $items = self::find()->where(['parent'=>NULL])->andFilterWhere(['not',['id'=>$id]])->orderBy('id')->all();
-        return ArrayHelper::map($items, 'id', 'name');
+        $fields = static::find()->where(['parent'=>NULL])->andFilterWhere(['not',['id'=>$id]])->orderBy('id')->all();
+        return ArrayHelper::map($fields, 'id', 'name');
     }
     
-//    //无代码项目，返回数组
-//    public static function get_item_notcode($ids=array()) {
-//        $items=self::find()->where(['or',['code'=>NULL],['code'=>'']])->andFilterWhere(['id'=>$ids])->all();
-//        return ArrayHelper::map($items, 'name', 'id');
-//    }
-//    
-//    public static function get_code_by_id($ids=array()) {
-//        $items=self::find()->filterWhere(['id'=>$ids])->all();
-//        return ArrayHelper::map($items, 'id', 'code');
-//    }
+    public static function get_name_id($name) {
+        return static::find()->andFilterWhere(['name'=>$name])->select(['id','name'])->indexBy('name')->column();
+        
+    }
+    
+    public static function get_code_name($code,$name) {
+        return static::find()->where(['name'=>$name,'code'=>$code])->select(['name'])->scalar();
+        
+    }
+    
+    //无代码项目，返回数组
+    public static function get_field_notcode($ids=array()) {
+        $items=static::find()->where(['or',['code'=>NULL],['code'=>'']])->andFilterWhere(['id'=>$ids])->all();
+        return ArrayHelper::map($items, 'name', 'id');
+    }
+    
+    public static function get_code_by_id($ids=array()) {
+        $items=static::find()->where(['id'=>$ids])->all();
+        return ArrayHelper::map($items, 'id', 'code');
+    }
 }

@@ -2,19 +2,15 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use project\models\CorporationMeal;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
-use project\models\User;
-use project\models\Meal;
-use kartik\daterange\DateRangePicker;
-use project\components\CommonHelper;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '字段管理';
-$this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['field/field-list']];
+$this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['field/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="field-index">
@@ -25,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <p>
                 <?= Html::a('添加字段', ['#'], ['data-toggle' => 'modal', 'data-target' => '#field-modal','class' => 'btn btn-success field-create']) ?>
             </p>
+            <?php Pjax::begin(); ?>
             <?=
             GridView::widget([
                 'dataProvider' => $dataProvider,
@@ -68,6 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]);
             ?>
+            <?php Pjax::end(); ?>
         </div>
     </div>
 </div>

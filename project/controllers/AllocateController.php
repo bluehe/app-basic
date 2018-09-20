@@ -173,13 +173,18 @@ class AllocateController extends Controller {
                 ];
             
             //项目处理
-            $keys= array_filter(array_keys($datas[0]));
-            if(!in_array($index['corporation_id'], $keys)){
-                Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['corporation_id'].'>>字段');
-                return false;
-            }
-            if(!in_array($index['start_time'], $keys)){
-                Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['start_time'].'>>字段');
+            if(isset($datas[0])){
+                $keys= array_filter(array_keys($datas[0]));
+                if(!in_array($index['corporation_id'], $keys)){
+                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['corporation_id'].'>>字段');
+                    return false;
+                }
+                if(!in_array($index['start_time'], $keys)){
+                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['start_time'].'>>字段');
+                    return false;
+                }
+            }else{
+                Yii::$app->session->setFlash('error', '没有有效数据');
                 return false;
             }
             
