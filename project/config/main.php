@@ -108,6 +108,13 @@ return [
                         
                     ]
                 ],
+                project\assets\SparklineAsset::className() =>[
+                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
+                    'js'=>[
+                        'a'=>'jquery-sparkline/dist/jquery.sparkline.min.js',
+                        
+                    ]
+                ],
                 
             ],
         ],

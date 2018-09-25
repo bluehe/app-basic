@@ -12,6 +12,7 @@ use project\components\ExcelHelper;
 use project\models\Field;
 use project\models\Corporation;
 use project\models\ActivityData;
+use project\models\ActivityChange;
 
 
 class ImportController extends Controller { 
@@ -146,7 +147,7 @@ class ImportController extends Controller {
                     //未改变
                     $num_delete=count(array_diff($corporation_exist, array_keys($corporation_datas)));
                     
-                    //删除
+                    //或者删除
                     //ActivityData::deleteAll(['statistics_time'=>$model->statistics_at,'corporation_id'=>array_diff($corporation_exist, array_keys($corporation_datas))]);
                     
                     Yii::$app->session->setFlash('success', '新增 '.$num_add.'条，更新 '.$num_update.' 条，未改变 '.$num_delete.' 条数据');
@@ -157,29 +158,30 @@ class ImportController extends Controller {
                     $model->stat= ImportLog::STAT_INDUCE;
                     $model->save();
                     
-//                    //生成区间活跃数据
-//                    //删除旧数据
-//                    ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at]]);
-//                    //前部分区间
-//                    $pre_time= ActivityData::get_pre_time($model->statistics_at);
-//                    if($pre_time){                       
-//                        ActivityChange::induce_data($pre_time, $model->statistics_at);
-//                                               
-//                    }
-//                    //后部分区间
-//                    $next_time= ActivityData::get_next_time($model->statistics_at);
-//                    if($next_time){
-//                        ActivityChange::induce_data($model->statistics_at,$next_time);
-//                        ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time]);                       
-//                    }
-//                                        
-//                    //设置活跃标志
-//                    ActivityChange::set_activity();
-//                    
-//                    //设置趋势
-//                    ActivityChange::set_trend();
-//                    
-//                    //清除缓存
+                    //生成区间活跃数据
+                    //删除旧数据
+                    ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at]]);
+                    //前部分区间
+                    $pre_time= ActivityData::get_pre_time($model->statistics_at);
+                    if($pre_time){                       
+                        ActivityChange::induce_data($pre_time, $model->statistics_at);
+                                               
+                    }
+                    //后部分区间
+                    $next_time= ActivityData::get_next_time($model->statistics_at);
+                    if($next_time){
+                        ActivityChange::induce_data($model->statistics_at,$next_time);
+                        ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time]);                       
+                    }
+                                        
+                    //设置活跃标志
+                    ActivityChange::set_activity();
+                    
+                    //设置趋势
+                    ActivityChange::set_trend();
+                    
+                    //清除缓存
+                    Yii::$app->cache->delete('deviation');
 //                    Yii::$app->cache->flush();
                                         
                 }else{
@@ -201,25 +203,26 @@ class ImportController extends Controller {
         $model = ImportLog::findOne($id);
         if ($model !== null) {
             ActivityData::deleteAll(['statistics_time'=>$model->statistics_at]);
-           // ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at]]);
+            ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at]]);
             
             $pre_time= ActivityData::get_pre_time($model->statistics_at);
             $next_time= ActivityData::get_next_time($model->statistics_at);
-//            if($pre_time&&$next_time){
-//                ActivityChange::induce_data($pre_time,$next_time);          
-//            }
-//            if($next_time){
-//                ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time]);
-//            }
+            if($pre_time&&$next_time){
+                ActivityChange::induce_data($pre_time,$next_time);          
+            }
+            if($next_time){
+                ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time]);
+            }
             $model->stat= ImportLog::STAT_UPLOAD;
             $model->save();
             
-//            ActivityChange::set_activity();
-//            
-//            //设置趋势
-//            ActivityChange::set_trend();
-//            
-//            //清除缓存
+            ActivityChange::set_activity();
+            
+            //设置趋势
+            ActivityChange::set_trend();
+            
+            //清除缓存
+            Yii::$app->cache->delete('deviation');
 //            Yii::$app->cache->flush();
                    
             

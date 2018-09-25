@@ -114,4 +114,12 @@ class Field extends \yii\db\ActiveRecord
         $items=static::find()->where(['id'=>$ids])->all();
         return ArrayHelper::map($items, 'id', 'code');
     }
+    
+    public static function get_typeadd_code($time) {
+        $log_id= ImportLog::find()->where(['statistics_at'=>$time,'stat'=> ImportLog::STAT_INDUCE])->select(['id'])->scalar();
+        $field_id = ImportData::find()->where(['log_id'=>$log_id])->select(['field_id'])->distinct()->column();
+        $field = static::find()->where(['id'=>$field_id,'type'=> self::TYPE_ADD])->select(['code'])->distinct()->column();
+       
+        return $field;
+    }
 }

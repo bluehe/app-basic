@@ -276,6 +276,13 @@ a.desc:after {
 /*.timeline-list .timeline>li>.fa {left:20px;width:50px;font-size: 14px;}*/
 .timeline-list .timeline>li>.timeline-item{margin-left: 72px;}
 
+#columnsetting-content .checkbox-inline {
+    width: 140px;
+}
+#columnsetting-content .checkbox-inline:first-child {
+    margin-left: 10px;
+}
+
 @media (min-width: 768px){
     .timeline-list .dl-horizontal dt {width:60px}
     .timeline-list .dl-horizontal dd {

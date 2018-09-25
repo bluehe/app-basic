@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `field`.
  */
-class m180919_163401_create_field_table extends Migration {
+class m180919_163402_create_field_table extends Migration {
 
     /**
      * @inheritdoc
@@ -28,7 +28,6 @@ class m180919_163401_create_field_table extends Migration {
         ], $tableOptions);
             
 //        $this->createIndex('code',$table, ['code']);
-        $this->createIndex('name',$table, ['name']);
               
     }
 

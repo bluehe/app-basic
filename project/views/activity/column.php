@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use project\models\Corporation;
+use project\models\ActivitySearch;
 
 /* @var $this yii\web\View */
 /* @var $model dms\models\RepairOrder */
@@ -20,7 +20,7 @@ use project\models\Corporation;
         ]);
         ?>
         
-        <?= $form->field($model, 'content')->checkboxList(Corporation::$List['column'], ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
+        <?= $form->field($model, 'content')->checkboxList(ActivitySearch::$List['column'], ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
      
 
         <div class="col-md-6 col-xs-6 text-right">
