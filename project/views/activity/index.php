@@ -335,328 +335,573 @@ $this->params['breadcrumbs'][] = $this->title;
                     'visible'=> is_array($column)&&in_array('pipeline_usercount',$column),
                     ],
             
-            [
-            'attribute' => 'pipeline_pipecount',
-            'value' => function($model) {
-                return Html::tag('span', $model->pipeline_pipecount?$model->pipeline_pipecount:'',['class' => ($model->pipeline_pipecount==0 ? '' : ($model->pipeline_pipecount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('pipeline_pipecount', $model->start_time, $model->end_time);
-                    $value=$model->pipeline_pipecount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('pipeline_pipecount',$column),
-            ],
+                    [
+                    'attribute' => 'pipeline_pipecount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->pipeline_pipecount?$model->pipeline_pipecount:'',['class' => ($model->pipeline_pipecount==0 ? '' : ($model->pipeline_pipecount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('pipeline_pipecount', $model->start_time, $model->end_time);
+                            $value=$model->pipeline_pipecount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('pipeline_pipecount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'pipeline_executecount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->pipeline_executecount?$model->pipeline_executecount:'',['class' => ($model->pipeline_executecount==0 ? '' : ($model->pipeline_executecount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('pipeline_executecount', $model->start_time, $model->end_time);
+                            $value=$model->pipeline_executecount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}         
+                    }, 
+                    'visible'=> is_array($column)&&in_array('pipeline_executecount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'pipeline_elapse_time',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->pipeline_elapse_time?$model->pipeline_elapse_time:'',['class' => ($model->pipeline_elapse_time==0 ? '' : ($model->pipeline_elapse_time >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('pipeline_elapse_time', $model->start_time, $model->end_time);
+                            $value=$model->pipeline_elapse_time;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('pipeline_elapse_time',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_usercount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codecheck_usercount?$model->codecheck_usercount:'',['class' => ($model->codecheck_usercount==0 ? '' : ($model->codecheck_usercount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codecheck_usercount', $model->start_time, $model->end_time);
+                            $value=$model->codecheck_usercount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('codecheck_usercount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_taskcount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codecheck_taskcount?$model->codecheck_taskcount:'',['class' => ($model->codecheck_taskcount==0 ? '' : ($model->codecheck_taskcount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codecheck_taskcount', $model->start_time, $model->end_time);
+                            $value=$model->codecheck_taskcount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}         
+                    }, 
+                    'visible'=> is_array($column)&&in_array('codecheck_taskcount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_codelinecount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codecheck_codelinecount?$model->codecheck_codelinecount:'',['class' => ($model->codecheck_codelinecount==0 ? '' : ($model->codecheck_codelinecount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codecheck_codelinecount', $model->start_time, $model->end_time);
+                            $value=$model->codecheck_codelinecount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('codecheck_codelinecount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_issuecount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codecheck_issuecount?$model->codecheck_issuecount:'',['class' => ($model->codecheck_issuecount==0 ? '' : ($model->codecheck_issuecount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codecheck_issuecount', $model->start_time, $model->end_time);
+                            $value=$model->codecheck_issuecount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}
+                    },
+                    'visible'=> is_array($column)&&in_array('codecheck_issuecount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_execount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codecheck_execount?$model->codecheck_execount:'',['class' => ($model->codecheck_execount==0 ? '' : ($model->codecheck_execount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codecheck_execount', $model->start_time, $model->end_time);
+                            $value=$model->codecheck_execount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}         
+                    }, 
+                    'visible'=> is_array($column)&&in_array('codecheck_execount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codeci_usercount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codeci_usercount?$model->codeci_usercount:'',['class' => ($model->codeci_usercount==0 ? '' : ($model->codeci_usercount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codeci_usercount', $model->start_time, $model->end_time);
+                            $value=$model->codeci_usercount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}        
+                    },
+                    'visible'=> is_array($column)&&in_array('codeci_usercount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codeci_buildcount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codeci_buildcount?$model->codeci_buildcount:'',['class' => ($model->codeci_buildcount==0 ? '' : ($model->codeci_buildcount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codeci_buildcount', $model->start_time, $model->end_time);
+                            $value=$model->codeci_buildcount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('codeci_buildcount',$column),
+                    ],
                      
-            [
-            'attribute' => 'pipeline_executecount',
-            'value' => function($model) {
-                return Html::tag('span', $model->pipeline_executecount?$model->pipeline_executecount:'',['class' => ($model->pipeline_executecount==0 ? '' : ($model->pipeline_executecount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('pipeline_executecount', $model->start_time, $model->end_time);
-                    $value=$model->pipeline_executecount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}         
-            }, 
-            'visible'=> is_array($column)&&in_array('pipeline_executecount',$column),
-            ],
+                    [
+                    'attribute' => 'codeci_allbuildcount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codeci_allbuildcount?$model->codeci_allbuildcount:'',['class' => ($model->codeci_allbuildcount==0 ? '' : ($model->codeci_allbuildcount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codeci_allbuildcount', $model->start_time, $model->end_time);
+                            $value=$model->codeci_allbuildcount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}           
+                    },
+                    'visible'=> is_array($column)&&in_array('codeci_allbuildcount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codeci_buildtotaltime',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->codeci_buildtotaltime?$model->codeci_buildtotaltime:'',['class' => ($model->codeci_buildtotaltime==0 ? '' : ($model->codeci_buildtotaltime >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('codeci_buildtotaltime', $model->start_time, $model->end_time);
+                            $value=$model->codeci_buildtotaltime;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('codeci_buildtotaltime',$column),
+                    ],
+
+                    [
+                    'attribute' => 'testman_usercount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->testman_usercount?$model->testman_usercount:'',['class' => ($model->testman_usercount==0 ? '' : ($model->testman_usercount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('testman_usercount', $model->start_time, $model->end_time);
+                            $value=$model->testman_usercount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                       }else{return [];}           
+                    }, 
+                    'visible'=> is_array($column)&&in_array('testman_usercount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'testman_casecount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->testman_casecount?$model->testman_casecount:'',['class' => ($model->testman_casecount==0 ? '' : ($model->testman_casecount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('testman_casecount', $model->start_time, $model->end_time);
+                            $value=$model->testman_casecount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    }, 
+                    'visible'=> is_array($column)&&in_array('testman_casecount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'testman_totalexecasecount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->testman_totalexecasecount?$model->testman_totalexecasecount:'',['class' => ($model->testman_totalexecasecount==0 ? '' : ($model->testman_totalexecasecount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('testman_totalexecasecount', $model->start_time, $model->end_time);
+                            $value=$model->testman_totalexecasecount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('testman_totalexecasecount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'deploy_usercount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->deploy_usercount?$model->deploy_usercount:'',['class' => ($model->deploy_usercount==0 ? '' : ($model->deploy_usercount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('deploy_usercount', $model->start_time, $model->end_time);
+                            $value=$model->deploy_usercount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('deploy_usercount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'deploy_envcount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->deploy_envcount?$model->deploy_envcount:'',['class' => ($model->deploy_envcount==0 ? '' : ($model->deploy_envcount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('deploy_envcount', $model->start_time, $model->end_time);
+                            $value=$model->deploy_envcount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('deploy_envcount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'deploy_execount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->deploy_execount?$model->deploy_execount:'',['class' => ($model->deploy_execount==0 ? '' : ($model->deploy_execount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('deploy_execount', $model->start_time, $model->end_time);
+                            $value=$model->deploy_execount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    }, 
+                    'visible'=> is_array($column)&&in_array('deploy_execount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'deploy_vmcount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->deploy_vmcount?$model->deploy_vmcount:'',['class' => ($model->deploy_vmcount==0 ? '' : ($model->deploy_vmcount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('deploy_vmcount', $model->start_time, $model->end_time);
+                            $value=$model->deploy_vmcount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}            
+                    },
+                    'visible'=> is_array($column)&&in_array('deploy_vmcount',$column),
+                    ],
+                            
+                    [
+                    'attribute' => 'projectman_usercount_d',
+                    'value' => function($model) {                                
+                        return $model->data->projectman_usercount?$model->data->projectman_usercount:'';
+                    },
+                    'visible'=> is_array($column)&&in_array('projectman_usercount_d',$column),
+                    ],
+                            
+                    [
+                    'attribute' => 'projectman_projectcount_d',
+                    'value' => function($model) {
+                        return $model->data->projectman_projectcount?$model->data->projectman_projectcount:'';
+
+                    },
+                    'visible'=> is_array($column)&&in_array('projectman_projectcount_d',$column),
+                    ],
+                            
+                    [
+                    'attribute' => 'projectman_membercount_d',
+                    'value' => function($model) {
+                        return $model->data->projectman_membercount?$model->data->projectman_membercount:'';
+
+                    },                
+                    'visible'=> is_array($column)&&in_array('projectman_membercount_d',$column),
+                    ],
+                            
+                    [
+                    'attribute' => 'projectman_versioncount_d',
+                    'value' => function($model) {
+                        return $model->data->projectman_versioncount?$model->data->projectman_versioncount:'';
+
+                    },                               
+                    'visible'=> is_array($column)&&in_array('projectman_versioncount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'projectman_issuecount_d',
+                    'value' => function($model) {
+                        return $model->data->projectman_issuecount?$model->data->projectman_issuecount:'';
+                    },
+                    'visible'=> is_array($column)&&in_array('projectman_issuecount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'projectman_storagecount_d',
+                    'value' => function($model) {
+                        return $model->data->projectman_storagecount?$model->data->projectman_storagecount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('projectman_storagecount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codehub_all_usercount_d',
+                    'value' => function($model) {
+                        return $model->data->codehub_all_usercount?$model->data->codehub_all_usercount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('codehub_all_usercount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codehub_repositorycount_d',
+                    'value' => function($model) {
+                        return $model->data->codehub_repositorycount?$model->data->codehub_repositorycount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('codehub_repositorycount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codehub_commitcount_d',
+                    'value' => function($model) {
+                        return $model->data->codehub_commitcount?$model->data->codehub_commitcount:'';
+                    },                 
+                    'visible'=> is_array($column)&&in_array('codehub_commitcount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codehub_repositorysize_d',
+                    'value' => function($model) {
+                        return $model->data->codehub_repositorysize?$model->data->codehub_repositorysize:'';
+                    },                 
+                    'visible'=> is_array($column)&&in_array('codehub_repositorysize_d',$column),
+                    ],
+                            
+                    [
+                    'attribute' => 'pipeline_usercount_d',
+                    'value' => function($model) {
+                       return $model->data->pipeline_usercount?$model->data->pipeline_usercount:'';
+                    },                   
+                    'visible'=> is_array($column)&&in_array('pipeline_usercount_d',$column),
+                    ],
             
-            [
-            'attribute' => 'pipeline_elapse_time',
-            'value' => function($model) {
-                return Html::tag('span', $model->pipeline_elapse_time?$model->pipeline_elapse_time:'',['class' => ($model->pipeline_elapse_time==0 ? '' : ($model->pipeline_elapse_time >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('pipeline_elapse_time', $model->start_time, $model->end_time);
-                    $value=$model->pipeline_elapse_time;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('pipeline_elapse_time',$column),
-            ],
-            
-            [
-            'attribute' => 'codecheck_usercount',
-            'value' => function($model) {
-                return Html::tag('span', $model->codecheck_usercount?$model->codecheck_usercount:'',['class' => ($model->codecheck_usercount==0 ? '' : ($model->codecheck_usercount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codecheck_usercount', $model->start_time, $model->end_time);
-                    $value=$model->codecheck_usercount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('codecheck_usercount',$column),
-            ],
-            
-            [
-            'attribute' => 'codecheck_taskcount',
-            'value' => function($model) {
-                return Html::tag('span', $model->codecheck_taskcount?$model->codecheck_taskcount:'',['class' => ($model->codecheck_taskcount==0 ? '' : ($model->codecheck_taskcount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codecheck_taskcount', $model->start_time, $model->end_time);
-                    $value=$model->codecheck_taskcount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}         
-            }, 
-            'visible'=> is_array($column)&&in_array('codecheck_taskcount',$column),
-            ],
-            
-            [
-            'attribute' => 'codecheck_codelinecount',
-            'value' => function($model) {
-                return Html::tag('span', $model->codecheck_codelinecount?$model->codecheck_codelinecount:'',['class' => ($model->codecheck_codelinecount==0 ? '' : ($model->codecheck_codelinecount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codecheck_codelinecount', $model->start_time, $model->end_time);
-                    $value=$model->codecheck_codelinecount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('codecheck_codelinecount',$column),
-            ],
-            
-            [
-            'attribute' => 'codecheck_issuecount',
-            'value' => function($model) {
-                return Html::tag('span', $model->codecheck_issuecount?$model->codecheck_issuecount:'',['class' => ($model->codecheck_issuecount==0 ? '' : ($model->codecheck_issuecount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codecheck_issuecount', $model->start_time, $model->end_time);
-                    $value=$model->codecheck_issuecount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}
-            },
-            'visible'=> is_array($column)&&in_array('codecheck_issuecount',$column),
-            ],
-            
-            [
-            'attribute' => 'codecheck_execount',
-            'value' => function($model) {
-                return Html::tag('span', $model->codecheck_execount?$model->codecheck_execount:'',['class' => ($model->codecheck_execount==0 ? '' : ($model->codecheck_execount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codecheck_execount', $model->start_time, $model->end_time);
-                    $value=$model->codecheck_execount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}         
-            }, 
-            'visible'=> is_array($column)&&in_array('codecheck_execount',$column),
-            ],
-             
-            [
-            'attribute' => 'codeci_usercount',
-            'value' => function($model) {
-                return Html::tag('span', $model->codeci_usercount?$model->codeci_usercount:'',['class' => ($model->codeci_usercount==0 ? '' : ($model->codeci_usercount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codeci_usercount', $model->start_time, $model->end_time);
-                    $value=$model->codeci_usercount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}        
-            },
-            'visible'=> is_array($column)&&in_array('codeci_usercount',$column),
-            ],
+                    [
+                    'attribute' => 'pipeline_pipecount_d',
+                    'value' => function($model) {
+                       return $model->data->pipeline_pipecount?$model->data->pipeline_pipecount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('pipeline_pipecount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'pipeline_executecount_d',
+                    'value' => function($model) {
+                       return $model->data->pipeline_executecount?$model->data->pipeline_executecount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('pipeline_executecount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'pipeline_elapse_time_d',
+                    'value' => function($model) {
+                       return $model->data->pipeline_elapse_time?$model->data->pipeline_elapse_time:'';
+                    },
+                   
+                    'visible'=> is_array($column)&&in_array('pipeline_elapse_time_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_usercount_d',
+                    'value' => function($model) {
+                       return $model->data->codecheck_usercount?$model->data->codecheck_usercount:'';
+                    },                   
+                    'visible'=> is_array($column)&&in_array('codecheck_usercount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_taskcount_d',
+                    'value' => function($model) {
+                       return $model->data->codecheck_taskcount?$model->data->codecheck_taskcount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('codecheck_taskcount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_codelinecount_d',
+                    'value' => function($model) {
+                       return $model->data->codecheck_codelinecount?$model->data->codecheck_codelinecount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('codecheck_codelinecount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_issuecount_d',
+                    'value' => function($model) {
+                       return $model->data->codecheck_issuecount?$model->data->codecheck_issuecount:'';
+                    },                   
+                    'visible'=> is_array($column)&&in_array('codecheck_issuecount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codecheck_execount_d',
+                    'value' => function($model) {
+                       return $model->data->codecheck_execount?$model->data->codecheck_execount:'';
+                    },                 
+                    'visible'=> is_array($column)&&in_array('codecheck_execount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codeci_usercount_d',
+                    'value' => function($model) {
+                       return $model->data->codeci_usercount?$model->data->codeci_usercount:'';
+                    },                 
+                    'visible'=> is_array($column)&&in_array('codeci_usercount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codeci_buildcount_d',
+                    'value' => function($model) {
+                        return $model->data->codeci_buildcount?$model->data->codeci_buildcount:'';
+                    },                 
+                    'visible'=> is_array($column)&&in_array('codeci_buildcount_d',$column),
+                    ],
                      
-            [
-            'attribute' => 'codeci_buildcount',
-            'value' => function($model) {
-                return Html::tag('span', $model->codeci_buildcount?$model->codeci_buildcount:'',['class' => ($model->codeci_buildcount==0 ? '' : ($model->codeci_buildcount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codeci_buildcount', $model->start_time, $model->end_time);
-                    $value=$model->codeci_buildcount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('codeci_buildcount',$column),
-            ],
-                     
-            [
-            'attribute' => 'codeci_allbuildcount',
-            'value' => function($model) {
-                return Html::tag('span', $model->codeci_allbuildcount?$model->codeci_allbuildcount:'',['class' => ($model->codeci_allbuildcount==0 ? '' : ($model->codeci_allbuildcount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codeci_allbuildcount', $model->start_time, $model->end_time);
-                    $value=$model->codeci_allbuildcount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}           
-            },
-            'visible'=> is_array($column)&&in_array('codeci_allbuildcount',$column),
-            ],
-                     
-            [
-            'attribute' => 'codeci_buildtotaltime',
-            'value' => function($model) {
-                return Html::tag('span', $model->codeci_buildtotaltime?$model->codeci_buildtotaltime:'',['class' => ($model->codeci_buildtotaltime==0 ? '' : ($model->codeci_buildtotaltime >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('codeci_buildtotaltime', $model->start_time, $model->end_time);
-                    $value=$model->codeci_buildtotaltime;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('codeci_buildtotaltime',$column),
-            ],
-                       
-            [
-            'attribute' => 'testman_usercount',
-            'value' => function($model) {
-                return Html::tag('span', $model->testman_usercount?$model->testman_usercount:'',['class' => ($model->testman_usercount==0 ? '' : ($model->testman_usercount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('testman_usercount', $model->start_time, $model->end_time);
-                    $value=$model->testman_usercount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-               }else{return [];}           
-            }, 
-            'visible'=> is_array($column)&&in_array('testman_usercount',$column),
-            ],
-            
-            [
-            'attribute' => 'testman_casecount',
-            'value' => function($model) {
-                return Html::tag('span', $model->testman_casecount?$model->testman_casecount:'',['class' => ($model->testman_casecount==0 ? '' : ($model->testman_casecount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('testman_casecount', $model->start_time, $model->end_time);
-                    $value=$model->testman_casecount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            }, 
-            'visible'=> is_array($column)&&in_array('testman_casecount',$column),
-            ],
-            
-            [
-            'attribute' => 'testman_totalexecasecount',
-            'value' => function($model) {
-                return Html::tag('span', $model->testman_totalexecasecount?$model->testman_totalexecasecount:'',['class' => ($model->testman_totalexecasecount==0 ? '' : ($model->testman_totalexecasecount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('testman_totalexecasecount', $model->start_time, $model->end_time);
-                    $value=$model->testman_totalexecasecount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('testman_totalexecasecount',$column),
-            ],
-                     
-            [
-            'attribute' => 'deploy_usercount',
-            'value' => function($model) {
-                return Html::tag('span', $model->deploy_usercount?$model->deploy_usercount:'',['class' => ($model->deploy_usercount==0 ? '' : ($model->deploy_usercount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('deploy_usercount', $model->start_time, $model->end_time);
-                    $value=$model->deploy_usercount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('deploy_usercount',$column),
-            ],
-            
-            [
-            'attribute' => 'deploy_envcount',
-            'value' => function($model) {
-                return Html::tag('span', $model->deploy_envcount?$model->deploy_envcount:'',['class' => ($model->deploy_envcount==0 ? '' : ($model->deploy_envcount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('deploy_envcount', $model->start_time, $model->end_time);
-                    $value=$model->deploy_envcount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            },
-            'visible'=> is_array($column)&&in_array('deploy_envcount',$column),
-            ],
-                       
-            [
-            'attribute' => 'deploy_execount',
-            'value' => function($model) {
-                return Html::tag('span', $model->deploy_execount?$model->deploy_execount:'',['class' => ($model->deploy_execount==0 ? '' : ($model->deploy_execount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('deploy_execount', $model->start_time, $model->end_time);
-                    $value=$model->deploy_execount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}          
-            }, 
-            'visible'=> is_array($column)&&in_array('deploy_execount',$column),
-            ],
-                      
-            [
-            'attribute' => 'deploy_vmcount',
-            'value' => function($model) {
-                return Html::tag('span', $model->deploy_vmcount?$model->deploy_vmcount:'',['class' => ($model->deploy_vmcount==0 ? '' : ($model->deploy_vmcount >0 ? 'text-green' : 'text-red') )]);
-                          
-            },
-            'format' => 'raw',
-            'contentOptions'=>function($model) {
-                if(Yii::$app->request->get('dev',0)){
-                    $dev= ActivityChange::deviation_data('deploy_vmcount', $model->start_time, $model->end_time);
-                    $value=$model->deploy_vmcount;
-                    return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                }else{return [];}            
-            },
-            'visible'=> is_array($column)&&in_array('deploy_vmcount',$column),
-            ],
+                    [
+                    'attribute' => 'codeci_allbuildcount_d',
+                    'value' => function($model) {
+                        return $model->data->codeci_allbuildcount?$model->data->codeci_allbuildcount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('codeci_allbuildcount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'codeci_buildtotaltime_d',
+                    'value' => function($model) {
+                        return $model->data->codeci_buildtotaltime?$model->data->codeci_buildtotaltime:'';
+                    },                 
+                    'visible'=> is_array($column)&&in_array('codeci_buildtotaltime_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'testman_usercount_d',
+                    'value' => function($model) {
+                        return $model->data->testman_usercount?$model->data->testman_usercount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('testman_usercount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'testman_casecount_d',
+                    'value' => function($model) {
+                        return $model->data->testman_casecount?$model->data->testman_casecount:'';
+                    },                  
+                    'visible'=> is_array($column)&&in_array('testman_casecount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'testman_totalexecasecount_d',
+                    'value' => function($model) {
+                        return $model->data->testman_totalexecasecount?$model->data->testman_totalexecasecount:'';
+                    },                   
+                    'visible'=> is_array($column)&&in_array('testman_totalexecasecount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'deploy_usercount_d',
+                    'value' => function($model) {
+                        return $model->data->deploy_usercount?$model->data->deploy_usercount:'';
+                    },                   
+                    'visible'=> is_array($column)&&in_array('deploy_usercount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'deploy_envcount_d',
+                    'value' => function($model) {
+                        return $model->data->deploy_envcount?$model->data->deploy_envcount:'';
+                    },                 
+                    'visible'=> is_array($column)&&in_array('deploy_envcount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'deploy_execount_d',
+                    'value' => function($model) {
+                        return $model->data->deploy_execount?$model->data->deploy_execount:'';
+                    },                   
+                    'visible'=> is_array($column)&&in_array('deploy_execount_d',$column),
+                    ],
+
+                    [
+                    'attribute' => 'deploy_vmcount_d',
+                    'value' => function($model) {
+                        return $model->data->deploy_vmcount?$model->data->deploy_vmcount:'';
+                    },                   
+                    'visible'=> is_array($column)&&in_array('deploy_vmcount_d',$column),
+                    ],
+                            
 
                 ],
                 ]); ?>
