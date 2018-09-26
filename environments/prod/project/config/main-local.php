@@ -12,7 +12,7 @@ return [
             'charset' => 'utf8',
             'tablePrefix' => '',
             'dsn' => 'mysql:host=localhost;dbname=rky_test',
-            'username' => 'rky',
+            'username' => 'rky_test',
             'password' => 'rky_test',
         ],
         'mailer' => [
