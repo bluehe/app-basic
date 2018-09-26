@@ -51,7 +51,7 @@ class StatisticsController extends Controller {
         return $this->render('user', ['series' => $series, 'start' => $start, 'end' => $end]);
     }
     
-      public function actionCorporation() {
+    public function actionCorporation() {
          
         //行业
         $series['industry'] = [];
@@ -403,161 +403,115 @@ class StatisticsController extends Controller {
         
     }
     
-//    public function actionActivity() {
-//
-//        $end = strtotime('today');
-//        $start = strtotime('-30 days',$end);
-//        $sum=Yii::$app->request->get('sum',1);
-//        $group=Yii::$app->request->get('group',1);
-//
-//        if (Yii::$app->request->get('range')) {
-//            $range = explode('~', Yii::$app->request->get('range'));
-//            $start = isset($range[0]) ? strtotime($range[0]) : $start;
-//            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]): $end;
-//        }
-//        $series['activity'] = [];
-//        
-//   
-//
-//        //活跃数
-//        $activity_total = ActivityChange::get_activity_total($start-86400, $end,$sum,$group);
-//        $activity_change = ActivityChange::get_activity_total($start-86400, $end,$sum,$group,true);
-//        if($group==1){
-//           
-//            $data_total = [];
-//            $data_change = [];
-//            $data_per = [];
-//            foreach($activity_change as $change){
-//                $changes[date('n.j',$change['start_time']+86400).'-'.date('n.j',$change['end_time'])]=(int) $change['num'];                
-//            }
-//            foreach($activity_total as $total){
-//                $key=date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
-//                $data_total[]=['name' =>$key , 'y' =>  (int) $total['num']];
-//                $data_change[]=['name' => $key, 'y' =>  isset($changes[$key])?$changes[$key]:0];
-//                $data_per[]=['name' => $key, 'y' => isset($changes[$key])?round($changes[$key]/(int)$total['num']*100,2):0];               
-//            }
-//            
-//            $series['activity'][] = ['type' => 'column', 'name' => '下拨企业数', 'data' => $data_total,'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
-//            $series['activity'][] = ['type' => 'column', 'name' => '活跃企业数', 'data' => $data_change,'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
-//            $series['activity'][] = ['type' => 'spline', 'name' => '活跃率', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];
-////        }elseif($group==2){
-////            
-////            $data_change=[];
-////            $data_per = [];
-////            $groups = UserGroup::get_user_group(Yii::$app->user->identity->id);
-////                      
-////             foreach($activity_change as $change){
-////                $change['group_id']=$change['group_id']?$change['group_id']:0;
-////                $start_time=$change['start_time'];
-////                $end_time=$change['end_time'];
-//////                $start_time=date('n.j',$change['start_time']+86400);
-//////                $end_time=date('n.j',$change['end_time']);
-////                if($sum){
-////                    $et=date('n.j',$change['end_time']);//周
-////                }else{
-////                    $et=date('Y.n',$change['end_time']);//月
-////                }
-////                $changes[$et][$change['group_id']]=(int) $change['num'];
-////                $changes[$et]['start_time']=!isset($changes[$et]['start_time'])||$start_time<$changes[$et]['start_time']?$start_time:$changes[$et]['start_time'];
-////                $changes[$et]['end_time']=!isset($changes[$et]['end_time'])||$end_time>$changes[$et]['end_time']?$end_time:$changes[$et]['end_time'];
-////            }
-////            
-////            foreach($activity_total as $total){
-////                 
-////                if($sum){
-////                    $et2=date('n.j',$total['end_time']);
-////                }else{
-////                    $et2=date('Y.n',$total['end_time']);
-////                }
-////               
-////                $key=date('n.j',$changes[$et2]['start_time']+86400).'-'.date('n.j',$changes[$et2]['end_time']);
-//////                $key=$changes[$et2]['start_time'].'-'.$changes[$et2]['end_time'];                
-////                $total['group_id']=$total['group_id']?$total['group_id']:0;
-////                $data_change[$total['group_id']][]=['name' => $key, 'y' =>  isset($changes[$et2][$total['group_id']])?$changes[$et2][$total['group_id']]:0];
-////                $data_per[$total['group_id']][]=['name' => $key, 'y' => isset($changes[$et2][$total['group_id']])?round($changes[$et2][$total['group_id']]/(int)$total['num']*100,2):0];         
-////            }
-////            
-////            foreach ($data_change as $gid=>$data){
-////                $series['activity'][] = ['type' => 'column', 'name' => $gid?$groups[$gid]['groupname']:'未分组', 'data' => $data,'color'=>$gid&&$groups[$gid]['groupcolor']?'#'.$groups[$gid]['groupcolor']:''];
-////               
-////            }
-////            foreach ($data_per as $gid=>$per){
-////                 $series['activity'][] = ['type' => 'spline', 'name' => $gid?$groups[$gid]['groupname']:'未分组', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&$groups[$gid]['groupcolor']?'#'.$groups[$gid]['groupcolor']:''];
-////            }
-//                               
-//        }elseif($group==3){
-//            
-//            $data_change=[];
-//            $data_per = [];
-//            $groups = User::get_bd_color();
-//            
-//            foreach($activity_change as $change){
-//                $change['base_bd']=$change['base_bd']?$change['base_bd']:0;
-//                $start_time=$change['start_time'];
-//                $end_time=$change['end_time'];
-////                $start_time=date('n.j',$change['start_time']+86400);
-////                $end_time=date('n.j',$change['end_time']);
-//                if($sum){
-//                    $et=date('n.j',$change['end_time']);//周
-//                }else{
-//                    $et=date('Y.n',$change['end_time']);//月
-//                }
-//                $changes[$et][$change['base_bd']]=(int) $change['num'];
-//                $changes[$et]['start_time']=!isset($changes[$et]['start_time'])||$start_time<$changes[$et]['start_time']?$start_time:$changes[$et]['start_time'];
-//                $changes[$et]['end_time']=!isset($changes[$et]['end_time'])||$end_time>$changes[$et]['end_time']?$end_time:$changes[$et]['end_time'];
-//            }
-//            
-//            foreach($activity_total as $total){
-//                if($sum){
-//                    $et2=date('n.j',$total['end_time']);
-//                }else{
-//                    $et2=date('Y.n',$total['end_time']);
-//                }
-//               
-//                $key=date('n.j',$changes[$et2]['start_time']+86400).'-'.date('n.j',$changes[$et2]['end_time']);
-////              $key=$changes[$et2]['start_time'].'-'.$changes[$et2]['end_time'];                
-//                $total['base_bd']=$total['base_bd']?$total['base_bd']:0;
-//                $data_change[$total['base_bd']][]=['name' => $key, 'y' =>  isset($changes[$et2][$total['base_bd']])?$changes[$et2][$total['base_bd']]:0];
-//                $data_per[$total['base_bd']][]=['name' => $key, 'y' => isset($changes[$et2][$total['base_bd']])?round($changes[$et2][$total['base_bd']]/(int)$total['num']*100,2):0];               
-//            }
-//            
-//            foreach ($data_change as $gid=>$data){
-//                $series['activity'][] = ['type' => 'column', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];
-//               
-//            }
-//            foreach ($data_per as $gid=>$per){
-//                 $series['activity'][] = ['type' => 'spline', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];
-//            }
-//                               
-//        }
-//        
-//        //活跃项目
-//        $series['item']=[];       
-//        $data_item=[]; 
-//        
-//        $items=[];
-//        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,false);
-//        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount']);
-//        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount');
-//        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount');
-//        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount');
-//        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount');
-//        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime']);
-//        
-//        arsort($items);
-////        $fv= reset($items);
-////        $fk= key($items);
-////        unset($items[$fk]);
-////        $items[$fk]=$fv;
-//        
-//        foreach ($items as $key=>$item){
-//            $data_item[] = ['name' =>  $key, 'y' =>$item];
-//        }
-//        $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item];
-//        
-//        return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group]);
-//    }
-//    
+    public function actionActivity() {
+
+        $end = strtotime('today');
+        $start = strtotime('-1 months +1 days',$end);
+        $sum=Yii::$app->request->get('sum',1);
+        $group=Yii::$app->request->get('group',1);
+
+        if (Yii::$app->request->get('range')) {
+            $range = explode('~', Yii::$app->request->get('range'));
+            $start = isset($range[0]) ? strtotime($range[0]) : $start;
+            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]): $end;
+        }
+        $series['activity'] = [];
+        
+        //活跃数
+        $activity_total = ActivityChange::get_activity_total($start-86400, $end,$sum,$group);
+        $activity_change = ActivityChange::get_activity_total($start-86400, $end,$sum,$group,true);
+        if($group==1){
+           
+            $data_total = [];
+            $data_change = [];
+            $data_per = [];
+            foreach($activity_change as $change){
+                $changes[date('n.j',$change['start_time']+86400).'-'.date('n.j',$change['end_time'])]=(int) $change['num'];                
+            }
+            foreach($activity_total as $total){
+                $key=date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
+                $data_total[]=['name' =>$key , 'y' =>  (int) $total['num']];
+                $data_change[]=['name' => $key, 'y' =>  isset($changes[$key])?$changes[$key]:0];
+                $data_per[]=['name' => $key, 'y' => isset($changes[$key])?round($changes[$key]/(int)$total['num']*100,2):0];               
+            }
+            
+            $series['activity'][] = ['type' => 'column', 'name' => '下拨企业数', 'data' => $data_total,'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
+            $series['activity'][] = ['type' => 'column', 'name' => '活跃企业数', 'data' => $data_change,'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
+            $series['activity'][] = ['type' => 'spline', 'name' => '活跃率', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];                           
+        }else{
+            
+            $data_change=[];
+            $data_per = [];
+            $groups = User::get_bd_color();
+            
+            foreach($activity_change as $change){
+                $change['base_bd']=$change['base_bd']?$change['base_bd']:0;
+                $start_time=$change['start_time'];
+                $end_time=$change['end_time'];
+//                $start_time=date('n.j',$change['start_time']+86400);
+//                $end_time=date('n.j',$change['end_time']);
+                if($sum){
+                    $et=date('n.j',$change['end_time']);//周
+                }else{
+                    $et=date('Y.n',$change['end_time']);//月
+                }
+                $changes[$et][$change['base_bd']]=(int) $change['num'];
+                $changes[$et]['start_time']=!isset($changes[$et]['start_time'])||$start_time<$changes[$et]['start_time']?$start_time:$changes[$et]['start_time'];
+                $changes[$et]['end_time']=!isset($changes[$et]['end_time'])||$end_time>$changes[$et]['end_time']?$end_time:$changes[$et]['end_time'];
+            }
+            
+
+            foreach($activity_total as $total){
+                if($sum){
+                    $et2=date('n.j',$total['end_time']);
+                }else{
+                    $et2=date('Y.n',$total['end_time']);
+                }
+               
+                $key=date('n.j',$changes[$et2]['start_time']+86400).'-'.date('n.j',$changes[$et2]['end_time']);
+//              $key=$changes[$et2]['start_time'].'-'.$changes[$et2]['end_time'];                
+                $total['base_bd']=$total['base_bd']?$total['base_bd']:0;
+                $data_change[$total['base_bd']][]=['name' => $key, 'y' =>  isset($changes[$et2][$total['base_bd']])?$changes[$et2][$total['base_bd']]:0];
+                $data_per[$total['base_bd']][]=['name' => $key, 'y' => isset($changes[$et2][$total['base_bd']])?round($changes[$et2][$total['base_bd']]/(int)$total['num']*100,2):0];               
+            }
+            
+            foreach ($data_change as $gid=>$data){
+                $series['activity'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+               
+            }
+            foreach ($data_per as $gid=>$per){
+                 $series['activity'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+            }
+                               
+        }
+        
+        //活跃项目
+        $series['item']=[];       
+        $data_item=[]; 
+        
+        $items=[];
+        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,false);
+        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount']);
+        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount');
+        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount');
+        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount');
+        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount');
+        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime']);
+        
+        arsort($items);
+//        $fv= reset($items);
+//        $fk= key($items);
+//        unset($items[$fk]);
+//        $items[$fk]=$fv;
+        
+        foreach ($items as $key=>$item){
+            $data_item[] = ['name' =>  $key, 'y' =>$item];
+        }
+        $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item];
+        
+        return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group]);
+    }
+    
 //    public function actionTrain() {
 //        
 //        $end = strtotime('today')+ 86399;

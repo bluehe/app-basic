@@ -344,46 +344,46 @@ class ActivityChange extends \yii\db\ActiveRecord
 
 
     
-//        public static function get_activity_total($start, $end,$sum=1,$group=1,$activity=false) {
-//              
-//        $query = static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'base_bd'=>SORT_ASC]);
-//        if($activity){
-//            //$query->andWhere(['or',['>','codehub_commitcount',0],['>','projectman_issuecount',0],['>','projectman_usercount',0],['>','testman_totalexecasecount',0],['>','deploy_execount',0],['>','codecheck_execount',0],['>','codeci_allbuildcount',0],['>','codeci_buildtotaltime',0]]);
-//            $query->andWhere(['is_act'=>self::ACT_Y]);
-//        }
-//        $query->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(distinct corporation_id)','corporation_id'=>'MAX(corporation_id)','base_bd'=>'MAX(base_bd)']);
-//        if($sum){
-//            //周
-//            $query->groupBy(['start_time','end_time']);       
-//        }else{
-//            //月
-//            $query->groupBy(["FROM_UNIXTIME(end_time, '%Y-%m')"]);
-//        }
-//        if($group==3){
-//            $query->addGroupBy(['base_bd']);
-//        }
-//        return $query->asArray()->all();
-//    }
-//    
-//    public static function get_activity_item($start, $end,$items,$activity=true) {
-//        $query = static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->andWhere(['corporation_id'=>[3,5,7,8,13,14,19,21,22,39,44,46,61,62,64,65,66,69,71,72,73,76,81,83,86,90,98,99,103,104,106,107,111,116,118,121,125,140,141,143,145,149,150,151,156,157,161,163,165,166,172,173,175,177,185]]);
-//        if($activity){
-//            $items=is_array($items)?$items:explode(',', $items);
-//            if(count($items)>1){
-//                $w[]='or';
-//                foreach($items as $item){
-//                    $w[]=['>',$item,0];
-//                   
-//                }
-//                $query->andWhere($w);
-//            }else{
-//                $query->andWhere(['>',$items[0],0]);
-//            }
-//            
-//        }else{
-//           $ids=ActivityChange::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end],['is_act' => ActivityChange::ACT_Y]])->select(['corporation_id'])->distinct()->column();
-//           $query->andFilterWhere(['not',['corporation_id' => $ids]]);
-//        }
-//        return $query->select(['num'=>'count(distinct corporation_id)'])->scalar();
-//    }
+        public static function get_activity_total($start, $end,$sum=1,$group=1,$activity=false) {
+              
+        $query = static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'base_bd'=>SORT_ASC]);
+        if($activity){
+            //$query->andWhere(['or',['>','codehub_commitcount',0],['>','projectman_issuecount',0],['>','projectman_usercount',0],['>','testman_totalexecasecount',0],['>','deploy_execount',0],['>','codecheck_execount',0],['>','codeci_allbuildcount',0],['>','codeci_buildtotaltime',0]]);
+            $query->andWhere(['is_act'=>self::ACT_Y]);
+        }
+        $query->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(distinct corporation_id)','corporation_id'=>'MAX(corporation_id)','base_bd'=>'MAX(base_bd)']);
+        if($sum){
+            //周
+            $query->groupBy(['start_time','end_time']);       
+        }else{
+            //月
+            $query->groupBy(["FROM_UNIXTIME(end_time, '%Y-%m')"]);
+        }
+        if(!$group){
+            $query->addGroupBy(['base_bd']);
+        }
+        return $query->asArray()->all();
+    }
+    
+    public static function get_activity_item($start, $end,$items,$activity=true) {
+        $query = static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]]);
+        if($activity){
+            $items=is_array($items)?$items:explode(',', $items);
+            if(count($items)>1){
+                $w[]='or';
+                foreach($items as $item){
+                    $w[]=['>',$item,0];
+                   
+                }
+                $query->andWhere($w);
+            }else{
+                $query->andWhere(['>',$items[0],0]);
+            }
+            
+        }else{
+           $ids=static::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end],['not',['type'=> self::TYPE_DELETE]],['is_act' => ActivityChange::ACT_Y]])->select(['corporation_id'])->distinct()->column();
+           $query->andFilterWhere(['not',['corporation_id' => $ids]]);
+        }
+        return $query->select(['num'=>'count(distinct corporation_id)'])->scalar();
+    }
 }
