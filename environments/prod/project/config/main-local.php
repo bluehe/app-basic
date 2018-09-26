@@ -11,9 +11,9 @@ return [
             'schemaCacheDuration' => 24 * 3600,
             'charset' => 'utf8',
             'tablePrefix' => '',
-            'dsn' => 'mysql:host=localhost;dbname=app',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => 'mysql:host=localhost;dbname=rky_test',
+            'username' => 'rky',
+            'password' => 'rky_test',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
