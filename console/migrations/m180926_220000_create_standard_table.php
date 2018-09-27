@@ -19,8 +19,9 @@ class m180926_220000_create_standard_table extends Migration {
         }
         $this->createTable($table, [
 //            'id' => $this->primaryKey(),
-            'type' => $this->integer(),
+            'type' => $this->integer()->defaultValue(1),
             'field' => $this->string(32),
+            'connect' => $this->integer()->defaultValue(1),
             'value' => $this->string(32),
             'PRIMARY KEY (type, field)',
         ], $tableOptions);

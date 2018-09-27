@@ -27,6 +27,8 @@ use project\models\ActivityData;
         <?= $form->field($model, 'field')->dropDownList(ActivityData::get_code(false), ['prompt' => '无']) ?>
         
         <?= $form->field($model, 'type')->radioList(Standard::$List['type'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
+        
+        <?= $form->field($model, 'connect')->radioList(Standard::$List['connect'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
 
         <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
 

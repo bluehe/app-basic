@@ -46,6 +46,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             return $model->Type;
                         },
                     ],
+                    [
+                        'attribute' => 'connect',
+                        'value' =>
+                        function($model) {
+                            return $model->Connect;
+                        },
+                    ],
                     'value',
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',

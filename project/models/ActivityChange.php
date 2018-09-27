@@ -219,9 +219,7 @@ class ActivityChange extends \yii\db\ActiveRecord
         $model_change->start_time=$start_time;
         $model_change->end_time=$end_time;
                         
-        $codes= ActivityData::get_code();//计算字段
-        unset($codes['huawei_account']);
-        unset($codes['corporation_name']);
+        $codes= self::$List['column_activity'];//计算字段
         $typeadd_codes= Field::get_typeadd_code($end_time);//排除字段
         $news= ActivityData::get_data_by_time($end_time,$corporation_id);
         $olds= ActivityData::get_data_by_time($start_time,$corporation_id);
@@ -233,7 +231,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             $_model_ca= clone $model_change;
             $_model_ca->type= ActivityChange::TYPE_ADD;
             $_model_ca->corporation_id=$c_a;
-            foreach($codes as $code){
+            foreach($codes as $code=>$v){
                 $_model_ca->$code=$news[$c_a][$code];
             }
             $_model_ca->save();
@@ -245,7 +243,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             $_model_cu= clone $model_change;
             $_model_cu->type= ActivityChange::TYPE_UPDATE;
             $_model_cu->corporation_id=$c_u;
-            foreach($codes as $code){
+            foreach($codes as $code=>$v){
                 if(in_array($code,$typeadd_codes)){
                     $_model_cu->$code=$news[$c_u][$code];
                 }else{
@@ -262,7 +260,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             $_model_cd= clone $model_change;
             $_model_cd->type= ActivityChange::TYPE_DELETE;
             $_model_cd->corporation_id=$c_d;
-            foreach($codes as $code){
+            foreach($codes as $code=>$v){
                 if(in_array($code,$typeadd_codes)){
                     $_model_cd->$code=0;
                 }else{
@@ -275,8 +273,7 @@ class ActivityChange extends \yii\db\ActiveRecord
         return true;
 
     }
-    
-        
+           
     //设定活跃
     public static function set_activity() {
         static::updateAll(['is_act'=> self::ACT_Y], ['and',['is_act'=> self::ACT_D],['or',['>','codehub_commitcount',0],['>','projectman_issuecount',0],['>','projectman_usercount',0],['>','testman_totalexecasecount',0],['>','deploy_execount',0],['>','codecheck_execount',0],['>','codeci_allbuildcount',0],['>','codeci_buildtotaltime',0]]]);
@@ -284,12 +281,64 @@ class ActivityChange extends \yii\db\ActiveRecord
         return true;
     }
     
-        //是否活跃
+    //是否活跃
     public static function is_activity($model) {
-        return ($model->codehub_commitcount>0||$model->projectman_issuecount>0||$model->projectman_usercount>0||$model->testman_totalexecasecount>0||$model->deploy_execount>0||$model->codecheck_execount>0||$model->codeci_allbuildcount>0||$model->codeci_buildtotaltime>0);
+          
+        $res_or=false;
+        $condition_or = Standard::find()->where(['connect'=> Standard::CONNECT_OR])->all();    
+        foreach($condition_or as $or){
+            $f=$or->type== Standard::TYPE_ADD?$model->{$or->field}:$model->data->{$or->field};
+            if(preg_match('/[~|-]{1}/',$or->value)){
+                $v= explode('~', $or->value);
+                if(count($v)<2){
+                    $v= explode('-', $or->value);
+                }              
+                $res_or=$res_or||($f>=$v[0]&&$f<=$v[1]);
+            }elseif (preg_match('/^(<>|>=|>|<=|<|=)/', $or->value, $matches)) {
+                $operator=$matches[1];
+                $value = substr($or->value, strlen($operator));              
+                switch($operator){
+                    case '<>':$res_or= $res_or||($f!=$value);break;
+                    case '>=':$res_or= $res_or||($f>=$value);break;
+                    case '>':$res_or= $res_or||($f>$value);break;
+                    case '<=':$res_or= $res_or||($f<=$value);break;
+                    case '<':$res_or= $res_or||($f<$value);break;
+                    case '=':$res_or= $res_or||($f==$value);break;
+                    default:;
+                }
+            } else {
+                $res_or=$res_or||($f==$or->value);
+            }
+        }
+        $res_and=true;
+        $condition_and = Standard::find()->where(['connect'=> Standard::CONNECT_AND])->all();    
+        foreach($condition_and as $and){
+            $f=$and->type == Standard::TYPE_ADD?$model->{$and->field}:$model->data->{$and->field};
+            if(preg_match('/[~|-]{1}/',$and->value)){
+                $v= explode('~', $and->value);
+                if(count($v)<2){
+                    $v= explode('-', $and->value);
+                }               
+                $res_and=$res_and&&($f>=$v[0]&&$f<=$v[1]);
+            }elseif (preg_match('/^(<>|>=|>|<=|<|=)/', $and->value, $matches)) {
+                $operator=$matches[1];
+                $value = substr($and->value, strlen($operator));               
+                switch($operator){
+                    case '<>':$res_and= $res_and&&($f!=$value);break;
+                    case '>=':$res_and= $res_and&&($f>=$value);break;
+                    case '>':$res_and= $res_and&&($f>$value);break;
+                    case '<=':$res_and= $res_and&&($f<=$value);break;
+                    case '<':$res_and= $res_and&&($f<$value);break;
+                    case '=':$res_and= $res_and&&($f==$value);break;
+                    default:;
+                }
+            } else {
+                $res_and=$res_and&&($f==$and->value);
+            }
+        }
+        return $res_and&&$res_or;
     }
-    
-    
+       
     //设定趋势
     public static function set_trend() {
         
@@ -315,9 +364,7 @@ class ActivityChange extends \yii\db\ActiveRecord
         $data=static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['start_time'=>SORT_ASC])->select(["(CASE WHEN is_act=2 THEN 1 WHEN is_act=1 THEN -1 ELSE 0 END)"])->column();
         return implode(',', $data);
     }
-    
-   
-    
+       
     //数据分析，标准差
     public static function deviation_data($column,$start=0,$end=0) {
         $cache = Yii::$app->cache;
@@ -348,10 +395,7 @@ class ActivityChange extends \yii\db\ActiveRecord
     
     }
  
-
-
-    
-        public static function get_activity_total($start, $end,$sum=1,$group=1,$activity=false) {
+    public static function get_activity_total($start, $end,$sum=1,$group=1,$activity=false) {
               
         $query = static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'base_bd'=>SORT_ASC]);
         if($activity){
