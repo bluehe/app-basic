@@ -70,25 +70,25 @@ $fieldOptions4 = [
                 'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control','autocomplete'=>'off'],
                 'imageOptions' => ['alt' => '点击换图', 'title' => '点击换图', 'style' => 'cursor:pointer', 'height' => 34]])->label(false)
             ?>
-<script>
-<?php $this->beginBlock('captcha') ?>
-    $(document).ready(function () {
-        changeVerifyCode();
-    });
-//更改或者重新加载验证码
-    function changeVerifyCode() {
-        $.ajax({
-            url: "<?= Url::toRoute(['site/captcha'])?>?refresh",
-            dataType: "json",
-            cache: false,
-            success: function (data) {
-//                $("#imgVerifyCode").attr("src", data["url"]);
-            }
-        });
-    }
-<?php $this->endBlock() ?>
-</script>
-<?php $this->registerJs($this->blocks['captcha'], \yii\web\View::POS_END); ?>
+            <script>
+            <?php $this->beginBlock('captcha') ?>
+                $(document).ready(function () {
+                    changeVerifyCode();
+                });
+            //更改或者重新加载验证码
+                function changeVerifyCode() {
+                    $.ajax({
+                        url: "<?= Url::toRoute(['site/captcha'])?>?refresh",
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+            //                $("#imgVerifyCode").attr("src", data["url"]);
+                        }
+                    });
+                }
+            <?php $this->endBlock() ?>
+            </script>
+            <?php $this->registerJs($this->blocks['captcha'], \yii\web\View::POS_END); ?>
         <?php endif; ?>
 
         <div class="text-center sign-icon">
@@ -113,33 +113,33 @@ $fieldOptions4 = [
         <?php if (System::getValue('agreement_open')): ?>
         <?= $form->field($model, 'agreement')->checkbox()->label($model->getAttributeLabel('agreement')) ?>
 
-<?php
-Modal::begin([
-    'id' => 'agreement-modal',
-    'header' => '<h4 class="modal-title"></h4>',
-    'options' => [
-        'tabindex' => false
-    ],
-]);
-Modal::end();
-?>
-<script>
-<?php $this->beginBlock('agreement') ?>
-    
-    $('.agreement').on('click', function () {
-        var code =$(this).data('code');
-        var title=$(this).html();
-        $.get('<?= Url::toRoute(['site/agreement']) ?>?code='+code,
-                function (data) {
-                    $('#agreement-modal .modal-title').html(title);
-                    $('#agreement-modal .modal-body').html(data);
-                    $('#agreement-modal').modal('show');
-                }
-        );
-    });
-<?php $this->endBlock() ?>
-</script>
-<?php $this->registerJs($this->blocks['agreement'], \yii\web\View::POS_END); ?>
+        <?php
+        Modal::begin([
+            'id' => 'agreement-modal',
+            'header' => '<h4 class="modal-title"></h4>',
+            'options' => [
+                'tabindex' => false
+            ],
+        ]);
+        Modal::end();
+        ?>
+        <script>
+        <?php $this->beginBlock('agreement') ?>
+
+            $('.agreement').on('click', function () {
+                var code =$(this).data('code');
+                var title=$(this).html();
+                $.get('<?= Url::toRoute(['site/agreement']) ?>?code='+code,
+                        function (data) {
+                            $('#agreement-modal .modal-title').html(title);
+                            $('#agreement-modal .modal-body').html(data);
+                            $('#agreement-modal').modal('show');
+                        }
+                );
+            });
+        <?php $this->endBlock() ?>
+        </script>
+        <?php $this->registerJs($this->blocks['agreement'], \yii\web\View::POS_END); ?>
         <?php endif; ?>            
         <div class="row">           
             <div class="col-xs-8">

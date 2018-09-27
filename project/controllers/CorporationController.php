@@ -20,6 +20,7 @@ use project\models\Parameter;
 use project\models\User;
 use project\models\Industry;
 use project\models\Meal;
+use project\models\System;
 
 
 /**
@@ -577,7 +578,7 @@ class CorporationController extends Controller
             $num=['add'=>0,'update'=>0,'fail'=>0];
                
             $notice_error=[];
-            $parameter_add=false;
+            $parameter_add=System::getValue('business_parameter');
             $searchModel = new CorporationSearch();
             $index=[
                 'base_company_name'=>$searchModel->getAttributeLabel('base_company_name'),
