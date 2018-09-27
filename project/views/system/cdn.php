@@ -68,7 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-<?php project\assets\CookieAsset::register($this); ?> 
 <script>
 <?php $this->beginBlock('cdn') ?>
     
