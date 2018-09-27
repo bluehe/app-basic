@@ -276,9 +276,46 @@ class ActivityChange extends \yii\db\ActiveRecord
            
     //设定活跃
     public static function set_activity() {
-        static::updateAll(['is_act'=> self::ACT_Y], ['and',['is_act'=> self::ACT_D],['or',['>','codehub_commitcount',0],['>','projectman_issuecount',0],['>','projectman_usercount',0],['>','testman_totalexecasecount',0],['>','deploy_execount',0],['>','codecheck_execount',0],['>','codeci_allbuildcount',0],['>','codeci_buildtotaltime',0]]]);
+        $query=static::find()->alias('c')->joinWith(['data d'])->andWhere(['is_act'=> self::ACT_D]);
+        
+        $condition_and = Standard::find()->where(['connect'=> Standard::CONNECT_AND])->all();
+        foreach($condition_and as $and){
+            $query->andFilterWhere(self::get_condition($and));
+        }
+        
+        $or_condition=[];       
+        $condition_or = Standard::find()->where(['connect'=> Standard::CONNECT_OR])->all();
+        foreach($condition_or as $or){
+            $or_condition[]= self::get_condition($or);
+        }
+        if(count($or_condition)>1){
+            $query->andFilterWhere(array_merge(['or'],$or_condition));
+        }else{
+            $query->andFilterWhere($or_condition);
+        }
+        $ids = $query->select(['c.id'])->column();
+           
+        static::updateAll(['is_act'=> self::ACT_Y], ['id'=>$ids]);
         static::updateAll(['is_act'=> self::ACT_N],['is_act'=> self::ACT_D]);
         return true;
+    }
+    
+    public static function get_condition($model) {
+        $f=$model->type== Standard::TYPE_ADD?'c.'.$model->field:'d.'.$model->field;
+        if(preg_match('/[~|-]{1}/',$model->value)){
+            $v= explode('~', $model->value);
+            if(count($v)<2){
+                $v= explode('-', $model->value);
+            }              
+            $condition=['between',$f,$v[0],$v[1]];
+        }elseif (preg_match('/^(<>|>=|>|<=|<|=)/', $model->value, $matches)) {
+            $operator=$matches[1];
+            $value = substr($model->value, strlen($operator));              
+            $condition=[$operator, $f, $value];
+        } else {
+            $condition=[$f=>$model->value];
+        }
+        return $condition;
     }
     
     //是否活跃
