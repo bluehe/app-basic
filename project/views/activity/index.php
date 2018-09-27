@@ -661,7 +661,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'projectman_usercount_d',
                     'value' => function($model) {                                
-                        return $model->data->projectman_usercount?$model->data->projectman_usercount:'';
+                        return $model->data&&$model->data->projectman_usercount?$model->data->projectman_usercount:'';
                     },
                     'visible'=> is_array($column)&&in_array('projectman_usercount_d',$column),
                     ],
@@ -669,7 +669,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'projectman_projectcount_d',
                     'value' => function($model) {
-                        return $model->data->projectman_projectcount?$model->data->projectman_projectcount:'';
+                        return $model->data&&$model->data->projectman_projectcount?$model->data->projectman_projectcount:'';
 
                     },
                     'visible'=> is_array($column)&&in_array('projectman_projectcount_d',$column),
@@ -678,7 +678,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'projectman_membercount_d',
                     'value' => function($model) {
-                        return $model->data->projectman_membercount?$model->data->projectman_membercount:'';
+                        return $model->data&&$model->data->projectman_membercount?$model->data->projectman_membercount:'';
 
                     },                
                     'visible'=> is_array($column)&&in_array('projectman_membercount_d',$column),
@@ -687,7 +687,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'projectman_versioncount_d',
                     'value' => function($model) {
-                        return $model->data->projectman_versioncount?$model->data->projectman_versioncount:'';
+                        return $model->data&&$model->data->projectman_versioncount?$model->data->projectman_versioncount:'';
 
                     },                               
                     'visible'=> is_array($column)&&in_array('projectman_versioncount_d',$column),
@@ -696,7 +696,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'projectman_issuecount_d',
                     'value' => function($model) {
-                        return $model->data->projectman_issuecount?$model->data->projectman_issuecount:'';
+                        return $model->data&&$model->data->projectman_issuecount?$model->data->projectman_issuecount:'';
                     },
                     'visible'=> is_array($column)&&in_array('projectman_issuecount_d',$column),
                     ],
@@ -704,7 +704,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'projectman_storagecount_d',
                     'value' => function($model) {
-                        return $model->data->projectman_storagecount?$model->data->projectman_storagecount:'';
+                        return $model->data&&$model->data->projectman_storagecount?$model->data->projectman_storagecount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('projectman_storagecount_d',$column),
                     ],
@@ -712,7 +712,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codehub_all_usercount_d',
                     'value' => function($model) {
-                        return $model->data->codehub_all_usercount?$model->data->codehub_all_usercount:'';
+                        return $model->data&&$model->data->codehub_all_usercount?$model->data->codehub_all_usercount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('codehub_all_usercount_d',$column),
                     ],
@@ -720,7 +720,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codehub_repositorycount_d',
                     'value' => function($model) {
-                        return $model->data->codehub_repositorycount?$model->data->codehub_repositorycount:'';
+                        return $model->data&&$model->data->codehub_repositorycount?$model->data->codehub_repositorycount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('codehub_repositorycount_d',$column),
                     ],
@@ -728,7 +728,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codehub_commitcount_d',
                     'value' => function($model) {
-                        return $model->data->codehub_commitcount?$model->data->codehub_commitcount:'';
+                        return $model->data&&$model->data->codehub_commitcount?$model->data->codehub_commitcount:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('codehub_commitcount_d',$column),
                     ],
@@ -736,7 +736,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codehub_repositorysize_d',
                     'value' => function($model) {
-                        return $model->data->codehub_repositorysize?$model->data->codehub_repositorysize:'';
+                        return $model->data&&$model->data->codehub_repositorysize?$model->data->codehub_repositorysize:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('codehub_repositorysize_d',$column),
                     ],
@@ -744,7 +744,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'pipeline_usercount_d',
                     'value' => function($model) {
-                       return $model->data->pipeline_usercount?$model->data->pipeline_usercount:'';
+                       return $model->data&&$model->data->pipeline_usercount?$model->data->pipeline_usercount:'';
                     },                   
                     'visible'=> is_array($column)&&in_array('pipeline_usercount_d',$column),
                     ],
@@ -752,7 +752,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'pipeline_pipecount_d',
                     'value' => function($model) {
-                       return $model->data->pipeline_pipecount?$model->data->pipeline_pipecount:'';
+                       return $model->data&&$model->data->pipeline_pipecount?$model->data->pipeline_pipecount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('pipeline_pipecount_d',$column),
                     ],
@@ -760,7 +760,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'pipeline_executecount_d',
                     'value' => function($model) {
-                       return $model->data->pipeline_executecount?$model->data->pipeline_executecount:'';
+                       return $model->data&&$model->data->pipeline_executecount?$model->data->pipeline_executecount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('pipeline_executecount_d',$column),
                     ],
@@ -768,7 +768,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'pipeline_elapse_time_d',
                     'value' => function($model) {
-                       return $model->data->pipeline_elapse_time?$model->data->pipeline_elapse_time:'';
+                       return $model->data&&$model->data->pipeline_elapse_time?$model->data->pipeline_elapse_time:'';
                     },
                    
                     'visible'=> is_array($column)&&in_array('pipeline_elapse_time_d',$column),
@@ -777,7 +777,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codecheck_usercount_d',
                     'value' => function($model) {
-                       return $model->data->codecheck_usercount?$model->data->codecheck_usercount:'';
+                       return $model->data&&$model->data->codecheck_usercount?$model->data->codecheck_usercount:'';
                     },                   
                     'visible'=> is_array($column)&&in_array('codecheck_usercount_d',$column),
                     ],
@@ -785,7 +785,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codecheck_taskcount_d',
                     'value' => function($model) {
-                       return $model->data->codecheck_taskcount?$model->data->codecheck_taskcount:'';
+                       return $model->data&&$model->data->codecheck_taskcount?$model->data->codecheck_taskcount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('codecheck_taskcount_d',$column),
                     ],
@@ -793,7 +793,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codecheck_codelinecount_d',
                     'value' => function($model) {
-                       return $model->data->codecheck_codelinecount?$model->data->codecheck_codelinecount:'';
+                       return $model->data&&$model->data->codecheck_codelinecount?$model->data->codecheck_codelinecount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('codecheck_codelinecount_d',$column),
                     ],
@@ -801,7 +801,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codecheck_issuecount_d',
                     'value' => function($model) {
-                       return $model->data->codecheck_issuecount?$model->data->codecheck_issuecount:'';
+                       return $model->data&&$model->data->codecheck_issuecount?$model->data->codecheck_issuecount:'';
                     },                   
                     'visible'=> is_array($column)&&in_array('codecheck_issuecount_d',$column),
                     ],
@@ -809,7 +809,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codecheck_execount_d',
                     'value' => function($model) {
-                       return $model->data->codecheck_execount?$model->data->codecheck_execount:'';
+                       return $model->data&&$model->data->codecheck_execount?$model->data->codecheck_execount:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('codecheck_execount_d',$column),
                     ],
@@ -817,7 +817,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codeci_usercount_d',
                     'value' => function($model) {
-                       return $model->data->codeci_usercount?$model->data->codeci_usercount:'';
+                       return $model->data&&$model->data->codeci_usercount?$model->data->codeci_usercount:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('codeci_usercount_d',$column),
                     ],
@@ -825,7 +825,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codeci_buildcount_d',
                     'value' => function($model) {
-                        return $model->data->codeci_buildcount?$model->data->codeci_buildcount:'';
+                        return $model->data&&$model->data->codeci_buildcount?$model->data->codeci_buildcount:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('codeci_buildcount_d',$column),
                     ],
@@ -833,7 +833,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codeci_allbuildcount_d',
                     'value' => function($model) {
-                        return $model->data->codeci_allbuildcount?$model->data->codeci_allbuildcount:'';
+                        return $model->data&&$model->data->codeci_allbuildcount?$model->data->codeci_allbuildcount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('codeci_allbuildcount_d',$column),
                     ],
@@ -841,7 +841,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'codeci_buildtotaltime_d',
                     'value' => function($model) {
-                        return $model->data->codeci_buildtotaltime?$model->data->codeci_buildtotaltime:'';
+                        return $model->data&&$model->data->codeci_buildtotaltime?$model->data->codeci_buildtotaltime:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('codeci_buildtotaltime_d',$column),
                     ],
@@ -849,7 +849,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'testman_usercount_d',
                     'value' => function($model) {
-                        return $model->data->testman_usercount?$model->data->testman_usercount:'';
+                        return $model->data&&$model->data->testman_usercount?$model->data->testman_usercount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('testman_usercount_d',$column),
                     ],
@@ -857,7 +857,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'testman_casecount_d',
                     'value' => function($model) {
-                        return $model->data->testman_casecount?$model->data->testman_casecount:'';
+                        return $model->data&&$model->data->testman_casecount?$model->data->testman_casecount:'';
                     },                  
                     'visible'=> is_array($column)&&in_array('testman_casecount_d',$column),
                     ],
@@ -865,7 +865,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'testman_totalexecasecount_d',
                     'value' => function($model) {
-                        return $model->data->testman_totalexecasecount?$model->data->testman_totalexecasecount:'';
+                        return $model->data&&$model->data->testman_totalexecasecount?$model->data->testman_totalexecasecount:'';
                     },                   
                     'visible'=> is_array($column)&&in_array('testman_totalexecasecount_d',$column),
                     ],
@@ -873,7 +873,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'deploy_usercount_d',
                     'value' => function($model) {
-                        return $model->data->deploy_usercount?$model->data->deploy_usercount:'';
+                        return $model->data&&$model->data->deploy_usercount?$model->data->deploy_usercount:'';
                     },                   
                     'visible'=> is_array($column)&&in_array('deploy_usercount_d',$column),
                     ],
@@ -881,7 +881,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'deploy_envcount_d',
                     'value' => function($model) {
-                        return $model->data->deploy_envcount?$model->data->deploy_envcount:'';
+                        return $model->data&&$model->data->deploy_envcount?$model->data->deploy_envcount:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('deploy_envcount_d',$column),
                     ],
@@ -889,7 +889,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'deploy_execount_d',
                     'value' => function($model) {
-                        return $model->data->deploy_execount?$model->data->deploy_execount:'';
+                        return $model->data&&$model->data->deploy_execount?$model->data->deploy_execount:'';
                     },                   
                     'visible'=> is_array($column)&&in_array('deploy_execount_d',$column),
                     ],
@@ -897,7 +897,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'attribute' => 'deploy_vmcount_d',
                     'value' => function($model) {
-                        return $model->data->deploy_vmcount?$model->data->deploy_vmcount:'';
+                        return $model->data&&$model->data->deploy_vmcount?$model->data->deploy_vmcount:'';
                     },                   
                     'visible'=> is_array($column)&&in_array('deploy_vmcount_d',$column),
                     ],

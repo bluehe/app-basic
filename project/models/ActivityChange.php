@@ -320,7 +320,10 @@ class ActivityChange extends \yii\db\ActiveRecord
     
     //是否活跃
     public static function is_activity($model) {
-          
+        
+        if(!$model->data){
+            return false;
+        }
         $res_or=false;
         $condition_or = Standard::find()->where(['connect'=> Standard::CONNECT_OR])->all();    
         foreach($condition_or as $or){
@@ -436,7 +439,27 @@ class ActivityChange extends \yii\db\ActiveRecord
               
         $query = static::find()->alias('c')->joinWith(['data d'])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'base_bd'=>SORT_ASC]);
         if($activity){
-            $query->andWhere(['is_act'=>self::ACT_Y]);
+            if(System::getValue('business_activity')==1){
+                //历史标准
+                $query->andWhere(['is_act'=>self::ACT_Y]);            
+            }else{
+                //最新标准
+                $condition_and = Standard::find()->where(['connect'=> Standard::CONNECT_AND])->all();
+                foreach($condition_and as $and){
+                    $query->andFilterWhere(self::get_condition($and));
+                }
+
+                $or_condition=[];       
+                $condition_or = Standard::find()->where(['connect'=> Standard::CONNECT_OR])->all();
+                foreach($condition_or as $or){
+                    $or_condition[]= self::get_condition($or);
+                }
+                if(count($or_condition)>1){
+                    $query->andFilterWhere(array_merge(['or'],$or_condition));
+                }else{
+                    $query->andFilterWhere($or_condition);
+                }
+            }
         }
         $query->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(distinct c.corporation_id)','corporation_id'=>'MAX(c.corporation_id)','base_bd'=>'MAX(base_bd)']);
         if($sum){
@@ -459,8 +482,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             if(count($items)>1){
                 $w[]='or';
                 foreach($items as $item){
-                    $w[]=['>',$item,0];
-                   
+                    $w[]=['>',$item,0];                  
                 }
                 $query->andWhere($w);
             }else{
