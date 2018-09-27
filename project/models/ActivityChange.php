@@ -434,12 +434,11 @@ class ActivityChange extends \yii\db\ActiveRecord
  
     public static function get_activity_total($start, $end,$sum=1,$group=1,$activity=false) {
               
-        $query = static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'base_bd'=>SORT_ASC]);
+        $query = static::find()->alias('c')->joinWith(['data d'])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'base_bd'=>SORT_ASC]);
         if($activity){
-            //$query->andWhere(['or',['>','codehub_commitcount',0],['>','projectman_issuecount',0],['>','projectman_usercount',0],['>','testman_totalexecasecount',0],['>','deploy_execount',0],['>','codecheck_execount',0],['>','codeci_allbuildcount',0],['>','codeci_buildtotaltime',0]]);
             $query->andWhere(['is_act'=>self::ACT_Y]);
         }
-        $query->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(distinct corporation_id)','corporation_id'=>'MAX(corporation_id)','base_bd'=>'MAX(base_bd)']);
+        $query->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(distinct c.corporation_id)','corporation_id'=>'MAX(c.corporation_id)','base_bd'=>'MAX(base_bd)']);
         if($sum){
             //周
             $query->groupBy(['start_time','end_time']);       

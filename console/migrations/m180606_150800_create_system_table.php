@@ -40,6 +40,7 @@ class m180606_150800_create_system_table extends Migration {
             [4, NULL, 'sms', '短信设置', 'group', '', '', '', 4],
             [5, NULL, 'cdn', 'CDN设置', 'group', '', '', '', 5],
             [6, NULL, 'agreement', '协议设置', 'group', '', '', '', 6],
+            [7, NULL, 'business', '业务设置', 'group', '', '', '', 7],
             [101, 1, 'system_stat', '系统状态', 'radio', '{"0":"关闭","1":"开放"}', '系统关闭只允许超级管理员登录；关闭将清退除超级管理员外的所有用户', '1', 1],
             [102, 1, 'system_close', '关闭原因', 'textarea', '3', '', '', 2],
             [103, 1, 'system_register', '允许注册', 'radio', '{"0":"否","1":"是"}', '', '1', 3],
@@ -78,6 +79,9 @@ class m180606_150800_create_system_table extends Migration {
             [601, 6, 'agreement_open', '启用协议', 'radio', '{"0":"否","1":"是"}', '', '1', 1],
             [602, 6, 'agreement_service', '服务协议', 'editor', '', '', '', 2],
             [603, 6, 'agreement_privacy', '隐私声明', 'editor', '', '', '', 3],
+            [701, 7, 'business_area', '区域', 'text', '', '', '', 1],
+            [702, 7, 'business_parameter', '企业导入添加参数', 'radio', '{"0":"不允许","1":"允许"}', '', '0', 2],
+            [703, 7, 'business_activity', '活跃统计标准', 'radio', '{"1":"历史标准","2":"最新标准"}', '', '1', 3],
            
         ]);
         

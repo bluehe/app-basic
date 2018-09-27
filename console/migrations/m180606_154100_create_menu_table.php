@@ -40,6 +40,7 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [15, '验证码设置', 10, '/system/captcha', 5, '{"icon":"fa fa-key"}'],
             [16, '协议设置', 10, '/system/agreement', 6, '{"icon":"fa fa-balance-scale"}'],
             [17, '计划任务', 10, '/system/crontab', 7, '{"icon":"fa fa-clock-o", "multi-action":[ "crontab", "crontab-create", "crontab-update"]}'],
+            [18, '业务设置', 10, '/system/business', 8, '{"icon":"fa fa-sitemap"}'],
 
             [20, '账号信息', NULL, '/account/index', 2, '{"icon":"fa fa-list-alt"}'],
             [21, '注册信息', 20, '/account/index', 1, '{"icon":"fa fa-pencil-square-o"}'],

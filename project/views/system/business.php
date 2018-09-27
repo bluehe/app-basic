@@ -7,7 +7,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'CDN设置';
+$this->title = '业务设置';
 $this->params['breadcrumbs'][] = ['label' => '系统设置', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-12">
         <div class="box box-primary">
             <?php
-            $form = ActiveForm::begin(['id' => 'cdn-form',
+            $form = ActiveForm::begin(['id' => 'business-form',
                         'options' => ['class' => 'form-horizontal'],
             ]);
             ?>
@@ -69,42 +69,10 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script>
-<?php $this->beginBlock('cdn') ?>
+<?php $this->beginBlock('business') ?>
     
-    $(document).ready(function () {
-        changeshow();
-        $('.radio-cdn_service,.radio-cdn_platform').on('change', function () {
-            changeshow();
-        });
 
-    });
-    function changeshow() {
-        var service = $('.radio-cdn_service:checked').val();
-        if (service === '1') {
-            $('.field-cdn:not(.field-cdn_service)').show();
-            $('.field-cdn_appid').hide();
-            $('.field-cdn_point').show();
-            $('.field-cdn_key label').html('accessKey');
-            $('.field-cdn_secret label').html('accessSecret');
-            $('.field-cdn_point label').html('endPoint');
-            
-            var platform = $('.radio-cdn_platform:checked').val();
-            if (platform === 'Qcloud') {
-                $('.field-cdn_appid').show();
-                $('.field-cdn_key label').html('secretId');
-                $('.field-cdn_secret label').html('secretKey');
-                $('.field-cdn_point label').html('region');
-            } else if (platform === 'Qiniu') {
-                $('.field-cdn_point').hide();
-                $('.field-cdn_secret label').html('secretKey');
-            }
-        } else {
-            $('.field-cdn:not(.field-cdn_service)').hide();                      
-        }
-        
-        
-    }
    
 <?php $this->endBlock() ?>
 </script>
-<?php $this->registerJs($this->blocks['cdn'], \yii\web\View::POS_END); ?>
+<?php $this->registerJs($this->blocks['business'], \yii\web\View::POS_END); ?>

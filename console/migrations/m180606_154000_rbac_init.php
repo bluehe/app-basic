@@ -147,6 +147,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/system/captcha', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/agreement', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/crontab', '2', null, null, null, '1482820123', '1482820123'],
+            ['/system/business', '2', null, null, null, '1482820123', '1482820123'],
             
             //用户管理
             ['/user/*', '2', null, null, null, '1482820123', '1482820123'],

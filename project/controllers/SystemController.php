@@ -417,4 +417,23 @@ class SystemController extends Controller {
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * 业务设置
+     */
+    public function actionBusiness() {
+
+        if (Yii::$app->request->post()) {
+            $system = Yii::$app->request->post('System');
+            $res = System::setSystem($system);
+            if ($res) {
+                Yii::$app->session->setFlash('success', '更新成功。');
+            } elseif ($res === false) {
+                Yii::$app->session->setFlash('error', '更新失败。');
+            }
+        }
+
+        return $this->render('business', [
+                    'model' => System::getChildren('business'),
+        ]);
+    }
 }
