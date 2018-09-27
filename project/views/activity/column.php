@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use project\models\ActivitySearch;
+use project\models\ActivityChange;
 
 /* @var $this yii\web\View */
 /* @var $model dms\models\RepairOrder */
@@ -20,7 +20,7 @@ use project\models\ActivitySearch;
         ]);
         ?>
         
-        <?= $form->field($model, 'content')->checkboxList(ActivitySearch::$List['column'], ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
+        <?= $form->field($model, 'content')->checkboxList(array_merge(ActivityChange::$List['column_activity'],ActivityChange::$List['column_data']), ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
      
 
         <div class="col-md-6 col-xs-6 text-right">

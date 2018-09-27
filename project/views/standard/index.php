@@ -10,17 +10,17 @@ use project\models\ActivityData;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '字段管理';
-$this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['field/index']];
+$this->title = '活跃标准';
+$this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['standard/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="field-index">
+<div class="standard-index">
 
     <div class="box box-primary">
         <div class="box-body">
 
             <p>
-                <?= Html::a('添加字段', ['#'], ['data-toggle' => 'modal', 'data-target' => '#field-modal','class' => 'btn btn-success field-create']) ?>
+                <?= Html::a('添加条件', ['#'], ['data-toggle' => 'modal', 'data-target' => '#standard-modal','class' => 'btn btn-success standard-create']) ?>
             </p>
             <?php Pjax::begin(); ?>
             <?=
@@ -32,19 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-//                    [
-//                        'attribute' => 'parent',
-//                        'value' =>
-//                        function($model) {
-//                            return $model->parent ? $model->parent0->name : '';
-//                        },
-//                    ],
-                    'name',
                     [
-                        'attribute' => 'code',
+                        'attribute' => 'field',
                         'value' =>
                         function($model) {
-                            return ActivityData::get_code_name($model->code);
+                            return ActivityData::get_code_name($model->field);
                         },
                     ],
                     [
@@ -54,15 +46,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             return $model->Type;
                         },
                     ],
+                    'value',
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
                         'template' => '{update} {delete}', //只需要展示删除和更新
                         'buttons' => [
                             'update' => function($url, $model, $key) {
-                               return Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#field-modal', 'class' => 'btn btn-primary btn-xs field-update',]);
+                               return Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#standard-modal', 'class' => 'btn btn-primary btn-xs standard-update',]);
                             },
                             'delete' => function($url, $model, $key) {
-                                return Html::a('<i class="fa fa-trash-o"></i> 删除', ['delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'确定删除吗？','data-method' => 'post',]);
+                                return Html::a('<i class="fa fa-trash-o"></i> 删除', ['#'], ['class' => 'btn btn-danger btn-xs standard-delete','data-type'=>$model->type,'data-field'=>$model->field]);
                                
                             },
                           
@@ -78,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <?php
 Modal::begin([
-    'id' => 'field-modal',
+    'id' => 'standard-modal',
     'header' => '<h4 class="modal-title"></h4>',
     'options' => [
         'tabindex' => false
@@ -87,30 +80,43 @@ Modal::begin([
 Modal::end();
 ?>
 <script>
-<?php $this->beginBlock('field') ?>
+<?php $this->beginBlock('standard') ?>
     
-    $('.field-index').on('click', '.field-create', function () {
-        $('#field-modal .modal-title').html('添加');
-        $('#field-modal .modal-body').html('');
+    $('.standard-index').on('click', '.standard-create', function () {
+        $('#standard-modal .modal-title').html('添加');
+        $('#standard-modal .modal-body').html('');
         $.get('<?= Url::toRoute('create') ?>',
                 function (data) {
-                    $('#field-modal .modal-body').html(data);
+                    $('#standard-modal .modal-body').html(data);
                 }
         );
     });
     
-    $('.field-index').on('click', '.field-update', function () {
-        $('#field-modal .modal-title').html('修改');
-        $('#field-modal .modal-body').html('');
+    $('.standard-index').on('click', '.standard-update', function () {
+        $('#standard-modal .modal-title').html('修改');
+        $('#standard-modal .modal-body').html('');
         $.get('<?= Url::toRoute('update') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
-                    $('#field-modal .modal-body').html(data);
+                    $('#standard-modal .modal-body').html(data);
                 }
         );
+    });
+    
+    $('.standard-index').on('click', '.standard-delete', function () {
+        var _this = $(this).parents('tr');
+        if(!confirm('确定删除么？')){return false;}
+        $.getJSON('<?= Url::toRoute('delete') ?>',{type: $(this).data('type'),field:$(this).data('field')},
+                function (data) {
+                    if (data.stat == 'success') {
+                        _this.remove();        
+                     } 
+                }
+        );
+        return false;
     });
     
 
 
 <?php $this->endBlock() ?>
 </script>
-<?php $this->registerJs($this->blocks['field'], \yii\web\View::POS_END); ?>
+<?php $this->registerJs($this->blocks['standard'], \yii\web\View::POS_END); ?>

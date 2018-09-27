@@ -176,6 +176,10 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/subsidy/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/subsidy/subsidy-list', '2', null, null, null, '1482820123', '1482820123'],
             
+            //活跃标准
+            ['/standard/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/standard/index', '2', null, null, null, '1482820123', '1482820123'],
+            
             //字段管理
             ['/field/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/field/index', '2', null, null, null, '1482820123', '1482820123'],
@@ -224,6 +228,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['补贴管理', '2', '补贴管理', null, null, '1482820123', '1482820123'],
             
 //            ['数据中心', '2', '数据中心', null, null, '1482820123', '1482820123'],
+            ['活跃标准', '2', '活跃标准', null, null, '1482820123', '1482820123'],
             ['字段管理', '2', '字段管理', null, null, '1482820123', '1482820123'],
             ['数据导入', '2', '数据导入', null, null, '1482820123', '1482820123'],
 //            ['历史数据', '2', '历史数据', null, null, '1482820123', '1482820123'], 
@@ -285,10 +290,14 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['sa', '补贴管理'],
             ['ob', '补贴管理'],
             
+            ['活跃标准', '/standard/*'],
+            ['superadmin', '活跃标准'],
+            ['ob_data', '活跃标准'],
+            
             ['字段管理', '/field/*'],
             ['superadmin', '字段管理'],
             ['ob_data', '字段管理'],
-            
+                       
             ['数据导入', '/import/*'],
             ['superadmin', '数据导入'],
             ['ob_data', '数据导入'],

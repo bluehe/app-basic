@@ -56,10 +56,11 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [37, '补贴管理', 30, '/subsidy/subsidy-list', 7, '{"icon":"fa fa-tint"}'],
             
             [40, '数据中心', NULL, '/field/index', 4, '{"icon":"fa fa-wrench"}'],
-            [41, '字段管理', 40, '/field/index', 1, '{"icon":"fa fa-suitcase"}'],
-            [42, '数据导入', 40, '/import/index', 2, '{"icon":"fa fa-upload"}'],
-//            [43, '历史数据', 40, '/history/history-list', 3, '{"icon":"fa fa-database", "multi-action":["history-list", "history-create", "history-update"]}'],
-            [44, '活跃数据', 40, '/activity/index', 4, '{"icon":"fa fa-heartbeat"}'],
+            [41, '活跃标准', 40, '/standard/index', 1, '{"icon":"fa fa-balance-scale"}'],
+            [42, '字段管理', 40, '/field/index', 2, '{"icon":"fa fa-suitcase"}'],
+            [43, '数据导入', 40, '/import/index', 3, '{"icon":"fa fa-upload"}'],
+//            [44, '历史数据', 40, '/history/history-list', 4, '{"icon":"fa fa-database", "multi-action":["history-list", "history-create", "history-update"]}'],
+            [45, '活跃数据', 40, '/activity/index', 5, '{"icon":"fa fa-heartbeat"}'],
             
             [70, '数据统计', NULL, '/statistics/activity', 7, '{"icon":"fa  fa-bar-chart"}'],
             [71, '用户统计', 70, '/statistics/user', 1, '{"icon":"fa fa-user"}'],

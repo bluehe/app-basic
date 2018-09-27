@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use project\models\Field;
+use project\models\Standard;
 use project\models\ActivityData;
 
 /* @var $this yii\web\View */
@@ -13,7 +13,7 @@ use project\models\ActivityData;
     <div class="col-md-12">
 
         <?php
-        $form = ActiveForm::begin(['id' => 'field-form',
+        $form = ActiveForm::begin(['id' => 'standard-form',
                     'enableAjaxValidation' => true,
                     'enableClientValidation' => true,
                     'options' => ['class' => 'form-horizontal'],
@@ -23,15 +23,12 @@ use project\models\ActivityData;
                     ],
         ]);
         ?>
+                     
+        <?= $form->field($model, 'field')->dropDownList(ActivityData::get_code(false), ['prompt' => '无']) ?>
         
-        <?php //echo $form->field($model, 'parent')->dropDownList($model->get_parents_id($model->id), ['prompt' => '无']) ?>
-        
-        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-       
-        <?= $form->field($model, 'code')->dropDownList(ActivityData::get_code(), ['prompt' => '无']) ?>
-        
-        <?= $form->field($model, 'type')->radioList(Field::$List['type'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
+        <?= $form->field($model, 'type')->radioList(Standard::$List['type'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
 
+        <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
 
         <div class="col-md-6 col-xs-6 text-right">
             <?= Html::submitButton($model->isNewRecord ? '创建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

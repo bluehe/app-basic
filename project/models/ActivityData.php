@@ -74,41 +74,13 @@ class ActivityData extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        return [
-            'id' => 'ID',
+        return array_merge([
+           'id' => 'ID',
             'corporation_id' => '公司',
             'statistics_time' => '统计时间',
-            'projectman_usercount' => '项目用户数',
-            'projectman_projectcount' => '当前项目数',
-            'projectman_membercount' => '当前项目成员数',
-            'projectman_versioncount' => '当前迭代数',
-            'projectman_issuecount' => '工作项数',
-            'projectman_storagecount' => '项目存储空间',
-            'codehub_all_usercount' => '配置管理用户数',
-            'codehub_repositorycount' => '当前代码仓库数',
-            'codehub_commitcount' => '提交次数',
-            'codehub_repositorysize' => '存储空间',
-            'pipeline_usercount' => '流水线用户数',
-            'pipeline_pipecount' => '当前流水线条数',
-            'pipeline_executecount' => '流水线执行次数',
-            'pipeline_elapse_time' => '流水线执行时长',
-            'codecheck_usercount' => '代码检查用户数',
-            'codecheck_taskcount' => '当前检查任务数',
-            'codecheck_codelinecount' => '检查代码行数',
-            'codecheck_issuecount' => '检查发现问题总数',
-            'codecheck_execount' => '检查次数',
-            'codeci_usercount' => '编译构建用户数',
-            'codeci_buildcount' => '当前构建任务数',
-            'codeci_allbuildcount' => '构建次数',
-            'codeci_buildtotaltime' => '构建时长',
-            'testman_usercount' => '测试管理用户数',
-            'testman_casecount' => '用例总数',
-            'testman_totalexecasecount' => '用例执行次数',
-            'deploy_usercount' => '部署用户数',
-            'deploy_envcount' => '当前部署任务数',
-            'deploy_execount' => '部署次数',
-            'deploy_vmcount' => '节点数',
-        ];
+            ],
+            ActivityChange::$List['column_activity']
+        );
     }
 
     /**
@@ -119,17 +91,24 @@ class ActivityData extends \yii\db\ActiveRecord
         return $this->hasOne(Corporation::className(), ['id' => 'corporation_id']);
     }
     
-    public static function get_code() {
-       $table = self::tableName();
-       $tableSchema = Yii::$app->db->schema->getTableSchema($table);
-       $fields = ArrayHelper::getColumn($tableSchema->columns, 'name', 'name');
-       unset($fields['id']);
-       unset($fields['corporation_id']);
-       unset($fields['statistics_time']);
-       
-       return array_merge(['huawei_account'=>'华为云账号','corporation_name'=>'企业名称'],$fields);
+    public static function get_code($all=true) {
+//       $table = self::tableName();
+//       $tableSchema = Yii::$app->db->schema->getTableSchema($table);
+//       $fields = ArrayHelper::getColumn($tableSchema->columns, 'name', 'name');
+//       unset($fields['id']);
+//       unset($fields['corporation_id']);
+//       unset($fields['statistics_time']);
+        $fields= ActivityChange::$List['column_activity'];
+    
+        return $all?array_merge(['huawei_account'=>'华为云账号','corporation_name'=>'企业名称'],$fields):$fields;
     }
     
+     public static function get_code_name($code) {
+
+        $fields= array_merge(['huawei_account'=>'华为云账号','corporation_name'=>'企业名称'], ActivityChange::$List['column_activity']);
+    
+        return isset($fields[$code])?$fields[$code]:'';
+    }
         
     public static function get_corporationid_by_time($statistics_time='') {   
        return static::find()->andFilterWhere(['statistics_time'=>$statistics_time])->select(['corporation_id'])->column();

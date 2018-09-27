@@ -54,7 +54,7 @@ class Field extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'parent' => '上级',
-            'code' => '代码',
+            'code' => '字段',
             'name' => '名称',
             'type' => '类型',
         ];
