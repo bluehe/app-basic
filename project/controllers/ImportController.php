@@ -248,7 +248,7 @@ class ImportController extends Controller {
 
 
             //目标文件夹，不存在则创建
-            $targetFolder = '/data/upload';
+            $targetFolder = '/data/import_data';
             $targetPath = Yii::getAlias('@webroot') . $targetFolder;
 
             if (!file_exists($targetPath)) {
