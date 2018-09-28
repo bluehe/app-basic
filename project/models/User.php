@@ -330,4 +330,17 @@ class User extends ActiveRecord implements IdentityInterface
        
     }
     
+    public static function get_role($role='sa') {
+        $data=[];
+        if($role=='other'){
+            $users = static::find()->where(['and','status'=>self::STATUS_ACTIVE,['not',['role'=>'sa']]])->all();       
+        }else{
+            $users = static::find()->where(['role'=>$role,'status'=>self::STATUS_ACTIVE])->all();
+        }
+        foreach($users as $user){
+            $data[$user['id']]=$user['nickname']?$user['nickname']:$user['username'];
+        }
+        return $data;
+    }
+    
 }
