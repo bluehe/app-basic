@@ -512,133 +512,133 @@ class StatisticsController extends Controller {
         return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group]);
     }
     
-//    public function actionTrain() {
-//        
-//        $end = strtotime('today')+ 86399;
-//        $start = strtotime('-30 days',$end);
-//        $sum=Yii::$app->request->get('sum',1);//1-天；2-周；3-月
-//        $group=Yii::$app->request->get('group',1);//1-总；2-角色；3-个人
-//
-//        if (Yii::$app->request->get('range')) {
-//            $range = explode('~', Yii::$app->request->get('range'));
-//            $start = isset($range[0]) ? strtotime($range[0]) : $start;
-//            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]) + 86399 : $end;
-//        }
-//        
-//        $series['num']=[];
-//        $series['type']=[];
-//
-//        //趋势
-//        $train_num = Train::get_train_num($start, $end, Train::STAT_END,$sum,$group);
-//        $train_type = Train::get_train_type($start, $end, Train::STAT_END,$group);
-//               
-//        if($group==1){
-//            $data_train_num = [];            
-//            if($sum==1){
-//                //天
-//                for ($i = ($train_num===true?strtotime(key($train_num)):$start); $i < $end; $i = $i + 86400) {
-//                    $k=date('Y-m-d', $i);
-//                    $j = date('n.j', $i);
-//                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];          
-//                }
-//            }elseif($sum==2){
-//                //周
-//                for ($i = ($train_num?strtotime(key($train_num)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
-//                    $k=strftime("%Y-W%W",$i);
-//                    $j = date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
-//                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];          
-//                }
-//            }else{
-//                //月
-//                for ($i = ($train_num?strtotime(key($train_num)):strtotime(date("Y-m",$start))); $i < $end; $i= strtotime('+1 months',$i)) {
-//                    $k=date("Y-m",$i);
-//                    $j = date('Y.n', $i);
-//                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];         
-//                }
-//            }
-//            $series['num'][] = ['type' => 'line', 'name' => '次数', 'data' => $data_train_num,'showInLegend'=>false];
-//            
-//            //类型
-//            $data_train_type = [];
-//            foreach($train_type as $type){
-//                 $data_train_type[] = ['name' => Train::$List['train_type'][$type['train_type']], 'y' => (int) $type['num']];
-//                 //$series['type'][] = ['type' => 'column', 'name' => Train::$List['train_type'][$type['train_type']], 'data'=>[(int) $type['num']]];
-//            }            
-//            $series['type'][] = ['type' => 'column', 'name' => '次数', 'data' => $data_train_type,'showInLegend'=>false,'colorByPoint'=>false];            
-//        }else{
-//                     
-//            $groups = User::get_user_color();
-//            
-//            //次数
-//            $users_num=[];
-//            $data_num_total=[];
-//            $data_train_num = [];
-//            
-//            
-//            foreach ($train_num as $total){
-//                if(!in_array($total['user_id'], $users_num)){
-//                    $users_num[]=$total['user_id'];
-//                }              
-//                $data_num_total[$total['time']][$total['user_id']]=$total['num'];
-//            }
-//            if($sum==1){
-//                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):$start); $i < $end; $i = $i + 86400) {
-//                    $k=date('Y-m-d', $i);
-//                    $j = date('n.j', $i);
-//                    foreach($users_num as $user){
-//                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];
-//                    }
-//                }
-//            }elseif($sum==2){
-//                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
-//                    $k=strftime("%Y-W%W",$i);
-//                    $j = date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
-//                    foreach($users_num as $user){
-//                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];                    
-//                    }      
-//                }
-//            }else{
-//                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):strtotime(date("Y-m",$start))); $i < $end; $i= strtotime('+1 months',$i)) {
-//                    $k=date("Y-m",$i);
-//                    $j = date('Y.n', $i);
-//                    foreach($users_num as $user){
-//                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];                   
-//                    }         
-//                }
-//            }
-//            
-//            foreach ($data_train_num as $gid=>$data){
-//                $series['num'][] = ['type' => 'line', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];              
-//            }
-//            
-//            //类型
-//            $users_type=[];
-//            $data_type_total=[];
-//            $data_train_type = [];
-//           
-//            foreach ($train_type as $t){
-//                if(!in_array($t['user_id'], $users_type)){
-//                    $users_type[]=$t['user_id'];
-//                }              
-//                $data_type_total[$t['train_type']][$t['user_id']]=$t['num'];
-//            }
-//            
-//            foreach($data_type_total as $k=>$type){
-//                foreach($users_type as $user){
-//                    $data_train_type[$user][] = ['name' => Train::$List['train_type'][$k], 'y' => isset($data_type_total[$k][$user]) ? (int) $data_type_total[$k][$user] : 0];                   
-//                }      
-//            }
-//            
-//            foreach ($data_train_type as $gid=>$data){
-//                $series['type'][] = ['type' => 'column', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];              
-//            }
-//                
-//            
-//            
-//            
-//        }
-//        return $this->render('train', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group]);
-//    }
+    public function actionTrain() {
+        
+        $end = strtotime('today')+ 86399;
+        $start = strtotime('-30 days',$end);
+        $sum=Yii::$app->request->get('sum',1);//1-天；2-周；3-月
+        $group=Yii::$app->request->get('group',1);//1-总；0-个人
+
+        if (Yii::$app->request->get('range')) {
+            $range = explode('~', Yii::$app->request->get('range'));
+            $start = isset($range[0]) ? strtotime($range[0]) : $start;
+            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]) + 86399 : $end;
+        }
+        
+        $series['num']=[];
+        $series['type']=[];
+
+        //趋势
+        $train_num = Train::get_train_num($start, $end, Train::STAT_END,$sum,$group);
+        $train_type = Train::get_train_type($start, $end, Train::STAT_END,$group);
+               
+        if($group==1){
+            $data_train_num = [];            
+            if($sum==1){
+                //天
+                for ($i = ($train_num===true?strtotime(key($train_num)):$start); $i < $end; $i = $i + 86400) {
+                    $k=date('Y-m-d', $i);
+                    $j = date('n.j', $i);
+                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];          
+                }
+            }elseif($sum==2){
+                //周
+                for ($i = ($train_num?strtotime(key($train_num)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
+                    $k=strftime("%Y-W%W",$i);
+                    $j = date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
+                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];          
+                }
+            }else{
+                //月
+                for ($i = ($train_num?strtotime(key($train_num)):strtotime(date("Y-m",$start))); $i < $end; $i= strtotime('+1 months',$i)) {
+                    $k=date("Y-m",$i);
+                    $j = date('Y.n', $i);
+                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];         
+                }
+            }
+            $series['num'][] = ['type' => 'line', 'name' => '次数', 'data' => $data_train_num,'showInLegend'=>false];
+            
+            //类型
+            $data_train_type = [];
+            foreach($train_type as $type){
+                 $data_train_type[] = ['name' => Train::$List['train_type'][$type['train_type']], 'y' => (int) $type['num']];
+                 //$series['type'][] = ['type' => 'column', 'name' => Train::$List['train_type'][$type['train_type']], 'data'=>[(int) $type['num']]];
+            }            
+            $series['type'][] = ['type' => 'column', 'name' => '次数', 'data' => $data_train_type,'showInLegend'=>false,'colorByPoint'=>false];            
+        }else{
+                     
+            $groups = User::get_user_color();
+            
+            //次数
+            $users_num=[];
+            $data_num_total=[];
+            $data_train_num = [];
+            
+            
+            foreach ($train_num as $total){
+                if(!in_array($total['user_id'], $users_num)){
+                    $users_num[]=$total['user_id'];
+                }              
+                $data_num_total[$total['time']][$total['user_id']]=$total['num'];
+            }
+            if($sum==1){
+                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):$start); $i < $end; $i = $i + 86400) {
+                    $k=date('Y-m-d', $i);
+                    $j = date('n.j', $i);
+                    foreach($users_num as $user){
+                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];
+                    }
+                }
+            }elseif($sum==2){
+                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
+                    $k=strftime("%Y-W%W",$i);
+                    $j = date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
+                    foreach($users_num as $user){
+                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];                    
+                    }      
+                }
+            }else{
+                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):strtotime(date("Y-m",$start))); $i < $end; $i= strtotime('+1 months',$i)) {
+                    $k=date("Y-m",$i);
+                    $j = date('Y.n', $i);
+                    foreach($users_num as $user){
+                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];                   
+                    }         
+                }
+            }
+            
+            foreach ($data_train_num as $gid=>$data){
+                $series['num'][] = ['type' => 'line', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];              
+            }
+            
+            //类型
+            $users_type=[];
+            $data_type_total=[];
+            $data_train_type = [];
+           
+            foreach ($train_type as $t){
+                if(!in_array($t['user_id'], $users_type)){
+                    $users_type[]=$t['user_id'];
+                }              
+                $data_type_total[$t['train_type']][$t['user_id']]=$t['num'];
+            }
+            
+            foreach($data_type_total as $k=>$type){
+                foreach($users_type as $user){
+                    $data_train_type[$user][] = ['name' => Train::$List['train_type'][$k], 'y' => isset($data_type_total[$k][$user]) ? (int) $data_type_total[$k][$user] : 0];                   
+                }      
+            }
+            
+            foreach ($data_train_type as $gid=>$data){
+                $series['type'][] = ['type' => 'column', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];              
+            }
+                
+            
+            
+            
+        }
+        return $this->render('train', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group]);
+    }
     
    
 
