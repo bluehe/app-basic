@@ -22,7 +22,7 @@ class CorporationStat extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'corporation_stat';
+        return '{{%corporation_stat}}';
     }
 
     /**

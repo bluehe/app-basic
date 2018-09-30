@@ -23,7 +23,7 @@ class CorporationBd extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'corporation_bd';
+        return '{{%corporation_bd}}';
     }
 
     /**
@@ -67,5 +67,9 @@ class CorporationBd extends \yii\db\ActiveRecord
     public function getBd()
     {
         return $this->hasOne(User::className(), ['id' => 'bd_id']);
+    }
+    
+    public static function get_bd_by_time($time='',$corporation_id='') {   
+       return static::find()->alias('a')->andFilterWhere(['<=','start_time',$time])->andFilterWhere(['corporation_id'=>$corporation_id])->andWhere(['not exists', static::find()->alias('b')->where('b.corporation_id=a.corporation_id AND b.start_time>a.start_time')])->select(['bd_id','corporation_id','start_time'])->indexBy('corporation_id')->column();
     }
 }

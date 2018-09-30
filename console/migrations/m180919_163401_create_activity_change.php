@@ -12,6 +12,7 @@ class m180919_163401_create_activity_change extends Migration {
      */
     public function up() {
         $table = '{{%activity_change}}';
+        $userTable = '{{%user}}';
         $corporationTable = '{{%corporation}}';
       
         $tableOptions = null;
@@ -23,6 +24,7 @@ class m180919_163401_create_activity_change extends Migration {
             'id' => $this->primaryKey(),
             'start_time' => $this->integer()->notNull(),
             'end_time' => $this->integer()->notNull(),
+            'bd_id' => $this->integer(),
             'corporation_id' => $this->integer()->notNull(),
             'type' => $this->integer()->notNull(),
             'is_act' => $this->integer()->notNull()->defaultValue(0),
@@ -65,7 +67,7 @@ class m180919_163401_create_activity_change extends Migration {
             'deploy_vmcount' => $this->float()->notNull()->defaultValue(0),
                
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
-           
+            "FOREIGN KEY ([[bd_id]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
            
                 ], $tableOptions);
             

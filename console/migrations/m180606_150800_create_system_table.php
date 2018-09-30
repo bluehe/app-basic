@@ -81,7 +81,8 @@ class m180606_150800_create_system_table extends Migration {
             [603, 6, 'agreement_privacy', '隐私声明', 'editor', '', '', '', 3],
             [701, 7, 'business_area', '区域', 'text', '', '', '', 1],
             [702, 7, 'business_parameter', '企业导入添加参数', 'radio', '{"0":"不允许","1":"允许"}', '', '0', 2],
-            [703, 7, 'business_activity', '活跃统计标准', 'radio', '{"1":"历史标准","2":"最新标准"}', '', '1', 3],
+            [703, 7, 'business_activity_statistics', '活跃统计标准', 'radio', '{"1":"历史标准","2":"最新标准"}', '', '1', 3],
+            [704, 7, 'business_activity_search', '活跃汇总筛选', 'radio', '{"1":"分条/历史","2":"汇总/最新"}', '分条/历史筛选会对单次原数据进行条件筛选；汇总/最新会对汇总数据（展现数据）进行筛选', '1', 4],
            
         ]);
         

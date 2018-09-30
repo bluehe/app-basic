@@ -37,13 +37,13 @@ return [
             'clients' => [
                 'github' => [
                     'class' => 'yii\authclient\clients\GitHub',
-                    'clientId' => '441b767ffa92ee879471',
-                    'clientSecret' => 'b16da9ef4cf8d97a12e035dd4dff413c6198ad0d',
+                    'clientId' => '38f5f49deae15ed4bc68',
+                    'clientSecret' => '83dd3bfbb7d458b4e1ff5aeaa74d88a868f68131',
                 ],
                 'weibo' => [
                     'class' => 'common\widgets\WeiboClient',
-                    'clientId' => '1514136892',
-                    'clientSecret' => 'e8a0366aa72f5a584452963addec20c9',
+                    'clientId' => '1908461907',
+                    'clientSecret' => 'ee01aaf40a55769dd866650ad754ed2d',
                 ],
 //                'qq' => [
 //                    'class' => 'common\widgets\QQClient',

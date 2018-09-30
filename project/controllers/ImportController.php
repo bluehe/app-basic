@@ -23,6 +23,9 @@ class ImportController extends Controller {
             'index' => [
                 'class' => IndexAction::className(),
                 'data' => function(){
+//            $data= \project\models\CorporationBd::get_bd_by_time(1538228939);
+//            var_dump($data);
+//            exit;
                     $dataProvider = new ActiveDataProvider([
                         'query' => ImportLog::find(),
                         'sort' => ['defaultOrder' => [                            

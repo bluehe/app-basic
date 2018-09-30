@@ -8,9 +8,6 @@ $this->title = '首页';
 
     <div class="jumbotron">
         <h1>欢迎!</h1>
-
-     
-
        
     </div>
 

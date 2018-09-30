@@ -105,18 +105,36 @@ class CommonHelper {
         return $displayMaxSize;
     }
     
-    public static function searchNumber($query,$attribute,$value) {
+    public static function searchNumber($query,$attribute,$value,$group=false) {
        
         if(preg_match('/[~|-]{1}/',$value)){
             $v= explode('~', $value);
             if(count($v)<2){
                 $v= explode('-', $value);
             }
-            $query->andFilterWhere(['between',$attribute,$v[0],$v[1]]);
+            if($group){
+                $query->andHaving(['between',$attribute,$v[0],$v[1]]);
+            }else{
+                $query->andFilterWhere(['between',$attribute,$v[0],$v[1]]);
+            }
             
-        }else{
-            $query->andFilterCompare($attribute, $value);
+        }elseif (preg_match('/^(<>|>=|>|<=|<|=)/', $value, $matches)) {          
+            $operator = $matches[1];
+            $value = substr($value, strlen($operator));
+            if($group){
+                $query->andHaving([$operator, $attribute, $value]);
+            }else{
+                $query->andFilterWhere([$operator, $attribute, $value]);
+            }
+            
+        } else {
+            if($group){
+                $query->andHaving(['=', $attribute, $value]);
+            }else{
+                $query->andFilterWhere(['=', $attribute, $value]);
+            }
         }
+        
         return $query;
     }
     

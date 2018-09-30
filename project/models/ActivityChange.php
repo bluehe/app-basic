@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property int $start_time
  * @property int $end_time
+ * @property int $bd_id
  * @property int $corporation_id
  * @property int $type
  * @property int $is_act
@@ -75,7 +76,7 @@ class ActivityChange extends \yii\db\ActiveRecord
     {
         return [
             [['start_time', 'end_time', 'corporation_id', 'type'], 'required'],
-            [['start_time', 'end_time', 'corporation_id', 'type', 'is_act', 'act_trend', 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount'], 'integer'],
+            [['start_time', 'end_time', 'bd_id','corporation_id', 'type', 'is_act', 'act_trend', 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount'], 'integer'],
             [['projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount'], 'number'],
             [['corporation_id', 'start_time', 'end_time'], 'unique', 'targetAttribute' => ['corporation_id', 'start_time', 'end_time'],'message'=>'已经存在此项数据'],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
@@ -98,6 +99,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             'id'=>'ID',
             'start_time' => '开始时间',
             'end_time' => '结束时间',
+            'bd_id' => '客户经理',
             'corporation_id' => '公司',
             'type' => '类型',
             'is_act' => '活跃',
@@ -207,13 +209,19 @@ class ActivityChange extends \yii\db\ActiveRecord
         return $this->hasOne(Corporation::className(), ['id' => 'corporation_id']);
     }
     
+    public function getBd()
+    {
+        return $this->hasOne(User::className(), ['id' => 'bd_id']);
+    }
+    
     public function getData()
     {
         return $this->hasOne(ActivityData::className(), ['corporation_id' => 'corporation_id','statistics_time'=>'end_time']);
     }
     
      //生成数据
-    public static function induce_data($start_time,$end_time,$corporation_id='') {   
+    public static function induce_data($start_time,$end_time,$corporation_id='') {
+        $corporation_bd= CorporationBd::get_bd_by_time($end_time);
         $model_change=new ActivityChange();
         $model_change->loadDefaultValues();
         $model_change->start_time=$start_time;
@@ -229,8 +237,9 @@ class ActivityChange extends \yii\db\ActiveRecord
         $c_add= array_diff($new_keys, $old_keys);
         foreach($c_add as $c_a){
             $_model_ca= clone $model_change;
-            $_model_ca->type= ActivityChange::TYPE_ADD;
+            $_model_ca->type= ActivityChange::TYPE_ADD;            
             $_model_ca->corporation_id=$c_a;
+            $_model_ca->bd_id=isset($corporation_bd[$c_a])?$corporation_bd[$c_a]:null;
             foreach($codes as $code=>$v){
                 $_model_ca->$code=$news[$c_a][$code];
             }
@@ -243,6 +252,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             $_model_cu= clone $model_change;
             $_model_cu->type= ActivityChange::TYPE_UPDATE;
             $_model_cu->corporation_id=$c_u;
+            $_model_cu->bd_id=isset($corporation_bd[$c_u])?$corporation_bd[$c_u]:null;
             foreach($codes as $code=>$v){
                 if(in_array($code,$typeadd_codes)){
                     $_model_cu->$code=$news[$c_u][$code];
@@ -260,6 +270,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             $_model_cd= clone $model_change;
             $_model_cd->type= ActivityChange::TYPE_DELETE;
             $_model_cd->corporation_id=$c_d;
+            $_model_cd->bd_id=isset($corporation_bd[$c_d])?$corporation_bd[$c_d]:null;
             foreach($codes as $code=>$v){
                 if(in_array($code,$typeadd_codes)){
                     $_model_cd->$code=0;
@@ -439,7 +450,7 @@ class ActivityChange extends \yii\db\ActiveRecord
               
         $query = static::find()->alias('c')->joinWith(['data d'])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'base_bd'=>SORT_ASC]);
         if($activity){
-            if(System::getValue('business_activity')==1){
+            if(System::getValue('business_activity_statistics')==1){
                 //历史标准
                 $query->andWhere(['is_act'=>self::ACT_Y]);            
             }else{

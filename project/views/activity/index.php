@@ -113,10 +113,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filter' => false,
                     ],
                     [
-                        'attribute' => 'base_bd',
-                        'label'=>'客户经理',
+                        'attribute' => 'bd_id',
                         'value' => function($model) {
-                            return $model->corporation->base_bd?($model->corporation->baseBd->nickname?$model->corporation->baseBd->nickname:$model->corporation->baseBd->username):'';
+                            return $model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'';
                         },
                         'filter' => User::get_bd(),
                     ],
