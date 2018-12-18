@@ -237,6 +237,7 @@ class ImportController extends Controller {
     }
     
     public function actionImport() {
+        set_time_limit(0);
         //判断是否Ajax
           if (Yii::$app->request->isAjax) {
 
@@ -275,84 +276,126 @@ class ImportController extends Controller {
             $model->name=$filenames[0];
             $model->patch=$f_name;
             
-            if (@move_uploaded_file($files['tmp_name'][0], $filename)&&$model->save()) {
+            if (@move_uploaded_file($files['tmp_name'][0], $filename)) {
+                
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    $model->save();
                
-                $import_data=new ImportData();
-                $import_data->log_id=$model->id;
-                //$datas = Excel::import($filename, ['headerTitle' => true, 'setFirstRecordAsKeys' => true,]);
-                $format = \PHPExcel_IOFactory::identify($filename);
-                $objectreader = \PHPExcel_IOFactory::createReader($format);
-                $objectPhpExcel = $objectreader->load($filename);
-            
-                $dataArray = $objectPhpExcel->getActiveSheet()->toArray(null, true, true, true);
-            
-                $datas = ExcelHelper::execute_array_label($dataArray);
-                
-                //项目处理
-                if(isset($datas[0])){
-                    $keys= array_filter(array_keys($datas[0]));                                               
-                    $exits_key= Field::get_name_id($keys);
+//                    $import_data=new ImportData();
+//                    $import_data->log_id=$model->id;
+                    //$datas = Excel::import($filename, ['headerTitle' => true, 'setFirstRecordAsKeys' => true,]);
+                    $format = \PHPExcel_IOFactory::identify($filename);
+                    $objectreader = \PHPExcel_IOFactory::createReader($format);
+                    $objectPhpExcel = $objectreader->load($filename);
 
-                    $diff=array_diff($keys, array_keys($exits_key));
+                    $dataArray = $objectPhpExcel->getActiveSheet()->toArray(null, true, true, true);
 
-                    if(!empty($diff)){
-                        $field_modle=new Field();
-                        $field_modle->loadDefaultValues();
-                        foreach($diff as $field){
-                            $_model = clone $field_modle;
-                            $_model->name=$field;
-                            $_model->save();
-                        }
-                        Yii::$app->session->setFlash('warning', '有新增字段，请设置相应代码');
+                    $datas = ExcelHelper::execute_array_label($dataArray);
+
+                    //项目处理
+                    if(isset($datas[0])){
+                        $keys= array_filter(array_keys($datas[0]));                                               
                         $exits_key= Field::get_name_id($keys);
-                    }
-                    $field_huawei_account=Field::get_code_name('huawei_account', $keys);
-                    $field_corporation_name=Field::get_code_name('corporation_name', $keys);
-                    if(!$field_huawei_account){
-                        Yii::$app->session->setFlash('error', '文件首行不存在或还未设置<<华为云账号>>字段');
-                        $model->delete();
-                        return $this->redirect(Yii::$app->request->referrer);
-                    }
-                }else{
-                    Yii::$app->session->setFlash('error', '没有有效数据');
-                    $model->delete();
-                    return $this->redirect(Yii::$app->request->referrer);
-                }
-                
-                foreach ($datas as $key=>$data) {
-//                    Yii::$app->session->setFlash('success', json_encode($datas,256));
-//                    return true;
-                    
-                    //数据处理
-                    $data= array_filter($data);//去除0值和空值
-                                      
-                    
-                    $_model_import = clone $import_data;
-                    $corporation= Corporation::findOne(['huawei_account'=>trim($data[$field_huawei_account])]);
-                    if($corporation===null){
-                        //不存在
-                        $corporation=new Corporation();
-                        $corporation->loadDefaultValues();
-                        $corporation->huawei_account=trim($data[$field_huawei_account]);
-                        $corporation->base_company_name=$field_corporation_name&&isset($data[$field_corporation_name])?trim($data[$field_corporation_name]):trim($data[$field_huawei_account]);
-                        $corporation->save(false);                           
-                    }
-                    $_model_import->corporation_id=$corporation->id;
 
-                    foreach($data as $k=>$v){
-                        //每一项数据处理
-                        if(isset($exits_key[$k])&&!in_array($k,[$field_huawei_account,$field_corporation_name])){
-                            $_model_import_data = clone $_model_import;
-                            $_model_import_data->field_id=$exits_key[$k];
-                            $v=str_replace(',', '', $v);//去除千分号
-                            $_model_import_data->data=$v?$v:0;
-                            $_model_import_data->save();
+                        $diff=array_diff($keys, array_keys($exits_key));
+
+                        if(!empty($diff)){
+                            $field_modle=new Field();
+                            $field_modle->loadDefaultValues();
+                            foreach($diff as $field){
+                                $_model = clone $field_modle;
+                                $_model->name=$field;
+                                $_model->save();
+                            }
+                            Yii::$app->session->setFlash('warning', '有新增字段，请设置相应代码');
+                            $exits_key= Field::get_name_id($keys);
+                        }
+                        $field_huawei_account=Field::get_code_name('huawei_account', $keys);
+                        $field_corporation_name=Field::get_code_name('corporation_name', $keys);
+                        if(!$field_huawei_account){
+                            Yii::$app->session->setFlash('error', '文件首行不存在或还未设置<<华为云账号>>字段');
+                            throw new \Exception('文件首行不存在或还未设置<<华为云账号>>字段');
+//                            $model->delete();
+//                            return $this->redirect(Yii::$app->request->referrer);
+                        }
+                    }else{
+                        Yii::$app->session->setFlash('error', '没有有效数据');
+                        throw new \Exception('没有有效数据');
+//                        $model->delete();
+//                        return $this->redirect(Yii::$app->request->referrer);
+                    }
+
+                    $model_import_data=[];
+                    $corporations = Corporation::find()->where(['not',['huawei_account'=>NULL]])->select(['id','huawei_account'])->indexBy('huawei_account')->column();
+                    foreach ($datas as $key=>$data) {
+    //                    Yii::$app->session->setFlash('success', json_encode($datas,256));
+    //                    return true;
+
+                        //数据处理
+                        $data= array_filter($data);//去除0值和空值
+                        
+                        
+                        //$corporation= Corporation::findOne(['huawei_account'=>trim($data[$field_huawei_account])]);
+                        if(!array_key_exists(trim($data[$field_huawei_account]), $corporations)){
+                            //不存在
+                            $corporation=new Corporation();
+                            $corporation->loadDefaultValues();
+                            $corporation->huawei_account=trim($data[$field_huawei_account]);
+                            $corporation->base_company_name=$field_corporation_name&&isset($data[$field_corporation_name])?trim($data[$field_corporation_name]):trim($data[$field_huawei_account]);
+                            $corporation->save(false); 
+                            $corporation_id=$corporation->id;
+                        }else{
+                            $corporation_id=$corporations[trim($data[$field_huawei_account])];
                         }
                        
+
+                        foreach($data as $k=>$v){
+                            //每一项数据处理
+                            if(isset($exits_key[$k])&&!in_array($k,[$field_huawei_account,$field_corporation_name])){
+                                $v=str_replace(',', '', $v);//去除千分号
+                                $v=$v?$v:0;
+                                $model_import_data[]=['log_id'=>$model->id,'corporation_id'=>$corporation_id,'field_id'=>$exits_key[$k],'data'=>$v];
+                            }
+
+                        }
+                        
+//                        $_model_import = clone $import_data;
+//                        $corporation= Corporation::findOne(['huawei_account'=>trim($data[$field_huawei_account])]);
+//                        if($corporation===null){
+//                            //不存在
+//                            $corporation=new Corporation();
+//                            $corporation->loadDefaultValues();
+//                            $corporation->huawei_account=trim($data[$field_huawei_account]);
+//                            $corporation->base_company_name=$field_corporation_name&&isset($data[$field_corporation_name])?trim($data[$field_corporation_name]):trim($data[$field_huawei_account]);
+//                            $corporation->save(false);                           
+//                        }
+//                        $_model_import->corporation_id=$corporation->id;
+//
+//                        foreach($data as $k=>$v){
+//                            //每一项数据处理
+//                            if(isset($exits_key[$k])&&!in_array($k,[$field_huawei_account,$field_corporation_name])){
+//                                $_model_import_data = clone $_model_import;
+//                                $_model_import_data->field_id=$exits_key[$k];
+//                                $v=str_replace(',', '', $v);//去除千分号
+//                                $_model_import_data->data=$v?$v:0;
+//                                $_model_import_data->save();
+//                               
+//                            }
+//
+//                        }
+
                     }
-                                                         
-            }
-            Yii::$app->session->setFlash('success', '导入成功。');
+                    if(!empty($model_import_data)){
+                        Yii::$app->db->createCommand()->batchInsert(ImportData::tableName(), ['log_id', 'corporation_id','field_id','data'], $model_import_data)->execute();
+                    }
+                    $transaction->commit();
+                    Yii::$app->session->setFlash('success', '导入成功。');
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    throw $e;
+                    Yii::$app->session->setFlash('error', '导入失败。');
+                }
                   
             }else{
                 Yii::$app->session->setFlash('error', '导入失败。');

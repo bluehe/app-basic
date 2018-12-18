@@ -52,9 +52,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'options' => ['accept' => 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
                         'pluginEvents' => [
                             //选择后直接上传
-                            'change' => 'function() {$(this).fileinput("upload");}',
+                            'change' => 'function() {$(this).fileinput("upload");$(this).parent("div").find(".glyphicon").removeClass("glyphicon-folder-open").addClass("fa fa-spinner fa-spin");}',
                             //上传成功
                             'fileuploaded' => 'function(event, data) {window.location.reload();}',
+                            //上传失败
+                            'fileuploaderror' => 'function(event, data) {window.location.reload();}',
                         ],
                     ]);
                     ?>
