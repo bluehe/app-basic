@@ -40,11 +40,11 @@ class CorporationMeal extends \yii\db\ActiveRecord
     {
         return [
             [['corporation_id', 'start_time','huawei_account'], 'required'],
-            [['corporation_id', 'meal_id', 'number', 'bd', 'user_id', 'created_at'], 'integer'],
-            [['amount'], 'number'],
-            [['amount'],'requiredByNoSetid','skipOnEmpty' => false],
+            [['corporation_id', 'meal_id', 'number', 'bd', 'user_id', 'created_at','devcloud_count'], 'integer'],
+            [['devcloud_amount','cloud_amount','amount'], 'number'],
+            [['devcloud_count','devcloud_amount','cloud_amount'],'requiredByNoSetid','skipOnEmpty' => false],
             [['number'],'requiredBySetid','skipOnEmpty' => false],
-            [['huawei_account'], 'string', 'max' => 32],
+            [['huawei_account','annual'], 'string', 'max' => 32],
             [['huawei_account'], 'unique','filter'=>['not',['corporation_id'=>$this->corporation_id]], 'message' => '{attribute}已存在'],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
             [['meal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Meal::className(), 'targetAttribute' => ['meal_id' => 'id']],
@@ -61,10 +61,14 @@ class CorporationMeal extends \yii\db\ActiveRecord
             //下拨金额
             if($this->meal_id){
                 if($this->number){
-                    $this->amount = $this->number*Meal::get_meal_amount($this->meal_id);
+                    $this->devcloud_count = $this->number*Meal::get_meal_devcount($this->meal_id);
+                    $this->devcloud_amount = $this->number*Meal::get_meal_devamount($this->meal_id);
+                    $this->cloud_amount = $this->number*Meal::get_meal_cloudamount($this->meal_id);
+                    $this->amount = $this->devcloud_amount+$this->cloud_amount;
                 }
             }else{
                 $this->number=1;
+                $this->amount = $this->devcloud_amount+$this->cloud_amount;
             }
             return true;
         } else {
@@ -93,7 +97,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
     public function requiredByNoSetid($attribute, $params)
     {
         if (!$this->meal_id&&!$this->$attribute){
-                $this->addError($attribute,'金额不能为空。');            
+            $this->addError($attribute,'不能为空。');            
         }        
     }
     
@@ -116,7 +120,11 @@ class CorporationMeal extends \yii\db\ActiveRecord
             'start_time' => '下拨日期',
             'end_time' => '到期时间',
             'number' => '下拨数量',
+            'devcloud_count' => '软开云人数',
+            'devcloud_amount' => '软开云金额',
+            'cloud_amount' => '公有云金额',
             'amount' => '下拨金额',
+            'annual' => '下拨年度',
             'huawei_account'=>'华为云账号',
             'bd' => '下拨经理',
             'user_id' => '操作人',

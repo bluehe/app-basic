@@ -10,6 +10,7 @@ use project\models\Meal;
 use kartik\daterange\DateRangePicker;
 use kartik\file\FileInput;
 use project\components\CommonHelper;
+use project\models\Parameter;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -89,6 +90,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $model->bd?($model->bd0->nickname?$model->bd0->nickname:$model->bd0->username):'';
                             },
                         'filter' => User::get_bd(),
+                    ],
+                    [
+                        'attribute' => 'annual',
+                        'value' => 
+                            function($model) {
+                                return implode(',', Parameter::get_para_value('allocate_annual',$model->annual));
+                            },
+                        'filter' => Parameter::get_type('allocate_annual'),
                     ],
                     [
                         'attribute' => 'meal_id',

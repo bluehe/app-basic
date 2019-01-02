@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use project\models\Meal;
 use kartik\widgets\DatePicker;
 use project\models\CorporationMeal;
+use project\models\Parameter;
 
 /* @var $this yii\web\View */
 /* @var $model project\models\Corporation */
@@ -26,11 +27,17 @@ use project\models\CorporationMeal;
        
         <?= $form->field($model, 'huawei_account')->textInput(['maxlength' => true]) ?>
         
+        <?= $form->field($model, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
+        
         <?= $form->field($model, 'meal_id')->dropDownList(Meal::get_meal(), ['prompt' => '其他']) ?>
 
         <?= $form->field($model, 'number')->textInput() ?>
 
-        <?= $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'devcloud_count')->textInput(['maxlength' => true]) ?>
+        
+        <?= $form->field($model, 'devcloud_amount')->textInput(['maxlength' => true]) ?>
+        
+        <?= $form->field($model, 'cloud_amount')->textInput(['maxlength' => true]) ?>
         
         <?= $form->field($model, 'start_time')->widget(DatePicker::classname(), [
             'options' => ['placeholder' => '','autocomplete'=>'off'],
@@ -62,10 +69,14 @@ use project\models\CorporationMeal;
     function change_allocate_set(){
         var v=$('#corporationmeal-meal_id').val();
         if(v){
-            $('.field-corporationmeal-amount').hide();
+            $('.field-corporationmeal-devcloud_count').hide();
+            $('.field-corporationmeal-devcloud_amount').hide();
+            $('.field-corporationmeal-cloud_amount').hide();
             $('.field-corporationmeal-number').show();
         }else{
-            $('.field-corporationmeal-amount').show();
+            $('.field-corporationmeal-devcloud_count').show();
+            $('.field-corporationmeal-devcloud_amount').show();
+            $('.field-corporationmeal-cloud_amount').show();
             $('.field-corporationmeal-number').hide();
         }
     }
