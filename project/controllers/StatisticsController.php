@@ -142,7 +142,7 @@ class StatisticsController extends Controller {
                     if($allocate_total){
                     for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
                         $k=date('Y-m-d', $i);
-                        $j = date('n.j', $i);
+                        $j = $end-$amount_num_start>365*86400?date('Y.n.j', $i):date('n.j', $i);
                         $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
                         $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
                     }
@@ -152,7 +152,7 @@ class StatisticsController extends Controller {
                     if($clould_total){
                     for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
                         $k=date('Y-m-d', $i);
-                        $j = date('n.j', $i);                  
+                        $j = $end-$clould_num_start>365*86400?date('Y.n.j', $i):date('n.j', $i);                  
                         $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
                         $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
                     }
@@ -162,7 +162,7 @@ class StatisticsController extends Controller {
                     if($clould_total){
                     for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
                         $k=date('Y-m-d', $i);
-                        $j = date('n.j', $i);                  
+                        $j = $end-$clould_num_start>365*86400?date('Y.n.j', $i):date('n.j', $i);                  
                         $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
                         $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
                     }
@@ -172,7 +172,7 @@ class StatisticsController extends Controller {
                     if($allocate_total){
                     for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
                         $k=date('Y-m-d', $i);
-                        $j = date('n.j', $i);
+                        $j = $end-$amount_num_start>365*86400?date('Y.n.j', $i):date('n.j', $i);
                         $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
                         $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
                     }
@@ -182,7 +182,7 @@ class StatisticsController extends Controller {
                 
                 $old_cost_num= count($cost_total);
                 for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = $i + 86400){                  
-                    $j = date('n.j', $i);                    
+                    $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>365*86400?date('Y.n.j', $i):date('n.j', $i);                    
                     if(isset($cost_total[$i])){
                         $cost=$cost_total[$i];
                     }else{
@@ -210,7 +210,7 @@ class StatisticsController extends Controller {
                     for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
                         $k=strftime("%Y-W%W",$i);
                         $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = date('n.j', $i).'-'.date('n.j', $l);
+                        $j = $end-$amount_num_start>365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                         //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
                         $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
                         $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
@@ -224,7 +224,7 @@ class StatisticsController extends Controller {
                     for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
                         $k=strftime("%Y-W%W",$i);
                         $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = date('n.j', $i).'-'.date('n.j', $l);
+                        $j = $end-$clould_num_start>365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                         //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
                         $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
                         $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
@@ -237,7 +237,7 @@ class StatisticsController extends Controller {
                     for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
                         $k=strftime("%Y-W%W",$i);
                         $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = date('n.j', $i).'-'.date('n.j', $l);
+                        $j = $end-$clould_num_start>365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                         //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
                         $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
                         $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
@@ -249,7 +249,7 @@ class StatisticsController extends Controller {
                     for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
                         $k=strftime("%Y-W%W",$i);
                         $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = date('n.j', $i).'-'.date('n.j', $l);
+                        $j = $end-$amount_num_start>365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                         //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
                         $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
                         $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
@@ -262,7 +262,7 @@ class StatisticsController extends Controller {
                 $old_cost_num= count($cost_total);
                 for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = $i + 86400*7){
                     $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                    $j = date('n.j', $i).'-'.date('n.j', $l);
+                    $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                                       
                     if(!isset($cost_total[$i])){                       
                         $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i))+(float)ClouldSubsidy::get_amount_base($i);
@@ -426,10 +426,10 @@ class StatisticsController extends Controller {
             $data_change = [];
             $data_per = [];
             foreach($activity_change as $change){
-                $changes[date('n.j',$change['start_time']+86400).'-'.date('n.j',$change['end_time'])]=(int) $change['num'];                
+                $changes[date('Y.n.j',$change['start_time']+86400).'-'.date('Y.n.j',$change['end_time'])]=(int) $change['num'];                
             }
             foreach($activity_total as $total){
-                $key=date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
+                $key=date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']);
                 $data_total[]=['name' =>$key , 'y' =>  (int) $total['num']];
                 $data_change[]=['name' => $key, 'y' =>  isset($changes[$key])?$changes[$key]:0];
                 $data_per[]=['name' => $key, 'y' => isset($changes[$key])?round($changes[$key]/(int)$total['num']*100,2):0];               
@@ -445,17 +445,17 @@ class StatisticsController extends Controller {
             $groups = User::get_bd_color();
             
             foreach($activity_change as $change){
-                $change['base_bd']=$change['base_bd']?$change['base_bd']:0;
+                $change['bd_id']=$change['bd_id']?$change['bd_id']:0;
                 $start_time=$change['start_time'];
                 $end_time=$change['end_time'];
 //                $start_time=date('n.j',$change['start_time']+86400);
 //                $end_time=date('n.j',$change['end_time']);
                 if($sum){
-                    $et=date('n.j',$change['end_time']);//周
+                    $et=date('Y.n.j',$change['end_time']);//周
                 }else{
                     $et=date('Y.n',$change['end_time']);//月
                 }
-                $changes[$et][$change['base_bd']]=(int) $change['num'];
+                $changes[$et][$change['bd_id']]=(int) $change['num'];
                 $changes[$et]['start_time']=!isset($changes[$et]['start_time'])||$start_time<$changes[$et]['start_time']?$start_time:$changes[$et]['start_time'];
                 $changes[$et]['end_time']=!isset($changes[$et]['end_time'])||$end_time>$changes[$et]['end_time']?$end_time:$changes[$et]['end_time'];
             }
@@ -463,16 +463,16 @@ class StatisticsController extends Controller {
 
             foreach($activity_total as $total){
                 if($sum){
-                    $et2=date('n.j',$total['end_time']);
+                    $et2=date('Y.n.j',$total['end_time']);
                 }else{
                     $et2=date('Y.n',$total['end_time']);
                 }
                
-                $key=date('n.j',$changes[$et2]['start_time']+86400).'-'.date('n.j',$changes[$et2]['end_time']);
+                $key=$end-$start>365*86400?date('Y.n.j',$changes[$et2]['start_time']+86400).'-'.date('Y.n.j',$changes[$et2]['end_time']):date('n.j',$changes[$et2]['start_time']+86400).'-'.date('n.j',$changes[$et2]['end_time']);
 //              $key=$changes[$et2]['start_time'].'-'.$changes[$et2]['end_time'];                
-                $total['base_bd']=$total['base_bd']?$total['base_bd']:0;
-                $data_change[$total['base_bd']][]=['name' => $key, 'y' =>  isset($changes[$et2][$total['base_bd']])?$changes[$et2][$total['base_bd']]:0];
-                $data_per[$total['base_bd']][]=['name' => $key, 'y' => isset($changes[$et2][$total['base_bd']])?round($changes[$et2][$total['base_bd']]/(int)$total['num']*100,2):0];               
+                $total['bd_id']=$total['bd_id']?$total['bd_id']:0;
+                $data_change[$total['bd_id']][]=['name' => $key, 'y' =>  isset($changes[$et2][$total['bd_id']])?$changes[$et2][$total['bd_id']]:0];
+                $data_per[$total['bd_id']][]=['name' => $key, 'y' => isset($changes[$et2][$total['bd_id']])?round($changes[$et2][$total['bd_id']]/(int)$total['num']*100,2):0];               
             }
             
             foreach ($data_change as $gid=>$data){
@@ -538,14 +538,14 @@ class StatisticsController extends Controller {
                 //天
                 for ($i = ($train_num===true?strtotime(key($train_num)):$start); $i < $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
-                    $j = date('n.j', $i);
+                    $j = $end-($train_num===true?strtotime(key($train_num)):$start)>365*86400?date('Y.n.j', $i):date('n.j', $i);
                     $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];          
                 }
             }elseif($sum==2){
                 //周
                 for ($i = ($train_num?strtotime(key($train_num)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
                     $k=strftime("%Y-W%W",$i);
-                    $j = date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
+                    $j = $end-($train_num?strtotime(key($train_num)):strtotime(strftime("%Y-W%W",$start)))>365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $i + 86400*7-1):date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
                     $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];          
                 }
             }else{
@@ -584,7 +584,7 @@ class StatisticsController extends Controller {
             if($sum==1){
                 for ($i = ($data_num_total===true?strtotime(key($data_num_total)):$start); $i < $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
-                    $j = date('n.j', $i);
+                    $j = $end-($data_num_total===true?strtotime(key($data_num_total)):$start)>365*86400?date('Y.n.j', $i):date('n.j', $i);
                     foreach($users_num as $user){
                         $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];
                     }
@@ -592,7 +592,7 @@ class StatisticsController extends Controller {
             }elseif($sum==2){
                 for ($i = ($data_num_total===true?strtotime(key($data_num_total)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
                     $k=strftime("%Y-W%W",$i);
-                    $j = date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
+                    $j = $end-($data_num_total===true?strtotime(key($data_num_total)):strtotime(strftime("%Y-W%W",$start)))>365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $i + 86400*7-1):date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
                     foreach($users_num as $user){
                         $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];                    
                     }      
