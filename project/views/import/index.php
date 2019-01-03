@@ -94,20 +94,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'stat',
                         'value' =>
                         function($model) {
-                            return Html::tag('span', $model->Stat, ['class' => ($model->stat == ImportLog::STAT_UPLOAD? 'text-aqua' : ($model->stat == ImportLog::STAT_INDUCE ? 'text-green' : 'text-red') )]);
+                            return Html::tag('span', $model->Stat, ['class' => ($model->stat == ImportLog::STAT_UPLOAD? 'text-aqua' :($model->stat == ImportLog::STAT_START?'text-yellow': ($model->stat == ImportLog::STAT_INDUCE ? 'text-green' : 'text-red')) )]);
                         },
                         'format' => 'raw',
                     ],
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{induce} {clean}',
+                        'template' => '{start} {induce} {clean}',
                         'buttons' => [
+                            'start' => function($url, $model, $key) {
+                                        return $model->stat==ImportLog::STAT_UPLOAD||$model->stat==ImportLog::STAT_START?Html::tag('button', '<i class="fa fa-refresh"></i> 数据初始化', ['class' => 'btn btn-success btn-xs start', 'data-id' => $key]):'';
+                            },
                             'induce' => function($url, $model, $key) {
-                                        return $model->stat!=ImportLog::STAT_INDUCE?Html::tag('button', '<i class="fa fa-hourglass-half"></i> 生成数据', ['class' => 'btn btn-primary btn-xs induce', 'data-id' => $key]):'';
+                                        return $model->stat==ImportLog::STAT_START?Html::tag('button', '<i class="fa fa-hourglass-half"></i> 生成数据', ['class' => 'btn btn-primary btn-xs induce', 'data-id' => $key]):'';
                             },
                             'clean' => function($url, $model, $key) {
-                                        return $model->stat==ImportLog::STAT_INDUCE?Html::tag('button', '<i class="fa fa-refresh"></i> 清除数据', ['class' => 'btn btn-warning btn-xs clean', 'data-id' => $key]):'';
+                                        return $model->stat==ImportLog::STAT_INDUCE?Html::tag('button', '<i class="fa fa-recycle"></i> 清除数据', ['class' => 'btn btn-warning btn-xs clean', 'data-id' => $key]):'';
                             },
                         ],
                     ],
@@ -137,6 +140,14 @@ Modal::end();
                     $('#import-modal .modal-body').html(data);
                 }
         );
+    });
+    
+    //数据初始化
+     $('.import-index').on('click', '.start',function () {
+        var _this=$(this);
+        _this.addClass('disabled').removeClass('start').find('i').addClass('fa-spin');
+        $.getJSON("<?= Url::toRoute('start') ?>", {id: _this.data('id')}, function (data) {});
+
     });
     
     //数据生成

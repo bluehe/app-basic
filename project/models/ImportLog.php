@@ -19,8 +19,9 @@ use Yii;
 class ImportLog extends \yii\db\ActiveRecord
 {
     const STAT_UPLOAD = 1;
-    const STAT_INDUCE = 2;
-    const STAT_COVER = 3;
+    const STAT_START = 2;
+    const STAT_INDUCE = 3;
+    const STAT_COVER = 4;
     
     /**
      * {@inheritdoc}
@@ -61,6 +62,7 @@ class ImportLog extends \yii\db\ActiveRecord
     public static $List = [
         'stat' => [
             self::STAT_UPLOAD => "已上传",
+            self::STAT_START => "已初始化",
             self::STAT_INDUCE => "已生成",
             self::STAT_COVER => "被覆盖"
         ]
