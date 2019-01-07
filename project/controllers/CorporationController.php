@@ -276,21 +276,34 @@ class CorporationController extends Controller
                 
                 $corporation->huawei_account=$model->huawei_account;
                 
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
       
-                if($stat){
-                    //续拨继续下拨需要手动添加状态
-                    $statModel=new CorporationStat();
-                    $statModel->corporation_id=$corporation->id;
-                    $statModel->stat=$corporation->stat;
-                    $statModel->user_id=Yii::$app->user->identity->id;
-                    $statModel->created_at=$model->created_at;
-                    $statModel->save();         
-                }
+                    if($stat){
+                        //续拨继续下拨需要手动添加状态
+                        $statModel=new CorporationStat();
+                        $statModel->corporation_id=$corporation->id;
+                        $statModel->stat=$corporation->stat;
+                        $statModel->user_id=Yii::$app->user->identity->id;
+                        $statModel->created_at=$model->created_at;
+                        if(!$statModel->save()){
+                            throw new \Exception('状态更新失败！');
+                        }       
+                    }
+
+                    if(!$model->save()){
+                        throw new \Exception('下拨失败！');
+                    }
+                    if(!$corporation->save()){
+                        throw new \Exception('请修改企业信息！');                            
+                    }
                 
-                if($model->save()&&$corporation->save()){
+                    $transaction->commit();
                     Yii::$app->session->setFlash('success', '下拨成功。');
-                }else{
-                    Yii::$app->session->setFlash('error', '下拨失败。');
+               
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    Yii::$app->session->setFlash('error', $e->getMessage());
                 }
                 return $this->redirect(Yii::$app->request->referrer);
             }
