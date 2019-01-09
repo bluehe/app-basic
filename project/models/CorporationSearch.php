@@ -49,7 +49,7 @@ class CorporationSearch extends Corporation
         // add conditions that should always apply here
 
       
-         if ($pageSize > 0) {
+        if ($pageSize > 0) {
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
                     'pagination' => [

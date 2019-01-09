@@ -60,6 +60,12 @@ class ActivityChange extends \yii\db\ActiveRecord
     const TREND_DE = 1;
     const TREND_UC = 2;
     const TREND_IN = 3;
+    const HEALTH_WA = -1;
+    const HEALTH_H0 = 1;
+    const HEALTH_H1 = 2;
+    const HEALTH_H2 = 3;
+    const HEALTH_H3 = 4;
+    const HEALTH_H4 = 5;
     
     /**
      * {@inheritdoc}
@@ -76,11 +82,12 @@ class ActivityChange extends \yii\db\ActiveRecord
     {
         return [
             [['start_time', 'end_time', 'corporation_id', 'type'], 'required'],
-            [['start_time', 'end_time', 'bd_id','corporation_id', 'type', 'is_act', 'act_trend', 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount'], 'integer'],
+            [['start_time', 'end_time', 'bd_id','corporation_id', 'type', 'is_act', 'act_trend','health', 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount'], 'integer'],
             [['projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount'], 'number'],
             [['corporation_id', 'start_time', 'end_time'], 'unique', 'targetAttribute' => ['corporation_id', 'start_time', 'end_time'],'message'=>'已经存在此项数据'],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
-            [[ 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount','projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount'],'default','value'=>0],
+            [[ 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount','projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount','h_h','h_c','h_i','h_a','h_r','h_v','h_d'],'default','value'=>0],
+            ['health', 'default', 'value' => self::HEALTH_WA],
             ['type', 'default', 'value' => self::TYPE_UPDATE],
             ['type', 'in', 'range' => [self::TYPE_UPDATE, self::TYPE_ADD, self::TYPE_DELETE]],
             ['is_act', 'default', 'value' => self::ACT_D],
@@ -102,8 +109,16 @@ class ActivityChange extends \yii\db\ActiveRecord
             'bd_id' => '客户经理',
             'corporation_id' => '公司',
             'type' => '类型',
-            'is_act' => '活跃',
+            'is_act' => '历史活跃',
             'act_trend' => '趋势',
+            'health' => '健康度',
+            'h_h' => '健康度h',
+            'h_c' => '健康度c',
+            'h_i' => '健康度i',
+            'h_a' => '健康度a',
+            'h_r' => '健康度r',
+            'h_v' => '健康度v',
+            'h_d' => '健康度d',
             ],
             self::$List['column_activity'],
             self::$List['column_data']
@@ -124,6 +139,22 @@ class ActivityChange extends \yii\db\ActiveRecord
             self::TREND_DE => "下降",
             self::TREND_UC => "持平",
             self::TREND_IN => "上升"
+        ],
+        'health' => [
+            self::HEALTH_WA => "未计算",
+            self::HEALTH_H0 => "H0",
+            self::HEALTH_H1 => "H1",
+            self::HEALTH_H2 => "H2",
+            self::HEALTH_H3 => "H3",
+            self::HEALTH_H4 => "H4"
+        ],
+        'health_color' => [
+            self::HEALTH_WA => "#dd4b39",
+            self::HEALTH_H0 => "#909090",
+            self::HEALTH_H1 => "#f7a35c",
+            self::HEALTH_H2 => "#7cb5ec",
+            self::HEALTH_H3 => "#90ee7e",
+            self::HEALTH_H4 => "#00a65a"
         ],
         'column_activity'=>[
             'projectman_usercount' => '项目用户数',
@@ -200,6 +231,16 @@ class ActivityChange extends \yii\db\ActiveRecord
         $act = isset(self::$List['is_act'][$this->is_act]) ? self::$List['is_act'][$this->is_act] : null;
         return $act;
     }
+    
+    public function getHealth() {
+        $health = isset(self::$List['health'][$this->health]) ? self::$List['health'][$this->health] : null;
+        return $health;
+    }
+    
+    public function getHealthColor() {
+        $health_color = isset(self::$List['health_color'][$this->health]) ? self::$List['health_color'][$this->health] : null;
+        return $health_color;
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -219,7 +260,7 @@ class ActivityChange extends \yii\db\ActiveRecord
         return $this->hasOne(ActivityData::className(), ['corporation_id' => 'corporation_id','statistics_time'=>'end_time']);
     }
     
-     //生成数据
+    //生成数据
     public static function induce_data($start_time,$end_time,$corporation_id='') {
         $corporation_bd= CorporationBd::get_bd_by_time($end_time);
         $model_change=new ActivityChange();
@@ -309,6 +350,145 @@ class ActivityChange extends \yii\db\ActiveRecord
         static::updateAll(['is_act'=> self::ACT_Y], ['id'=>$ids]);
         static::updateAll(['is_act'=> self::ACT_N],['is_act'=> self::ACT_D]);
         return true;
+    }
+    
+    //设定健康度
+    public static function set_health() {
+        
+        $end_times = static::find()->where(['health'=>self::HEALTH_WA])->select(['end_time'])->orderBy(['end_time'=>SORT_DESC])->distinct()->limit(5)->column();
+        if($end_times){
+            
+            foreach ($end_times as $end_time){
+                $s= static::find()->where(['<=','end_time',$end_time])->select(['end_time'])->distinct()->limit(4)->orderBy(['end_time'=>SORT_DESC])->column();//最近四次时间
+                $start_time=min($s);
+//                $datas=$activity_data=$activity_num=$corporation_allocate=null;
+        
+                //每个时间段计算
+                $datas=static::find()->where(['health'=>self::HEALTH_WA,'end_time'=>$end_time])->all();
+                //当期历史数据
+                $activity_data=ActivityData::find()->where(['statistics_time'=>$end_time])->select(['corporation_id','projectman_projectcount','projectman_issuecount','codehub_commitcount','codehub_repositorysize','pipeline_executecount','codecheck_execount','codeci_buildtotaltime','testman_totalexecasecount','deploy_execount','projectman_membercount','projectman_storagecount','codehub_all_usercount','pipeline_pipecount','codecheck_usercount','deploy_envcount'])->indexBy('corporation_id')->all();
+                //当期活跃周数
+                $activity_num=static::find()->where(['is_act'=>self::ACT_Y])->andWhere(['between','end_time',$start_time-1,$end_time+1])->select(['corporation_id','num'=>'count(corporation_id)'])->groupBy(['corporation_id'])->indexBy('corporation_id')->asArray()->all();
+                //企业下拨额
+                $corporation_allocate= CorporationMeal::find()->andWhere(['<=','start_time',$end_time])->andWhere(['>=','end_time',$end_time])->select(['amount'=>'SUM(amount)','devcloud_count'=>'SUM(devcloud_count)','devcloud_amount'=>'SUM(devcloud_amount)','cloud_amount'=>'SUM(cloud_amount)','corporation_id'])->indexBy('corporation_id')->groupBy(['corporation_id'])->asArray()->all();
+                
+                
+                foreach($datas as $data){
+                                        
+                    $c=0;
+                    $i=0;
+                    $m=0;
+                    if(isset($activity_data[$data->corporation_id])){
+                        $acd=$activity_data[$data->corporation_id];//企业历史数据
+                        
+                        //设定c
+                        if($acd->projectman_projectcount>20&&$acd->projectman_issuecount>30&&$acd->codehub_commitcount>20&&$acd->codehub_repositorysize>100&&$acd->pipeline_executecount>20&&$acd->codecheck_execount>20&&$acd->codeci_buildtotaltime>200&&$acd->testman_totalexecasecount>20&&$acd->deploy_execount>20){
+                            $c=3;
+                        }elseif($acd->projectman_projectcount>5&&$acd->projectman_issuecount>10&&$acd->codehub_commitcount>5&&$acd->codehub_repositorysize>10&&$acd->pipeline_executecount>10&&$acd->codecheck_execount>10&&$acd->codeci_buildtotaltime>10&&$acd->testman_totalexecasecount>10&&$acd->deploy_execount>10){
+                            $c=2;
+                        }elseif($acd->projectman_projectcount>1&&$acd->projectman_issuecount>0&&$acd->codehub_commitcount>0&&$acd->codehub_repositorysize>0&&$acd->pipeline_executecount>0&&$acd->codecheck_execount>0&&$acd->codeci_buildtotaltime>0&&$acd->testman_totalexecasecount>0&&$acd->deploy_execount>0){
+                            $c=1;
+                        }
+                        
+                        //设定i
+                        if($acd->projectman_projectcount>0||$acd->projectman_membercount>0||$acd->projectman_issuecount>0||$acd->projectman_storagecount>0){
+                            $i=$i+0.5;           
+                        }
+                        if($acd->codehub_all_usercount>0||$acd->codehub_commitcount>0||$acd->codehub_repositorysize>0){
+                            $i=$i+0.5;
+                        }
+                        if($acd->pipeline_pipecount>0||$acd->pipeline_executecount>0){
+                            $i=$i+0.5;
+                        }
+                        if($acd->codecheck_usercount>0||$acd->codecheck_execount>0){
+                            $i=$i+0.5;
+                        }
+                        if($acd->codeci_buildtotaltime>0){
+                            $i=$i+0.5;
+                        }
+                        if($acd->testman_totalexecasecount>0){
+                            $i=$i+0.5;
+                        }
+                        if($acd->deploy_envcount>0||$acd->deploy_execount>0){
+                            $i=$i+0.5;
+                        }
+                        
+                        $m=$acd->projectman_membercount?$acd->projectman_membercount:0;
+ 
+                    }
+                    
+                    //设定a
+                    $a=isset($activity_num[$data->corporation_id])&&$activity_num[$data->corporation_id]['num']>0?$activity_num[$data->corporation_id]['num']-1:0;
+                    
+                    $r=0;
+                    $v=0;
+                    $d=0;
+                    if(isset($corporation_allocate[$data->corporation_id])){
+                        $set=$corporation_allocate[$data->corporation_id];
+                        //设定r
+                        $r_num=$set['devcloud_count'];
+                        $r= $r_num&&isset($activity_data[$data->corporation_id])?$activity_data[$data->corporation_id]->projectman_membercount/$r_num:1;
+                        
+                        //设定v
+                        if($set['cloud_amount']==0){
+                            $v=0;
+                        }elseif($set['cloud_amount']>0&&$set['cloud_amount']<=1000){
+                            $v=1;
+                        }elseif($set['cloud_amount']>1000&&$set['cloud_amount']<=10000){
+                            $v=2;
+                        }elseif($set['cloud_amount']>10000&&$set['cloud_amount']<=100000){
+                            $v=3;
+                        }elseif($set['cloud_amount']>100000&&$set['cloud_amount']<=500000){
+                            $v=4;
+                        }else{
+                            $v=5;
+                        }
+                        
+                        //设定d
+                         if($set['devcloud_amount']==0){
+                            $d=0;
+                        }elseif($set['devcloud_amount']>0&&$set['devcloud_amount']<=1000){
+                            $d=1;
+                        }elseif($set['devcloud_amount']>1000&&$set['devcloud_amount']<=10000){
+                            $d=2;
+                        }elseif($set['devcloud_amount']>10000&&$set['devcloud_amount']<=100000){
+                            $d=3;
+                        }elseif($set['devcloud_amount']>100000&&$set['devcloud_amount']<=200000){
+                            $d=4;
+                        }else{
+                            $d=5;
+                        }
+                        
+                    }
+        
+                    $data->h_c=$c;
+                    $data->h_i=$i;
+                    $data->h_a=$a;
+                    $data->h_r=$r;
+                    $data->h_v=$v;
+                    $data->h_d=$d;
+                    //$data->h_membercount=$m;
+                    
+                    $data->h_h=0.3*(0.2*$data->h_v+0.8*$data->h_d)+0.7*(0.2*$data->h_c+0.3*$data->h_i+0.5*$data->h_a)*$data->h_r;
+                    
+                    if($data->h_i==0&&$data->h_c==0&&$data->h_a==0&&$m<=1){
+                        $data->health= self::HEALTH_H0;
+                    }elseif($data->h_a==0&&$data->h_c>0&&$data->h_c<=2&&$m>1){
+                        $data->health= self::HEALTH_H1;
+                    }elseif($data->h_h>=2.5){
+                        $data->health= self::HEALTH_H4;
+                    }elseif($data->h_h>=1.5&&$data->h_h<2.5){
+                        $data->health= self::HEALTH_H3;
+                    }else{
+                        $data->health= self::HEALTH_H2;
+                    }     
+                    
+                    $data->save();
+         
+                }
+            }
+        }
+        
     }
     
     public static function get_condition($model) {
@@ -411,8 +591,15 @@ class ActivityChange extends \yii\db\ActiveRecord
         return true;
     }
     
+    //活跃度趋势
     public static function get_act_line($corporation_id,$start, $end) {
         $data=static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['start_time'=>SORT_ASC])->select(["(CASE WHEN is_act=2 THEN 1 WHEN is_act=1 THEN -1 ELSE 0 END)"])->column();
+        return implode(',', $data);
+    }
+    
+    //健康度趋势
+    public static function get_health_line($corporation_id,$start, $end) {
+        $data=static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['start_time'=>SORT_ASC])->select(['health'])->column();
         return implode(',', $data);
     }
        
@@ -448,12 +635,9 @@ class ActivityChange extends \yii\db\ActiveRecord
  
     public static function get_activity_total($start, $end,$sum=1,$group=1,$activity=false) {
               
-        $query = static::find()->alias('c')->joinWith(['data d'])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'base_bd'=>SORT_ASC]);
+        $query = static::find()->alias('c')->joinWith(['data d'])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'bd_id'=>SORT_ASC]);
         if($activity){
-            if(System::getValue('business_activity_statistics')==1){
-                //历史标准
-                $query->andWhere(['is_act'=>self::ACT_Y]);            
-            }else{
+            if(System::getValue('business_activity_statistics')==2){              
                 //最新标准
                 $condition_and = Standard::find()->where(['connect'=> Standard::CONNECT_AND])->all();
                 foreach($condition_and as $and){
@@ -470,18 +654,22 @@ class ActivityChange extends \yii\db\ActiveRecord
                 }else{
                     $query->andFilterWhere($or_condition);
                 }
+                          
+            }else{
+                //历史标准
+                $query->andWhere(['is_act'=>self::ACT_Y]);  
             }
         }
-        $query->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(distinct c.corporation_id)','corporation_id'=>'MAX(c.corporation_id)','base_bd'=>'MAX(base_bd)']);
+        $query->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(distinct c.corporation_id)','corporation_id'=>'c.corporation_id','bd_id']);
         if($sum){
             //周
-            $query->groupBy(['start_time','end_time']);       
+            $query->groupBy(['end_time']);       
         }else{
             //月
             $query->groupBy(["FROM_UNIXTIME(end_time, '%Y-%m')"]);
         }
         if(!$group){
-            $query->addGroupBy(['base_bd']);
+            $query->addGroupBy(['bd_id']);
         }
         return $query->asArray()->all();
     }

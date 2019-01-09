@@ -169,6 +169,7 @@ class ImportController extends Controller {
                     //生成区间活跃数据
                     //删除旧数据
                     ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at]]);
+                    ActivityChange::updateAll(['health'=> ActivityChange::HEALTH_WA],['>','end_time',$model->statistics_at]);//健康度
                     //前部分区间
                     $pre_time= ActivityData::get_pre_time($model->statistics_at);
                     if($pre_time){                       
@@ -187,6 +188,9 @@ class ImportController extends Controller {
                     
                     //设置趋势
                     ActivityChange::set_trend();
+                    
+                    //设置健康度
+                    ActivityChange::set_health();
                     
                     //清除缓存
                     Yii::$app->cache->delete('deviation');
@@ -212,6 +216,7 @@ class ImportController extends Controller {
         if ($model !== null) {
             ActivityData::deleteAll(['statistics_time'=>$model->statistics_at]);
             ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at]]);
+            ActivityChange::updateAll(['health'=> ActivityChange::HEALTH_WA],['>','end_time',$model->statistics_at]);//健康度
             
             $pre_time= ActivityData::get_pre_time($model->statistics_at);
             $next_time= ActivityData::get_next_time($model->statistics_at);
@@ -228,6 +233,9 @@ class ImportController extends Controller {
             
             //设置趋势
             ActivityChange::set_trend();
+            
+            //设置健康度
+            ActivityChange::set_health();
             
             //清除缓存
             Yii::$app->cache->delete('deviation');

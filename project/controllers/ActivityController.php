@@ -120,7 +120,7 @@ class ActivityController extends Controller {
         foreach($models as $key=>$model){
             $k=$key+2;
             $objSheet->setCellValue( 'A'.$k, date('Y-m-d',$model->start_time+86400).' ~ '.date('Y-m-d',$model->end_time))
-                ->setCellValue( 'B'.$k, $model->corporation->base_bd?($model->corporation->baseBd->nickname?$model->corporation->baseBd->nickname:$model->corporation->baseBd->username):'')
+                ->setCellValue( 'B'.$k, $model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'')
                 ->setCellValue( 'C'.$k, $model->corporation->base_company_name)
                 ->setCellValue( 'D'.$k, $model->Act);                       
             

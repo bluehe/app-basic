@@ -40,18 +40,30 @@ class ClouldSubsidySearch extends ClouldSubsidy
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$pageSize = '')
     {
         $query = ClouldSubsidy::find()->joinWith(['subsidyBd']);
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort' => ['defaultOrder' => [
+        if ($pageSize > 0) {
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                    'pagination' => [
+                    'pageSize' => $pageSize,
+                ],
+                'sort' => ['defaultOrder' => [
                     'id' => SORT_DESC,
                 ]],
-        ]);
+            ]);
+        }else{
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'sort' => ['defaultOrder' => [
+                        'id' => SORT_DESC,
+                    ]],
+            ]);
+        }
 
         $this->load($params);
 

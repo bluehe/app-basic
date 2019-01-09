@@ -54,9 +54,9 @@ class ActivitySearch extends ActivityChange
     public function rules()
     {
         return [
-            [['id','bd_id', 'corporation_id','type','is_act','act_trend'], 'integer'],
+            [['id','bd_id', 'corporation_id','type','is_act','act_trend','health'], 'integer'],
             [[ 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount','projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount', 'projectman_usercount_d', 'projectman_projectcount_d', 'projectman_membercount_d', 'projectman_versioncount_d', 'projectman_issuecount_d', 'codehub_all_usercount_d', 'codehub_repositorycount_d', 'codehub_commitcount_d', 'pipeline_usercount_d', 'pipeline_pipecount_d', 'pipeline_executecount_d', 'codecheck_usercount_d', 'codecheck_taskcount_d', 'codecheck_codelinecount_d', 'codecheck_issuecount_d', 'codecheck_execount_d', 'codeci_usercount_d', 'codeci_buildcount_d', 'codeci_allbuildcount_d', 'testman_usercount_d', 'testman_casecount_d', 'testman_totalexecasecount_d', 'deploy_usercount_d', 'deploy_envcount_d', 'deploy_execount_d','projectman_storagecount_d', 'codehub_repositorysize_d', 'pipeline_elapse_time_d', 'codeci_buildtotaltime_d', 'deploy_vmcount_d'], 'safe'],
-            [[ 'start_time', 'end_time','corporation'],'safe'],
+            [[ 'start_time', 'end_time','corporation','h_h','h_c','h_i','h_a','h_r','h_v','h_d'],'safe'],
         ];
     }
     
@@ -88,6 +88,14 @@ class ActivitySearch extends ActivityChange
                 'corporation_id'=>'c.corporation_id',
                 'is_act'=>'MAX(is_act)',
                 'act_trend'=>'SUM(CASE WHEN is_act='.ActivityChange::ACT_Y.' THEN 1  ELSE 0 END)/count(*)',
+                'health'=>'SUM(CASE WHEN health!='.ActivityChange::HEALTH_WA.' THEN health  ELSE 0 END)/count(*)',
+                'h_h'=>'AVG(h_h)',
+                'h_c'=>'AVG(h_c)',
+                'h_i'=>'AVG(h_i)',
+                'h_a'=>'AVG(h_a)',
+                'h_r'=>'AVG(h_r)',
+                'h_v'=>'AVG(h_v)',
+                'h_d'=>'AVG(h_d)',
                 'projectman_usercount' => 'SUM(c.projectman_usercount)',
                 'projectman_projectcount' => 'SUM(c.projectman_projectcount)',
                 'projectman_membercount' => 'SUM(c.projectman_membercount)',
@@ -189,6 +197,10 @@ class ActivitySearch extends ActivityChange
             'asc' => ['act_trend' => SORT_ASC,'corporation_id'=>SORT_ASC],
             'desc' => ['act_trend' => SORT_DESC,'corporation_id'=>SORT_ASC],          
         ];
+        $sort->attributes['health'] = [
+            'asc' => ['health' => SORT_ASC,'corporation_id'=>SORT_ASC],
+            'desc' => ['health' => SORT_DESC,'corporation_id'=>SORT_ASC],          
+        ];
         
 //        $sort->attributes['projectman_usercount_d'] = [
 //            'asc' => ['d.projectman_usercount' => SORT_ASC],
@@ -207,12 +219,16 @@ class ActivitySearch extends ActivityChange
         // grid filtering conditions
         $query->andFilterWhere([
             'act_trend'=>$this->act_trend,
+            'health'=>$this->health,
         ]);
+        
+        
         
         $query->andFilterWhere(['or like', 'base_company_name', explode('|', trim($this->corporation))]);
         
         if($sum){
-            $ids = ActivityChange::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end],['is_act' => ActivityChange::ACT_Y]])->select(['corporation_id'])->distinct()->column();
+            //历史标准汇总
+            $ids = ActivityChange::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end],['is_act' => ActivityChange::ACT_Y]])->andFilterWhere(['bd_id'=>$this->bd_id])->select(['corporation_id'])->distinct()->column();
             if($this->is_act== ActivityChange::ACT_Y){
                 $query->andFilterWhere(['c.corporation_id' => $ids]);
             }elseif($this->is_act== ActivityChange::ACT_N){
@@ -220,12 +236,10 @@ class ActivitySearch extends ActivityChange
             }
             
         }else{
+            //历史标准分次
             $query->andFilterWhere([ 'is_act' => $this->is_act]);
         }
-        
-
-        
-        
+  
         $business_activity_search=(System::getValue('business_activity_search')==2)&&$sum;//搜索方式
         
         if($business_activity_search&&$this->bd_id){
@@ -233,7 +247,7 @@ class ActivitySearch extends ActivityChange
         }else{
             $query->andFilterWhere(['bd_id'=>$this->bd_id]);
         }
-        
+              
         foreach(ActivityChange::$List['column_activity'] as $key=>$v){
             if($this->$key){
                 CommonHelper::searchNumber($query, $business_activity_search?$key:"c.$key", $this->$key,$business_activity_search);
@@ -242,6 +256,15 @@ class ActivitySearch extends ActivityChange
                 CommonHelper::searchNumber($query, $business_activity_search?$key.'_d':"d.$key", $this->{$key.'_d'},$business_activity_search);
             }
         }
+        
+        //健康度
+        CommonHelper::searchNumber($query, $business_activity_search?'h_h':"c.h_h", $this->h_h,$business_activity_search);
+        CommonHelper::searchNumber($query, $business_activity_search?'h_c':"c.h_c", $this->h_c,$business_activity_search);
+        CommonHelper::searchNumber($query, $business_activity_search?'h_i':"c.h_i", $this->h_i,$business_activity_search);
+        CommonHelper::searchNumber($query, $business_activity_search?'h_a':"c.h_a", $this->h_a,$business_activity_search);
+        CommonHelper::searchNumber($query, $business_activity_search?'h_r':"c.h_r", $this->h_r,$business_activity_search);
+        CommonHelper::searchNumber($query, $business_activity_search?'h_v':"c.h_v", $this->h_v,$business_activity_search);
+        CommonHelper::searchNumber($query, $business_activity_search?'h_d':"c.h_d", $this->h_d,$business_activity_search);
         
 //        if($this->projectman_usercount){
 //            CommonHelper::searchNumber($query, $business_activity_search?'projectman_usercount':'c.projectman_usercount', $this->projectman_usercount,$business_activity_search);

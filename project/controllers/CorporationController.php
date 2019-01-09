@@ -136,6 +136,7 @@ class CorporationController extends Controller
             $allocate = in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])?CorporationMeal::get_allocate($model->id):null;
             if($allocate){
                 $allocate->start_time=$allocate->start_time>0?date('Y-m-d',$allocate->start_time):'';
+                $allocate->end_time=$allocate->end_time>0?date('Y-m-d',$allocate->end_time):'';
             }
            
             if ($model->load(Yii::$app->request->post())) {
@@ -166,9 +167,10 @@ class CorporationController extends Controller
                 try {
                     if($allocate){
                         $allocate->start_time=strtotime($allocate->start_time);
-                        $allocate->end_time = strtotime('+1 year', $allocate->start_time)-1;                       
+                        $allocate->end_time = $allocate->end_time?strtotime($allocate->end_time)+86399:strtotime('+1 year', $allocate->start_time)-1;                     
                         $allocate->user_id = Yii::$app->user->identity->id;
                         $allocate->save(false);
+                        $model->huawei_account=$allocate->huawei_account;
                     }
                     $model->base_registered_time= strtotime($model->base_registered_time);
                     //$model->allocate_time= $model->stat== Corporation::STAT_ALLOCATE?strtotime($model->allocate_time):null;               

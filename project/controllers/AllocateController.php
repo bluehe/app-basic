@@ -73,7 +73,7 @@ class AllocateController extends Controller {
     public function actionAllocateExport() {
         $start_time= microtime(true);
         $searchModel = new CorporationMealSearch();
-        $models = $searchModel->search(Yii::$app->request->queryParams)->getModels();
+        $models = $searchModel->search(Yii::$app->request->queryParams,1000)->getModels();
        
         $fileName= Yii::getAlias('@webroot').'/excel/allocate_temple.xlsx';
         $format = \PHPExcel_IOFactory::identify($fileName);
@@ -217,8 +217,8 @@ class AllocateController extends Controller {
             //项目处理
             if(isset($datas[0])){
                 $keys= array_filter(array_keys($datas[0]));
-                if(!in_array($index['corporation_id'], $keys)){
-                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['corporation_id'].'>>字段');
+                if(!in_array($index['huawei_account'], $keys)){
+                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['huawei_account'].'>>字段');
                     return false;
                 }
                 if(!in_array($index['start_time'], $keys)){

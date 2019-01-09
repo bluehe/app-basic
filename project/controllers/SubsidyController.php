@@ -57,7 +57,7 @@ class SubsidyController extends Controller
     public function actionSubsidyExport() {
         $start_time= microtime(true);
         $searchModel = new ClouldSubsidySearch();
-        $models = $searchModel->search(Yii::$app->request->queryParams)->getModels();
+        $models = $searchModel->search(Yii::$app->request->queryParams,1000)->getModels();
        
         $fileName= Yii::getAlias('@webroot').'/excel/subsidy_temple.xlsx';
         $format = \PHPExcel_IOFactory::identify($fileName);

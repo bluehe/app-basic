@@ -146,7 +146,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         'format' => 'raw',
                         'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['act_trend'], 
                         'visible'=> Yii::$app->request->get('dev',0),      
-                    ],        
+                    ],
+                    [
+                        'attribute' => 'health',
+                        'value' => function($model) use($start, $end) {                                
+                           return Yii::$app->request->get('sum',1)?'<span class="sparktristate_health">'.ActivityChange::get_health_line($model->corporation_id,$start-86400, $end).'</span>':'<span style="color:'.ActivityChange::$List['health_color'][$model->health].'">'.$model->Health.'</span>';                       
+                        },
+                        'format' => 'raw',
+                        'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['health'],  
+                    ],   
                     [
                     'attribute' => 'projectman_usercount',
                     'value' => function($model) {                                
@@ -930,6 +938,7 @@ Modal::end();
 <script>
 <?php $this->beginBlock('activity-change') ?>
     $('.sparktristate').sparkline('html', {type: 'tristate',colorMap:{'1':'#00a65a','-1':'#dd4b39'},tooltipValueLookups: {map: $.range_map({'-1': '不活跃', '1': '活跃','0':'未设置'})}});
+    $('.sparktristate_health').sparkline('html', {type: 'tristate',colorMap:<?php echo json_encode(ActivityChange::$List['health_color'])?>,tooltipValueLookups: {map: $.range_map(<?php echo json_encode(ActivityChange::$List['health'])?>)}});
     $('.activity-index').on('click', '.column-change', function () {
         $('.modal-title').html('显示项选择');
         $('.modal-body').html('');

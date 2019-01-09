@@ -40,20 +40,34 @@ class CorporationMealSearch extends CorporationMeal
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$pageSize = '')
     {
         $query = CorporationMeal::find()->joinWith(['corporation','bd0','meal']);
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort' => [
-                'defaultOrder' => [
-                    'start_time' => SORT_DESC,
-                    'id' => SORT_DESC,
-                ]],
-        ]);
+        if ($pageSize > 0) {
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                    'pagination' => [
+                    'pageSize' => $pageSize,
+                ],
+               'sort' => [
+                    'defaultOrder' => [
+                        'start_time' => SORT_DESC,
+                        'id' => SORT_DESC,
+                    ]],
+            ]);
+        }else{
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'sort' => [
+                    'defaultOrder' => [
+                        'start_time' => SORT_DESC,
+                        'id' => SORT_DESC,
+                    ]],
+            ]);
+        }
 
         $this->load($params);
 

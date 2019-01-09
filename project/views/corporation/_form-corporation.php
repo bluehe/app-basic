@@ -76,12 +76,18 @@ use project\models\CorporationMeal;
                 <?= $form->field($allocate, 'huawei_account')->textInput(['maxlength' => true]) ?>
                     
                 <?= $form->field($allocate, 'bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE), ['prompt' => '']) ?>
+                    
+                <?= $form->field($allocate, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
 
                 <?= $form->field($allocate, 'meal_id')->dropDownList(Meal::get_meal(), ['prompt' => '其他']) ?>
 
                 <?= $form->field($allocate, 'number')->textInput() ?>
 
-                <?= $form->field($allocate, 'amount')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($allocate, 'devcloud_count')->textInput(['maxlength' => true]) ?>
+        
+                <?= $form->field($allocate, 'devcloud_amount')->textInput(['maxlength' => true]) ?>
+
+                <?= $form->field($allocate, 'cloud_amount')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($allocate, 'start_time')->widget(DatePicker::classname(), [
                     'options' => ['placeholder' => '','autocomplete'=>'off'],
@@ -90,8 +96,22 @@ use project\models\CorporationMeal;
                         'autoclose' => true,
                         'todayHighlight' => true,
                         'format' => 'yyyy-mm-dd',
-                        'startDate'=> CorporationMeal::get_end_date($allocate->corporation_id,$allocate->id)
-                    ]
+                        'startDate'=> CorporationMeal::get_last_start_date($allocate->corporation_id)
+                    ],
+                    'pluginEvents'=>[
+                     'hide'=>"function(event){var startTime = $('#corporationmeal-start_time').val();var endTime = $('#corporationmeal-end_time').val(); var date=new Date(startTime);date.setFullYear(date.getFullYear()+1); date.setDate(date.getDate()-1); var m=date.getMonth() + 1; var d=date.getDate(); $('#corporationmeal-end_time').val(date.getFullYear() + '-' + (String(m).length < 2?'0':'')+m + '-' +(String(d).length < 2?'0':'')+d );$('#corporationmeal-end_time-kvdate').kvDatepicker('setStartDate',new Date(startTime));}"
+                ]
+                    ]) ?>  
+                    
+                <?= $form->field($allocate, 'end_time')->widget(DatePicker::classname(), [
+                    'options' => ['placeholder' => '','autocomplete'=>'off'],
+                    'removeButton' => false,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'todayHighlight' => true,
+                        'format' => 'yyyy-mm-dd',
+                        'startDate'=> $allocate->start_time              
+                    ]           
                     ]) ?>  
                 <script>
                 <?php $this->beginBlock('form-allocate') ?>
@@ -99,10 +119,14 @@ use project\models\CorporationMeal;
                     function change_allocate_set(){
                         var v=$('#corporationmeal-meal_id').val();
                         if(v){
-                            $('.field-corporationmeal-amount').hide();
+                            $('.field-corporationmeal-devcloud_count').hide();
+                            $('.field-corporationmeal-devcloud_amount').hide();
+                            $('.field-corporationmeal-cloud_amount').hide();
                             $('.field-corporationmeal-number').show();
                         }else{
-                            $('.field-corporationmeal-amount').show();
+                            $('.field-corporationmeal-devcloud_count').show();
+                            $('.field-corporationmeal-devcloud_amount').show();
+                            $('.field-corporationmeal-cloud_amount').show();
                             $('.field-corporationmeal-number').hide();
                         }
                     }
