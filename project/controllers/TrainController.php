@@ -229,7 +229,7 @@ class TrainController extends Controller {
         ]);
     }
     
-     public function actionEnd($id) {
+    public function actionEnd($id) {
         $model = Train::findOne($id);
         
         $model->setScenario("trainEnd");

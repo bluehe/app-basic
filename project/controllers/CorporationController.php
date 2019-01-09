@@ -133,7 +133,7 @@ class CorporationController extends Controller
         //$model->scenario='industry';
         if($model !== null&&Yii::$app->user->can('企业修改',['id'=>$id])){
             $model->base_industry =$old_industry= CorporationIndustry::get_corporation_industryid($model->id);
-            $allocate =in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])?CorporationMeal::get_allocate($model->id):null;
+            $allocate = in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])?CorporationMeal::get_allocate($model->id):null;
             if($allocate){
                 $allocate->start_time=$allocate->start_time>0?date('Y-m-d',$allocate->start_time):'';
             }
@@ -260,6 +260,7 @@ class CorporationController extends Controller
             $model->meal_id=$corporation->intent_set;
             $model->number=$corporation->intent_number;
             $model->huawei_account=$corporation->huawei_account;
+            $model->stat=$corporation->stat==Corporation::STAT_AGAIN?CorporationMeal::STAT_AGAIN:CorporationMeal::STAT_ALLOCATE;
            
             if ($model->load(Yii::$app->request->post())) {
                                      
@@ -269,7 +270,7 @@ class CorporationController extends Controller
                 }          
           
                 $model->start_time= strtotime($model->start_time);
-                $model->end_time = strtotime('+1 year', $model->start_time)-1;
+                $model->end_time = $model->end_time?strtotime($model->end_time)+86399:strtotime('+1 year', $model->start_time)-1;
                 $model->bd = $corporation->base_bd;
                 $model->user_id = Yii::$app->user->identity->id;
                 $model->created_at = time();

@@ -7,13 +7,13 @@ use yii\web\Controller;
 use project\actions\IndexAction;
 use project\models\CorporationMeal;
 use project\models\CorporationMealSearch;
-use project\actions\UpdateAction;
 use project\actions\DeleteAction;
 use project\components\ExcelHelper;
 use project\models\User;
 use project\models\Corporation;
 use project\models\Meal;
 USE project\models\Parameter;
+use project\models\ColumnSetting;
 
 
 class AllocateController extends Controller { 
@@ -26,17 +26,13 @@ class AllocateController extends Controller {
                 'data' => function(){
                     $searchModel = new CorporationMealSearch();
                     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                    $column= ColumnSetting::get_column_content(Yii::$app->user->identity->id,'allocate');
                     return [
                         'dataProvider' => $dataProvider,
                         'searchModel' => $searchModel,
+                        'column'=>$column,
                     ];               
                 }
-            ],
-            'allocate-update' => [
-                'class' => UpdateAction::className(),
-                'modelClass' => CorporationMeal::className(),
-                'successRedirect'=>Yii::$app->request->referrer,
-                'ajax'=>true,
             ],
             'allocate-delete' => [
                 'class' => DeleteAction::className(),
@@ -45,7 +41,34 @@ class AllocateController extends Controller {
 
         ];
     }
-   
+    
+    public function actionAllocateUpdate($id) {
+        $model = CorporationMeal::findOne($id);                 
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->start_time= strtotime($model->start_time);
+            $model->end_time = $model->end_time?strtotime($model->end_time)+86399:strtotime('+1 year', $model->start_time)-1;
+            
+            if (Yii::$app->request->isAjax) {                
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }            
+     
+            if($model->save()){
+                Yii::$app->session->setFlash('success', '更新成功');
+            }else{
+                Yii::$app->session->setFlash('error', '更新失败');
+            }        
+            return $this->redirect(Yii::$app->request->referrer);
+        }else{
+                              
+            $model->start_time= date('Y-m-d',$model->start_time);
+            $model->end_time= date('Y-m-d',$model->end_time);
+        }
+        return $this->renderAjax('allocate-update', [
+                    'model' => $model,
+        ]);
+    }
     
     public function actionAllocateExport() {
         $start_time= microtime(true);
@@ -69,7 +92,8 @@ class AllocateController extends Controller {
                 ->setCellValue( 'J1', $searchModel->getAttributeLabel('end_time'))
                 ->setCellValue( 'K1', $searchModel->getAttributeLabel('devcloud_count'))
                 ->setCellValue( 'L1', $searchModel->getAttributeLabel('devcloud_amount'))
-                ->setCellValue( 'M1', $searchModel->getAttributeLabel('cloud_amount'));
+                ->setCellValue( 'M1', $searchModel->getAttributeLabel('cloud_amount'))
+                ->setCellValue( 'N1', $searchModel->getAttributeLabel('stat'));
 
         foreach($models as $key=>$model){
             $k=$key+2;
@@ -85,7 +109,8 @@ class AllocateController extends Controller {
                     ->setCellValue( 'J'.$k, $model->end_time>0?date('Y-m-d',$model->end_time):'')
                     ->setCellValue( 'K'.$k, $model->devcloud_count)
                     ->setCellValue( 'L'.$k, $model->devcloud_amount)
-                    ->setCellValue( 'M'.$k, $model->cloud_amount);
+                    ->setCellValue( 'M'.$k, $model->cloud_amount)
+                    ->setCellValue( 'N'.$k, $model->Stat);
                     
         }
         
@@ -222,60 +247,72 @@ class AllocateController extends Controller {
             foreach ($allocates as $company_name=>$company) {
 
                 $corporation = Corporation::findOne(['base_company_name'=>$company_name]);
-                if($corporation!==null&&Yii::$app->user->can('企业修改',['id'=>$corporation->id])){
-                    //企业存在
-                    ksort($company);
+                if($corporation==null){
+                    //企业不存在
+                    $corporation=new Corporation();
+                    $corporation->loadDefaultValues();
+                    $corporation->base_company_name=$company_name;
+                    $corporation->save();
                     
-                    foreach($company as $key=>$data){
-                        
-                        $stat =0;
-                        
-                        $allocate = CorporationMeal::findOne(['corporation_id'=>$corporation->id,'start_time'=>$key]);
-                        if($allocate===null){
-                            //不存在
-                            if($key>CorporationMeal::get_end_time($corporation->id)){
-                                $num_key='add';
-                                $allocate=new CorporationMeal();
-                                $allocate->loadDefaultValues();
-                                $allocate->corporation_id=$corporation->id;
-                                $allocate->start_time=$key;
-                                $allocate->end_time = strtotime('+1 year', $allocate->start_time)-1;                                
-                                $allocate->created_at = time();
-                                
-                                
-                                if($corporation->stat==Corporation::STAT_AGAIN){
-                                    $stat=1;
-                                }
-                                $corporation->stat= CorporationMeal::get_allocate($corporation->id)?Corporation::STAT_AGAIN:Corporation::STAT_ALLOCATE;
-                            }else{
-                                continue;
+                }elseif(!Yii::$app->user->can('企业修改',['id'=>$corporation->id])){
+                    $num['fail']++;
+                    continue;
+                }
+                ksort($company);//下拨时间排序
+
+                foreach($company as $key=>$data){
+
+                    $stat =0;
+
+                    $allocate = CorporationMeal::findOne(['corporation_id'=>$corporation->id,'start_time'=>$key]);
+                    if($allocate===null){
+                        //不存在
+                        if($key>CorporationMeal::get_last_start_time($corporation->id)){
+                            $num_key='add';
+                            $allocate=new CorporationMeal();
+                            $allocate->loadDefaultValues();
+                            $allocate->corporation_id=$corporation->id;
+                            $allocate->start_time=$key;                                                              
+                            $allocate->created_at = time();
+                            $allocate->stat=CorporationMeal::get_allocate($corporation->id)?CorporationMeal::STAT_AGAIN:CorporationMeal::STAT_ALLOCATE;
+
+
+                            if($corporation->stat==Corporation::STAT_AGAIN){
+                                $stat=1;
                             }
+                            $corporation->stat= CorporationMeal::get_allocate($corporation->id)?Corporation::STAT_AGAIN:Corporation::STAT_ALLOCATE;
                         }else{
-                            $num_key='update';
+                            $num['fail']++;
+                            continue;
                         }
+                    }else{
+                        $num_key='update';
+                    }
 
-                        $allocate->user_id = Yii::$app->user->identity->id;
-                        
-                        if(isset($data[$index['huawei_account']])){
-                            $allocate->huawei_account= trim($data[$index['huawei_account']]);
-                        }
-                        if(isset($data[$index['bd']])&&array_search(trim($data[$index['bd']]), $bd)){
-                            $allocate->bd= array_search(trim($data[$index['bd']]), $bd);
-                            $corporation->base_bd=$corporation->base_bd?$corporation->base_bd:$allocate->bd;
-                        }
-                        
-                        if(isset($data[$index['annual']])&&array_search(trim($data[$index['annual']]), $annual)){
-                            $allocate->annual= (string)array_search(trim($data[$index['annual']]), $annual);
-                        }
+                    $allocate->user_id = Yii::$app->user->identity->id;
 
-                        if(isset($data[$index['meal_id']])&&array_search(trim($data[$index['meal_id']]), $intent_set)){
-                            $allocate->meal_id= array_search(trim($data[$index['meal_id']]), $intent_set);
-                        }
-                        if(isset($data[$index['number']])){
-                            $allocate->number= trim($data[$index['number']]);
-                        }
-                        
-                        //是否存在套餐，否则需要提取后续数据
+                    $allocate->end_time = isset($data[$index['end_time']])?strtotime($data[$index['end_time']])+86399:strtotime('+1 year', $allocate->start_time)-1;                        
+
+                    if(isset($data[$index['huawei_account']])){
+                        $allocate->huawei_account= trim($data[$index['huawei_account']]);
+                    }
+                    if(isset($data[$index['bd']])&&array_search(trim($data[$index['bd']]), $bd)){
+                        $allocate->bd= array_search(trim($data[$index['bd']]), $bd);
+                        $corporation->base_bd=$corporation->base_bd?$corporation->base_bd:$allocate->bd;
+                    }
+
+                    if(isset($data[$index['annual']])&&array_search(trim($data[$index['annual']]), $annual)){
+                        $allocate->annual= (string)array_search(trim($data[$index['annual']]), $annual);
+                    }
+
+                    if(isset($data[$index['meal_id']])&&array_search(trim($data[$index['meal_id']]), $intent_set)){
+                        $allocate->meal_id= array_search(trim($data[$index['meal_id']]), $intent_set);
+                    }
+                    if(isset($data[$index['number']])){
+                        $allocate->number= trim($data[$index['number']]);
+                    }
+
+                    //是否存在套餐，否则需要提取后续数据
 //                        if($allocate->meal_id&&$allocate->number){
 //                            $allocate->amount=$allocate->number*Meal::get_meal_amount($allocate->meal_id);
 //                        }elseif(isset($data[$index['devcloud_amount']])&&isset($data[$index['cloud_amount']])&&isset($data[$index['devcloud_count']])){
@@ -284,47 +321,43 @@ class AllocateController extends Controller {
 //                            $allocate->cloud_amount=trim($data[$index['cloud_amount']]);
 //                            $allocate->amount=$allocate->devcloud_amount+$allocate->cloud_amount;
 //                        }
-                        if(isset($data[$index['devcloud_amount']])&&isset($data[$index['cloud_amount']])&&isset($data[$index['devcloud_count']])){
-                            $allocate->devcloud_count=trim($data[$index['devcloud_count']]);
-                            $allocate->devcloud_amount=trim($data[$index['devcloud_amount']]);
-                            $allocate->cloud_amount=trim($data[$index['cloud_amount']]);                          
-                        }
-                        
-                        $corporation->huawei_account=$allocate->huawei_account;
-                       
-                        if($stat){
-                            //续拨继续下拨需要手动添加状态
-                            $statModel=new CorporationStat();
-                            $statModel->corporation_id=$corporation->id;
-                            $statModel->stat=$corporation->stat;
-                            $statModel->user_id=Yii::$app->user->identity->id;
-                            $statModel->created_at=$allocate->created_at;
-                            $statModel->save();         
-                        }
-               
-                
-                        if($allocate->save()&&$corporation->save(false)){
-
-                            $num[$num_key]++;
-                        }else{
-                            $errors=$allocate->getErrors();
-
-                            if($errors){
-                                $error=[];
-                                foreach($errors as $e){
-                                    $error[]=$e[0];
-                                }
-                                $notice_error[]=$data[$index['corporation_id']]. ' {'. implode(' ', $error).'}';
-                            }
-                            $num['fail']++;
-                        }
-                    
+                    if(isset($data[$index['devcloud_amount']])&&isset($data[$index['cloud_amount']])&&isset($data[$index['devcloud_count']])){
+                        $allocate->devcloud_count=trim($data[$index['devcloud_count']]);
+                        $allocate->devcloud_amount=trim($data[$index['devcloud_amount']]);
+                        $allocate->cloud_amount=trim($data[$index['cloud_amount']]);                          
                     }
-                                       
-                }else{
-                    $num['fail']++;
+
+                    $corporation->huawei_account=$allocate->huawei_account;
+
+                    if($stat){
+                        //续拨继续下拨需要手动添加状态
+                        $statModel=new CorporationStat();
+                        $statModel->corporation_id=$corporation->id;
+                        $statModel->stat=$corporation->stat;
+                        $statModel->user_id=Yii::$app->user->identity->id;
+                        $statModel->created_at=$allocate->created_at;
+                        $statModel->save();         
+                    }
+
+
+                    if($allocate->save()&&$corporation->save(false)){
+
+                        $num[$num_key]++;
+                    }else{
+                        $errors=$allocate->getErrors();
+
+                        if($errors){
+                            $error=[];
+                            foreach($errors as $e){
+                                $error[]=$e[0];
+                            }
+                            $notice_error[]=$data[$index['corporation_id']]. ' {'. implode(' ', $error).'}';
+                        }
+                        $num['fail']++;
+                    }
+
                 }
-                
+              
             }
            
             if($notice_error){
@@ -338,6 +371,37 @@ class AllocateController extends Controller {
         }
         return true;
         
+    }
+    
+    public function actionAllocateColumn() {
+
+        $model=ColumnSetting::get_column(Yii::$app->user->identity->id,'allocate');
+        if($model==null){
+            $model=new ColumnSetting();
+            $model->uid=Yii::$app->user->identity->id;
+            $model->type='allocate';
+            
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $column = Yii::$app->request->post('ColumnSetting');
+            $model->content= json_encode($column['content']);
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', '操作成功。');
+            } else {
+                Yii::$app->session->setFlash('error', '操作失败。');
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+          
+            $model->content= json_decode($model->content);
+                
+            return $this->renderAjax('allocate-column', [
+                'model' => $model,
+            ]);
+      
+        }
     }
     
 }

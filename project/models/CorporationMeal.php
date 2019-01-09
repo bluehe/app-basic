@@ -25,6 +25,9 @@ use Yii;
  */
 class CorporationMeal extends \yii\db\ActiveRecord
 {
+    
+    const STAT_ALLOCATE = 7;
+    const STAT_AGAIN = 8;
     /**
      * {@inheritdoc}
      */
@@ -39,8 +42,8 @@ class CorporationMeal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corporation_id', 'start_time','huawei_account'], 'required'],
-            [['corporation_id', 'meal_id', 'number', 'bd', 'user_id', 'created_at','devcloud_count'], 'integer'],
+            [['corporation_id', 'start_time','huawei_account','stat'], 'required'],
+            [['corporation_id', 'meal_id', 'number', 'bd', 'user_id', 'created_at','devcloud_count','stat'], 'integer'],
             [['devcloud_amount','cloud_amount','amount'], 'number'],
             [['devcloud_count','devcloud_amount','cloud_amount'],'requiredByNoSetid','skipOnEmpty' => false],
             [['number'],'requiredBySetid','skipOnEmpty' => false],
@@ -129,7 +132,39 @@ class CorporationMeal extends \yii\db\ActiveRecord
             'bd' => '下拨经理',
             'user_id' => '操作人',
             'created_at' => '操作时间',
+            'stat' => '类型',
         ];
+    }
+    
+    public static $List = [       
+        'stat'=>[    
+            self::STAT_ALLOCATE=>'新下拨',
+            self::STAT_AGAIN=>'续拨'         
+        ],
+        'column'=>[
+//            'id' => 'ID',
+//            'corporation_id' => '企业',
+//            'huawei_account'=>'华为云账号',           
+             'bd' => '下拨经理',
+            'annual' => '下拨年度',
+
+            'meal_id' => '下拨套餐',
+            'number' => '下拨数量',
+            'amount' => '下拨金额',
+            'devcloud_count' => '软开云人数',
+            'devcloud_amount' => '软开云金额',
+            'cloud_amount' => '公有云金额',
+//            'start_time' => '下拨日期',
+            'end_time' => '到期时间',          
+//            'user_id' => '操作人',
+//            'created_at' => '操作时间',
+            'stat' => '类型',
+        ]
+    ];
+            
+    public function getStat() {
+        $stat = isset(self::$List['stat'][$this->stat]) ? self::$List['stat'][$this->stat] : null;
+        return $stat;
     }
 
     /**
@@ -172,6 +207,28 @@ class CorporationMeal extends \yii\db\ActiveRecord
             $model->orderBy(['end_time'=>SORT_DESC]);
         }
         return  $model->one();  
+    }
+    
+    public static function get_pre_date($id) {
+        $model= static::findOne($id);
+        $time= static::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['<','start_time',$model->start_time])->select(['start_time'])->orderBy(['start_time'=>SORT_DESC])->scalar();
+        return $time>0?date('Y-m-d',$time+86400):null;       
+    }
+    
+    public static function get_next_date($id) {
+        $model= static::findOne($id);
+        $time= static::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['>','start_time',$model->start_time])->select(['start_time'])->orderBy(['start_time'=>SORT_ASC])->scalar();
+        return $time>0?date('Y-m-d',$time-1):null;          
+    }
+    
+    public static function get_last_start_date($corporation_id,$id=null) {
+        $time= static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['not',['id'=>$id]])->select(['start_time'])->orderBy(['start_time'=>SORT_DESC])->scalar();
+        return $time>0?date('Y-m-d',$time+86400):null;       
+    }
+    
+    public static function get_last_start_time($corporation_id,$id=null) {
+        $time= static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['not',['id'=>$id]])->select(['start_time'])->orderBy(['start_time'=>SORT_DESC])->scalar();
+        return $time>0?$time:null;       
     }
     
     public static function get_end_date($corporation_id,$id=null) {

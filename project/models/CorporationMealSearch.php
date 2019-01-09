@@ -18,7 +18,7 @@ class CorporationMealSearch extends CorporationMeal
     public function rules()
     {
         return [
-            [['id','meal_id', 'number', 'bd', 'user_id', 'created_at'], 'integer'],
+            [['id','meal_id', 'number', 'bd', 'user_id', 'created_at','stat'], 'integer'],
             [['amount'], 'number'],
             [['corporation_id','huawei_account', 'start_time', 'end_time','annual'], 'safe'],
         ];
@@ -70,6 +70,7 @@ class CorporationMealSearch extends CorporationMeal
             'number' => $this->number,
             'amount' => $this->amount,
             'bd' => $this->bd,
+            CorporationMeal::tableName().'.stat' => $this->stat,
             'annual' => $this->annual,
             'user_id' => $this->user_id,
             CorporationMeal::tableName().'.created_at' => $this->created_at,

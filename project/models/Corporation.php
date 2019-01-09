@@ -258,7 +258,7 @@ class Corporation extends \yii\db\ActiveRecord
         ];
     }
     
-     public static $List = [       
+    public static $List = [       
         'stat'=>[
             self::STAT_CREATED=>'新创建',
             self::STAT_FOLLOW=>'跟进中',            

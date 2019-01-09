@@ -46,9 +46,23 @@ use project\models\Parameter;
                 'autoclose' => true,
                 'todayHighlight' => true,
                 'format' => 'yyyy-mm-dd',
-                'startDate'=> CorporationMeal::get_end_date($model->corporation_id)
+                'startDate'=> CorporationMeal::get_last_start_date($model->corporation_id)
+            ],
+            'pluginEvents'=>[
+                'hide'=>"function(event){var startTime = $('#corporationmeal-start_time').val();var endTime = $('#corporationmeal-end_time').val(); var date=new Date(startTime);date.setFullYear(date.getFullYear()+1); date.setDate(date.getDate()-1); var m=date.getMonth() + 1; var d=date.getDate(); $('#corporationmeal-end_time').val(date.getFullYear() + '-' + (String(m).length < 2?'0':'')+m + '-' +(String(d).length < 2?'0':'')+d );$('#corporationmeal-end_time-kvdate').kvDatepicker('setStartDate',new Date(startTime));}"
             ]
             ]) ?>
+        
+        <?= $form->field($model, 'end_time')->widget(DatePicker::classname(), [
+            'options' => ['placeholder' => '','autocomplete'=>'off'],
+            'removeButton' => false,
+            'pluginOptions' => [
+                'autoclose' => true,
+                'todayHighlight' => true,
+                'format' => 'yyyy-mm-dd',
+                'startDate'=> $model->start_time              
+            ]           
+            ]) ?>  
                      
         <div class="col-md-6 col-xs-6 text-right">
 

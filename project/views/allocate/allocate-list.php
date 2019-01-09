@@ -24,7 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box box-primary">
         <div class="box-body">
 
-             <div class="clearfix" style="margin-bottom:10px;">
+            <div class="clearfix" style="margin-bottom:10px;">
+            <?= Html::a('<i class="fa fa-filter" title="选择需要显示的列"></i>', ['#'], ['data-toggle' => 'modal', 'data-target' => '#allocate-modal', 'class' => 'btn btn-danger pull-right column-change','style'=>'margin-left:15px']) ?>
             <?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['allocate-export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning pull-right']) ?>
             <?php if(in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)):?>
                  <div style="display: inline-block;margin:0 15px;" class="pull-right"><?=
@@ -90,6 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $model->bd?($model->bd0->nickname?$model->bd0->nickname:$model->bd0->username):'';
                             },
                         'filter' => User::get_bd(),
+                        'visible'=> is_array($column)&&in_array('bd',$column),
                     ],
                     [
                         'attribute' => 'annual',
@@ -98,6 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return implode(',', Parameter::get_para_value('allocate_annual',$model->annual));
                             },
                         'filter' => Parameter::get_type('allocate_annual'),
+                        'visible'=> is_array($column)&&in_array('annual',$column),
                     ],
                     [
                         'attribute' => 'meal_id',
@@ -106,29 +109,69 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $model->meal_id?$model->meal->name:'其他';
                             },
                         'filter' => Meal::get_meal(null),
+                        'visible'=> is_array($column)&&in_array('meal_id',$column),            
                     ],
-                    'number',
-                    'amount',
-                    ['attribute' =>'start_time','value' =>function($model) {return $model->start_time>0?date('Y-m-d',$model->start_time):'';},
-                    'filter' => DateRangePicker::widget([
-                        'name' => 'CorporationMealSearch[start_time]',
-                        'useWithAddon' => true,
-                        'presetDropdown' => true,
-                        'convertFormat' => true,
-                        'value' => Yii::$app->request->get('CorporationMealSearch')['start_time'],
-                        'pluginOptions' => [
-                            'timePicker' => false,
-                            'locale' => [
-                                'format' => 'Y-m-d',
-                                'separator' => '~'
+                    ['attribute' =>'number','visible'=> is_array($column)&&in_array('number',$column),],
+                    ['attribute' =>'amount','visible'=> is_array($column)&&in_array('amount',$column),],
+                    ['attribute' =>'devcloud_count','visible'=> is_array($column)&&in_array('devcloud_count',$column),],
+                    ['attribute' =>'devcloud_amount','visible'=> is_array($column)&&in_array('devcloud_amount',$column),],
+                    ['attribute' =>'cloud_amount','visible'=> is_array($column)&&in_array('cloud_amount',$column),],
+                    [
+                        'attribute' =>'start_time','value' =>function($model) {return $model->start_time>0?date('Y-m-d',$model->start_time):'';},
+                        'filter' => DateRangePicker::widget([
+                            'name' => 'CorporationMealSearch[start_time]',
+                            'useWithAddon' => true,
+                            'presetDropdown' => true,
+                            'convertFormat' => true,
+                            'value' => Yii::$app->request->get('CorporationMealSearch')['start_time'],
+                            'pluginOptions' => [
+                                'timePicker' => false,
+                                'locale' => [
+                                    'format' => 'Y-m-d',
+                                    'separator' => '~'
+                                ],
+                                'linkedCalendars' => false,
+                                'opens'=>'right'
                             ],
-                            'linkedCalendars' => false,
-                            'opens'=>'right'
-                        ],
-                    ]),
+                        ]),
+//                        'visible'=> is_array($column)&&in_array('start_time',$column),
+                            
                     ],
-//                    'end_time:date',
-                     
+                    [
+                        'attribute' =>'end_time','value' =>function($model) {return $model->end_time>0?date('Y-m-d',$model->end_time):'';},
+                        'filter' => DateRangePicker::widget([
+                            'name' => 'CorporationMealSearch[end_time]',
+                            'useWithAddon' => true,
+                            'presetDropdown' => true,
+                            'convertFormat' => true,
+                            'value' => Yii::$app->request->get('CorporationMealSearch')['end_time'],
+                            'pluginOptions' => [
+                                'timePicker' => false,
+                                'locale' => [
+                                    'format' => 'Y-m-d',
+                                    'separator' => '~'
+                                ],
+                                'linkedCalendars' => false,
+                                'opens'=>'right'
+                            ],
+                        ]),
+                        'visible'=> is_array($column)&&in_array('end_time',$column),
+                    ],
+                    [
+                        'attribute' => 'stat',
+                        'value' =>
+                            function($model) {
+                                switch($model->stat){                                  
+                                    case CorporationMeal::STAT_ALLOCATE:$color='text-maroon';break;
+                                    case CorporationMeal::STAT_AGAIN:$color='text-purple';break;
+                                    default: $color='';
+                                }
+                                return Html::tag('span', $model->Stat,['class' =>$color]);
+                            },
+                        'format' => 'raw',
+                        'filter' => CorporationMeal::$List['stat'],    
+                        'visible'=> is_array($column)&&in_array('stat',$column),
+                    ],
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
                         'template' => '{update} {delete}', //只需要展示删除和更新
@@ -190,6 +233,15 @@ Modal::end();
         );
     });
     
+    $('.allocate-index').on('click', '.column-change', function () {
+        $('.modal-title').html('显示项选择');
+        $('.modal-body').html('');
+        $.get('<?= Url::toRoute('allocate-column') ?>',
+                function (data) {
+                    $('.modal-body').html(data);
+                }
+        );
+    });
 
 
 <?php $this->endBlock() ?>

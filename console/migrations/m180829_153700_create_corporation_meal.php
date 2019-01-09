@@ -36,6 +36,7 @@ class m180829_153700_create_corporation_meal extends Migration {
             'bd' => $this->integer(),
             'user_id' => $this->integer(),
             'created_at' => $this->integer(),
+            'stat' => $this->smallInteger()->notNull()->defaultValue(1)->comment('类型'),
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
             "FOREIGN KEY ([[meal_id]]) REFERENCES {$mealTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[user_id]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",

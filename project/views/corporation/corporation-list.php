@@ -191,22 +191,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{follow} {apply} {check} {allocate} {again} {refuse}',
                         'buttons' => [                                                     
                             'follow' => function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_CREATED,Corporation::STAT_REFUSE])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-hourglass-2"></i> 跟进中', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_FOLLOW], ['class' => 'btn bg-aqua btn-xs','data-method' => 'post',]):'';
+                                return in_array($model->stat,[Corporation::STAT_CREATED,Corporation::STAT_REFUSE])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-hourglass-2"></i> 跟进', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_FOLLOW], ['class' => 'btn bg-aqua btn-xs','data-method' => 'post',]):'';
                             }, 
                             'refuse' => function($url, $model, $key) {
                                 return in_array($model->stat,[Corporation::STAT_FOLLOW,Corporation::STAT_OVERDUE])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-times"></i> 无意愿', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_REFUSE], ['class' => 'btn bg-gray btn-xs','data-method' => 'post',]):'';
                             },
                             'apply' => function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_FOLLOW])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-check"></i> 已申请', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-light-blue btn-xs corporation-apply',]):'';
+                                return in_array($model->stat,[Corporation::STAT_FOLLOW])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-check"></i> 申请', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-light-blue btn-xs corporation-apply',]):'';
                             },
                             'check' => function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_APPLY])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-check-square-o"></i> 已审核', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_CHECK], ['class' => 'btn bg-yellow btn-xs','data-method' => 'post','data-confirm' =>'确定完成审核？',]):'';
+                                return in_array($model->stat,[Corporation::STAT_APPLY])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-check-square-o"></i> 审核', ['corporation-update-stat', 'id' => $key,'stat'=> Corporation::STAT_CHECK], ['class' => 'btn bg-yellow btn-xs','data-method' => 'post','data-confirm' =>'确定完成审核？',]):'';
                             },
                             'allocate'=>function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_CHECK])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-trophy"></i> 已下拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-maroon btn-xs corporation-allocate',]):'';
+                                return in_array($model->stat,[Corporation::STAT_CHECK])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-trophy"></i> 下拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-maroon btn-xs corporation-allocate',]):'';
                             },
                             'again'=>function($url, $model, $key) {
-                                return in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_OVERDUE,Corporation::STAT_AGAIN])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-refresh"></i> 已续拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-purple btn-xs corporation-again',]):'';
+                                return in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_OVERDUE,Corporation::STAT_AGAIN])&&CommonHelper::corporationRule('update', $key)?Html::a('<i class="fa fa-refresh"></i> 续拨', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn bg-purple btn-xs corporation-again',]):'';
                             },
 
                         ],
