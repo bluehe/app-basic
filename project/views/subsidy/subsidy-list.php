@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use project\models\User;
 use kartik\daterange\DateRangePicker;
+use project\models\Parameter;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -47,6 +48,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $model->subsidy_bd?($model->subsidyBd->nickname?$model->subsidyBd->nickname:$model->subsidyBd->username):'';
                             },
                         'filter' => User::get_bd(),
+                    ],
+                    [
+                        'attribute' => 'annual',
+                        'value' => 
+                            function($model) {
+                                return implode(',', Parameter::get_para_value('allocate_annual',$model->annual));
+                            },
+                        'filter' => Parameter::get_type('allocate_annual'),
+//                        'visible'=> is_array($column)&&in_array('annual',$column),
                     ],
                     ['attribute' =>'subsidy_time',
                     'filter' => DateRangePicker::widget([

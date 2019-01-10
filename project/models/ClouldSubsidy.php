@@ -37,7 +37,7 @@ class ClouldSubsidy extends \yii\db\ActiveRecord
            [['subsidy_bd','subsidy_time','subsidy_amount'], 'required'],
            [['corporation_id', 'subsidy_bd'], 'integer'],
            [['subsidy_amount'], 'number'],
-           [['subsidy_note'], 'string'],
+           [['subsidy_note','annual'], 'string'],
            [['corporation_name'], 'string', 'max' => 255], 
            [['subsidy_time'],'safe'],
            [['corporation_name'],'requiredByCorporationid','skipOnEmpty' => false],
@@ -81,12 +81,13 @@ class ClouldSubsidy extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-           'id' => 'ID',
-           'corporation_id' => '补贴企业', 
-           'corporation_name' => '补贴企业', 
-           'subsidy_bd' => '客户经理', 
-           'subsidy_time' => '补贴时间',
-           'subsidy_amount' => '补贴金额',
+            'id' => 'ID',
+            'corporation_id' => '补贴企业', 
+            'corporation_name' => '补贴企业', 
+            'subsidy_bd' => '客户经理', 
+            'subsidy_time' => '补贴时间',
+            'subsidy_amount' => '补贴金额',
+            'annual'=>'补贴年度',
             'subsidy_note' => '备注',
         ];
     }
@@ -107,12 +108,12 @@ class ClouldSubsidy extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'subsidy_bd']);
     }
     
-    public static function get_amount_base($start='') {
-        return static::find()->andFilterWhere(['<','subsidy_time', $start])->sum('subsidy_amount');     
+    public static function get_amount_base($start='',$annual='') {
+        return static::find()->andFilterWhere(['<','subsidy_time', $start])->andFilterWhere(['annual'=>$annual])->sum('subsidy_amount');     
     }
     
-    public static function get_amount_total($start='', $end='',$sum=1) {
-         $query= static::find()->andFilterWhere(['and',['>=', 'subsidy_time', $start],['<=', 'subsidy_time', $end]])->orderBy(['MAX(subsidy_time)'=>SORT_ASC]);
+    public static function get_amount_total($start='', $end='',$sum=1,$annual='') {
+         $query= static::find()->andFilterWhere(['and',['>=', 'subsidy_time', $start],['<=', 'subsidy_time', $end]])->andFilterWhere(['annual'=>$annual])->orderBy(['MAX(subsidy_time)'=>SORT_ASC]);
         if($sum==1){
             //天
             $query->groupBy(["FROM_UNIXTIME(subsidy_time, '%Y-%m-%d')"])->select(['amount'=>'SUM(subsidy_amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(subsidy_time, '%Y-%m-%d')"])->indexBy(['time']);

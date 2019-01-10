@@ -67,18 +67,20 @@ class SubsidyController extends Controller
         $objectPhpExcel->getActiveSheet()->setCellValue( 'A1', '序号')
                 ->setCellValue( 'B1', $searchModel->getAttributeLabel('corporation_name'))
                 ->setCellValue( 'C1', $searchModel->getAttributeLabel('subsidy_bd'))
-                ->setCellValue( 'D1', $searchModel->getAttributeLabel('subsidy_time'))
-                ->setCellValue( 'E1', $searchModel->getAttributeLabel('subsidy_amount'))
-                ->setCellValue( 'F1', $searchModel->getAttributeLabel('subsidy_note'));
+                ->setCellValue( 'D1', $searchModel->getAttributeLabel('annual'))
+                ->setCellValue( 'E1', $searchModel->getAttributeLabel('subsidy_time'))
+                ->setCellValue( 'F1', $searchModel->getAttributeLabel('subsidy_amount'))
+                ->setCellValue( 'G1', $searchModel->getAttributeLabel('subsidy_note'));
 
         foreach($models as $key=>$model){
             $k=$key+2;
             $objectPhpExcel->getActiveSheet()->setCellValue( 'A'.$k, $key+1)
                     ->setCellValue( 'B'.$k, $model->corporation_name)
                     ->setCellValue( 'C'.$k, $model->subsidy_bd?($model->subsidyBd->nickname?$model->subsidyBd->nickname:$model->subsidyBd->username):'')
-                    ->setCellValue( 'D'.$k, $model->subsidy_time)
-                    ->setCellValue( 'E'.$k, $model->subsidy_amount)
-                    ->setCellValue( 'F'.$k, $model->subsidy_note);
+                    ->setCellValue( 'D'.$k, implode(',', Parameter::get_para_value('allocate_annual',$model->annual)))
+                    ->setCellValue( 'E'.$k, $model->subsidy_time)
+                    ->setCellValue( 'F'.$k, $model->subsidy_amount)
+                    ->setCellValue( 'G'.$k, $model->subsidy_note);
                     
         }
         

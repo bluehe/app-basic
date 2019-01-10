@@ -22,6 +22,7 @@ class m180913_124600_create_clould_subsidy extends Migration {
             'corporation_id' => $this->integer()->comment('补贴企业'),
             'corporation_name' => $this->string()->comment('企业名称'),
             'subsidy_bd' => $this->integer()->comment('客户经理'),
+            'annual'=>$this->string()->comment('补贴年度'),
             'subsidy_time' => $this->integer()->comment('补贴时间'),
             'subsidy_amount' => $this->decimal(10,2)->comment('补贴金额'),
             'subsidy_note'=>$this->text()->comment('备注'),

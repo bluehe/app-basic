@@ -20,7 +20,7 @@ class ClouldSubsidySearch extends ClouldSubsidy
     {
         return [
             [['id', 'corporation_id', 'subsidy_bd'], 'integer'],
-            [['corporation_name', 'subsidy_note', 'subsidy_time','subsidy_amount'], 'safe'],
+            [['corporation_name', 'subsidy_note', 'subsidy_time','subsidy_amount','annual'], 'safe'],
         ];
     }
 
@@ -78,6 +78,7 @@ class ClouldSubsidySearch extends ClouldSubsidy
             'id' => $this->id,
             'corporation_id' => $this->corporation_id,
             'subsidy_bd' => $this->subsidy_bd,
+            'annual' => $this->annual,
         ]);
 
         $query->andFilterWhere(['or like', 'corporation_name', explode('|', trim($this->corporation_name))])

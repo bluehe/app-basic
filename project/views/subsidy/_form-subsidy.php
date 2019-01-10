@@ -6,6 +6,7 @@ use project\models\Corporation;
 use yii\helpers\Url;
 use kartik\widgets\DatePicker;
 use project\models\User;
+use project\models\Parameter;
 
 /* @var $this yii\web\View */
 /* @var $model project\models\ClouldSubsidy */
@@ -32,6 +33,8 @@ use project\models\User;
         <?= $form->field($model, 'corporation_name')->textInput(['maxlength' => true])->label('') ?> 
 
         <?= $form->field($model, 'subsidy_bd')->dropDownList(User::get_bd(),['prompt' => '']) ?>
+        
+        <?= $form->field($model, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
 
         <?= $form->field($model, 'subsidy_time')->widget(DatePicker::classname(), [
                     'options' => ['placeholder' => '','autocomplete'=>'off'],
