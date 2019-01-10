@@ -34,6 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'placeholder' => '下拨年度',
                             'id'=>'annual',
                         ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'width' => '110%'
+                        ],
                         'pluginEvents' => [
                             "change" => "function() {var v=$('.range-value').html();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
                         ]
@@ -65,28 +69,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 <li class="pull-right header">
                      <?=
-SwitchInput::widget([
-    'name' => 'sum',
-    'type' => SwitchInput::RADIO,
-    'value'=>$sum,
-    'items' => [
-        ['label' => '天', 'value' => 1],
-        ['label' => '周', 'value' => 2],
-        ['label' => '月', 'value' => 3],
-    ],
-    'pluginOptions'=>[
-        'onText'=>'是',
-        'offText'=>'否',
-        'onColor' => 'success',
-        'offColor' => 'danger', 
-        'size' => 'mini'
-    ],
-    'labelOptions' => ['style' => 'font-size: 12px'],
-    'pluginEvents' => [
-    'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
-]
-]);
-?>
+                    SwitchInput::widget([
+                        'name' => 'sum',
+                        'type' => SwitchInput::RADIO,
+                        'value'=>$sum,
+                        'items' => [
+                            ['label' => '天', 'value' => 1],
+                            ['label' => '周', 'value' => 2],
+                            ['label' => '月', 'value' => 3],
+                        ],
+                        'pluginOptions'=>[
+                            'onText'=>'是',
+                            'offText'=>'否',
+                            'onColor' => 'success',
+                            'offColor' => 'danger', 
+                            'size' => 'mini'
+                        ],
+                        'labelOptions' => ['style' => 'font-size: 12px'],
+                        'pluginEvents' => [
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
+                    ]
+                    ]);
+                    ?>
                 </li>
                 
                 
