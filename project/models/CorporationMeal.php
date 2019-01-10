@@ -246,8 +246,8 @@ class CorporationMeal extends \yii\db\ActiveRecord
         return $time>0?$time:null;       
     }
     
-        public static function get_amount_total($start='', $end='',$sum=1,$group=0) {
-        $query= static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'start_time', $end]])->orderBy(['MAX(start_time)'=>SORT_ASC]);
+        public static function get_amount_total($start='', $end='',$sum=1,$group=0,$annual='') {
+        $query= static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'start_time', $end]])->andFilterWhere(['annual'=>$annual])->orderBy(['MAX(start_time)'=>SORT_ASC]);
         if($sum==1){
             //天
             $query->select(['amount'=>'SUM(amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(start_time, '%Y-%m-%d')"])->groupBy(["FROM_UNIXTIME(start_time, '%Y-%m-%d')"])->indexBy(['time']);
@@ -265,16 +265,16 @@ class CorporationMeal extends \yii\db\ActiveRecord
         return $query->asArray()->all();
     }
 
-    public static function get_amount_base($start='') {
-        return static::find()->andFilterWhere(['<','start_time', $start])->sum('amount');     
+    public static function get_amount_base($start='',$annual='') {
+        return static::find()->andFilterWhere(['<','start_time', $start])->andFilterWhere(['annual'=>$annual])->sum('amount');     
     }    
     
-    public static function get_cost_total($time) {
-        return static::find()->andFilterWhere(['<','start_time', $time])->sum("(CASE WHEN ($time-start_time)/(end_time+1-start_time)<1 THEN amount*($time-start_time)/(end_time+1-start_time) ELSE amount END)");     
+    public static function get_cost_total($time,$annual='') {
+        return static::find()->andFilterWhere(['<','start_time', $time])->andFilterWhere(['annual'=>$annual])->sum("(CASE WHEN ($time-start_time)/(end_time+1-start_time)<1 THEN amount*($time-start_time)/(end_time+1-start_time) ELSE amount END)");     
     }
     
-    public static function get_allocate_num($start='', $end='') {
-        return static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'start_time', $end]])->select(['amount','num'=>'count(*)'])->orderBy(['num'=>SORT_DESC])->groupBy(['amount'])->asArray()->all();
+    public static function get_allocate_num($start='', $end='',$annual='') {
+        return static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'start_time', $end]])->andFilterWhere(['annual'=>$annual])->select(['amount','num'=>'count(*)'])->orderBy(['num'=>SORT_DESC])->groupBy(['amount'])->asArray()->all();
     }
     
 }

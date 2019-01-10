@@ -110,6 +110,7 @@ class StatisticsController extends Controller {
         $end = strtotime('today');
         $start = strtotime('-1 year',$end);
         $sum=Yii::$app->request->get('sum',1);//1-天；2-周；3-月
+        $annual=Yii::$app->request->get('annual');
 
         if (Yii::$app->request->get('range')) {
             $range = explode('~', Yii::$app->request->get('range'));
@@ -117,14 +118,14 @@ class StatisticsController extends Controller {
             $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]) : $end;
         }
 
-        $allocate_total= CorporationMeal::get_amount_total($start,$end,$sum);
-        $base_amount= (float)CorporationMeal::get_amount_base($start);
+        $allocate_total= CorporationMeal::get_amount_total($start,$end,$sum,0,$annual);
+        $base_amount= (float)CorporationMeal::get_amount_base($start,$annual);
                
-        $clould_total= ClouldSubsidy::get_amount_total($start,$end,$sum);
-        $base_clould=$base_clould_cost=(float)ClouldSubsidy::get_amount_base($start);
+        $clould_total= ClouldSubsidy::get_amount_total($start,$end,$sum,$annual);
+        $base_clould=$base_clould_cost=(float)ClouldSubsidy::get_amount_base($start,$annual);
         
         $cache = Yii::$app->cache;
-        $cost_total = $cache->get('allocate_cost');
+        $cost_total = $cache->get('allocate_cost_'.$annual);
         if ($cost_total === false) {
             $cost_total=[];
         }
@@ -133,237 +134,237 @@ class StatisticsController extends Controller {
         $data_allocate_num=[];
         $data_clould_amount = [];
         $data_clould_num = [];
-            if($sum==1){                
-                //天
-                
-                $amount_num_start=($allocate_total?strtotime(key($allocate_total)):$start)-86400;
-                $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):$start))-86400;
-                if($amount_num_start<=$clould_num_start){
-                    if($allocate_total){
-                    for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
-                        $k=date('Y-m-d', $i);
-                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
-                        $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
-                        $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
-                    }
-                    $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
-                
-                    }
-                    if($clould_total){
-                    for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
-                        $k=date('Y-m-d', $i);
-                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
-                        $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
-                        $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
-                    }
-                    $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','color'=>'#F7A35C', 'data' => $data_clould_amount];          
-                    }
-                }else{
-                    if($clould_total){
-                    for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
-                        $k=date('Y-m-d', $i);
-                        $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
-                        $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
-                        $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
-                    }
-                    $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴额','color'=>'#F7A35C', 'data' => $data_clould_amount];
-                    }
-                
-                    if($allocate_total){
-                    for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
-                        $k=date('Y-m-d', $i);
-                        $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
-                        $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
-                        $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
-                    }
-                    $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
-                    }
+        if($sum==1){                
+            //天
+
+            $amount_num_start=($allocate_total?strtotime(key($allocate_total)):$start)-86400;
+            $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):$start))-86400;
+            if($amount_num_start<=$clould_num_start){
+                if($allocate_total){
+                for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
+                    $k=date('Y-m-d', $i);
+                    $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
+                    $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
+                    $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
                 }
-                
-                $old_cost_num= count($cost_total);
-                for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = $i + 86400){                  
-                    $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);                    
-                    if(isset($cost_total[$i])){
-                        $cost=$cost_total[$i];
-                    }else{
-                        $k=date('Y-m-d', $i);
-                        $base_clould_cost=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould_cost : $base_clould_cost;
-                        $cost= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i))+$base_clould_cost;
-                        $cost_total[$i]=$cost;
-                    }
-                    
-                    $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
+                $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
+
                 }
-                $series['amount'][] = ['type' => 'areaspline','zIndex'=>2, 'name' => '累计消耗额','color'=>'#90EE7E', 'data' => $data_amount_cost];
-                if($old_cost_num!=count($cost_total)){
-                    $query = CorporationMeal::find()->select(['SUM(amount)'])->createCommand()->getRawSql();
-                    $dependency = new \yii\caching\DbDependency(['sql' => $query]);
-                    $cache->set('allocate_cost', $cost_total, null, $dependency);
+                if($clould_total){
+                for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
+                    $k=date('Y-m-d', $i);
+                    $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
+                    $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
+                    $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
                 }
-                
-            }elseif($sum==2){
-                //周
-                $amount_num_start=($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start)));
-                $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start))));
-                if($amount_num_start<=$clould_num_start){
-                    if($allocate_total){
-                    for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
-                        $k=strftime("%Y-W%W",$i);
-                        $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                        //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                        $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
-                        $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
-                    }
-                    $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
-                    $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
-                
-                    }
-                
-                    if($clould_total){
-                    for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
-                        $k=strftime("%Y-W%W",$i);
-                        $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                        //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                        $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
-                        $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
-                    }
-                    $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
-                    $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
-                    }
-                }else{
-                    if($clould_total){
-                    for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
-                        $k=strftime("%Y-W%W",$i);
-                        $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                        //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                        $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
-                        $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
-                    }
-                    $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
-                    $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
-                    }
-                    if($allocate_total){
-                    for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
-                        $k=strftime("%Y-W%W",$i);
-                        $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                        //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                        $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
-                        $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
-                    }
-                    $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
-                    $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
-                    }
-                }
-                
-                $old_cost_num= count($cost_total);
-                for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = $i + 86400*7){
-                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                    $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                                      
-                    if(!isset($cost_total[$i])){                       
-                        $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i))+(float)ClouldSubsidy::get_amount_base($i);
-                    }
-                    if(!isset($cost_total[$l+86400])){
-                       $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400))+(float)ClouldSubsidy::get_amount_base($l+86400);
-                    }
-                       
-                    
-                    $cost=$cost_total[$l+86400]-$cost_total[$i];
-                    $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
-                    
-                   
-                }
-                $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
-                if($old_cost_num!=count($cost_total)){
-                    $query = CorporationMeal::find()->select(['SUM(amount)'])->createCommand()->getRawSql();
-                    $dependency = new \yii\caching\DbDependency(['sql' => $query]);
-                    $cache->set('allocate_cost', $cost_total, null, $dependency);
+                $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','color'=>'#F7A35C', 'data' => $data_clould_amount];          
                 }
             }else{
-                //月
-                $amount_num_start=($allocate_total?strtotime(key($allocate_total)):strtotime(date("Y-m",$start)));
-                $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(date("Y-m",$start))));
+                if($clould_total){
+                for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
+                    $k=date('Y-m-d', $i);
+                    $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
+                    $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
+                    $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
+                }
+                $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴额','color'=>'#F7A35C', 'data' => $data_clould_amount];
+                }
 
-                if($amount_num_start<=$clould_num_start){
-                    if($allocate_total){
-                    for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
-                        $k=date("Y-m",$i);
-                        $j = date('Y.n', $i);
-//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                        $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
-                        $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
-                    }
-                    $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
-                    $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
-                    }
-                
-                    if($clould_total){
-                    for ($i = $clould_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
-                        $k=date("Y-m",$i);
-                        $j = date('Y.n', $i);
-//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                        $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];  
-                        $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0]; 
-                    }
-                    $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
-                    $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
-                    }
-                }else{
-                    if($clould_total){
-                    for ($i = $clould_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
-                        $k=date("Y-m",$i);
-                        $j = date('Y.n', $i);
-//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                        $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];  
-                        $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0]; 
-                    }
-                    $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
-                    $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
-                    }
-                    if($allocate_total){
-                    for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
-                        $k=date("Y-m",$i);
-                        $j = date('Y.n', $i);
-//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                        $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
-                        $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
-                    }
-                    $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
-                    $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
-                    }
+                if($allocate_total){
+                for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
+                    $k=date('Y-m-d', $i);
+                    $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
+                    $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
+                    $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
                 }
-                
-                $old_cost_num= count($cost_total);
-                for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = strtotime('+1 months',$i)){
-                    $l=strtotime('+1 months',$i)-86400<$end?strtotime('+1 months',$i)-86400:$end;
-                    $j = date('Y.n', $i);                                      
-                    if(!isset($cost_total[$i])){                       
-                        $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i))+(float)ClouldSubsidy::get_amount_base($i);
-                    }
-                    if(!isset($cost_total[$l+86400])){
-                       $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400))+(float)ClouldSubsidy::get_amount_base($l+86400);
-                    }
-                  
-                    $cost=$cost_total[$l+86400]-$cost_total[$i];
-                    $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
-                  
-                }
-                $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
-                if($old_cost_num!=count($cost_total)){
-                    $query = CorporationMeal::find()->select(['SUM(amount)'])->createCommand()->getRawSql();
-                    $dependency = new \yii\caching\DbDependency(['sql' => $query]);
-                    $cache->set('allocate_cost', $cost_total, null, $dependency);
+                $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
                 }
             }
+
+            $old_cost_num= count($cost_total);
+            for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = $i + 86400){                  
+                $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);                    
+                if(isset($cost_total[$i])){
+                    $cost=$cost_total[$i];
+                }else{
+                    $k=date('Y-m-d', $i);
+                    $base_clould_cost=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould_cost : $base_clould_cost;
+                    $cost= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual))+$base_clould_cost;
+                    $cost_total[$i]=$cost;
+                }
+
+                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
+            }
+            $series['amount'][] = ['type' => 'areaspline','zIndex'=>2, 'name' => '累计消耗额','color'=>'#90EE7E', 'data' => $data_amount_cost];
+            if($old_cost_num!=count($cost_total)){
+                $query = CorporationMeal::find()->select(['SUM(amount)'])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
+                $dependency = new \yii\caching\DbDependency(['sql' => $query]);
+                $cache->set('allocate_cost_'.$annual, $cost_total, null, $dependency);
+            }
+
+        }elseif($sum==2){
+            //周
+            $amount_num_start=($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start)));
+            $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start))));
+            if($amount_num_start<=$clould_num_start){
+                if($allocate_total){
+                for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
+                    $k=strftime("%Y-W%W",$i);
+                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                    $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                    //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                    $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
+                    $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
+                }
+                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+
+                }
+
+                if($clould_total){
+                for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
+                    $k=strftime("%Y-W%W",$i);
+                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                    $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                    //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                    $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
+                    $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
+                }
+                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
+                }
+            }else{
+                if($clould_total){
+                for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
+                    $k=strftime("%Y-W%W",$i);
+                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                    $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                    //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                    $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
+                    $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
+                }
+                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
+                }
+                if($allocate_total){
+                for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
+                    $k=strftime("%Y-W%W",$i);
+                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                    $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                    //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                    $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
+                    $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
+                }
+                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                }
+            }
+
+            $old_cost_num= count($cost_total);
+            for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = $i + 86400*7){
+                $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+
+                if(!isset($cost_total[$i])){                       
+                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual))+(float)ClouldSubsidy::get_amount_base($i,$annual);
+                }
+                if(!isset($cost_total[$l+86400])){
+                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual))+(float)ClouldSubsidy::get_amount_base($l+86400,$annual);
+                }
+
+
+                $cost=$cost_total[$l+86400]-$cost_total[$i];
+                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
+
+
+            }
+            $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
+            if($old_cost_num!=count($cost_total)){
+                $query = CorporationMeal::find()->select(['SUM(amount)'])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
+                $dependency = new \yii\caching\DbDependency(['sql' => $query]);
+                $cache->set('allocate_cost_'.$annual, $cost_total, null, $dependency);
+            }
+        }else{
+            //月
+            $amount_num_start=($allocate_total?strtotime(key($allocate_total)):strtotime(date("Y-m",$start)));
+            $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(date("Y-m",$start))));
+
+            if($amount_num_start<=$clould_num_start){
+                if($allocate_total){
+                for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                    $k=date("Y-m",$i);
+                    $j = date('Y.n', $i);
+//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                    $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
+                    $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
+                }
+                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                }
+
+                if($clould_total){
+                for ($i = $clould_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                    $k=date("Y-m",$i);
+                    $j = date('Y.n', $i);
+//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                    $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];  
+                    $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0]; 
+                }
+                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
+                }
+            }else{
+                if($clould_total){
+                for ($i = $clould_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                    $k=date("Y-m",$i);
+                    $j = date('Y.n', $i);
+//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                    $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];  
+                    $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0]; 
+                }
+                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
+                }
+                if($allocate_total){
+                for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                    $k=date("Y-m",$i);
+                    $j = date('Y.n', $i);
+//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                    $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
+                    $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
+                }
+                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                }
+            }
+
+            $old_cost_num= count($cost_total);
+            for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = strtotime('+1 months',$i)){
+                $l=strtotime('+1 months',$i)-86400<$end?strtotime('+1 months',$i)-86400:$end;
+                $j = date('Y.n', $i);                                      
+                if(!isset($cost_total[$i])){                       
+                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual))+(float)ClouldSubsidy::get_amount_base($i,$annual);
+                }
+                if(!isset($cost_total[$l+86400])){
+                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual))+(float)ClouldSubsidy::get_amount_base($l+86400,$annual);
+                }
+
+                $cost=$cost_total[$l+86400]-$cost_total[$i];
+                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
+
+            }
+            $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
+            if($old_cost_num!=count($cost_total)){
+                $query = CorporationMeal::find()->select(['SUM(amount)'])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
+                $dependency = new \yii\caching\DbDependency(['sql' => $query]);
+                $cache->set('allocate_cost_'.$annual, $cost_total, null, $dependency);
+            }
+        }
             
         //下拨金额百分比
         $series['allocate_num']=[]; 
         $data_allocate=[];     
-        $allocate_num= CorporationMeal::get_allocate_num($start,$end);
+        $allocate_num= CorporationMeal::get_allocate_num($start,$end,$annual);
         foreach($allocate_num as $allocate){
             $data_allocate[] = ['name' =>floatval($allocate['amount']/10000).'万', 'y' => (int) $allocate['num']];
         }
@@ -374,7 +375,7 @@ class StatisticsController extends Controller {
         $data_allocate_bd=[]; 
         $changes=[];
         $bds=[];
-        $allocate_bd= CorporationMeal::get_amount_total($start,$end,3,1);
+        $allocate_bd= CorporationMeal::get_amount_total($start,$end,3,1,$annual);
         
         $groups = User::get_bd_color();
             
@@ -399,7 +400,7 @@ class StatisticsController extends Controller {
         }
         
      
-        return $this->render('corporation', ['series' => $series,'drilldown'=>$drilldown, 'start' => $start, 'end' => $end,'sum'=>$sum]);
+        return $this->render('corporation', ['series' => $series,'drilldown'=>$drilldown, 'start' => $start, 'end' => $end,'sum'=>$sum,'annual'=>$annual]);
         
     }
     

@@ -7,6 +7,8 @@ use kartik\daterange\DateRangePicker;
 use yii\helpers\Url;
 use kartik\widgets\SwitchInput;
 use yii\web\JsExpression;
+use kartik\widgets\Select2;
+use project\models\Parameter;
 
 $this->title = '企业统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['corporation']];
@@ -24,6 +26,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li><a href="#industry_line" data-toggle="tab">行业规模</a></li>
                 
                 <li class="pull-right header">
+                    <?= Select2::widget([
+                        'name' => 'annual',                        
+                        'data' => Parameter::get_type('allocate_annual'),
+                        'value'=>$annual,
+                        'options' => [
+                            'placeholder' => '下拨年度',
+                            'id'=>'annual',
+                        ],
+                        'pluginEvents' => [
+                            "change" => "function() {var v=$('.range-value').html();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
+                        ]
+                    ]);?>
+                    
+                </li>
+                <li class="pull-right header">
                     <?=
                     DateRangePicker::widget([
                         'name' => 'daterange',
@@ -40,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html();var s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
                     ]
                     ]);
                     ?>
@@ -66,7 +83,7 @@ SwitchInput::widget([
     ],
     'labelOptions' => ['style' => 'font-size: 12px'],
     'pluginEvents' => [
-    'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s;}",
+    'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
 ]
 ]);
 ?>
