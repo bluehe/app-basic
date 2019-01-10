@@ -24,8 +24,12 @@ use project\models\Meal;
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($model, 'region')->textInput(['maxlength' => true]) ?>
+                
+                <?= $form->field($model, 'devcloud_count')->textInput(['maxlength' => true,'disabled'=> Meal::get_corporationmeal_exist($model->id)]) ?>
+                
+                <?= $form->field($model, 'devcloud_amount')->textInput(['maxlength' => true,'disabled'=> Meal::get_corporationmeal_exist($model->id)]) ?>
 
-                <?= $form->field($model, 'amount')->textInput(['maxlength' => true,'disabled'=> Meal::get_corporationmeal_exist($model->id)]) ?>
+                <?= $form->field($model, 'cloud_amount')->textInput(['maxlength' => true,'disabled'=> Meal::get_corporationmeal_exist($model->id)]) ?>
 
                 <?= $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::className(),['clientOptions'=>['lang'=>'zh_cn','maxHeight'=>'400px']]) ?>
 

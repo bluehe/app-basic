@@ -31,6 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'yii\grid\SerialColumn'],
                     'name',
                     'region',
+                    'devcloud_count',
+                    'devcloud_amount',
+                    'cloud_amount',
                     'amount',
                      [
                         'attribute' => 'content',

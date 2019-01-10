@@ -36,3 +36,4 @@ phpunit.phar
 /console/runtime/
 /project/runtime/
 /project/web/assets/
+/project/web/data/import_data/
