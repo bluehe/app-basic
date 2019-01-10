@@ -206,6 +206,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/statistics/activity', '2', null, null, null, '1482820123', '1482820123'],            
             ['/statistics/train', '2', null, null, null, '1482820123', '1482820123'],
             ['/statistics/corporation', '2', null, null, null, '1482820123', '1482820123'],
+            ['/statistics/health', '2', null, null, null, '1482820123', '1482820123'],
                       
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
@@ -245,6 +246,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['活跃统计', '2', '活跃统计', null, null, '1482820123', '1482820123'],
             ['企业统计', '2', '企业统计', null, null, '1482820123', '1482820123'],
             ['培训统计', '2', '培训统计', null, null, '1482820123', '1482820123'],
+            ['健康度统计', '2', '健康度统计', null, null, '1482820123', '1482820123'],
           
         ]);
         $this->batchInsert($authManager->itemChildTable, ['parent', 'child'], [
@@ -328,9 +330,11 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['企业统计', '/statistics/corporation'],
             ['活跃统计', '/statistics/activity'],            
             ['培训统计', '/statistics/train'],
+            ['健康度统计', '/statistics/health'],
             ['数据统计', '企业统计'],
             ['数据统计', '活跃统计'],           
             ['数据统计', '培训统计'],
+            ['数据统计', '健康度统计'],
             ['superadmin', '用户统计'],
             ['pm', '数据统计'],
             ['sa', '数据统计'],

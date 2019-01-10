@@ -602,6 +602,10 @@ class ActivityChange extends \yii\db\ActiveRecord
         $data=static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['start_time'=>SORT_ASC])->select(['health'])->column();
         return implode(',', $data);
     }
+    
+    public static function get_health($start, $end) {
+        return static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['end_time'=>SORT_ASC,'health'=>SORT_ASC])->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(health)','health'=>'MAX(health)'])->groupBy(['end_time','health'])->asArray()->all();        
+    }
        
     //数据分析，标准差
     public static function deviation_data($column,$start=0,$end=0) {

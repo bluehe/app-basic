@@ -152,7 +152,7 @@ class StatisticsController extends Controller {
                     if($clould_total){
                     for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
                         $k=date('Y-m-d', $i);
-                        $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
+                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
                         $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
                         $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
                     }
@@ -172,7 +172,7 @@ class StatisticsController extends Controller {
                     if($allocate_total){
                     for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
                         $k=date('Y-m-d', $i);
-                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
+                        $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
                         $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
                         $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
                     }
@@ -224,7 +224,7 @@ class StatisticsController extends Controller {
                     for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
                         $k=strftime("%Y-W%W",$i);
                         $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                         //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
                         $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
                         $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
@@ -249,7 +249,7 @@ class StatisticsController extends Controller {
                     for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
                         $k=strftime("%Y-W%W",$i);
                         $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                        $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                         //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
                         $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
                         $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
@@ -430,9 +430,10 @@ class StatisticsController extends Controller {
             }
             foreach($activity_total as $total){
                 $key=date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']);
-                $data_total[]=['name' =>$key , 'y' =>  (int) $total['num']];
-                $data_change[]=['name' => $key, 'y' =>  isset($changes[$key])?$changes[$key]:0];
-                $data_per[]=['name' => $key, 'y' => isset($changes[$key])?round($changes[$key]/(int)$total['num']*100,2):0];               
+                $j = $end-$start>=365*86400?date('Y.n.j', $total['start_time']+8640).'-'.date('Y.n.j', $total['end_time']):date('n.j', $total['start_time']+8640).'-'.date('n.j', $total['end_time']);
+                $data_total[]=['name' =>$j , 'y' =>  (int) $total['num']];
+                $data_change[]=['name' => $j, 'y' =>  isset($changes[$key])?$changes[$key]:0];
+                $data_per[]=['name' => $j, 'y' => isset($changes[$key])?round($changes[$key]/(int)$total['num']*100,2):0];               
             }
             
             $series['activity'][] = ['type' => 'column', 'name' => '下拨企业数', 'data' => $data_total,'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
@@ -451,7 +452,7 @@ class StatisticsController extends Controller {
 //                $start_time=date('n.j',$change['start_time']+86400);
 //                $end_time=date('n.j',$change['end_time']);
                 if($sum){
-                    $et=date('Y.n.j',$change['end_time']);//周
+                    $et=date('Y.n.j',$change['end_time']);//次
                 }else{
                     $et=date('Y.n',$change['end_time']);//月
                 }
@@ -640,6 +641,42 @@ class StatisticsController extends Controller {
         return $this->render('train', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group]);
     }
     
-   
+   public function actionHealth() {
+        
+        $end = strtotime('today');
+        $start = strtotime('-1 months +1 days',$end);
+
+        if (Yii::$app->request->get('range')) {
+            $range = explode('~', Yii::$app->request->get('range'));
+            $start = isset($range[0]) ? strtotime($range[0]) : $start;
+            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]): $end;
+        }
+        
+        //健康度
+        $series['health']=[]; 
+        $data_health=$health_value=$health_key=[];
+        $health_total= ActivityChange::get_health($start-86400, $end);      
+        
+        foreach($health_total as $total){
+            $key=$end-$start>=365*86400?date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']):date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
+            $health_value[$key][$total['health']]= (int) $total['num'];
+            if(!in_array($total['health'], $health_key)){
+                $health_key[]=$total['health'];
+            }
+        }
+        asort($health_key);
+        foreach($health_value as $date=>$value){
+            foreach($health_key as $key){
+                $data_health[$key][]=['name' =>$date , 'y' =>  isset($health_value[$date][$key])?$health_value[$date][$key]:0];
+            }
+        }
+       
+        foreach($data_health as $k=>$v){
+            $series['health'][] = ['type' => 'column', 'name' => ActivityChange::$List['health'][$k], 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+        }
+        
+        return $this->render('health', ['series' => $series, 'start' => $start, 'end' => $end]);
+    
+    }
 
 }

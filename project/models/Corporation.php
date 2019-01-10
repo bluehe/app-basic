@@ -146,7 +146,7 @@ class Corporation extends \yii\db\ActiveRecord
             $bdModel = new CorporationBd();
             $bdModel->corporation_id=$this->id;
             $bdModel->bd_id=$this->base_bd;
-            $bdModel->start_time=time();
+            $bdModel->start_time=strtotime(date('Y-m-d',time()));
             $bdModel->save();
             
             //状态
@@ -159,12 +159,19 @@ class Corporation extends \yii\db\ActiveRecord
         } else {
             if(array_key_exists('base_bd', $changedAttributes)&&$changedAttributes['base_bd']!=$this->base_bd){
                 //BD变动，修改历史记录表,删除权限缓存
-                CorporationBd::updateAll(['end_time'=>time()], ['corporation_id'=>$this->id,'bd_id'=>$changedAttributes['base_bd']]);
-                $bdModel = new CorporationBd();
-                $bdModel->corporation_id=$this->id;
-                $bdModel->bd_id=$this->base_bd;
-                $bdModel->start_time=time();
-                $bdModel->save();
+                $corporation_bd= CorporationBd::findOne(['corporation_id'=>$this->id,'start_time'=>strtotime(date('Y-m-d',time()))]);
+                if($corporation_bd==null){
+                    CorporationBd::updateAll(['end_time'=>strtotime(date('Y-m-d',time()))], ['corporation_id'=>$this->id,'bd_id'=>$changedAttributes['base_bd']]);
+                    $bdModel = new CorporationBd();
+                    $bdModel->corporation_id=$this->id;
+                    $bdModel->bd_id=$this->base_bd;
+                    $bdModel->start_time=strtotime(date('Y-m-d',time()));
+                    $bdModel->save();
+                }else{
+                    //同一天改动BD
+                    $corporation_bd->bd_id=$this->base_bd;
+                    $corporation_bd->save();
+                }
                 
                 $cache = Yii::$app->cache;
                 $corporation_update = $cache->get('corporation_update');

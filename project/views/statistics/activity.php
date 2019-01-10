@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'=>$sum,
                         'options'=>['class'=>'sum'],
                         'pluginOptions'=>[
-                            'onText'=>'周',
+                            'onText'=>'次',
                             'offText'=>'月',
                             'onColor' => 'success',
                             'offColor' => 'danger',       
@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        ],
                         'options'=>['class'=>'group'],
                         'pluginOptions'=>[
-                            'onText'=>'总和',
+                            'onText'=>'全员',
                             'offText'=>'个人',
                             'onColor' => 'success',
                             'offColor' => 'danger', 

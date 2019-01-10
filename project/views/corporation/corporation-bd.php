@@ -22,7 +22,7 @@ use project\models\User;
             <li>
                 <i class="fa fa-user bg-teal"></i>
                 <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i><?= date('Y-m-d H:i',$bd->start_time)?></span>
+                    <span class="time"><i class="fa fa-clock-o"></i><?= date('Y-m-d',$bd->start_time)?></span>
 
                     <h3 class="timeline-header"><?= $bd->bd_id?User::get_nickname($bd->bd_id):'<span class="not-set">(未设置)</span>'?></h3>
 

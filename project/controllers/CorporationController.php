@@ -322,7 +322,7 @@ class CorporationController extends Controller
        
     public function actionCorporationBd($id) {
 
-        $model = CorporationBd::find()->where(['corporation_id'=>$id])->orderBy(['start_time'=>SORT_ASC])->all();
+        $model = CorporationBd::find()->where(['corporation_id'=>$id])->orderBy(['start_time'=>SORT_ASC,'id'=>SORT_ASC])->all();
 
         return $this->renderAjax('corporation-bd', [
                     'model' => $model,
