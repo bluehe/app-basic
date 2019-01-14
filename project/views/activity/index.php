@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'opens'=>'right',
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
                     ]
                     ]);
                     ?>
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'labelText'=>'统计'
                         ],
                         'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
                     ]
                     ]);
                     ?>
@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'labelText'=>'数据分析'
                         ],
                         'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
                     ]
                     ]);
                     ?>

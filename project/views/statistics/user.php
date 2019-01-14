@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li class="active"><a href="#signup_line" data-toggle="tab">用户统计</a></li>
 
 
-                <li class="pull-right header">
+                <li class="pull-right">
 <!--                    <button type="button" class="btn btn-default pull-right" id="daterange-btn"><span><i class="fa fa-calendar"></i> 时间选择</span><i class="fa fa-caret-down"></i></button>-->
                     <?=
                     DateRangePicker::widget([
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html(); self.location='".Url::to(['statistics/user'])."?range='+v;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val(); self.location='".Url::to(['statistics/user'])."?range='+v;}",
                     ]
                     ]);
                     ?>

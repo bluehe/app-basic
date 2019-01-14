@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li><a href="#item_pie" data-toggle="tab">活跃项目</a></li>
 
  
-                <li class="pull-right header">
+                <li class="pull-right">
 <!--                    <button type="button" class="btn btn-default pull-right" id="daterange-btn"><span><i class="fa fa-calendar"></i> 时间选择</span><i class="fa fa-caret-down"></i></button>-->
                     <?=
                     DateRangePicker::widget([
@@ -46,13 +46,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
                     ]
                     ]);
                     ?>
                 </li>
                 
-                <li class="pull-right header activity">
+                <li class="pull-right activity">
                     <?=
                     SwitchInput::widget([
                         'name' => 'sum',
@@ -65,13 +65,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'offColor' => 'danger',       
                         ],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
                     ]
                     ]);
                     ?>
                 </li>
                 
-                <li class="pull-right header activity">
+                <li class="pull-right activity">
                     <?=
                     SwitchInput::widget([
                         'name' => 'group',
@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
                     ]
                     ]);
                     ?>
@@ -214,9 +214,9 @@ $('.nav a').on('shown.bs.tab',function (e) {
     
     var $id=$(this).attr('href');
     if($id=='#item_pie'){
-        $('.nav .header.activity').hide();
+        $('.nav .activity').hide();
     }else{
-        $('.nav .header.activity').show();
+        $('.nav .activity').show();
     }
     $($id).find('[data-highcharts-chart]').each(function(){
         $('#'+$(this).attr('id')).highcharts().reflow();

@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li class="active"><a href="#amount_line" data-toggle="tab">下拨消耗</a></li>
                 <li><a href="#industry_line" data-toggle="tab">行业规模</a></li>
                 
-                <li class="pull-right header">
+                <li class="pull-right headers header">
                     <?= Select2::widget([
                         'name' => 'annual',                        
                         'data' => Parameter::get_type('allocate_annual'),
@@ -39,12 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'width' => '110%'
                         ],
                         'pluginEvents' => [
-                            "change" => "function() {var v=$('.range-value').html();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
+                            "change" => "function() {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
                         ]
                     ]);?>
                     
                 </li>
-                <li class="pull-right header">
+                <li class="pull-right headers">
                     <?=
                     DateRangePicker::widget([
                         'name' => 'daterange',
@@ -61,13 +61,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html();var s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
                     ]
                     ]);
                     ?>
                 </li>
                 
-                <li class="pull-right header">
+                <li class="pull-right headers header">
                      <?=
                     SwitchInput::widget([
                         'name' => 'sum',
@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
                     ]
                     ]);
                     ?>
@@ -449,9 +449,9 @@ $('.nav a').on('shown.bs.tab',function (e) {
     
     var $id=$(this).attr('href');
     if($id=='#industry_line'){
-        $('.nav .header').hide();
+        $('.nav .headers').hide();
     }else{
-        $('.nav .header').show();
+        $('.nav .headers').show();
     }
     $($id).find('[data-highcharts-chart]').each(function(){
         $('#'+$(this).attr('id')).highcharts().reflow();

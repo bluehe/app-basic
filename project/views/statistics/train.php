@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li class="active"><a href="#num_line" data-toggle="tab">统计</a></li>
 
 
-                <li class="pull-right header">
+                <li class="pull-right">
 <!--                    <button type="button" class="btn btn-default pull-right" id="daterange-btn"><span><i class="fa fa-calendar"></i> 时间选择</span><i class="fa fa-caret-down"></i></button>-->
                     <?=
                     DateRangePicker::widget([
@@ -44,13 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val();g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/train'])."?range='+v+'&sum='+s+'&group='+g;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('input[name=sum]:checked').val();g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/train'])."?range='+v+'&sum='+s+'&group='+g;}",
                     ]
                     ]);
                     ?>
                 </li>
                 
-                <li class="pull-right header">
+                <li class="pull-right">
                     <?=
                     SwitchInput::widget([
                         'name' => 'group',
@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val();g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/train'])."?range='+v+'&sum='+s+'&group='+g;}",
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('input[name=sum]:checked').val();g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/train'])."?range='+v+'&sum='+s+'&group='+g;}",
                     ]
                     ]);
                     ?>
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').html();s=$('input[name=sum]:checked').val();g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/train'])."?range='+v+'&sum='+s+'&group='+g;}",
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('input[name=sum]:checked').val();g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/train'])."?range='+v+'&sum='+s+'&group='+g;}",
                     ]
                     ]);
                     ?>
