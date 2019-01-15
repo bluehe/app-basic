@@ -52,6 +52,22 @@ class Parameter extends \yii\db\ActiveRecord
         ];
     }
     
+    public static $List = [
+        'type' => [
+            'allocate_annual' => "下拨年度",
+            'contact_park' => "所属园区",
+            'develop_pattern' => "开发模式",
+            'develop_scenario' => "开发场景",
+            'develop_science' => "开发环境",
+            'develop_language' => "开发语言",
+            'develop_IDE' => "开发IDE",
+        ],       
+    ];
+
+    public function getType() {
+        $type = isset(self::$List['type'][$this->type]) ? self::$List['type'][$this->type] : null;
+        return $type;
+    }
     
     public static function get_type($type='') {
         $p = static::find()->andFilterWhere(['type'=>$type])->orderBy(['type'=>SORT_ASC,'sort_p'=>SORT_ASC])->all();

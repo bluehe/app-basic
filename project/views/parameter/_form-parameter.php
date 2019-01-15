@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use project\models\Parameter;
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
@@ -21,7 +22,7 @@ use yii\widgets\ActiveForm;
             ]);
             ?>
           
-                <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'type')->dropDownList(Parameter::$List['type'], ['prompt' => '']) ?>               
 
                 <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
 

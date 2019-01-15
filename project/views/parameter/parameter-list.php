@@ -30,7 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-                    'type',
+                    [
+                        'attribute' => 'type',
+                        'value' =>
+                            function($model) {
+                                return $model->Type;
+                            },
+                        'format' => 'raw',  
+                    ],
                     'code',
                     'title',
                     'description',
