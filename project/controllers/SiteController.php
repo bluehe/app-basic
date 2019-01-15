@@ -498,13 +498,10 @@ class SiteController extends Controller
         //获取GitHub发送的内容
         $json = file_get_contents('php://input');
         $content = json_decode($json, true);
-        echo $content;
         //github发送过来的签名
         $signature = $_SERVER['HTTP_X_HUB_SIGNATURE'];
         if (!$signature) {
            return http_response_code(404);
-        }else{
-            echo $signature;
         }
         list($algo, $hash) = explode('=', $signature, 2);
         //计算签名
