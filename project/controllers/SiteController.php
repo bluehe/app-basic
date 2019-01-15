@@ -500,8 +500,8 @@ class SiteController extends Controller
         //github发送过来的签名
         $signature = $_SERVER['HTTP_X_HUB_SIGNATURE'];
         if (!$signature) {
-            fwrite($file, '遇到签名问题');
-           return http_response_code(404);
+           fwrite($file, '遇到签名问题');
+//           return http_response_code(404);
         }
         list($algo, $hash) = explode('=', $signature, 2);
         //计算签名
