@@ -499,9 +499,10 @@ class SiteController extends Controller
         fwrite($file, $content);
         //github发送过来的签名
         $signature = Yii::$app->request->headers->get('X-Hub-Signature');
-        $signature1=$_SERVER['X-Hub-Signature'];
+//        $signature1=$_SERVER['X-Hub-Signature'];
         fwrite($file, '遇到签名问题1:'.$signature.'\n');
         fwrite($file, '遇到签名问题2:'.$signature1.'\n');
+        fwrite($file, 'POST:'.Yii::$app->request->post().'\n');
         fclose($file);
         $file= fopen($target.'/git.log', 'a+');
         if (!$signature) {
