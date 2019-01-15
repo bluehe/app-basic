@@ -491,9 +491,6 @@ class SiteController extends Controller
     public function actionNew() {
         $target = dirname(dirname(__DIR__)); // 生产环境web目录
         $file= fopen($target.'/git.log', 'a+');
-        fwrite($file, '打开文本');
-        fclose($file);
-        exit;
         //密钥
         $secret = "app";
         //获取GitHub发送的内容
@@ -501,7 +498,12 @@ class SiteController extends Controller
         $content = json_decode($json, true);
         fwrite($file, $content);
         //github发送过来的签名
-        $signature = $_SERVER['HTTP_X_HUB_SIGNATURE'];
+        $signature = Yii::$app->request->headers->get('X-Hub-Signature');
+        $signature1=$_SERVER['X-Hub-Signature'];
+        fwrite($file, '遇到签名问题1:'.$signature.'\n');
+        fwrite($file, '遇到签名问题2:'.$signature1.'\n');
+        fclose($file);
+        $file= fopen($target.'/git.log', 'a+');
         if (!$signature) {
            fwrite($file, '遇到签名问题');
 //           return http_response_code(404);
