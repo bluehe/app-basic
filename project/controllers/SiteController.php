@@ -524,5 +524,6 @@ class SiteController extends Controller
             $res_log .= '======================================================================='.PHP_EOL;
             echo $res_log;
         }
+        fclose($file);
     }
 }
