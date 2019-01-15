@@ -492,6 +492,8 @@ class SiteController extends Controller
         $target = dirname(dirname(__DIR__)); // 生产环境web目录
         $file= fopen($target.'/git.log', 'a+');
         fwrite($file, '打开文本');
+        fclose($file);
+        exit;
         //密钥
         $secret = "app";
         //获取GitHub发送的内容
