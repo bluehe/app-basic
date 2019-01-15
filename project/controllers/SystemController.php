@@ -185,12 +185,12 @@ class SystemController extends Controller {
             if($system['sms_platform']=='aliyun'){
                 Yii::$app->set('aliyun', [
                     'class' => 'saviorlv\aliyun\Sms',
-                    'accessKeyId' => $system['sms_key'],
-                    'accessKeySecret' => $system['sms_secret'],                
+                    'accessKeyId' => $system['aliyun_sms_key'],
+                    'accessKeySecret' => $system['aliyun_sms_secret'],                
                 ]);
                 $response_r = Yii::$app->aliyun->sendSms(
-                            $system['sms_sign'], // 短信签名
-                            $system['sms_captcha'], // 短信模板编号
+                            $system['aliyun_sms_sign'], // 短信签名
+                            $system['aliyun_sms_captcha'], // 短信模板编号
                             $smsto, // 短信接收者
                             ["code"=>"123456"]
                             
@@ -199,19 +199,19 @@ class SystemController extends Controller {
                 $result =$response['code']==200?'success':$response['message'];
             }elseif($system['sms_platform']=='cloudsmser'){           
                 require_once(Yii::getAlias('@common').'/vendor/smser/cloudsmser/smsapi.fun.php');
-                $response=sendSMS($system['sms_key'],$system['sms_secret'],$smsto,array_to_json(['code'=>123456]),$system['sms_captcha']);
+                $response=sendSMS($system['cloudsmser_sms_key'],$system['cloudsmser_sms_secret'],$smsto,array_to_json(['code'=>123456]),$system['cloudsmser_sms_captcha']);
                 $result =$response['stat']==100?'success':$response['message'];
             }elseif($system['sms_platform']=='submail'){
                 $server='https://api.mysubmail.com/';
-                $message_configs['appid']=$system['sms_key'];
-                $message_configs['appkey']=$system['sms_secret'];
+                $message_configs['appid']=$system['submail_sms_key'];
+                $message_configs['appkey']=$system['submail_sms_secret'];
                 $message_configs['sign_type']='normal';
                 $message_configs['server']=$server;
                 
                 require_once(Yii::getAlias('@common').'/vendor/smser/submail/SUBMAILAutoload.php');
                 $submail=new \MESSAGEXsend($message_configs);
                 $submail->setTo($smsto);
-                $submail->SetProject($system['sms_captcha']);
+                $submail->SetProject($system['submail_sms_captcha']);
                 $submail->AddVar('code',123456); 
                 $xsend=$submail->xsend();
                 $result =$xsend['status']=='success'?'success':$xsend['msg'];

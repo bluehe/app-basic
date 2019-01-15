@@ -51,12 +51,12 @@ class CommonHelper {
             if($sms['sms_platform']=='aliyun'){
                 Yii::$app->set('aliyun', [
                     'class' => 'saviorlv\aliyun\Sms',
-                    'accessKeyId' => $sms['sms_key'],
-                    'accessKeySecret' => $sms['sms_secret'],                
+                    'accessKeyId' => $sms['aliyun_sms_key'],
+                    'accessKeySecret' => $sms['aliyun_sms_secret'],                
                 ]);
                 $response = Yii::$app->aliyun->sendSms(
-                            $sms['sms_sign'], // 短信签名
-                            $sms[$type], //模板编号
+                            $sms['aliyun_sms_sign'], // 短信签名
+                            $sms['aliyun_'.$type], //模板编号
                             $smsto, // 短信接收者
                             $content
                         );
@@ -64,19 +64,19 @@ class CommonHelper {
                 $result =$sms_response['code']==200?'success':$sms_response['message'];
             }elseif($sms['sms_platform']=='cloudsmser'){
                 require_once(Yii::getAlias('@common').'/vendor/smser/cloudsmser/smsapi.fun.php');
-                $response=sendSMS($sms['sms_key'],$sms['sms_secret'],$smsto,array_to_json($content),$sms[$type]);
+                $response=sendSMS($sms['cloudsmser_sms_key'],$sms['cloudsmser_sms_secret'],$smsto,array_to_json($content),$sms['cloudsmser_'.$type]);
                 $result =$response['stat']==100?'success':$response['message'];
             }elseif($sms['sms_platform']=='submail'){
                 $server='https://api.mysubmail.com/';
-                $message_configs['appid']=$sms['sms_key'];
-                $message_configs['appkey']=$sms['sms_secret'];
+                $message_configs['appid']=$sms['submail_sms_key'];
+                $message_configs['appkey']=$sms['submail_sms_secret'];
                 $message_configs['sign_type']='normal';
                 $message_configs['server']=$server;
                 
                 require_once(Yii::getAlias('@common').'/vendor/smser/submail/SUBMAILAutoload.php');
                 $submail=new \MESSAGEXsend($message_configs);
                 $submail->setTo($smsto);
-                $submail->SetProject($sms[$type]);
+                $submail->SetProject($sms['submail_'.$type]);
                 foreach($content as $k=>$v){
                     $submail->AddVar($k,$v);
                 }
