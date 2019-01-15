@@ -483,8 +483,6 @@ class SiteController extends Controller
     
     public function actionNew() {
         $target = dirname(dirname(__DIR__)); // 生产环境web目录
-        echo $target;
-        exit;
         //密钥
         $secret = "app";
         //获取GitHub发送的内容
