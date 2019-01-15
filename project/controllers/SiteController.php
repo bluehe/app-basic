@@ -477,6 +477,10 @@ class SiteController extends Controller
         return $this->render('complete', ['model_l' => $model_l, 'model_s' => $model_s,]);
     }
     
+    public function actionTest() {
+        echo shell_exec('ls -la');
+    }
+    
     public function actionNew() {
         $target = dirname(dirname(__DIR__)); // 生产环境web目录
         //密钥
