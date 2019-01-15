@@ -637,9 +637,16 @@ class ActivityChange extends \yii\db\ActiveRecord
     
     }
  
-    public static function get_activity_total($start, $end,$sum=1,$group=1,$activity=false) {
+    public static function get_activity_total($start, $end,$sum=1,$group=1,$annual='',$activity=false) {
               
         $query = static::find()->alias('c')->joinWith(['data d'])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'bd_id'=>SORT_ASC]);
+        if($annual=='all'){
+            
+            
+        }elseif($annual){
+            $corporation_id= CorporationMeal::find()->where(['annual'=>$annual])->select(['corporation_id'])->distinct()->column();
+            $query->andFilterWhere(['c.corporation_id'=>$corporation_id]);
+        }
         if($activity){
             if(System::getValue('business_activity_statistics')==2){              
                 //最新标准
@@ -678,8 +685,15 @@ class ActivityChange extends \yii\db\ActiveRecord
         return $query->asArray()->all();
     }
     
-    public static function get_activity_item($start, $end,$items,$activity=true) {
+    public static function get_activity_item($start, $end,$items,$annual='',$activity=true) {
         $query = static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]]);
+         if($annual=='all'){
+            
+            
+        }elseif($annual){
+            $corporation_id= CorporationMeal::find()->where(['annual'=>$annual])->select(['corporation_id'])->distinct()->column();
+            $query->andFilterWhere(['corporation_id'=>$corporation_id]);
+        }
         if($activity){
             $items=is_array($items)?$items:explode(',', $items);
             if(count($items)>1){

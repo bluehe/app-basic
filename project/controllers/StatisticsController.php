@@ -410,6 +410,7 @@ class StatisticsController extends Controller {
         $start = strtotime('-1 months +1 days',$end);
         $sum=Yii::$app->request->get('sum',1);
         $group=Yii::$app->request->get('group',1);
+        $annual=Yii::$app->request->get('annual');
 
         if (Yii::$app->request->get('range')) {
             $range = explode('~', Yii::$app->request->get('range'));
@@ -419,8 +420,8 @@ class StatisticsController extends Controller {
         $series['activity'] = [];
         
         //活跃数
-        $activity_total = ActivityChange::get_activity_total($start-86400, $end,$sum,$group);
-        $activity_change = ActivityChange::get_activity_total($start-86400, $end,$sum,$group,true);
+        $activity_total = ActivityChange::get_activity_total($start-86400, $end,$sum,$group,$annual);
+        $activity_change = ActivityChange::get_activity_total($start-86400, $end,$sum,$group,$annual,true);
         if($group==1){
            
             $data_total = [];
@@ -492,13 +493,13 @@ class StatisticsController extends Controller {
         $data_item=[]; 
         
         $items=[];
-        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,false);
-        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount']);
-        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount');
-        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount');
-        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount');
-        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount');
-        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime']);
+        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,$annual,false);
+        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount'],$annual);
+        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount',$annual);
+        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount',$annual);
+        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount',$annual);
+        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount',$annual);
+        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime'],$annual);
         
         arsort($items);
 //        $fv= reset($items);
@@ -511,7 +512,7 @@ class StatisticsController extends Controller {
         }
         $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item];
         
-        return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group]);
+        return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group,'annual'=>$annual]);
     }
     
     public function actionTrain() {

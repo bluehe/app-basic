@@ -76,10 +76,17 @@ class ActivitySearch extends ActivityChange
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$start=0,$end=0,$sum=1, $pageSize = '')
+    public function search($params,$start=0,$end=0,$sum=1,$annual='', $pageSize = '')
     {
         $subQuery = ActivityChange::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end]])->orderBy(['start_time'=>SORT_DESC])->limit(ActivityChange::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end]])->count());
         $query = ActivityChange::find()->from(['c'=>$subQuery])->joinWith(['corporation','data d']);
+        if($annual=='all'){
+            
+            
+        }elseif($annual){
+            $corporation_id= CorporationMeal::find()->where(['annual'=>$annual])->select(['corporation_id'])->distinct()->column();
+            $query->andFilterWhere(['c.corporation_id'=>$corporation_id]);
+        }
         if($sum){
             $query->select([
                 'start_time'=>'MIN(start_time)',

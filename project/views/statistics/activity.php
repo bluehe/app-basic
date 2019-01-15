@@ -7,6 +7,8 @@ use kartik\daterange\DateRangePicker;
 use yii\helpers\Url;
 use kartik\widgets\SwitchInput;
 use yii\web\JsExpression;
+use kartik\widgets\Select2;
+use project\models\Parameter;
 
 $this->title = '活跃统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['activity']];
@@ -24,6 +26,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li><a href="#item_pie" data-toggle="tab">活跃项目</a></li>
 
  
+                <li class="pull-right header">
+                    <?= Select2::widget([
+                        'name' => 'annual',                        
+                        'data' => Parameter::get_type('allocate_annual'),
+                        'value'=>$annual,
+                        'options' => [
+                            'placeholder' => '下拨年度',
+                            'id'=>'annual',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'width' => '110%'
+                        ],
+                        'pluginEvents' => [
+                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0;var a=$('#annual').val(); self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g+'&annual='+a;}",
+                        ]
+                    ]);?>
+                    
+                </li>
                 <li class="pull-right">
 <!--                    <button type="button" class="btn btn-default pull-right" id="daterange-btn"><span><i class="fa fa-calendar"></i> 时间选择</span><i class="fa fa-caret-down"></i></button>-->
                     <?=
@@ -46,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0;var a=$('#annual').val(); self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g+'&annual='+a;}",
                     ]
                     ]);
                     ?>
@@ -65,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'offColor' => 'danger',       
                         ],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0;var a=$('#annual').val(); self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g+'&annual='+a;}",
                     ]
                     ]);
                     ?>
@@ -91,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0;var a=$('#annual').val(); self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g+'&annual='+a;}",
                     ]
                     ]);
                     ?>

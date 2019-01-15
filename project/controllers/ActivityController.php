@@ -23,6 +23,7 @@ class ActivityController extends Controller {
                     $start = strtotime('-1 months +1 days',$end);
                     $sum=Yii::$app->request->get('sum',1);
                     $dev=Yii::$app->request->get('dev',0);
+                    $annual=Yii::$app->request->get('annual');
 
                     if (Yii::$app->request->get('range')) {
                         $range = explode('~', Yii::$app->request->get('range'));
@@ -31,7 +32,7 @@ class ActivityController extends Controller {
                     }
 
                     $searchModel = new ActivitySearch();
-                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$start-86400,$end,$sum);
+                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$start-86400,$end,$sum,$annual);
 
                     $column= ColumnSetting::get_column_content(Yii::$app->user->identity->id,'activity');
 
@@ -42,6 +43,7 @@ class ActivityController extends Controller {
                         'end' => $end,
                         'sum'=>$sum,
                         'dev'=>$dev,
+                        'annual'=>$annual,
                         'column'=>$column,
                     ];
                               
@@ -87,6 +89,7 @@ class ActivityController extends Controller {
         $end = strtotime('today');
         $start = strtotime('-1 months +1 days',$end);
         $sum=Yii::$app->request->get('sum',1);
+        $annual=Yii::$app->request->get('annual');
         
         if (Yii::$app->request->get('range')) {
             $range = explode('~', Yii::$app->request->get('range'));
@@ -96,7 +99,7 @@ class ActivityController extends Controller {
         
         $start_time= microtime(true);
         $searchModel = new ActivitySearch();
-        $models = $searchModel->search(Yii::$app->request->queryParams,$start-86400,$end,$sum,1000)->getModels();
+        $models = $searchModel->search(Yii::$app->request->queryParams,$start-86400,$end,$sum,$annual,1000)->getModels();
         $column= ColumnSetting::get_column_content(Yii::$app->user->identity->id,'activity');
 
         

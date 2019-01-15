@@ -9,6 +9,8 @@ use project\models\ActivityChange;
 use kartik\widgets\SwitchInput;
 use yii\bootstrap\Modal;
 use project\models\User;
+use kartik\widgets\Select2;
+use project\models\Parameter;
 
 $this->title = '活跃数据';
 $this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['activity/index']];
@@ -24,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li class="header pull-right" style="margin-left: 20px;"> <div><?= Html::a('<i class="fa fa-filter" title="选择需要显示的列"></i>', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal', 'class' => 'btn btn-danger column-change']) ?></div></li>
                 <li class="header pull-right"> <div><?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning']) ?></div></li>
                 
-                <li class="header">
+                <li>
 <!--                    <button type="button" class="btn btn-default pull-right" id="daterange-btn"><span><i class="fa fa-calendar"></i> 时间选择</span><i class="fa fa-caret-down"></i></button>-->
                    <?=
                     DateRangePicker::widget([
@@ -47,13 +49,32 @@ $this->params['breadcrumbs'][] = $this->title;
                             'opens'=>'right',
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; var a=$('#annual').val();self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
                     ]
                     ]);
                     ?>
                     
                 </li>
-                <li class="header" style="margin-left: 20px;">
+                <li style="margin-left: 10px;">
+                    <?= Select2::widget([
+                        'name' => 'annual',                        
+                        'data' => Parameter::get_type('allocate_annual'),
+                        'value'=>$annual,
+                        'options' => [
+                            'placeholder' => '下拨年度',
+                            'id'=>'annual',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'width' => '110%'
+                        ],
+                        'pluginEvents' => [
+                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; var a=$('#annual').val();self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d+'&annual='+a;}",
+                        ]
+                    ]);?>
+                    
+                </li>
+                <li style="margin-left: 20px;">
                     <?=
                     SwitchInput::widget([
                         'name' => 'sum',
@@ -67,13 +88,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'labelText'=>'统计'
                         ],
                         'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; var a=$('#annual').val();self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
                     ]
                     ]);
                     ?>
                 </li>
                 
-                <li class="header" style="margin-left: 20px;">
+                <li style="margin-left: 10px;">
                     <?=
                     SwitchInput::widget([
                         'name' => 'dev',
@@ -87,11 +108,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'labelText'=>'数据分析'
                         ],
                         'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;d=$('.dev').is(':checked')?1:0; var a=$('#annual').val();self.location='".Url::to(['activity/index'])."?".Yii::$app->request->queryString."&range='+v+'&sum='+s+'&dev='+d;}",
                     ]
                     ]);
                     ?>
                 </li>
+                
             </ul>
                
            
