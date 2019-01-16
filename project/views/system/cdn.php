@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -24,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach ($model as $one) {
                     if ($one['type'] == 'text' || $one['type'] == 'password') {
                         ?>
-                        <div class="form-group field-cdn field-<?= $one['code'] ?>">
+                        <div id="<?= $one['code'] ?>" class="form-group field-cdn field-<?= $one['code'] ?>">
                             <label class="col-md-2 control-label" for="<?= $one['code'] ?>"><?= $one['tag'] ?></label>
                             <div class="col-md-4"><input type="<?= $one['type'] ?>" id="<?= $one['code'] ?>" class="form-control" name="System[<?= $one['code'] ?>]" value="<?= $one['value'] ?>"></div>
                             <div class="col-md-6"><div class="help-block"><?= $one['hint'] ?></div></div>                               
@@ -32,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                     } elseif ($one['type'] == 'radio' && $ranges = json_decode($one['store_range'])) {
                         ?>
-                        <div class="form-group field-cdn field-<?= $one['code'] ?>"><label class="col-md-2 control-label"><?= $one['tag'] ?></label>
+                        <div id="<?= $one['code'] ?>" class="form-group field-cdn field-<?= $one['code'] ?>"><label class="col-md-2 control-label"><?= $one['tag'] ?></label>
                             <div class="col-md-4">
                                 <div id="<?= $one['code'] ?>">
                                     <?php
@@ -81,23 +80,20 @@ $this->params['breadcrumbs'][] = $this->title;
     function changeshow() {
         var service = $('.radio-cdn_service:checked').val();
         if (service === '1') {
-            $('.field-cdn:not(.field-cdn_service)').show();
-            $('.field-cdn_appid').hide();
-            $('.field-cdn_point').show();
-            $('.field-cdn_key label').html('accessKey');
-            $('.field-cdn_secret label').html('accessSecret');
-            $('.field-cdn_point label').html('endPoint');
-            
+            $('.field-cdn:not(.field-cdn_service)').hide(); 
+            $('.field-cdn_platform').show();
+                       
             var platform = $('.radio-cdn_platform:checked').val();
-            if (platform === 'Qcloud') {
-                $('.field-cdn_appid').show();
-                $('.field-cdn_key label').html('secretId');
-                $('.field-cdn_secret label').html('secretKey');
-                $('.field-cdn_point label').html('region');
-            } else if (platform === 'Qiniu') {
-                $('.field-cdn_point').hide();
-                $('.field-cdn_secret label').html('secretKey');
-            }
+            $('div[id^="'+platform+'"]').show();
+//            if (platform === 'Qcloud') {
+//                $('.field-cdn_appid').show();
+//                $('.field-cdn_key label').html('secretId');
+//                $('.field-cdn_secret label').html('secretKey');
+//                $('.field-cdn_point label').html('region');
+//            } else if (platform === 'Qiniu') {
+//                $('.field-cdn_point').hide();
+//                $('.field-cdn_secret label').html('secretKey');
+//            }
         } else {
             $('.field-cdn:not(.field-cdn_service)').hide();                      
         }
