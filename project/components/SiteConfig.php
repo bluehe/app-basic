@@ -82,38 +82,38 @@ class SiteConfig extends Component
             if(Yii::$app->siteConfig->cdn_platform=='Alioss'){
                 Yii::configure(yii::$app->cdn, [
                     'class' => \feehi\cdn\AliossTarget::className(),
-                    'bucket' => Yii::$app->siteConfig->cdn_bucket,
-                    'accessKey' => Yii::$app->siteConfig->cdn_key,
-                    'accessSecret' => Yii::$app->siteConfig->cdn_secret,
-                    'endPoint' => Yii::$app->siteConfig->cdn_point,
-                    'host' => Yii::$app->siteConfig->cdn_host
+                    'bucket' => Yii::$app->siteConfig->Alioss_cdn_bucket,
+                    'accessKey' => Yii::$app->siteConfig->Alioss_cdn_key,
+                    'accessSecret' => Yii::$app->siteConfig->Alioss_cdn_secret,
+                    'endPoint' => Yii::$app->siteConfig->Alioss_cdn_point,
+                    'host' => Yii::$app->siteConfig->Alioss_cdn_host
                 ]);               
             }elseif(Yii::$app->siteConfig->cdn_platform=='Qiniu'){
                 Yii::configure(yii::$app->cdn, [
                     'class' => \feehi\cdn\QiniuTarget::className(),                   
-                    'accessKey' => Yii::$app->siteConfig->cdn_key,
-                    'secretKey' => Yii::$app->siteConfig->cdn_secret,
-                    'bucket' => Yii::$app->siteConfig->cdn_bucket,
-                    'host' => Yii::$app->siteConfig->cdn_host
+                    'accessKey' => Yii::$app->siteConfig->Qiniu_cdn_key,
+                    'secretKey' => Yii::$app->siteConfig->Qiniu_cdn_secret,
+                    'bucket' => Yii::$app->siteConfig->Qiniu_cdn_bucket,
+                    'host' => Yii::$app->siteConfig->Qiniu_cdn_host
                 ]);  
             }elseif(Yii::$app->siteConfig->cdn_platform=='Qcloud'){
                 Yii::configure(yii::$app->cdn, [
                     'class' => \feehi\cdn\QcloudTarget::className(),
-                    'appId' => Yii::$app->siteConfig->cdn_appid,
-                    'secretId' => Yii::$app->siteConfig->cdn_key,
-                    'secretKey' => Yii::$app->siteConfig->cdn_secret,
-                    'region' => Yii::$app->siteConfig->cdn_point,
-                    'bucket' => Yii::$app->siteConfig->cdn_bucket,
-                    'host' => Yii::$app->siteConfig->cdn_host
+                    'appId' => Yii::$app->siteConfig->Qcloud_cdn_appid,
+                    'secretId' => Yii::$app->siteConfig->Qcloud_cdn_key,
+                    'secretKey' => Yii::$app->siteConfig->Qcloud_cdn_secret,
+                    'region' => Yii::$app->siteConfig->Qcloud_cdn_point,
+                    'bucket' => Yii::$app->siteConfig->Qcloud_cdn_bucket,
+                    'host' => Yii::$app->siteConfig->Qcloud_cdn_host
                 ]);  
             }elseif(Yii::$app->siteConfig->cdn_platform=='Netease'){
                 Yii::configure(yii::$app->cdn, [
                     'class' => \feehi\cdn\NeteaseTarget::className(),
-                    'bucket' => Yii::$app->siteConfig->cdn_bucket,
-                    'accessKey' => Yii::$app->siteConfig->cdn_key,
-                    'accessSecret' => Yii::$app->siteConfig->cdn_secret,
-                    'endPoint' => Yii::$app->siteConfig->cdn_point,
-                    'host' => Yii::$app->siteConfig->cdn_host
+                    'bucket' => Yii::$app->siteConfig->Netease_cdn_bucket,
+                    'accessKey' => Yii::$app->siteConfig->Netease_cdn_key,
+                    'accessSecret' => Yii::$app->siteConfig->Netease_cdn_secret,
+                    'endPoint' => Yii::$app->siteConfig->Netease_cdn_point,
+                    'host' => Yii::$app->siteConfig->Netease_cdn_host
                 ]);               
             }
         }
