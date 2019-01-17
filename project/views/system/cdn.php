@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach ($model as $one) {
                     if ($one['type'] == 'text' || $one['type'] == 'password') {
                         ?>
-                        <div id="<?= $one['code'] ?>" class="form-group field-cdn field-<?= $one['code'] ?>">
+                        <div id="<?= $one['code'] ?>" class="form-group field-cdn field-<?= $one['code'] ?>" style="display: none;">
                             <label class="col-md-2 control-label" for="<?= $one['code'] ?>"><?= $one['tag'] ?></label>
                             <div class="col-md-4"><input type="<?= $one['type'] ?>" id="<?= $one['code'] ?>" class="form-control" name="System[<?= $one['code'] ?>]" value="<?= $one['value'] ?>"></div>
                             <div class="col-md-6"><div class="help-block"><?= $one['hint'] ?></div></div>                               
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                     } elseif ($one['type'] == 'radio' && $ranges = json_decode($one['store_range'])) {
                         ?>
-                        <div id="<?= $one['code'] ?>" class="form-group field-cdn field-<?= $one['code'] ?>"><label class="col-md-2 control-label"><?= $one['tag'] ?></label>
+                        <div id="<?= $one['code'] ?>" class="form-group field-cdn field-<?= $one['code'] ?>" <?=$one['code']=='cdn_service'?'':'style="display: none;"'?>><label class="col-md-2 control-label"><?= $one['tag'] ?></label>
                             <div class="col-md-4">
                                 <div id="<?= $one['code'] ?>">
                                     <?php

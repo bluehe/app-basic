@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach ($model as $one) {
                     if ($one['type'] == 'text' || $one['type'] == 'password') {
                         ?>
-                        <div id="<?= $one['code'] ?>" class="form-group field-sms field-<?= $one['code'] ?>">
+                        <div id="<?= $one['code'] ?>" class="form-group field-sms field-<?= $one['code'] ?>" style="display: none;">
                             <label class="col-md-2 control-label" for="<?= $one['code'] ?>"><?= $one['tag'] ?></label>
                             <div class="col-md-4"><input type="<?= $one['type'] ?>" id="<?= $one['code'] ?>" class="form-control" name="System[<?= $one['code'] ?>]" value="<?= $one['value'] ?>"></div>
                             <div class="col-md-6"><div class="help-block"><?= $one['hint'] ?></div></div>                               
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                     } elseif ($one['type'] == 'radio' && $ranges = json_decode($one['store_range'])) {
                         ?>
-                        <div id="<?= $one['code'] ?>" class="form-group field-sms field-<?= $one['code'] ?>"><label class="col-md-2 control-label"><?= $one['tag'] ?></label>
+                        <div id="<?= $one['code'] ?>" class="form-group field-sms field-<?= $one['code'] ?>" <?=$one['code']=='sms_service'?'':'style="display: none;"'?>><label class="col-md-2 control-label"><?= $one['tag'] ?></label>
                             <div class="col-md-4">
                                 <div id="<?= $one['code'] ?>">
                                     <?php
@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 }
                 ?>
-                <div class="form-group field-sms field-tel"><label class="col-md-2 col-xs-12 control-label" for="smtp-test">测试号码</label><div class="col-md-4 col-xs-7"><input type="text" id="sms-test" class="form-control" name="tel" value=""></div><div class="col-md-6 col-xs-5"><input id="second" type="button" value="发送测试短信" class="btn btn-success"></div></div>
+                <div class="form-group field-sms field-tel" style="display: none;"><label class="col-md-2 col-xs-12 control-label" for="smtp-test">测试号码</label><div class="col-md-4 col-xs-7"><input type="text" id="sms-test" class="form-control" name="tel" value=""></div><div class="col-md-6 col-xs-5"><input id="second" type="button" value="发送测试短信" class="btn btn-success"></div></div>
             </div>
             <div class="box-footer">
                 <div class="col-md-1 col-md-offset-2 col-xs-6 text-right">
