@@ -255,30 +255,30 @@ Modal::end();
 <?php $this->beginBlock('corporation') ?>
     $('.corporation-index').on('click', '.corporation-view', function () {
         $('#corporation-modal .modal-header').hide();
-        $('.modal-body').html('');
+        $('#corporation-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-view') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#corporation-modal .modal-body').html(data);
                 }
         );
     });
     
     $('.corporation-index').on('click', '.corporation-create', function () {
         $('#corporation-modal .modal-header').hide();
-        $('.modal-body').html('');
+        $('#corporation-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-create') ?>',
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#corporation-modal .modal-body').html(data);
                 }
         );
     });
     
     $('.corporation-index').on('click', '.corporation-update', function () {
         $('#corporation-modal .modal-header').hide();
-        $('.modal-body').html('');
+        $('#corporation-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-update') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#corporation-modal .modal-body').html(data);
                 }
         );
     });
@@ -286,10 +286,10 @@ Modal::end();
     $('.corporation-index').on('click', '.corporation-apply', function () {
         $('#corporation-modal .modal-title').html('企业申请');
         $('#corporation-modal .modal-header').show();
-        $('.modal-body').html('');
+        $('#corporation-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-apply') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#corporation-modal .modal-body').html(data);
                 }
         );
     });
@@ -297,10 +297,10 @@ Modal::end();
     $('.corporation-index').on('click', '.corporation-allocate', function () {
         $('#corporation-modal .modal-title').html('企业下拨');
         $('#corporation-modal .modal-header').show();
-        $('.modal-body').html('');
+        $('#corporation-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-allocate') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#corporation-modal .modal-body').html(data);
                 }
         );
     });
@@ -308,42 +308,44 @@ Modal::end();
     $('.corporation-index').on('click', '.corporation-again', function () {
         $('#corporation-modal .modal-title').html('企业续拨');
         $('#corporation-modal .modal-header').show();
-        $('.modal-body').html('');
+        $('#corporation-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-allocate') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#corporation-modal .modal-body').html(data);
                 }
         );
     });
     
     $('.corporation-index').on('click', '.bd-list', function () {
-        $('.modal-title').html('历史记录');
-        $('.modal-body').html('');
+        $('#list-modal .modal-title').html('客户经理');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-bd') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
     $('.corporation-index').on('click', '.stat-list', function () {
-        $('.modal-title').html('状态记录');
-        $('.modal-body').html('');
+        $('#list-modal .modal-title').html('状态记录');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-stat') ?>',{id: $(this).closest('tr').data('key')},
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
     
     $('.corporation-index').on('click', '.column-change', function () {
-        $('.modal-title').html('显示项选择');
-        $('.modal-body').html('');
+        $('#list-modal .modal-title').html('显示项选择');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation-column') ?>',
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
+    
+    
 <?php $this->endBlock() ?>
 </script>
 <?php $this->registerJs($this->blocks['corporation'], \yii\web\View::POS_END); ?>

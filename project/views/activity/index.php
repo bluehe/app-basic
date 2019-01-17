@@ -962,11 +962,11 @@ Modal::end();
     $('.sparktristate').sparkline('html', {type: 'tristate',colorMap:{'1':'#00a65a','-1':'#dd4b39'},tooltipValueLookups: {map: $.range_map({'-1': '不活跃', '1': '活跃','0':'未设置'})}});
     $('.sparktristate_health').sparkline('html', {type: 'tristate',colorMap:<?php echo json_encode(ActivityChange::$List['health_color'])?>,tooltipValueLookups: {map: $.range_map(<?php echo json_encode(ActivityChange::$List['health'])?>)}});
     $('.activity-index').on('click', '.column-change', function () {
-        $('.modal-title').html('显示项选择');
-        $('.modal-body').html('');
+        $('#item-modal .modal-title').html('显示项选择');
+        $('#item-modal .modal-body').html('');
         $.get('<?= Url::toRoute('column') ?>',
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#item-modal .modal-body').html(data);
                 }
         );
     });

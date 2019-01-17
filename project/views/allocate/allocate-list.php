@@ -234,11 +234,11 @@ Modal::end();
     });
     
     $('.allocate-index').on('click', '.column-change', function () {
-        $('.modal-title').html('显示项选择');
-        $('.modal-body').html('');
+        $('#allocate-modal .modal-title').html('显示项选择');
+        $('#allocate-modal .modal-body').html('');
         $.get('<?= Url::toRoute('allocate-column') ?>',
                 function (data) {
-                    $('.modal-body').html(data);
+                    $('#allocate-modal .modal-body').html(data);
                 }
         );
     });

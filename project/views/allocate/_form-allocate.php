@@ -41,13 +41,13 @@ use project\models\Parameter;
 
         <?= $form->field($model, 'meal_id')->dropDownList(Meal::get_meal(), ['prompt' => '其他']) ?>
 
-        <?= $form->field($model, 'number')->textInput() ?>
+        <?= $form->field($model, 'number', ['options' =>['class' => 'form-group','style' => 'display: none;']])->textInput() ?>
 
-        <?= $form->field($model, 'devcloud_count')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'devcloud_count', ['options' =>['class' => 'form-group','style' => 'display: none;']])->textInput(['maxlength' => true]) ?>
         
-        <?= $form->field($model, 'devcloud_amount')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'devcloud_amount', ['options' =>['class' => 'form-group','style' => 'display: none;']])->textInput(['maxlength' => true]) ?>
         
-        <?= $form->field($model, 'cloud_amount')->textInput(['maxlength' => true]) ?>        
+        <?= $form->field($model, 'cloud_amount', ['options' =>['class' => 'form-group','style' => 'display: none;']])->textInput(['maxlength' => true]) ?>        
        
         <?= $form->field($model, 'start_time')->widget(DatePicker::classname(), [
             'options' => ['placeholder' => '','autocomplete'=>'off'],
@@ -60,7 +60,7 @@ use project\models\Parameter;
                 'endDate'=> CorporationMeal::get_next_date($model->id)
             ],
             'pluginEvents'=>[
-                'hide'=>"function(event){var startTime = $('#corporationmeal-start_time').val();var endTime = $('#corporationmeal-end_time').val(); var date=new Date(startTime);date.setFullYear(date.getFullYear()+1); date.setDate(date.getDate()-1); var m=date.getMonth() + 1; var d=date.getDate(); $('#corporationmeal-end_time').val(date.getFullYear() + '-' + (String(m).length < 2?'0':'')+m + '-' +(String(d).length < 2?'0':'')+d );$('#corporationmeal-end_time-kvdate').kvDatepicker('setStartDate',new Date(startTime));}"
+                'hide'=>"function(event){var startTime = $('#corporationmeal-start_time').val();var endTime = $('#corporationmeal-end_time').val(); if(startTime){ var date=new Date(startTime);date.setFullYear(date.getFullYear()+1); date.setDate(date.getDate()-1); var m=date.getMonth() + 1; var d=date.getDate(); $('#corporationmeal-end_time').val(date.getFullYear() + '-' + (String(m).length < 2?'0':'')+m + '-' +(String(d).length < 2?'0':'')+d );$('#corporationmeal-end_time-kvdate').kvDatepicker('setStartDate',new Date(startTime));}}"
             ]
             ]) ?>  
         
