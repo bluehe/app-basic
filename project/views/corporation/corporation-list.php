@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'base_bd',
                             'value' =>
                             function($model) {
-                                return '<span class="bd-list" data-toggle="modal" data-target="#list-modal">'.($model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'<span class="not-set">(未设置)</span>').'</span>';
+                                return '<span class="bd-list" data-toggle="modal" data-target="#list-modal" style="cursor: pointer">'.($model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'<span class="not-set" style="cursor: pointer">(未设置)</span>').'</span>';
                             },
                             'format'=>'raw',
                             'filter' => User::get_bd(null, Corporation::get_existbd()), 
@@ -181,7 +181,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     case Corporation::STAT_AGAIN:$color='text-purple';break;
                                     default: $color='';
                                 }
-                                return Html::tag('span', $model->Stat,['data-toggle'=>'modal','data-target'=>'#list-modal', 'class' =>'stat-list '.$color]);
+                                return Html::tag('span', $model->Stat,['data-toggle'=>'modal','data-target'=>'#list-modal','style'=>'cursor: pointer', 'class' =>'stat-list '.$color]);
                             },
                         'format' => 'raw',
                         'filter' => Corporation::$List['stat'],    
