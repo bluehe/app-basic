@@ -330,6 +330,99 @@ class CorporationController extends Controller
         
     }
     
+    public function actionCorporationBdDelete($id)
+    {
+        $model = CorporationBd::findOne($id);
+        
+        $stat='error';
+        $bd=null;
+        if ($model !== null&&Yii::$app->user->can('企业修改',['id'=>$model->corporation_id])) {
+            $count = CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->count();
+            if($count>1){
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+               
+                    $pre = CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['<','start_time',$model->start_time])->orderBy(['start_time'=>SORT_DESC])->one();
+                    if($pre!==null){
+                        //非第一条
+                        $pre->end_time=$model->end_time;
+                        $pre->save();
+                    }
+                    $next=CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['>','start_time',$model->start_time])->orderBy(['start_time'=>SORT_ASC])->one();
+                    if($next==null){
+                        //最后一条
+                        Corporation::updateAll(['base_bd'=>$pre->bd_id], ['id'=>$pre->corporation_id]);//更新企业BD为上一条
+                        $bd= ['corporation_id'=>$pre->corporation_id,'name'=>User::get_nickname($pre->bd_id)];
+                    }
+                    
+                    $model->delete();
+                    $stat='success';
+                    $transaction->commit();
+                    
+               
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    $stat='fail';
+                }
+            }else{
+                $stat='fail';
+            }
+        }        
+        return json_encode(['stat' => $stat,'bd'=>$bd]);
+    }
+    
+    public function actionCorporationBdUpdate($id) {
+        $model = CorporationBd::findOne($id);
+        if($model !== null&&Yii::$app->user->can('企业修改',['id'=>$model->corporation_id])){
+            $_model = clone $model;
+            
+           
+            if ($model->load(Yii::$app->request->post())) {
+                                     
+                if (Yii::$app->request->isAjax) {                
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return \yii\bootstrap\ActiveForm::validate($model);
+                }          
+          
+                $model->start_time= strtotime($model->start_time);
+                $pre = CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['<','start_time',$_model->start_time])->orderBy(['start_time'=>SORT_DESC])->one();
+                $next=CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['>','start_time',$_model->start_time])->orderBy(['start_time'=>SORT_ASC])->one();
+                
+                if($pre!==null){
+                    //不是第一条
+                    if($model->bd_id==$pre->bd_id){
+                        $model->start_time=$pre->start_time;
+                        $pre->delete();
+                    }else{
+                        $pre->end_time=$model->start_time;
+                        $pre->save();
+                    }
+                }
+                
+                if($next!==null){
+                    if($model->bd_id==$next->bd_id){
+                    //不是最后一条,且BD相同
+                        $model->end_time=null;
+                        $next->delete();
+                    }                                      
+                }elseif($_model->bd_id!=$model->bd_id){
+                    //最后一条且BD修改
+                    Corporation::updateAll(['base_bd'=>$model->bd_id], ['id'=>$model->corporation_id]);//更新企业BD
+                }
+                $model->save();
+                
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            $model->start_time=date('Y-m-d',$model->start_time);
+            return $this->renderAjax('corporation-bd-update', [
+                    'model' => $model,
+            ]);
+        
+        }else{
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+    }
+    
     public function actionCorporationStat($id) {
 
         $model = CorporationStat::find()->where(['corporation_id'=>$id])->orderBy(['created_at'=>SORT_ASC])->all();
