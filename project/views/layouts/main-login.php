@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use common\widgets\Alert;
 use project\models\System;
+use project\components\CommonHelper;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
@@ -53,9 +54,9 @@ jQuery(function($){
         // Components
         slide_links        : 'blank',    // Individual links for each slide (Options: false, 'num', 'name', 'blank')
         slides             : [    // Slideshow Images
-                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/1.jpg'},
-                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/2.jpg'},
-                                 {image : '<?=defined('APP_STATIC')?APP_STATIC:'..'?>/image/login/3.jpg'}
+                                 {image : '<?=CommonHelper::getImage('/image/login/1.jpg')?>'},
+                                 {image : '<?=CommonHelper::getImage('/image/login/2.jpg')?>'},
+                                 {image : '<?=CommonHelper::getImage('/image/login/3.jpg')?>'}
                              ]
 
     });

@@ -4,6 +4,7 @@ namespace project\components;
 
 use Yii;
 use project\models\System;
+use OSS\OssClient;
 
 class CommonHelper {
 
@@ -87,6 +88,47 @@ class CommonHelper {
         }else{
             return json_encode(['stat'=>'fail','message'=>'未开启短信功能']);
         }
+    }
+    
+    public static function getImage($url,$duration = 3600*24) {
+        if (Yii::$app->siteConfig->cdn_service) {
+            $cache = Yii::$app->cache;
+            $imgurl = $cache->get(Yii::$app->siteConfig->cdn_platform.'_' . $url);
+            if ($imgurl === false) {
+                if(strpos($url, '/') === 0 ){
+                    $path = substr($url, 1);
+                }else{
+                    $path=$url;
+                }
+                $flag = 0;                             
+                
+                if(Yii::$app->cdn->exists($path)){             
+                    $flag = 1;
+                }elseif (file_exists($path)){
+                    if(Yii::$app->cdn->upload($path,$path)){
+                        $flag = 1;                    
+                    }else{
+                        $flag = 0; 
+                    }
+                }else{
+                     $flag = 0; 
+                }
+                
+                if ($flag==1) {
+                    $imgurl=Yii::$app->siteConfig->{Yii::$app->siteConfig->cdn_platform.'_cdn_host'}.'/'.$path;
+                    $cache->set(Yii::$app->siteConfig->cdn_platform.'_' . $url, $imgurl,$duration);
+                }else{
+                    $imgurl=$url;
+                }
+                
+                
+            }
+            return $imgurl;
+        }else{
+            return $url;
+        }        
+        
+
     }
 
 }

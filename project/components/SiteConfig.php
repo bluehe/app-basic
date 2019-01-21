@@ -30,9 +30,9 @@ class SiteConfig extends Component
     {
         parent::init();
 
-        $cache = Yii::$app->getCache();
-        $key = 'system';
-        if (($data = $cache->get($key)) === false) {
+        $cache=Yii::$app->cache;
+        $data = $cache->get('system');
+        if ($data === false) {
             $data = System::find()->asArray()->select(['code','value','store_range'])->indexBy("code")->all();
             $cacheDependencyObject = Yii::createObject([
                 'class' => FileDependencyHelper::className(),
@@ -41,7 +41,7 @@ class SiteConfig extends Component
             ]);
             $fileName = $cacheDependencyObject->createFile();
             $dependency = new FileDependency(['fileName' => $fileName]);
-            $cache->set($key, $data, 0, $dependency);
+            $cache->set('system', $data, 0, $dependency);
         }
 
         foreach ($data as $v) {
@@ -55,11 +55,11 @@ class SiteConfig extends Component
         
         if (Yii::$app->siteConfig->smtp_service) {
 
-            $data = Yii::$app->cach->get('system');
+            $data = Yii::$app->cache->get('system');
             $charsets = json_decode($data['smtp_charset']['store_range'], true);
             $smtpcharset = $charsets[Yii::$app->siteConfig->smtp_charset];
             
-            Yii::configure(yii::$app->mailer, [
+            Yii::$app->set('mailer', [
                 'class' => 'yii\swiftmailer\Mailer',
                 'useFileTransport' => false,
                 'transport' => [
@@ -80,7 +80,7 @@ class SiteConfig extends Component
         if (Yii::$app->siteConfig->cdn_service) {
 
             if(Yii::$app->siteConfig->cdn_platform=='Alioss'){
-                Yii::configure(yii::$app->cdn, [
+                Yii::$app->set('cdn', [
                     'class' => \feehi\cdn\AliossTarget::className(),
                     'bucket' => Yii::$app->siteConfig->Alioss_cdn_bucket,
                     'accessKey' => Yii::$app->siteConfig->Alioss_cdn_key,
@@ -89,7 +89,7 @@ class SiteConfig extends Component
                     'host' => Yii::$app->siteConfig->Alioss_cdn_host
                 ]);               
             }elseif(Yii::$app->siteConfig->cdn_platform=='Qiniu'){
-                Yii::configure(yii::$app->cdn, [
+                 Yii::$app->set('cdn', [
                     'class' => \feehi\cdn\QiniuTarget::className(),                   
                     'accessKey' => Yii::$app->siteConfig->Qiniu_cdn_key,
                     'secretKey' => Yii::$app->siteConfig->Qiniu_cdn_secret,
@@ -97,7 +97,7 @@ class SiteConfig extends Component
                     'host' => Yii::$app->siteConfig->Qiniu_cdn_host
                 ]);  
             }elseif(Yii::$app->siteConfig->cdn_platform=='Qcloud'){
-                Yii::configure(yii::$app->cdn, [
+                 Yii::$app->set('cdn', [
                     'class' => \feehi\cdn\QcloudTarget::className(),
                     'appId' => Yii::$app->siteConfig->Qcloud_cdn_appid,
                     'secretId' => Yii::$app->siteConfig->Qcloud_cdn_key,
@@ -107,7 +107,7 @@ class SiteConfig extends Component
                     'host' => Yii::$app->siteConfig->Qcloud_cdn_host
                 ]);  
             }elseif(Yii::$app->siteConfig->cdn_platform=='Netease'){
-                Yii::configure(yii::$app->cdn, [
+                 Yii::$app->set('cdn', [
                     'class' => \feehi\cdn\NeteaseTarget::className(),
                     'bucket' => Yii::$app->siteConfig->Netease_cdn_bucket,
                     'accessKey' => Yii::$app->siteConfig->Netease_cdn_key,

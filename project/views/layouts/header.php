@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use project\components\CommonHelper;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -34,13 +35,13 @@ use yii\helpers\Url;
                 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $directoryAsset ?><?= Yii::$app->user->identity->avatar ? Yii::$app->user->identity->avatar : '/image/user.png' ?>" class="user-image" alt="User Image"/>
+                        <img src="<?= Yii::$app->user->identity->avatar ? Yii::$app->user->identity->avatar : CommonHelper::getImage('/image/user.png') ?>" class="user-image" alt="User Image"/>
                         <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $directoryAsset ?><?= Yii::$app->user->identity->avatar ? Yii::$app->user->identity->avatar : '/image/user.png' ?>" class="img-circle" alt="User Image"/>
+                            <img src="<?= Yii::$app->user->identity->avatar ? Yii::$app->user->identity->avatar : CommonHelper::getImage('/image/user.png') ?>" class="img-circle" alt="User Image"/>
 
                             <p>
                                 <?= Yii::$app->user->identity->username ?>

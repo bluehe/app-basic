@@ -40,7 +40,7 @@ class initSiteConfig extends Event {
 //            ],
 //            ]);
 //        }
-        $system = $cache->get('system_info');
+        $system = $cache->get('system');
         
         //系统状态-关闭
         if($system['system_stat']=='0'){
