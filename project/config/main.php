@@ -1,4 +1,4 @@
-<?php
+ <?php
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -52,28 +52,28 @@ return [
                 ],
                 project\assets\AppAsset::className() =>[
                     'sourcePath' => '@project/web',
-                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'baseUrl'=>'@web',
                     'css'=>[
                         'a'=>'css/site.css',
                     ]                   
                 ],
                 project\assets\CookieAsset::className() =>[
                     'sourcePath' => '@project/web',
-                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'baseUrl'=>'@web',
                     'js'=>[
                         'a'=>'js/sendcookie.js',
                     ]                   
                 ],
                 project\assets\ParticlesAsset::className() =>[
                     'sourcePath' => '@project/web',
-                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'baseUrl'=>'@web',
                     'js'=>[
                         'a'=>'js/jquery.particleground.min.js',
                     ]                   
                 ],
                 project\assets\SupersizedAsset::className() =>[
                     'sourcePath' => '@project/web',
-                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'baseUrl'=>'@web',
                     'css'=>[
                         'a'=>'css/supersized.css',
                     ],

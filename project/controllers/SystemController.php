@@ -23,7 +23,7 @@ class SystemController extends Controller {
             $system = Yii::$app->request->post('System');
             $res = System::setSystem($system);
             if ($res) {
-                Yii::$app->cache->delete('system_info');
+                Yii::$app->cache->delete('system');
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
                 Yii::$app->session->setFlash('error', '更新失败。');
@@ -45,7 +45,7 @@ class SystemController extends Controller {
 
             $res = System::setSystem($system);
             if ($res) {
-                Yii::$app->cache->delete('system_smtp');
+                Yii::$app->cache->delete('system');
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
                 Yii::$app->session->setFlash('error', '更新失败。');
@@ -67,7 +67,7 @@ class SystemController extends Controller {
 
             $res = System::setSystem($system);
             if ($res) {
-                Yii::$app->cache->delete('system_sms');
+                Yii::$app->cache->delete('system');
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
                 Yii::$app->session->setFlash('error', '更新失败。');
@@ -89,7 +89,7 @@ class SystemController extends Controller {
 
             $res = System::setSystem($system);
             if ($res) {
-                Yii::$app->cache->delete('system_cdn');
+                Yii::$app->cache->delete('system');
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
                 Yii::$app->session->setFlash('error', '更新失败。');
