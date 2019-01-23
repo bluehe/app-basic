@@ -70,6 +70,25 @@ $fieldOptions4 = [
                 'options' => ['placeholder' => $model->getAttributeLabel('verifyCode'), 'class' => 'form-control','autocomplete'=>'off'],
                 'imageOptions' => ['alt' => '点击换图', 'title' => '点击换图', 'style' => 'cursor:pointer', 'height' => 34]])->label(false)
             ?>
+                <script>
+                <?php $this->beginBlock('captcha') ?>
+                    $(document).ready(function () {
+                        changeVerifyCode();
+                    });
+                //更改或者重新加载验证码
+                    function changeVerifyCode() {
+                        $.ajax({
+                            url: "/site/captcha?refresh",
+                            dataType: "json",
+                            cache: false,
+                            success: function (data) {
+                //                $("#imgVerifyCode").attr("src", data["url"]);
+                            }
+                        });
+                    }
+                <?php $this->endBlock() ?>
+                </script>
+                <?php $this->registerJs($this->blocks['captcha'], \yii\web\View::POS_END); ?>
         <?php endif; ?>
 
         <div class="text-center sign-icon">
