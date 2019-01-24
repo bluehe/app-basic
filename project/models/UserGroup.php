@@ -91,7 +91,7 @@ class UserGroup extends \yii\db\ActiveRecord
     }
     
     public static function auth_group($group_id){
-        return in_array($group_id, self::get_group_userid(Yii::$app->user->identity->id));
+        return in_array($group_id, self::get_user_groupid(Yii::$app->user->identity->id));
         
     }
 }
