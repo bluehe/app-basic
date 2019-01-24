@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use project\models\Meal;
+use project\models\Group;
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
@@ -21,15 +22,18 @@ use project\models\Meal;
             ]);
             ?>
             <div class="box-body">
+                
+                <?= $form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['prompt' => '','disabled'=> $model->id?Meal::get_corporationmeal_exist($model->id):false]) ?>
+                
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($model, 'region')->textInput(['maxlength' => true]) ?>
                 
-                <?= $form->field($model, 'devcloud_count')->textInput(['maxlength' => true,'disabled'=> Meal::get_corporationmeal_exist($model->id)]) ?>
+                <?= $form->field($model, 'devcloud_count')->textInput(['maxlength' => true,'disabled'=> $model->id?Meal::get_corporationmeal_exist($model->id):false]) ?>
                 
-                <?= $form->field($model, 'devcloud_amount')->textInput(['maxlength' => true,'disabled'=> Meal::get_corporationmeal_exist($model->id)]) ?>
+                <?= $form->field($model, 'devcloud_amount')->textInput(['maxlength' => true,'disabled'=> $model->id?Meal::get_corporationmeal_exist($model->id):false]) ?>
 
-                <?= $form->field($model, 'cloud_amount')->textInput(['maxlength' => true,'disabled'=> Meal::get_corporationmeal_exist($model->id)]) ?>
+                <?= $form->field($model, 'cloud_amount')->textInput(['maxlength' => true,'disabled'=> $model->id?Meal::get_corporationmeal_exist($model->id):false]) ?>
 
                 <?= $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::className(),['clientOptions'=>['lang'=>'zh_cn','maxHeight'=>'400px']]) ?>
 

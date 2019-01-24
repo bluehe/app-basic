@@ -11,6 +11,7 @@ namespace project\actions;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\UnprocessableEntityHttpException;
+use project\models\UserGroup;
 
 class UpdateAction extends \yii\base\Action
 {
@@ -31,7 +32,8 @@ class UpdateAction extends \yii\base\Action
     public $successRedirect;
 
     public $ajax = false;
-
+   
+    public $auth_group=false;//认证用户组权限
     /**
      * update修改
      *
@@ -47,6 +49,11 @@ class UpdateAction extends \yii\base\Action
         $model = call_user_func([$this->modelClass, 'findOne'], $id);
         if (! $model) throw new BadRequestHttpException("Cannot find model by $id");
         $model->setScenario( $this->scenario );
+        
+        if($this->auth_group&&!UserGroup::auth_group($model->group_id)){
+            Yii::$app->getSession()->setFlash('error', '权限不足');
+            return $this->controller->redirect(Yii::$app->request->referrer);
+        }
 
         if (Yii::$app->getRequest()->getIsPost()&&$model->load(Yii::$app->getRequest()->post())) {
             

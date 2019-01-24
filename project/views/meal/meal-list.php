@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use project\models\Meal;
 use project\grid\StatusColumn;
 use yii\helpers\Url;
+use project\models\UserGroup;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -29,13 +30,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'attribute' => 'group_id',
+                        'value' =>function($model) {
+                            return $model->group->title;   //主要通过此种方式实现
+                        },
+                        'format' => 'raw',
+                        'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
+                    ],
                     'name',
                     'region',
                     'devcloud_count',
                     'devcloud_amount',
                     'cloud_amount',
                     'amount',
-                     [
+                    [
                         'attribute' => 'content',
                         'format' => 'raw',
                     ],

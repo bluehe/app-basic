@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `group_user`.
  */
-class m190124_093900_create_user_group extends Migration {
+class m180820_092802_create_user_group extends Migration {
 
     /**
      * @inheritdoc

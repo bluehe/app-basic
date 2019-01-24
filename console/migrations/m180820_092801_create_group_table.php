@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `group`.
  */
-class m190123_171500_create_group_table extends Migration {
+class m180820_092801_create_group_table extends Migration {
 
     /**
      * @inheritdoc
@@ -23,8 +23,7 @@ class m190123_171500_create_group_table extends Migration {
             'title' => $this->string(16)->comment('简称'),
             'area' => $this->string(32)->comment('地域'),
             'address'=>$this->string(128)->comment('地址'),
-            'location'=>$this->string(64)->comment('坐标'),
-                            
+            'location'=>$this->string(64)->comment('坐标'),                           
             ], $tableOptions);
     }
 

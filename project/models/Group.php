@@ -104,4 +104,12 @@ class Group extends \yii\db\ActiveRecord
         $groups=$query->orderBy(['id'=>SORT_ASC])->all();
         return ArrayHelper::map($groups, 'id', 'title');
     }
+    
+    public static function get_user_group($id) {
+        //用户项目ID
+        $usergroup=UserGroup::get_user_groupid($id);
+        $groups=static::find()->andWhere(['id'=>$usergroup])->orderBy(['id'=>SORT_ASC])->all();
+        
+        return ArrayHelper::map($groups, 'id', 'title');
+    }
 }

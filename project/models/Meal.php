@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
  * This is the model class for table "{{%meal}}".
  *
  * @property int $id
+ * @property string $group_id 项目
  * @property string $name 规格
  * @property string $region 地区
  * @property string $amount 金额（元）
@@ -36,9 +37,9 @@ class Meal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'region','cloud_amount','devcloud_amount','devcloud_count', 'content', 'stat'], 'required'],
+            [['group_id','name', 'region','cloud_amount','devcloud_amount','devcloud_count', 'content', 'stat'], 'required'],
             [['amount','cloud_amount','devcloud_amount'], 'number'],
-            [['order_sort','devcloud_count', 'stat'], 'integer'],
+            [['group_id','order_sort','devcloud_count', 'stat'], 'integer'],
             [['name', 'region'], 'string', 'max' => 32],
             [['order_sort'], 'default','value'=>10],
             ['stat', 'default', 'value' => self::STAT_ACTIVE],
@@ -51,20 +52,36 @@ class Meal extends \yii\db\ActiveRecord
         if (parent::beforeSave($insert)) {           
             //下拨金额
             $this->amount = $this->cloud_amount+$this->devcloud_amount;
-                     
+                              
             return true;
         } else {
             return false;
         }
     }
     
+/**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCorporations()
+    {
+        return $this->hasMany(Corporation::className(), ['intent_set' => 'id']);
+    }
+
     /**
-    * @return \yii\db\ActiveQuery
-    */
-   public function getCorporationMeals()
-   {
-       return $this->hasMany(CorporationMeal::className(), ['meal_id' => 'id']);
-   }
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCorporationMeals()
+    {
+        return $this->hasMany(CorporationMeal::className(), ['meal_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroup()
+    {
+        return $this->hasOne(Group::className(), ['id' => 'group_id']);
+    }
 
     /**
      * {@inheritdoc}
@@ -73,6 +90,7 @@ class Meal extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'group_id' => '项目',
             'name' => '规格',
             'region' => '地区',
             'devcloud_count' => '软开云人数',

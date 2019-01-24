@@ -78,7 +78,7 @@ class UserGroup extends \yii\db\ActiveRecord
         }
         return $query->select(['group_id'])->distinct()->column();
     }
-    
+        
     public static function get_group_userid($id) {
         //项目用户ID
         return static::find()->where(['group_id' => $id])->select(['user_id'])->distinct()->column();
@@ -88,5 +88,10 @@ class UserGroup extends \yii\db\ActiveRecord
         //无项目组用户ID
         $user= static::find()->select(['user_id'])->distinct()->column();
         return User::find()->where(['not',['id'=>$user]])->select(['id'])->column();
+    }
+    
+    public static function auth_group($group_id){
+        return in_array($group_id, self::get_group_userid(Yii::$app->user->identity->id));
+        
     }
 }

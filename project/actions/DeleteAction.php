@@ -13,6 +13,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\Response;
 use yii\web\UnprocessableEntityHttpException;
+use project\models\UserGroup;
 
 class DeleteAction extends \yii\base\Action
 {
@@ -36,6 +37,8 @@ class DeleteAction extends \yii\base\Action
      * @var string 场景
      */
     public $scenario = 'default';
+    
+    public $auth_group=false;//认证用户组权限
 
     /**
      * delete删除
@@ -66,6 +69,10 @@ class DeleteAction extends \yii\base\Action
             $model = null;
             foreach ($ids as $one) {
                 $model = call_user_func([$this->modelClass, 'findOne'], $one);
+                if($this->auth_group&&!UserGroup::auth_group($model->group_id)){
+                    Yii::$app->getSession()->setFlash('error', '权限不足');
+                    continue;;
+                }
                 if ($model) {
                     $model->setScenario($this->scenario);
                     if (! $result = $model->delete()) {
