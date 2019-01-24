@@ -33,7 +33,7 @@ class User extends ActiveRecord implements IdentityInterface
     const ROLE_OB_DATA = 'ob_data';
     const ROLE_BD = 'bd';
     
-
+    public $group;
 
     /**
      * {@inheritdoc}
@@ -68,10 +68,10 @@ class User extends ActiveRecord implements IdentityInterface
             [['username'], 'string', 'min' => 4],
             [['nickname'], 'string', 'min' => 2],
             [['password_hash', 'password_reset_token', 'email', 'tel', 'avatar'], 'string', 'max' => 255],
-            [['point','project'], 'default', 'value' => 0],
+            [['point'], 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            [['role','project'], 'safe'],
+            [['role','group'], 'safe'],
         ];
     }
 
@@ -90,7 +90,7 @@ class User extends ActiveRecord implements IdentityInterface
             'role' => '角色',
             'point' => '积分',
             'user_color' => '颜色',
-            'project' => '项目',         
+            'group' => '项目',         
             'status' => '状态',
             'last_login' => '上次登录',
             'created_at' => '注册时间',
@@ -342,5 +342,5 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return $data;
     }
-    
+       
 }

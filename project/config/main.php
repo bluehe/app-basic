@@ -83,7 +83,7 @@ return [
                 ],
                 project\assets\ColorAsset::className() =>[
                     'sourcePath' => '@project/web',
-                    'baseUrl'=>defined('APP_STATIC')?APP_STATIC:'@web',
+                    'baseUrl'=>'@web',
                     'css'=>[
                         'a'=>'css/colpick.css',
                     ],

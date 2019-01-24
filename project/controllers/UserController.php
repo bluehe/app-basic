@@ -8,6 +8,7 @@ use project\models\User;
 use project\models\UserSearch;
 use project\actions\IndexAction;
 use mdm\admin\components\Helper;
+use project\models\UserGroup;
 
 class UserController extends Controller { 
     
@@ -66,10 +67,12 @@ class UserController extends Controller {
 //    }
     
     public function actionUserChange($id) {
+        $model = User::findOne($id);
         $auth = Yii::$app->authManager;
         $Role_admin = $auth->getRole('superadmin');
-        if (!$auth->getAssignment($Role_admin->name, $id)) {
-            $model = User::findOne($id);
+        $disabled =($auth->getAssignment($Role_admin->name, $model->id)||$model->role== User::ROLE_PM)&&!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)&&$model->id!=Yii::$app->user->identity->id;
+        if (!$disabled) {
+            
             $model->status = User::STATUS_ACTIVE == $model->status ? User::STATUS_DELETED : User::STATUS_ACTIVE;
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', '修改成功。');
@@ -77,15 +80,24 @@ class UserController extends Controller {
                 Yii::$app->session->setFlash('error', '修改失败。');
             }
         } else {
-            Yii::$app->session->setFlash('error', '不能改变超级管理员状态。');
+            Yii::$app->session->setFlash('error', '没有权限进行此操作。');
         }
 
         return $this->redirect(Yii::$app->request->referrer);
     }
     
     public function actionUserUpdate($id) {
-        $model = User::findOne($id);
-//        $model->group = UserGroup::get_user_groupid($model->id);
+        $model = User::findOne($id);        
+        
+        $auth = Yii::$app->authManager;
+        $Role_admin=$auth->getRole('superadmin');
+        $disabled =($auth->getAssignment($Role_admin->name, $model->id)||$model->role== User::ROLE_PM)&&!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)&&$model->id!=Yii::$app->user->identity->id;
+        if($disabled){
+            Yii::$app->session->setFlash('warning', '没有权限进行此操作');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        
+        $model->group =$old_group= UserGroup::get_user_groupid($model->id,true);
         $role = $model->role;
 
         if ($model->load(Yii::$app->request->post())) {
@@ -94,16 +106,17 @@ class UserController extends Controller {
                 return \yii\bootstrap\ActiveForm::validate($model);
             }
             
-//            $rw = Yii::$app->request->post('User');
-//            $groups = $rw['group'] ? $rw['group'] : array();             
-//            $group = new UserGroup();
-//            $group->user_id = $model->id;   
+            $rw = Yii::$app->request->post('User');
+            $groups = $rw['group'] ? $rw['group'] : array();             
+            $group = new UserGroup();
+            $group->user_id = $model->id;   
                       
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $auth = Yii::$app->authManager;
                 $Role_admin=$auth->getRole('superadmin');
-                if($model->status == User::STATUS_DELETED && $auth->getAssignment($Role_admin->name, $mode->id)){
+                if($model->status == User::STATUS_DELETED && $auth->getAssignment($Role_admin->name, $model->id)){
+                    //超级管理员不准删除
                     $mode->status = User::STATUS_ACTIVE;
                 }
                 $model->save(false);
@@ -132,20 +145,20 @@ class UserController extends Controller {
                     Yii::$app->cache->delete('corporation_delete');
                 }
                    
-//                    $t1 = array_diff($groups, $model->group); //新增
-//                    $t2 = array_diff($model->group, $groups); //删除
-//                    if (count($t1) > 0) {
-//                        foreach ($t1 as $t) {
-//                            $_group = clone $group;
-//                            $_group->group_id = $t;
-//                            if (!$_group->save()) {
-//                                throw new \Exception("修改失败");
-//                            }
-//                        }
-//                    }
-//                    if (count($t2) > 0) {
-//                        UserGroup::deleteAll(['user_id' => $model->id, 'group_id' => $t2]);
-//                    }
+                $t1 = array_diff($groups, $old_group); //新增
+                $t2 = array_diff($old_group, $groups); //删除
+                if (count($t1) > 0) {
+                    foreach ($t1 as $t) {
+                        $_group = clone $group;
+                        $_group->group_id = $t;
+                        if (!$_group->save()) {
+                            throw new \Exception("修改失败");
+                        }
+                    }
+                }
+                if (count($t2) > 0) {
+                    UserGroup::deleteAll(['user_id' => $model->id, 'group_id' => $t2]);
+                }
                    
 
                 $transaction->commit();
@@ -158,6 +171,7 @@ class UserController extends Controller {
 //                throw $e;
                 Yii::$app->session->setFlash('error', '修改失败。');
             }
+            return $this->redirect(Yii::$app->request->referrer);
  
         }
         return $this->render('user-update', [

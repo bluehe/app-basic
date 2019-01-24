@@ -102,7 +102,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{update}', //只需要展示删除和更新
                         'buttons' => [
                             'update' => function($url, $model, $key) {
-                                return Html::a('<i class="fa fa-pencil"></i> 修改', ['user-update', 'id' => $key], ['class' => 'btn btn-primary btn-xs',]);
+                                $auth = Yii::$app->authManager;
+                                $Role_admin=$auth->getRole('superadmin');
+                                $disabled =($auth->getAssignment($Role_admin->name, $model->id)||$model->role== User::ROLE_PM)&&!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)&&$model->id!=Yii::$app->user->identity->id;
+                                return $disabled?'':Html::a('<i class="fa fa-pencil"></i> 修改', ['user-update', 'id' => $key], ['class' => 'btn btn-primary btn-xs',]);
                             },
                         ],
                     ],

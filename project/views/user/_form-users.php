@@ -3,11 +3,15 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use project\models\User;
-//use project\models\Group;
+use project\models\Group;
 
 /* @var $this yii\web\View */
 /* @var $model dh\models\Users */
 /* @var $form yii\widgets\ActiveForm */
+
+$auth = Yii::$app->authManager;
+$Role_admin=$auth->getRole('superadmin');
+$disabled =($auth->getAssignment($Role_admin->name, $model->id)||$model->role== User::ROLE_PM)&&!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)&&$model->id!=Yii::$app->user->identity->id;
 ?>
 
 <div class="row">
@@ -37,7 +41,7 @@ use project\models\User;
                 
                 <?= $form->field($model, 'role')->dropDownList(User::$List['role'], ['prompt' => '']) ?>
                                                
-                <?php //echo $form->field($model, 'group')->checkboxList(Group::get_group(), ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
+                <?= $form->field($model, 'group')->checkboxList(Group::get_group(true), ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
 
                 <?= $form->field($model, 'status')->radioList(User::$List['status'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
 

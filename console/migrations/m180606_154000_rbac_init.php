@@ -149,6 +149,10 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/system/crontab', '2', null, null, null, '1482820123', '1482820123'],
             ['/system/business', '2', null, null, null, '1482820123', '1482820123'],
             
+            //项目管理
+            ['/group/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/group/index', '2', null, null, null, '1482820123', '1482820123'],
+            
             //用户管理
             ['/user/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/user/user-list', '2', null, null, null, '1482820123', '1482820123'],
@@ -221,6 +225,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             
             ['系统设置', '2', '系统设置', null, null, '1482820123', '1482820123'],
             ['账号信息', '2', '账号信息', null, null, '1482820123', '1482820123'],
+            ['项目管理', '2', '项目管理', null, null, '1482820123', '1482820123'],
                        
 //            ['业务中心', '2', '业务中心', null, null, '1482820123', '1482820123'],
             ['用户管理', '2', '用户管理', null, null, '1482820123', '1482820123'], 
@@ -261,6 +266,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             
             ['系统设置', '/system/*'], 
             ['superadmin', '系统设置'],
+            
+            ['项目管理', '/group/*'], 
+            ['superadmin', '项目管理'],
             
             ['用户管理', '/user/*'],
             ['pm', '用户管理'],
