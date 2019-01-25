@@ -23,7 +23,7 @@ use project\models\Group;
             ?>
             <div class="box-body">
                 
-                <?= $form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['prompt' => '','disabled'=> $model->id?Meal::get_corporationmeal_exist($model->id):false]) ?>
+                <?= $form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['disabled'=> $model->id?Meal::get_corporationmeal_exist($model->id):false]) ?>
                 
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

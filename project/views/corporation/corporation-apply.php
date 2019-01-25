@@ -25,7 +25,7 @@ use project\models\Meal;
         
         <?= $form->field($model, 'huawei_account')->textInput() ?>
         
-        <?= $form->field($model, 'intent_set')->dropDownList(Meal::get_meal(), ['prompt' => '']) ?>
+        <?= $form->field($model, 'intent_set')->dropDownList(Meal::get_meal(Meal::STAT_ACTIVE,$model->group_id), ['prompt' => '']) ?>
 
         <?= $form->field($model, 'intent_number')->textInput() ?>
                      

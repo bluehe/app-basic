@@ -14,6 +14,9 @@ use project\models\Industry;
 use project\models\CorporationMeal;
 use project\models\Meal;
 use kartik\daterange\DateRangePicker;
+use project\models\UserGroup;
+use project\models\Group;
+
 /* @var $this yii\web\View */
 /* @var $searchModel rky\models\CorporationSearch */
 
@@ -82,21 +85,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     [
-                    'attribute' => 'base_company_name',
-                    'value' =>
-                        function($model) {
-                            return Html::a($model->base_company_name, ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'corporation-view',]);
+                        'attribute' => 'group_id',
+                        'value' =>function($model) {
+                            return $model->group_id?$model->group->title:$model->group_id;   //主要通过此种方式实现
                         },
-                    'format' => 'raw',
+                        'format' => 'raw',
+                        'filter' => Group::get_user_group(Yii::$app->user->identity->id), 
+                        'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
                     ],
                     [
-                            'attribute' => 'base_bd',
-                            'value' =>
+                        'attribute' => 'base_company_name',
+                        'value' =>
                             function($model) {
-                                return '<span class="bd-list" data-toggle="modal" data-target="#list-modal" style="cursor: pointer">'.($model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'<span class="not-set" style="cursor: pointer">(未设置)</span>').'</span>';
+                                return Html::a($model->base_company_name, ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'corporation-view',]);
                             },
-                            'format'=>'raw',
-                            'filter' => User::get_bd(null, Corporation::get_existbd()), 
+                        'format' => 'raw',
+                    ],
+                    [
+                        'attribute' => 'base_bd',
+                        'value' =>
+                        function($model) {
+                            return '<span class="bd-list" data-toggle="modal" data-target="#list-modal" style="cursor: pointer">'.($model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'<span class="not-set" style="cursor: pointer">(未设置)</span>').'</span>';
+                        },
+                        'format'=>'raw',
+                        'filter' => User::get_bd(null, Corporation::get_existbd()), 
                     ],
                     ['attribute' =>'huawei_account','visible'=> is_array($column)&&in_array('huawei_account',$column),],  
                     [

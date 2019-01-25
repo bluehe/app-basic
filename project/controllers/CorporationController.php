@@ -21,6 +21,8 @@ use project\models\User;
 use project\models\Industry;
 use project\models\Meal;
 use project\models\System;
+use project\models\UserGroup;
+use yii\helpers\Html;
 
 
 /**
@@ -62,12 +64,14 @@ class CorporationController extends Controller
             'corporation-delete' => [
                 'class' => DeleteAction::className(),
                 'modelClass' => Corporation::className(),
+                'auth_group'=>true,
             ],
             'corporation-view' => [
                 'class' => ViewAction::className(),
                 'modelClass' => Corporation::className(),
                 'viewFile'=>'corporation-view',
                 'ajax'=>true,
+                'auth_group'=>true,
             ],
         ];
     }
@@ -130,7 +134,7 @@ class CorporationController extends Controller
     
     public function actionCorporationUpdate($id) {
         $model = Corporation::findOne($id);
-        //$model->scenario='industry';
+        //$model->scenario='industry';               
         if($model !== null&&Yii::$app->user->can('企业修改',['id'=>$id])){
             $model->base_industry =$old_industry= CorporationIndustry::get_corporation_industryid($model->id);
             $allocate = in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])?CorporationMeal::get_allocate($model->id):null;
@@ -259,6 +263,7 @@ class CorporationController extends Controller
             $model = new CorporationMeal();
             $model->loadDefaultValues();
             $model->corporation_id=$id;
+            $model->group_id=$corporation->group_id;
             $model->meal_id=$corporation->intent_set;
             $model->number=$corporation->intent_number;
             $model->huawei_account=$corporation->huawei_account;
@@ -311,7 +316,8 @@ class CorporationController extends Controller
                 return $this->redirect(Yii::$app->request->referrer);
             }
             return $this->renderAjax('corporation-allocate', [
-                    'model'=>$model
+                    'model'=>$model,
+                    'corporation'=>$corporation
             ]);
         
         }else{
@@ -327,6 +333,22 @@ class CorporationController extends Controller
         return $this->renderAjax('corporation-bd', [
                     'model' => $model,
         ]);     
+        
+    }
+    
+     public function actionGroupBd($id,$bd_id=null) {
+
+        $user = UserGroup::get_group_userid($id);
+        
+        $bds = User::get_bd(User::STATUS_ACTIVE, $user);
+
+        $str = Html::tag('option', '', array('value' => ''));
+        if ($user&&$bds) {   
+            foreach ($bds as $value => $name) {
+                $str .= Html::tag('option', Html::encode($name), array('value' => $value,'selected'=>$value==$bd_id));
+            }
+        }
+        return $str;  
         
     }
     
@@ -437,7 +459,7 @@ class CorporationController extends Controller
         
 
         $model = Corporation::findOne($id);
-        if(Yii::$app->user->can('企业修改',['id'=>$id])&&$model!=null){
+        if($model!=null&&Yii::$app->user->can('企业修改',['id'=>$id])){
             $model->stat=$stat;
             if($model->save()){
                 Yii::$app->session->setFlash('success', '状态更改成功。');
@@ -524,7 +546,8 @@ class CorporationController extends Controller
                 ->setCellValue( 'AA1', $searchModel->getAttributeLabel('develop_language'))
                 ->setCellValue( 'AB1', $searchModel->getAttributeLabel('develop_IDE'))
                 ->setCellValue( 'AC1', $searchModel->getAttributeLabel('develop_current_situation'))
-                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'));
+                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'))
+                ->setCellValue( 'AE1', $searchModel->getAttributeLabel('group_id'));
         $end_time= microtime(true);
         if($end_time-$start_time<1){
             sleep(1);
@@ -583,7 +606,8 @@ class CorporationController extends Controller
                 ->setCellValue( 'AA1', $searchModel->getAttributeLabel('develop_language'))
                 ->setCellValue( 'AB1', $searchModel->getAttributeLabel('develop_IDE'))
                 ->setCellValue( 'AC1', $searchModel->getAttributeLabel('develop_current_situation'))
-                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'));
+                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'))
+                ->setCellValue( 'AE1', $searchModel->getAttributeLabel('group_id'));
         
         foreach($models as $key=>$model){
             $k=$key+2;
@@ -616,7 +640,8 @@ class CorporationController extends Controller
                     ->setCellValue( 'AA'.$k, implode(',', Parameter::get_para_value('develop_language',explode(',',$model->develop_language))))
                     ->setCellValue( 'AB'.$k, implode(',', Parameter::get_para_value('develop_IDE',$model->develop_IDE)))
                     ->setCellValue( 'AC'.$k, $model->develop_current_situation)
-                    ->setCellValue( 'AD'.$k, $model->develop_weakness);
+                    ->setCellValue( 'AD'.$k, $model->develop_weakness)
+                    ->setCellValue( 'AE'.$k, $model->group_id?$model->group->title:$model->group_id);
             $line_stat= implode(',', Corporation::get_stat_list($model->stat));
             //状态选择
             $objSheet->getCell('C'.$k)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  

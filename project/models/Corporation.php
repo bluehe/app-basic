@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
  * This is the model class for table "corporation".
  *
  * @property int $id ID
+ * @property int $group_id 项目
  * @property string $base_company_name 公司名称
  * @property int $base_company_scale 企业规模
  * @property string $base_registered_capital 注册资金
@@ -85,13 +86,13 @@ class Corporation extends \yii\db\ActiveRecord
         return [
             [['base_company_name', 'huawei_account'], 'trim'],
             [['base_company_name','huawei_account'], 'unique', 'message' => '{attribute}已经存在'],
-            [['base_company_name','stat'], 'required'],
+            [['group_id','base_company_name','stat'], 'required'],
             [['base_industry'], 'required','on'=>'industry'],
             [['huawei_account','intent_set','intent_number'],'requiredByStat_r','skipOnEmpty' => false],
             [['huawei_account'],'requiredByStat_a','skipOnEmpty' => false],
             [['base_bd'],'requiredByStat_b','skipOnEmpty' => false],
             [['base_registered_time','base_industry'], 'safe'],
-            [['base_bd','base_company_scale', 'stat', 'intent_set','intent_number', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
+            [['group_id','base_bd','base_company_scale', 'stat', 'intent_set','intent_number', 'contact_park', 'develop_scale', 'created_at', 'updated_at'], 'integer'],
             [['base_registered_capital', 'base_last_income','intent_amount'], 'number'],
             [['base_main_business', 'note', 'develop_current_situation', 'develop_weakness'], 'string'],
             [['base_company_name', 'huawei_account', 'contact_business_tel', 'contact_technology_tel'], 'string', 'max' => 32],
@@ -101,6 +102,7 @@ class Corporation extends \yii\db\ActiveRecord
             [['develop_pattern', 'develop_scenario', 'develop_science', 'develop_language', 'develop_IDE'], 'safe'],
             [['base_bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['base_bd' => 'id']],
             [['intent_set'], 'exist', 'skipOnError' => true, 'targetClass' => Meal::className(), 'targetAttribute' => ['intent_set' => 'id']],
+            [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
             [['stat'], 'default', 'value' => self::STAT_CREATED],
         ];
     }
@@ -229,6 +231,7 @@ class Corporation extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'group_id' => '项目',
             'base_company_name' => '公司名称',
             'base_bd' => '客户经理',
             'base_industry'=>'行业',
@@ -327,6 +330,14 @@ class Corporation extends \yii\db\ActiveRecord
     public function getBaseBd()
     {
         return $this->hasOne(User::className(), ['id' => 'base_bd']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroup()
+    {
+        return $this->hasOne(Group::className(), ['id' => 'group_id']);
     }
     
     /**

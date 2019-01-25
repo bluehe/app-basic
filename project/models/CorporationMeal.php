@@ -43,7 +43,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
     {
         return [
             [['corporation_id', 'start_time','huawei_account','stat'], 'required'],
-            [['corporation_id', 'meal_id', 'number', 'bd', 'user_id', 'created_at','devcloud_count','stat'], 'integer'],
+            [['group_id','corporation_id', 'meal_id', 'number', 'bd', 'user_id', 'created_at','devcloud_count','stat'], 'integer'],
             [['devcloud_amount','cloud_amount','amount'], 'number'],
             [['devcloud_count','devcloud_amount','cloud_amount'],'requiredByNoSetid','skipOnEmpty' => false],
             [['number'],'requiredBySetid','skipOnEmpty' => false],
@@ -53,6 +53,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
             [['meal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Meal::className(), 'targetAttribute' => ['meal_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['bd' => 'id']],
+            [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
             [['number'], 'default', 'value' => 1],
             [['end_time'],'safe'],
         ];
@@ -119,6 +120,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'corporation_id' => '企业',
+            'group_id' => '项目',
             'meal_id' => '下拨套餐',
             'start_time' => '下拨日期',
             'end_time' => '到期时间',
@@ -181,6 +183,14 @@ class CorporationMeal extends \yii\db\ActiveRecord
     public function getMeal()
     {
         return $this->hasOne(Meal::className(), ['id' => 'meal_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroup()
+    {
+        return $this->hasOne(Group::className(), ['id' => 'group_id']);
     }
 
     /**

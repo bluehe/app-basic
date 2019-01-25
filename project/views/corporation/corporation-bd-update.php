@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use project\models\User;
 use kartik\widgets\DatePicker;
 use project\models\CorporationBd;
+use project\models\UserGroup;
 
 /* @var $this yii\web\View */
 /* @var $model project\models\Corporation */
@@ -25,7 +26,7 @@ use project\models\CorporationBd;
             ]); ?>
 
         
-        <?= $form->field($model, 'bd_id')->dropDownList(User::get_bd(User::STATUS_ACTIVE), ['prompt' => '']) ?>
+        <?= $form->field($model, 'bd_id')->dropDownList(User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid($model->corporation->group_id)), ['prompt' => '']) ?>
 
         <?= $form->field($model, 'start_time')->widget(DatePicker::classname(), [
                 'options' => ['placeholder' => '','autocomplete'=>'off'],

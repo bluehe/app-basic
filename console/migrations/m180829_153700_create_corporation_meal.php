@@ -15,6 +15,7 @@ class m180829_153700_create_corporation_meal extends Migration {
         $corporationTable = '{{%corporation}}';
         $mealTable = '{{%meal}}';
         $userTable = '{{%user}}';
+        $groupTable = '{{%group}}';
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
@@ -23,6 +24,7 @@ class m180829_153700_create_corporation_meal extends Migration {
         $this->createTable($table, [
             'id' => $this->primaryKey(),
             'corporation_id' => $this->integer()->notNull(),
+            'group_id' => $this->integer()->comment('项目'),
             'meal_id'=>$this->integer(),
             'start_time' => $this->integer()->notNull(),
             'end_time' => $this->integer()->notNull(),
@@ -38,6 +40,7 @@ class m180829_153700_create_corporation_meal extends Migration {
             'created_at' => $this->integer(),
             'stat' => $this->smallInteger()->notNull()->defaultValue(1)->comment('类型'),
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
+            "FOREIGN KEY ([[group_id]]) REFERENCES {$groupTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[meal_id]]) REFERENCES {$mealTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[user_id]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[bd]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",

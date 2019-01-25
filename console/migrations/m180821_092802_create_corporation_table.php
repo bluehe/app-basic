@@ -1,7 +1,6 @@
 <?php
 
 use yii\db\Migration;
-use mdm\admin\components\Configs;
 
 /**
  * Handles the creation of table `company_new`.
@@ -13,8 +12,9 @@ class m180821_092802_create_corporation_table extends Migration {
      */
     public function up() {
         $table = '{{%corporation}}';
-        $userTable = Configs::instance()->userTable;
+        $userTable = '{{%user}}';
         $mealTable = '{{%meal}}';
+        $groupTable = '{{%group}}';
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
@@ -22,6 +22,7 @@ class m180821_092802_create_corporation_table extends Migration {
         }
         $this->createTable($table, [
             'id' => $this->primaryKey()->comment('ID'),
+            'group_id' => $this->integer()->comment('项目'),
             'base_company_name' => $this->string(32)->comment('公司名称'),
             'base_bd' => $this->integer()->comment('客户经理'),
             //'base_industry' => $this->string()->comment('行业'),
@@ -61,7 +62,7 @@ class m180821_092802_create_corporation_table extends Migration {
 
             'created_at' => $this->integer()->comment('创建时间'),
             'updated_at' => $this->integer()->comment('更新时间'),
-            
+            "FOREIGN KEY ([[group_id]]) REFERENCES {$groupTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[base_bd]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[intent_set]]) REFERENCES {$mealTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
                 ], $tableOptions);

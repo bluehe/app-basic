@@ -11,6 +11,7 @@ namespace project\actions;
 
 use Yii;
 use yii\web\BadRequestHttpException;
+use project\models\UserGroup;
 
 class ViewAction extends \yii\base\Action
 {
@@ -23,6 +24,8 @@ class ViewAction extends \yii\base\Action
     public $viewFile = 'view';
     
     public $ajax = false;
+    
+    public $auth_group=false;//认证用户组权限
 
     /**
      * view详情页
@@ -37,6 +40,12 @@ class ViewAction extends \yii\base\Action
         $model = call_user_func([$this->modelClass, 'findOne'], $id);
         if (! $model) throw new BadRequestHttpException("Cannot find model by $id");
         $model->setScenario( $this->scenario );
+        
+        if($this->auth_group&&!UserGroup::auth_group($model->group_id)){
+            Yii::$app->getSession()->setFlash('error', '权限不足');
+            return $this->controller->redirect(Yii::$app->request->referrer);
+        }
+        
         if($this->ajax){
             return $this->controller->renderAjax($this->viewFile, [
                 'model' => $model,

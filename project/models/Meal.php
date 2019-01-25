@@ -41,6 +41,7 @@ class Meal extends \yii\db\ActiveRecord
             [['amount','cloud_amount','devcloud_amount'], 'number'],
             [['group_id','order_sort','devcloud_count', 'stat'], 'integer'],
             [['name', 'region'], 'string', 'max' => 32],
+            [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
             [['order_sort'], 'default','value'=>10],
             ['stat', 'default', 'value' => self::STAT_ACTIVE],
             ['stat', 'in', 'range' => [self::STAT_ACTIVE, self::STAT_DISABLED]],
@@ -115,8 +116,8 @@ class Meal extends \yii\db\ActiveRecord
         return $stat;
     }
     
-    public static function get_meal($stat=self::STAT_ACTIVE) {
-        $meals = static::find()->filterWhere(['stat'=> $stat])->orderBy(['order_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();
+    public static function get_meal($stat=self::STAT_ACTIVE,$group='') {
+        $meals = static::find()->filterWhere(['stat'=> $stat,'group_id'=>$group])->orderBy(['order_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();
         return ArrayHelper::map($meals, 'id', 'name');
     }
     

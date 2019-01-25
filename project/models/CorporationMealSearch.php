@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use project\models\CorporationMeal;
+use project\models\UserGroup;
 
 /**
  * CorporationMealSearch represents the model behind the search form of `project\models\CorporationMeal`.
@@ -18,7 +19,7 @@ class CorporationMealSearch extends CorporationMeal
     public function rules()
     {
         return [
-            [['id','meal_id', 'number', 'bd', 'user_id', 'created_at','stat'], 'integer'],
+            [['id','group_id','meal_id', 'number', 'bd', 'user_id', 'created_at','stat'], 'integer'],
             [['amount'], 'number'],
             [['corporation_id','huawei_account', 'start_time', 'end_time','annual'], 'safe'],
         ];
@@ -42,7 +43,7 @@ class CorporationMealSearch extends CorporationMeal
      */
     public function search($params,$pageSize = '')
     {
-        $query = CorporationMeal::find()->joinWith(['corporation','bd0','meal']);
+        $query = CorporationMeal::find()->joinWith(['corporation','bd0','meal','group']);
 
         // add conditions that should always apply here
 
@@ -79,7 +80,8 @@ class CorporationMealSearch extends CorporationMeal
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,           
+            'id' => $this->id,
+            CorporationMeal::tableName().'.group_id' => $this->group_id,
             'meal_id' => $this->meal_id,
             'number' => $this->number,
             'amount' => $this->amount,
@@ -108,6 +110,8 @@ class CorporationMealSearch extends CorporationMeal
             $query->andFilterWhere(['>=', 'end_time', $start])->andFilterWhere(['<=', 'end_time', $end]);
         }
 
+        $query->andWhere(['or',[CorporationMeal::tableName().'.group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],[CorporationMeal::tableName().'.group_id'=>NULL]]);
+        
         return $dataProvider;
     }
 }

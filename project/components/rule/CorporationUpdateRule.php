@@ -6,6 +6,7 @@ use Yii;
 use yii\rbac\Rule;
 use project\models\Corporation;
 use project\models\User;
+use project\models\UserGroup;
 
 class CorporationUpdateRule extends Rule {
 
@@ -26,7 +27,10 @@ class CorporationUpdateRule extends Rule {
             return false;
         }
         
-
+        if(!UserGroup::auth_group($model->group_id)){
+            return false;
+        }
+        
         $auth = Yii::$app->authManager;
         $Role_admin=$auth->getRole('superadmin');
         $uid = Yii::$app->user->identity->id;

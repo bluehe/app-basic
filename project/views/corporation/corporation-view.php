@@ -28,6 +28,7 @@ use project\models\User;
             <div class="tab-content">
                 <div class="tab-pane active" id="base">
                     <dl class="dl-horizontal">
+                    <dt><?= $model->getAttributeLabel('group_id') ?></dt><dd><?= $model->group_id?$model->group->title:$model->group_id ?></dd>
                     <dt><?= $model->getAttributeLabel('base_company_name') ?></dt><dd><?= $model->base_company_name ?></dd>
                     <dt><?= $model->getAttributeLabel('base_bd') ?></dt><dd><?= $model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'' ?></dd>
                     <dt><?= $model->getAttributeLabel('base_industry') ?></dt><dd><?= $model->get_industry($model->id) ?></dd>                  
@@ -54,6 +55,7 @@ use project\models\User;
                 <?php if(in_array($model->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN,Corporation::STAT_OVERDUE])&&$allocate=CorporationMeal::get_allocate($model->id)):?>
                 <div class="tab-pane" id="allocate">
                 <dl class="dl-horizontal">
+                    <dt><?= $allocate->getAttributeLabel('group_id') ?></dt><dd><?= $allocate->group_id?$allocate->group->title:$allocate->group_id ?></dd>
                     <dt><?= $allocate->getAttributeLabel('huawei_account') ?></dt><dd><?= $allocate->huawei_account ?></dd>
                     <dt><?= $allocate->getAttributeLabel('bd') ?></dt><dd><?= $allocate->bd?User::get_nickname($allocate->bd):'<span class="not-set">系统</span>' ?></dd>
                     <dt><?= $allocate->getAttributeLabel('meal_id') ?></dt><dd><?= $allocate->meal_id?$allocate->meal->name:'其他' ?></dd>

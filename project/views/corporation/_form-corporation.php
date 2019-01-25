@@ -10,6 +10,9 @@ use project\models\Parameter;
 use project\models\Corporation;
 use project\models\Meal;
 use project\models\CorporationMeal;
+use project\models\Group;
+use yii\helpers\Url;
+use project\models\UserGroup;
 
 /* @var $this yii\web\View */
 /* @var $model rky\models\Corporation */
@@ -38,9 +41,12 @@ use project\models\CorporationMeal;
                  </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="base">
+                    
+                <?= $form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['prompt' => '']) ?>
+                    
                 <?= $form->field($model, 'base_company_name')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'base_bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE), ['prompt' => '']) ?>
+                <?= $form->field($model, 'base_bd')->dropDownList($model->group_id?User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid($model->group_id)):[], ['prompt' => '']) ?>
 
                 <?= $form->field($model, 'base_industry')->widget(Select2::classname(), ['data' => Industry::get_industry_id(),'options' => ['prompt' => '','multiple'=>false],'showToggleAll'=>false]); ?>
 
@@ -75,7 +81,7 @@ use project\models\CorporationMeal;
                 <?php if($allocate){?>
                 <?= $form->field($allocate, 'huawei_account')->textInput(['maxlength' => true]) ?>
                     
-                <?= $form->field($allocate, 'bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE), ['prompt' => '']) ?>
+                <?= $form->field($allocate, 'bd')->dropDownList($model->group_id?User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid($allocate->group_id)):[], ['prompt' => '']) ?>
                     
                 <?= $form->field($allocate, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
 
@@ -223,6 +229,15 @@ $this->registerCss($cssString);
         
         $('#corporation-stat').change(function(){
            change_stat();
+        });
+        
+        $('#corporation-group_id').change(function(){
+            var v=$('#corporation-group_id').val();
+            if(v){
+                $.get("<?= Url::toRoute(['group-bd','bd_id'=>$model->base_bd]) ?>", {id: v}, function (data) {$("select#corporation-base_bd").html(data);});
+            }else{
+                $("select#corporation-base_bd").html('');
+            }
         })
     });
 <?php $this->endBlock() ?>

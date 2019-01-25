@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'group_id',
                         'value' =>function($model) {
-                            return $model->group->title;   //主要通过此种方式实现
+                            return $model->group_id?$model->group->title:$model->group_id;   //主要通过此种方式实现
                         },
                         'format' => 'raw',
                         'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,

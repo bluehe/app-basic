@@ -21,7 +21,7 @@ class CorporationSearch extends Corporation
     public function rules()
     {
         return [
-            [['id','base_bd', 'stat', 'intent_set', 'contact_park', 'created_at', 'updated_at'], 'integer'],
+            [['id','group_id','base_bd', 'stat', 'intent_set', 'contact_park', 'created_at', 'updated_at'], 'integer'],
             [['base_company_name', 'base_main_business', 'huawei_account', 'note', 'contact_address', 'contact_location', 'contact_business_name', 'contact_business_job', 'contact_business_tel', 'contact_technology_name', 'contact_technology_job', 'contact_technology_tel', 'develop_pattern', 'develop_scenario', 'develop_science', 'develop_language', 'develop_IDE', 'develop_current_situation', 'develop_weakness','base_industry','base_bd', 'base_registered_capital','base_last_income','base_company_scale','intent_number','intent_amount', 'develop_scale', 'base_registered_time'], 'safe'],
         ];
     }
@@ -44,7 +44,7 @@ class CorporationSearch extends Corporation
      */
     public function search($params,$pageSize = '')
     {
-        $query = Corporation::find()->joinWith(['baseBd']);
+        $query = Corporation::find()->joinWith(['baseBd','group']);
 
         // add conditions that should always apply here
 
@@ -79,6 +79,7 @@ class CorporationSearch extends Corporation
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'group_id' => $this->group_id,
             'base_bd' => $this->base_bd,
             'stat' => $this->stat,
             'intent_set' => $this->intent_set,
@@ -152,6 +153,8 @@ class CorporationSearch extends Corporation
             $end = strtotime($range[1]) + 86399;
             $query->andFilterWhere(['>=', 'base_registered_time', $start])->andFilterWhere(['<=', 'base_registered_time', $end]);
         }
+        
+        $query->andWhere(['or',['group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],['group_id'=>NULL]]);
 
         return $dataProvider;
     }
