@@ -23,6 +23,7 @@ use project\models\Meal;
 use project\models\System;
 use project\models\UserGroup;
 use yii\helpers\Html;
+use project\models\Group;
 
 
 /**
@@ -699,7 +700,8 @@ class CorporationController extends Controller
             
             $datas = ExcelHelper::execute_array_label($dataArray);
                 
-            $bd=User::get_bd();
+            $group = Group::get_user_group(Yii::$app->user->identity->id);
+            $bd=User::get_bd(User::STATUS_ACTIVE, UserGroup::get_group_userid(array_keys($group)));
             $base_industry= Industry::getIndustryName();
             $intent_set= Meal::get_meal();
             $contact_park=Parameter::get_type('contact_park');
@@ -708,7 +710,7 @@ class CorporationController extends Controller
             $develop_science=Parameter::get_type('develop_science');
             $develop_language=Parameter::get_type('develop_language');
             $develop_IDE=Parameter::get_type('develop_IDE');
-                
+                           
             $num=['add'=>0,'update'=>0,'fail'=>0];
                
             $notice_error=[];
@@ -744,13 +746,22 @@ class CorporationController extends Controller
                 'develop_IDE'=>$searchModel->getAttributeLabel('develop_IDE'),
                 'develop_current_situation'=>$searchModel->getAttributeLabel('develop_current_situation'),
                 'develop_weakness'=>$searchModel->getAttributeLabel('develop_weakness'),
+                'group_id'=>$searchModel->getAttributeLabel('group_id'),
                 ];
             
             //项目处理
+            if(!$group){
+                Yii::$app->session->setFlash('error', '没有权限');
+                return false;
+            }
             if(isset($datas[0])){
                 $keys= array_filter(array_keys($datas[0]));
                 if(!in_array($index['base_company_name'], $keys)){
                     Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['base_company_name'].'>>字段');
+                    return false;
+                }
+                if(count($group)>1&&!in_array($index['group_id'], $keys)){
+                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['group_id'].'>>字段');
                     return false;
                 }
                
@@ -783,12 +794,26 @@ class CorporationController extends Controller
                         continue;
                     }
                     
+                    if(count($group)>1){
+                        if(isset($data[$index['group_id']])&&array_search(trim($data[$index['group_id']]), $group)){
+                            $corporation->group_id= array_search(trim($data[$index['group_id']]), $group);
+                        }else{
+                            continue;
+                        }
+                    }else{
+                        if(!isset($data[$index['group_id']])||(isset($data[$index['group_id']])&&array_search(trim($data[$index['group_id']]), $group))){
+                            $corporation->group_id= key($group);          
+                        }else{
+                            continue;
+                        }
+                    }
+                                      
 //                    if(isset($data[$index['stat']])&&array_search(trim($data[$index['stat']]), $stat)){
 //                        $corporation->stat= array_search(trim($data[$index['stat']]), $stat);
 //                    }
                     if(isset($data[$index['base_bd']])&&array_search(trim($data[$index['base_bd']]), $bd)){
                         $corporation->base_bd= array_search(trim($data[$index['base_bd']]), $bd);
-                    }
+                    }                   
                     if(isset($data[$index['huawei_account']])){
                         $corporation->huawei_account= trim($data[$index['huawei_account']]);
                     }
@@ -957,110 +982,5 @@ class CorporationController extends Controller
         return true;
         
     }
-    
-//    public function actionCorporationImportTest() {
-//        //判断是否Ajax
-//        if (Yii::$app->request->isAjax) {
-//
-//            if (empty($_FILES['files'])) {
-//                $postMaxSize = ini_get('post_max_size');
-//                $fileMaxSize = ini_get('upload_max_filesize');
-//                $displayMaxSize = $postMaxSize < $fileMaxSize ? $postMaxSize : $fileMaxSize;
-//
-//                return json_encode(['error' => '没有文件上传,文件最大为' . $displayMaxSize], JSON_UNESCAPED_UNICODE);
-//                // or you can throw an exception
-//            }
-//
-//
-////            $start_time= microtime(true);
-//
-//            $files = $_FILES['files'];  
-//            
-//            $fileName= $files['tmp_name'][0];
-//            //$fileName= Yii::getAlias('@webroot').'/excel/1.xlsx';
-//            $format = \PHPExcel_IOFactory::identify($fileName);
-//            $objectreader = \PHPExcel_IOFactory::createReader($format);
-//            $objectPhpExcel = $objectreader->load($fileName);
-//            
-//            $dataArray = $objectPhpExcel->getActiveSheet()->toArray(null, true, true, true);
-//            
-//            $datas = ExcelHelper::execute_array_label($dataArray);
-//                
-//            $bd=User::get_bd();
-//           
-//            $stat= Corporation::$List['stat'];          
-//                
-//            $num=['add'=>0,'update'=>0,'fail'=>0];
-//               
-//            $notice_error=[];    
-//            foreach ($datas as $key=>$data) {
-////                    Yii::$app->session->setFlash('success', json_encode($datas,256));
-////                    return true;
-//                if($key==0){
-//                    //项目处理
-//                    $keys= array_filter(array_keys($data));
-//                    if(!in_array('标题', $keys)){
-//                        Yii::$app->session->setFlash('error', '文件首行不存在<<标题>>字段');
-//                        break;
-//                    }
-//                }                            
-//                //数据处理
-//                
-//                $data= array_filter($data);//去除0值和空值
-//                   
-//                if(isset($data['标题'])){
-//                    $company = Corporation::findOne(['base_company_name'=>trim($data['标题'])]);
-//
-//                    if($company===null){
-//                        //不存在
-//                        $num_key='add';
-//                        $company=new Corporation();
-//                        $company->base_company_name=trim($data['标题']);
-//                    }else{
-//                        if($company->stat== Corporation::STAT_ALLOCATE){
-//                            continue;
-//                        }
-//                        $num_key='update';
-//                    }
-//                            
-//                    if(isset($data['处理人'])&&array_search(trim($data['处理人']), $bd)){
-//                        $company->base_bd= array_search(trim($data['处理人']), $bd);
-//                    }
-//                    if(isset($data['状态'])&&array_search(trim($data['状态']), $stat)){
-//                        $company->stat= array_search(trim($data['状态']), $stat);
-//                    }
-//                    
-//                    if($company->save(false)){
-//                                             
-//                        $num[$num_key]++;
-//                    }else{
-//                        $errors=$company->getErrors();
-//                   
-//                        if($errors){
-//                            $error=[];
-//                            foreach($errors as $e){
-//                                $error[]=$e[0];
-//                            }
-//                            $notice_error[]=$data['标题']. ' {'. implode(' ', $error).'}';
-//                        }
-//                        $num['fail']++;
-//                    }
-//                }else{
-//                    $num['fail']++;
-//                }
-//                                    
-//            }
-//            if($notice_error){
-//                Yii::$app->session->setFlash('error', $notice_error);
-//            }
-//            Yii::$app->session->setFlash('warning', '新增'.$num['add'].'家，更新'.$num['update'].'家，失败'.$num['fail'].'家。');
-//                  
-//         
-//        } else {
-//            Yii::$app->session->setFlash('error', '上传失败。');
-//        }
-//        return true;
-//        
-//    }
 
 }
