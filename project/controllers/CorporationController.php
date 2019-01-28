@@ -547,8 +547,12 @@ class CorporationController extends Controller
                 ->setCellValue( 'AA1', $searchModel->getAttributeLabel('develop_language'))
                 ->setCellValue( 'AB1', $searchModel->getAttributeLabel('develop_IDE'))
                 ->setCellValue( 'AC1', $searchModel->getAttributeLabel('develop_current_situation'))
-                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'))
-                ->setCellValue( 'AE1', $searchModel->getAttributeLabel('group_id'));
+                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'));
+        
+        if(count(Group::get_user_group(Yii::$app->user->identity->id))>1){
+            $objSheet->setCellValue( 'AE1', $searchModel->getAttributeLabel('group_id'));
+        }
+        
         $end_time= microtime(true);
         if($end_time-$start_time<1){
             sleep(1);
@@ -607,8 +611,13 @@ class CorporationController extends Controller
                 ->setCellValue( 'AA1', $searchModel->getAttributeLabel('develop_language'))
                 ->setCellValue( 'AB1', $searchModel->getAttributeLabel('develop_IDE'))
                 ->setCellValue( 'AC1', $searchModel->getAttributeLabel('develop_current_situation'))
-                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'))
-                ->setCellValue( 'AE1', $searchModel->getAttributeLabel('group_id'));
+                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'));
+               
+        $group_count=count(Group::get_user_group(Yii::$app->user->identity->id));
+        
+        if($group_count>1){
+            $objSheet->setCellValue( 'AE1', $searchModel->getAttributeLabel('group_id'));
+        }
         
         foreach($models as $key=>$model){
             $k=$key+2;
@@ -641,8 +650,11 @@ class CorporationController extends Controller
                     ->setCellValue( 'AA'.$k, implode(',', Parameter::get_para_value('develop_language',explode(',',$model->develop_language))))
                     ->setCellValue( 'AB'.$k, implode(',', Parameter::get_para_value('develop_IDE',$model->develop_IDE)))
                     ->setCellValue( 'AC'.$k, $model->develop_current_situation)
-                    ->setCellValue( 'AD'.$k, $model->develop_weakness)
-                    ->setCellValue( 'AE'.$k, $model->group_id?$model->group->title:$model->group_id);
+                    ->setCellValue( 'AD'.$k, $model->develop_weakness);
+            
+            if($group_count>1){
+                $objSheet->setCellValue( 'AE'.$k, $model->group_id?$model->group->title:$model->group_id);
+            }
             $line_stat= implode(',', Corporation::get_stat_list($model->stat));
             //状态选择
             $objSheet->getCell('C'.$k)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
@@ -703,7 +715,7 @@ class CorporationController extends Controller
             $group = Group::get_user_group(Yii::$app->user->identity->id);
             $bd=User::get_bd(User::STATUS_ACTIVE, UserGroup::get_group_userid(array_keys($group)));
             $base_industry= Industry::getIndustryName();
-            $intent_set= Meal::get_meal();
+            $intent_set= Meal::get_meal(Meal::STAT_ACTIVE,array_keys($group));
             $contact_park=Parameter::get_type('contact_park');
             $develop_pattern=Parameter::get_type('develop_pattern');
             $develop_scenario=Parameter::get_type('develop_scenario');

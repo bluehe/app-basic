@@ -79,8 +79,9 @@ class AllocateController extends Controller {
         $format = \PHPExcel_IOFactory::identify($fileName);
         $objectreader = \PHPExcel_IOFactory::createReader($format);
         $objectPhpExcel = $objectreader->load($fileName);
+        $objSheet = $objectPhpExcel->getActiveSheet();
         
-        $objectPhpExcel->getActiveSheet()->setCellValue( 'A1', '序号')
+        $objSheet->setCellValue( 'A1', '序号')
                 ->setCellValue( 'B1', $searchModel->getAttributeLabel('corporation_id'))
                 ->setCellValue( 'C1', $searchModel->getAttributeLabel('huawei_account'))
                 ->setCellValue( 'D1', $searchModel->getAttributeLabel('bd'))
@@ -94,10 +95,16 @@ class AllocateController extends Controller {
                 ->setCellValue( 'L1', $searchModel->getAttributeLabel('devcloud_amount'))
                 ->setCellValue( 'M1', $searchModel->getAttributeLabel('cloud_amount'))
                 ->setCellValue( 'N1', $searchModel->getAttributeLabel('stat'));
+        
+        $group_count=count(Group::get_user_group(Yii::$app->user->identity->id));
+        
+        if($group_count>1){
+            $objSheet->setCellValue( 'O1', $searchModel->getAttributeLabel('group_id'));
+        }
 
         foreach($models as $key=>$model){
             $k=$key+2;
-            $objectPhpExcel->getActiveSheet()->setCellValue( 'A'.$k, $key+1)
+            $objSheet->setCellValue( 'A'.$k, $key+1)
                     ->setCellValue( 'B'.$k, $model->corporation->base_company_name)
                     ->setCellValue( 'C'.$k, $model->huawei_account)
                     ->setCellValue( 'D'.$k, $model->bd?($model->bd0->nickname?$model->bd0->nickname:$model->bd0->username):'')
@@ -111,6 +118,9 @@ class AllocateController extends Controller {
                     ->setCellValue( 'L'.$k, $model->devcloud_amount)
                     ->setCellValue( 'M'.$k, $model->cloud_amount)
                     ->setCellValue( 'N'.$k, $model->Stat);
+            if($group_count>1){
+                $objSheet->setCellValue( 'O'.$k, $model->group_id?$model->group->title:$model->group_id);
+            }
                     
         }
         
@@ -150,6 +160,10 @@ class AllocateController extends Controller {
                 ->setCellValue( 'K1', $searchModel->getAttributeLabel('devcloud_count'))
                 ->setCellValue( 'L1', $searchModel->getAttributeLabel('devcloud_amount'))
                 ->setCellValue( 'M1', $searchModel->getAttributeLabel('cloud_amount'));
+        
+        if(count(Group::get_user_group(Yii::$app->user->identity->id))>1){
+            $objectPhpExcel->getActiveSheet()->setCellValue( 'N1', $searchModel->getAttributeLabel('group_id'));
+        }
         
         $end_time= microtime(true);
         if($end_time-$start_time<1){
@@ -193,11 +207,10 @@ class AllocateController extends Controller {
             
             $datas = ExcelHelper::execute_array_label($dataArray);
                 
-            $bd=User::get_bd();
-            $intent_set= Meal::get_meal();
-
-                
-            
+            $group = Group::get_user_group(Yii::$app->user->identity->id);
+            $bd=User::get_bd(User::STATUS_ACTIVE, UserGroup::get_group_userid(array_keys($group)));
+            $intent_set= Meal::get_meal(Meal::STAT_ACTIVE,array_keys($group));
+           
             $searchModel = new CorporationMealSearch();
             $index=[
                 'corporation_id'=>$searchModel->getAttributeLabel('corporation_id'),
@@ -212,6 +225,7 @@ class AllocateController extends Controller {
                 'devcloud_count'=>$searchModel->getAttributeLabel('devcloud_count'),
                 'devcloud_amount'=>$searchModel->getAttributeLabel('devcloud_amount'),
                 'cloud_amount'=>$searchModel->getAttributeLabel('cloud_amount'),
+                'group_id'=>$searchModel->getAttributeLabel('group_id'),
                 ];
             
             //项目处理
@@ -232,7 +246,7 @@ class AllocateController extends Controller {
             
             $annual=Parameter::get_type('allocate_annual');
             
-            $num=['add'=>0,'update'=>0,'fail'=>0];              
+            $num=['add'=>0,'update'=>0,'fail'=>0];
             $notice_error=[];
             
             $allocates =[];
@@ -244,6 +258,7 @@ class AllocateController extends Controller {
                     
                 }
             }
+                        
             foreach ($allocates as $company_name=>$company) {
 
                 $corporation = Corporation::findOne(['base_company_name'=>$company_name]);
@@ -252,6 +267,21 @@ class AllocateController extends Controller {
                     $corporation=new Corporation();
                     $corporation->loadDefaultValues();
                     $corporation->base_company_name=$company_name;
+                    if(count($group)>1){
+                        if(isset($data[$index['group_id']])&&array_search(trim($data[$index['group_id']]), $group)){
+                            $corporation->group_id= array_search(trim($data[$index['group_id']]), $group);
+                        }else{
+                            $num['fail']++;
+                            continue;
+                        }
+                    }else{
+                        if(!isset($data[$index['group_id']])||(isset($data[$index['group_id']])&&array_search(trim($data[$index['group_id']]), $group))){
+                            $corporation->group_id= key($group);          
+                        }else{
+                            $num['fail']++;
+                            continue;
+                        }
+                    }
                     $corporation->save();
                     
                 }elseif(!Yii::$app->user->can('企业修改',['id'=>$corporation->id])){
@@ -272,6 +302,7 @@ class AllocateController extends Controller {
                             $allocate=new CorporationMeal();
                             $allocate->loadDefaultValues();
                             $allocate->corporation_id=$corporation->id;
+                            $allocate->group_id=$corporation->group_id;
                             $allocate->start_time=$key;                                                              
                             $allocate->created_at = time();
                             $allocate->stat=CorporationMeal::get_allocate($corporation->id)?CorporationMeal::STAT_AGAIN:CorporationMeal::STAT_ALLOCATE;

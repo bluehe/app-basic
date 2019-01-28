@@ -91,6 +91,7 @@ class UserGroup extends \yii\db\ActiveRecord
     }
     
     public static function auth_group($group_id){
+        //当前用户是否有权限
         return !$group_id||in_array($group_id, self::get_user_groupid(Yii::$app->user->identity->id));
         
     }

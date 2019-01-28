@@ -11,6 +11,8 @@ use kartik\daterange\DateRangePicker;
 use kartik\file\FileInput;
 use project\components\CommonHelper;
 use project\models\Parameter;
+use project\models\UserGroup;
+use project\models\Group;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -75,6 +77,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'attribute' => 'group_id',
+                        'value' =>function($model) {
+                            return $model->group_id?$model->group->title:$model->group_id;   //主要通过此种方式实现
+                        },
+                        'format' => 'raw',
+                        'filter' => Group::get_user_group(Yii::$app->user->identity->id), 
+                        'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
+                    ],
                     [
                         'attribute' => 'corporation_id',
                         'value' =>
