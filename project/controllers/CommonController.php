@@ -9,6 +9,8 @@ use project\models\User;
 use project\models\System;
 use project\components\CommonHelper;
 use project\models\Corporation;
+use project\models\UserGroup;
+use yii\helpers\Html;
 
 /**
  * Common controller
@@ -107,6 +109,47 @@ class CommonController extends Controller {
             
         }
         return json_encode($data);
+        
+    }
+    
+    public function actionGroupCorporation($id) {
+
+        $corporation= Corporation::get_corporation_id($id);
+
+        $str_corporation = Html::tag('option', '其他', array('value' => ''));
+        if ($corporation) {   
+            foreach ($corporation as $value => $name) {
+                $str_corporation .= Html::tag('option', Html::encode($name), array('value' => $value));
+            }
+        }
+        
+        
+        $user = UserGroup::get_group_userid($id);
+        
+        $bds = User::get_bd(null, $user);
+        $str_bd = Html::tag('option', '', array('value' => ''));
+        if ($user&&$bds) {   
+            foreach ($bds as $value => $name) {
+                $str_bd .= Html::tag('option', Html::encode($name), array('value' => $value));
+            }
+        }
+        
+        $sa = User::get_role('sa',null, $user);
+        $str_sa = Html::tag('option', '', array('value' => ''));
+        if ($user&&$sa) {   
+            foreach ($sa as $value => $name) {
+                $str_sa .= Html::tag('option', Html::encode($name), array('value' => $value));
+            }
+        }
+        
+        $other = User::get_role('other',null, $user);
+        $str_other = Html::tag('option', '', array('value' => ''));
+        if ($user&&$other) {   
+            foreach ($other as $value => $name) {
+                $str_other .= Html::tag('option', Html::encode($name), array('value' => $value));
+            }
+        }
+        return json_encode(['corporation'=>$str_corporation,'bd'=>$str_bd,'sa'=>$str_sa,'other'=>$str_other]);  
         
     }
 }

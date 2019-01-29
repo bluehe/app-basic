@@ -11,6 +11,7 @@ use project\models\TrainSearch;
 use project\models\Train;
 use project\models\TrainUser;
 use project\components\ExcelHelper;
+use project\models\Group;
 
 
 class TrainController extends Controller { 
@@ -46,6 +47,10 @@ class TrainController extends Controller {
         $model = new Train();
         $model->setScenario("trainStart");
         $model->loadDefaultValues();
+        $group = Group::get_user_group(Yii::$app->user->identity->id);
+        if(count($group)==1){
+            $model->group_id= key($group);   
+        }
         $model->uid=Yii::$app->user->identity->id;
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
@@ -449,6 +454,25 @@ class TrainController extends Controller {
         $format = \PHPExcel_IOFactory::identify($fileName);
         $objectreader = \PHPExcel_IOFactory::createReader($format);
         $objectPhpExcel = $objectreader->load($fileName);
+        
+        $objectPhpExcel->getActiveSheet()->setCellValue( 'A1', '序号')
+                ->setCellValue( 'B1', $searchModel->getAttributeLabel('日期'))
+                ->setCellValue( 'C1', $searchModel->getAttributeLabel('train_start'))
+                ->setCellValue( 'D1', $searchModel->getAttributeLabel('train_end'))
+                ->setCellValue( 'E1', $searchModel->getAttributeLabel('train_type'))
+                ->setCellValue( 'F1', $searchModel->getAttributeLabel('train_name'))
+                ->setCellValue( 'G1', $searchModel->getAttributeLabel('train_address'))
+                ->setCellValue( 'H1', $searchModel->getAttributeLabel('解决方案人员'))
+                ->setCellValue( 'I1', $searchModel->getAttributeLabel('其他人员'))
+                ->setCellValue( 'J1', $searchModel->getAttributeLabel('train_result'))
+                ->setCellValue( 'K1', $searchModel->getAttributeLabel('train_num'))
+                ->setCellValue( 'L1', $searchModel->getAttributeLabel('train_stat'));
+        
+        $group_count=count(Group::get_user_group(Yii::$app->user->identity->id));
+        
+        if($group_count>1){
+            $objectPhpExcel->getActiveSheet()->setCellValue( 'M1', $searchModel->getAttributeLabel('group_id'));
+        }
 
         foreach($models as $key=>$model){
             $k=$key+2;
@@ -464,6 +488,10 @@ class TrainController extends Controller {
                     ->setCellValue( 'J'.$k, $model->train_result)
                     ->setCellValue( 'K'.$k, $model->train_num)
                     ->setCellValue( 'L'.$k, $model->TrainStat);
+            
+            if($group_count>1){
+                $objectPhpExcel->getActiveSheet()->setCellValue( 'M'.$k, $model->group_id?$model->group->title:$model->group_id);
+            }
                     
         }
         

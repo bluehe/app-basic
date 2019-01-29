@@ -79,7 +79,7 @@ class CorporationSearch extends Corporation
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'group_id' => $this->group_id,
+            Corporation::tableName().'.group_id' => $this->group_id,
             'base_bd' => $this->base_bd,
             'stat' => $this->stat,
             'intent_set' => $this->intent_set,
@@ -154,7 +154,7 @@ class CorporationSearch extends Corporation
             $query->andFilterWhere(['>=', 'base_registered_time', $start])->andFilterWhere(['<=', 'base_registered_time', $end]);
         }
         
-        $query->andWhere(['or',['group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],['group_id'=>NULL]]);
+        $query->andWhere(['or',[Corporation::tableName().'.group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],[Corporation::tableName().'.group_id'=>NULL]]);
 
         return $dataProvider;
     }

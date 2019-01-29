@@ -14,7 +14,6 @@ use project\models\UserGroup;
 /* @var $model project\models\ClouldSubsidy */
 /* @var $form yii\widgets\ActiveForm */
 
-$group=Group::get_user_group(Yii::$app->user->identity->id);
 ?>
 
 <div class="row">
@@ -32,7 +31,7 @@ $group=Group::get_user_group(Yii::$app->user->identity->id);
         ]);
         ?>
         
-        <?= count($group)>1?$form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['prompt' => '']):'' ?>
+        <?= count(Group::get_user_group(Yii::$app->user->identity->id))>1?$form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['prompt' => '']):'' ?>
 
         <?= $form->field($model, 'corporation_id')->dropDownList(Corporation::get_corporation_id($model->group_id),['prompt' => '其他', 'class' => 'form-control selectcss2']); ?>                 
                 
@@ -97,7 +96,7 @@ $group=Group::get_user_group(Yii::$app->user->identity->id);
         $('#clouldsubsidy-group_id').change(function(){
             var v=$('#clouldsubsidy-group_id').val();
             if(v){
-                $.getJSON("<?= Url::toRoute(['group-corporation']) ?>", {id: v}, function (data) {$("select#clouldsubsidy-corporation_id").html(data.corporation).trigger('change');$("select#clouldsubsidy-subsidy_bd").html(data.bd).trigger('change');});
+                $.getJSON("<?= Url::toRoute(['common/group-corporation']) ?>", {id: v}, function (data) {$("select#clouldsubsidy-corporation_id").html(data.corporation).trigger('change');$("select#clouldsubsidy-subsidy_bd").html(data.bd).trigger('change');});
             }else{
                 $("select#clouldsubsidy-corporation_id").html('<option value="">其他</option>');
                 $("select#clouldsubsidy-subsidy_bd").html('<option value=""></option>');

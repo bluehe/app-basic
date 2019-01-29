@@ -9,6 +9,8 @@ use kartik\daterange\DateRangePicker;
 use project\models\Train;
 use project\models\User;
 use project\models\TrainUser;
+use project\models\Group;
+use project\models\UserGroup;
 /* @var $this yii\web\View */
 /* @var $searchModel rky\models\VisitSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php Pjax::begin(); ?>
             
             <p class="text-right">
-                <?= Html::a('添加记录', ['#'], ['data-toggle' => 'modal', 'data-target' => '#train-modal','class' => 'btn btn-success pull-left train-create']) ?>
+                <?= count(Group::get_user_group(Yii::$app->user->identity->id))?Html::a('添加记录', ['#'], ['data-toggle' => 'modal', 'data-target' => '#train-modal','class' => 'btn btn-success pull-left train-create']):'' ?>
                 
                  <?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning']) ?>
             </p>
@@ -37,6 +39,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'attribute' => 'group_id',
+                        'value' =>function($model) {
+                            return $model->group_id?$model->group->title:$model->group_id;   //主要通过此种方式实现
+                        },
+                        'format' => 'raw',
+                        'filter' => Group::get_user_group(Yii::$app->user->identity->id),   
+                        'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
+                    ],
                     [
                         'attribute' => 'train_start',
                         'label'=>'时间',
@@ -87,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 function($model) {
                                     return $model->get_username($model->id,'sa');   //主要通过此种方式实现
                                 },
-                        'filter' => User::get_role('sa'), 
+                        'filter' => User::get_role('sa',User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))), 
                     ],
                     [
                         'attribute' => 'other',
@@ -95,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 function($model) {
                                     return $model->get_username($model->id,'other');   //主要通过此种方式实现
                                 },
-                        'filter' => User::get_role('other'), 
+                        'filter' => User::get_role('other',User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))), 
                     ],
                     //'other',
                     // 'note:ntext',
@@ -128,10 +139,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->uid==Yii::$app->user->identity->id&&in_array($model->train_stat,array(Train::STAT_CREATED, Train::STAT_ORDER))||($model->train_stat==Train::STAT_ORDER&&in_array(Yii::$app->user->identity->id,TrainUser::get_userid($model->id,'sa')))?Html::a('<i class="fa fa-trash-o"></i> 取消', ['cancel', 'id' => $key], ['class' => 'btn btn-danger btn-xs']):'';
                         },
                         'order' => function($url, $model, $key) {
-                                    return $model->train_stat==Train::STAT_CREATED&&(!TrainUser::get_userid($model->id,'sa')||in_array(Yii::$app->user->identity->id,TrainUser::get_userid($model->id,'sa')))?Html::a('<i class="fa fa-check"></i> 接受', ['#'], ['data-toggle' => 'modal', 'data-target' => '#train-modal','class' => 'btn btn-info btn-xs train-order',]):'';
+                                    return $model->train_stat==Train::STAT_CREATED&&((!TrainUser::get_userid($model->id,User::ROLE_SA)&&Yii::$app->user->identity->role== User::ROLE_SA)||in_array(Yii::$app->user->identity->id,TrainUser::get_userid($model->id,User::ROLE_SA)))?Html::a('<i class="fa fa-check"></i> 接受', ['#'], ['data-toggle' => 'modal', 'data-target' => '#train-modal','class' => 'btn btn-info btn-xs train-order',]):'';
                         },
                         'refuse' => function($url, $model, $key) {
-                                    return $model->train_stat==Train::STAT_CREATED&&(!TrainUser::get_userid($model->id,'sa')||in_array(Yii::$app->user->identity->id,TrainUser::get_userid($model->id,'sa')))?Html::a('<i class="fa fa-remove"></i> 拒绝', ['refuse', 'id' => $key], ['class' => 'btn btn-danger btn-xs']):'';
+                                    return $model->train_stat==Train::STAT_CREATED&&((!TrainUser::get_userid($model->id,User::ROLE_SA)&&Yii::$app->user->identity->role== User::ROLE_SA)||in_array(Yii::$app->user->identity->id,TrainUser::get_userid($model->id,User::ROLE_SA)))?Html::a('<i class="fa fa-remove"></i> 拒绝', ['refuse', 'id' => $key], ['class' => 'btn btn-danger btn-xs']):'';
                         },
                         'delete' => function($url, $model, $key) {
                                     return $model->uid==Yii::$app->user->identity->id&&in_array($model->train_stat,array(Train::STAT_REFUSE, Train::STAT_CANCEL))?Html::a('<i class="fa fa-trash-o"></i> 删除', ['delete', 'id' => $key], ['class' => 'btn btn-danger btn-xs','data-confirm' =>'确定要删除此项吗？','data-method' => 'post',]):'';

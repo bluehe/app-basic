@@ -21,7 +21,7 @@ class TrainSearch extends Train
     public function rules()
     {
         return [
-            [['id', 'uid', 'created_at', 'updated_at', 'corporation_id', 'train_num', 'reply_uid', 'reply_at', 'train_stat'], 'integer'],
+            [['id','group_id', 'uid', 'created_at', 'updated_at', 'corporation_id', 'train_num', 'reply_uid', 'reply_at', 'train_stat'], 'integer'],
             [['train_type', 'train_name', 'train_address', 'other_people', 'train_result', 'train_note','sa', 'other','train_start'], 'safe'],
         ];
     }
@@ -44,7 +44,7 @@ class TrainSearch extends Train
      */
     public function search($params,$pageSize = '')
     {
-        $query = Train::find()->joinWith(['corporation']);
+        $query = Train::find()->joinWith(['corporation','group']);
 
         // add conditions that should always apply here
 
@@ -80,6 +80,7 @@ class TrainSearch extends Train
         $query->andFilterWhere([
             'id' => $this->id,
             'uid' => $this->uid,
+            Train::tableName().'.group_id' => $this->group_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'corporation_id' => $this->corporation_id,
@@ -113,6 +114,8 @@ class TrainSearch extends Train
             $query->andWhere([Train::tableName().'.id'=>$train]);
         }
 
+        $query->andWhere(['or',[Train::tableName().'.group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],[Train::tableName().'.group_id'=>NULL]]);
+        
         return $dataProvider;
     }
 }

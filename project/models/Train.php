@@ -76,8 +76,8 @@ class Train extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uid', 'created_at', 'updated_at', 'corporation_id', 'train_num', 'reply_uid', 'reply_at', 'train_stat'], 'integer'],
-            [['uid','train_type','train_start','train_end'], 'required'],
+            [['group_id','uid', 'created_at', 'updated_at', 'corporation_id', 'train_num', 'reply_uid', 'reply_at', 'train_stat'], 'integer'],
+            [['group_id','uid','train_type','train_start','train_end'], 'required'],
             [['train_result'], 'required', 'on' => 'trainEnd'],
             [['sa'], 'requiredBySelfsa','skipOnEmpty' => false,'on' => ['trainStart','trainEnd']],
             [['other'], 'requiredBySelfother','skipOnEmpty' => false,'on' => ['trainStart','trainEnd']],
@@ -87,6 +87,7 @@ class Train extends \yii\db\ActiveRecord
             [['uid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['uid' => 'id']],
             [['reply_uid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['reply_uid' => 'id']],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
+            [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
         ];
     }
     
@@ -114,14 +115,14 @@ class Train extends \yii\db\ActiveRecord
     
     public function requiredBySelfsa($attribute, $params)
     {
-        if (Yii::$app->user->identity->role=='sa'&&(!$this->$attribute||!in_array(Yii::$app->user->identity->id,$this->$attribute))){
+        if (Yii::$app->user->identity->role== User::ROLE_SA&&(!$this->$attribute||!in_array(Yii::$app->user->identity->id,$this->$attribute))){
                 $this->addError($attribute,'必须包含自己');            
         }        
     }
     
     public function requiredBySelfother($attribute, $params)
     {
-        if (Yii::$app->user->identity->role!='sa'&&(!$this->$attribute||!in_array(Yii::$app->user->identity->id,$this->$attribute))){
+        if (Yii::$app->user->identity->role!=User::ROLE_SA&&(!$this->$attribute||!in_array(Yii::$app->user->identity->id,$this->$attribute))){
                 $this->addError($attribute,'必须包含自己');            
         }        
     }
@@ -134,6 +135,7 @@ class Train extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'uid' => '创建人',
+            'group_id' => '项目',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'train_type' => '类型',
@@ -223,6 +225,14 @@ class Train extends \yii\db\ActiveRecord
     public function getCorporation()
     {
         return $this->hasOne(Corporation::className(), ['id' => 'corporation_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroup()
+    {
+        return $this->hasOne(Group::className(), ['id' => 'group_id']);
     }
     
     /** 

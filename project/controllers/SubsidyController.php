@@ -11,10 +11,6 @@ use project\actions\UpdateAction;
 use project\actions\DeleteAction;
 use project\actions\CreateAction;
 use project\components\ExcelHelper;
-use project\models\Corporation;
-use yii\helpers\Html;
-use project\models\UserGroup;
-use project\models\User;
 use project\models\Group;
 use project\models\Parameter;
 
@@ -59,32 +55,6 @@ class SubsidyController extends Controller
             ],
 
         ];
-    }
-    
-    public function actionGroupCorporation($id) {
-
-        $corporation= Corporation::get_corporation_id($id);
-
-        $str_corporation = Html::tag('option', '其他', array('value' => ''));
-        if ($corporation) {   
-            foreach ($corporation as $value => $name) {
-                $str_corporation .= Html::tag('option', Html::encode($name), array('value' => $value));
-            }
-        }
-        
-        
-        $user = UserGroup::get_group_userid($id);
-        
-        $bds = User::get_bd(null, $user);
-
-        $str = Html::tag('option', '', array('value' => ''));
-        if ($user&&$bds) {   
-            foreach ($bds as $value => $name) {
-                $str .= Html::tag('option', Html::encode($name), array('value' => $value));
-            }
-        }
-        return json_encode(['corporation'=>$str_corporation,'bd'=>$str]);  
-        
     }
     
     public function actionSubsidyExport() {
