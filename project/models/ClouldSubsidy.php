@@ -34,15 +34,17 @@ class ClouldSubsidy extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-           [['subsidy_bd','subsidy_time','subsidy_amount'], 'required'],
-           [['corporation_id', 'subsidy_bd'], 'integer'],
-           [['subsidy_amount'], 'number'],
-           [['subsidy_note','annual'], 'string'],
-           [['corporation_name'], 'string', 'max' => 255], 
-           [['subsidy_time'],'safe'],
-           [['corporation_name'],'requiredByCorporationid','skipOnEmpty' => false],
-           [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']], 
-           [['subsidy_bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['subsidy_bd' => 'id']], 
+            [['group_id','subsidy_bd','subsidy_time','subsidy_amount'], 'required'],
+            [['group_id','corporation_id', 'subsidy_bd'], 'integer'],
+            [['subsidy_amount'], 'number'],
+            [['subsidy_note','annual'], 'string'],
+            [['corporation_name'], 'string', 'max' => 255], 
+            [['subsidy_time'],'safe'],
+            [['corporation_name'],'requiredByCorporationid','skipOnEmpty' => false],
+            [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']], 
+            [['subsidy_bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['subsidy_bd' => 'id']], 
+            [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
+//            [['group_id'], 'default', 'value' => function(){$group=Group::get_user_group(Yii::$app->user->identity->id);if(count($group)==1){return key($group);}}],
         ];
     }
     
@@ -82,6 +84,7 @@ class ClouldSubsidy extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'group_id' => '项目',
             'corporation_id' => '补贴企业', 
             'corporation_name' => '补贴企业', 
             'subsidy_bd' => '客户经理', 
@@ -98,6 +101,14 @@ class ClouldSubsidy extends \yii\db\ActiveRecord
     public function getCorporation()
     {
         return $this->hasOne(Corporation::className(), ['id' => 'corporation_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroup()
+    {
+        return $this->hasOne(Group::className(), ['id' => 'group_id']);
     }
     
     /**

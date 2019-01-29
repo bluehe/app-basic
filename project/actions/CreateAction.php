@@ -9,6 +9,8 @@ namespace project\actions;
 
 use Closure;
 use Yii;
+use project\models\UserGroup;
+use project\models\Group;
 
 class CreateAction extends \yii\base\Action
 {
@@ -26,6 +28,8 @@ class CreateAction extends \yii\base\Action
     public $successRedirect = ['index'];
     
     public $ajax = false;
+    
+    public $default_group=false;//认证用户组权限
 
     /**
      * create创建页
@@ -37,6 +41,13 @@ class CreateAction extends \yii\base\Action
         /* @var $model yii\db\ActiveRecord */
         $model = new $this->modelClass;
         $model->setScenario( $this->scenario );
+        
+        //用户组权限
+        $group = Group::get_user_group(Yii::$app->user->identity->id);
+        if($this->default_group&&count($group)==1){
+            $model->group_id= key($group);   
+        }
+        
         if (Yii::$app->getRequest()->getIsPost()&&$model->load(Yii::$app->getRequest()->post())) {
             
             if( Yii::$app->getRequest()->getIsAjax() ){

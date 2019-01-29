@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             function($model) {
                                 return $model->bd?($model->bd0->nickname?$model->bd0->nickname:$model->bd0->username):'';
                             },
-                        'filter' => User::get_bd(),
+                        'filter' => User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))),
                         'visible'=> is_array($column)&&in_array('bd',$column),
                     ],
                     [
@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             function($model) {
                                 return $model->meal_id?$model->meal->name:'其他';
                             },
-                        'filter' => Meal::get_meal(null),
+                        'filter' => Meal::get_meal(null,array_keys(Group::get_user_group(Yii::$app->user->identity->id))),
                         'visible'=> is_array($column)&&in_array('meal_id',$column),            
                     ],
                     ['attribute' =>'number','visible'=> is_array($column)&&in_array('number',$column),],

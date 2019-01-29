@@ -7,6 +7,7 @@ use project\models\Meal;
 use kartik\widgets\DatePicker;
 use project\models\CorporationMeal;
 use project\models\Parameter;
+use project\models\UserGroup;
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
@@ -35,7 +36,7 @@ use project\models\Parameter;
         
         <?= $form->field($model, 'huawei_account')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE), ['prompt' => '']) ?>
+        <?= $form->field($model, 'bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid($model->group_id)), ['prompt' => '']) ?>
         
         <?= $form->field($model, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
 

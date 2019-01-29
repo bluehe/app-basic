@@ -42,7 +42,7 @@ use project\models\UserGroup;
             <div class="tab-content">
                 <div class="tab-pane active" id="base">
                     
-                <?= $form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['prompt' => '']) ?>
+                <?= count(Group::get_user_group(Yii::$app->user->identity->id))>1?$form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['prompt' => '']):'' ?>
                     
                 <?= $form->field($model, 'base_company_name')->textInput(['maxlength' => true]) ?>
 
@@ -81,7 +81,7 @@ use project\models\UserGroup;
                 <?php if($allocate){?>
                 <?= $form->field($allocate, 'huawei_account')->textInput(['maxlength' => true]) ?>
                     
-                <?= $form->field($allocate, 'bd')->dropDownList($model->group_id?User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid($allocate->group_id)):[], ['prompt' => '']) ?>
+                <?= $form->field($allocate, 'bd')->dropDownList($allocate->group_id?User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid($allocate->group_id)):[], ['prompt' => '']) ?>
                     
                 <?= $form->field($allocate, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
 
@@ -238,7 +238,7 @@ $this->registerCss($cssString);
             }else{
                 $("select#corporation-base_bd").html('');
             }
-        })
+        });
     });
 <?php $this->endBlock() ?>
 </script>

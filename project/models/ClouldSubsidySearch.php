@@ -19,7 +19,7 @@ class ClouldSubsidySearch extends ClouldSubsidy
     public function rules()
     {
         return [
-            [['id', 'corporation_id', 'subsidy_bd'], 'integer'],
+            [['id','group_id', 'corporation_id', 'subsidy_bd'], 'integer'],
             [['corporation_name', 'subsidy_note', 'subsidy_time','subsidy_amount','annual'], 'safe'],
         ];
     }
@@ -76,6 +76,7 @@ class ClouldSubsidySearch extends ClouldSubsidy
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'group_id' => $this->group_id,
             'corporation_id' => $this->corporation_id,
             'subsidy_bd' => $this->subsidy_bd,
             'annual' => $this->annual,
@@ -94,6 +95,8 @@ class ClouldSubsidySearch extends ClouldSubsidy
             $end = strtotime($range[1]) + 86399;
             $query->andFilterWhere(['>=', 'subsidy_time', $start])->andFilterWhere(['<=', 'subsidy_time', $end]);
         }
+        
+        $query->andWhere(['or',['group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],['group_id'=>NULL]]);
 
         return $dataProvider;
     }

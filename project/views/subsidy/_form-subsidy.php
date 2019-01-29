@@ -7,10 +7,14 @@ use yii\helpers\Url;
 use kartik\widgets\DatePicker;
 use project\models\User;
 use project\models\Parameter;
+use project\models\Group;
+use project\models\UserGroup;
 
 /* @var $this yii\web\View */
 /* @var $model project\models\ClouldSubsidy */
 /* @var $form yii\widgets\ActiveForm */
+
+$group=Group::get_user_group(Yii::$app->user->identity->id);
 ?>
 
 <div class="row">
@@ -27,12 +31,14 @@ use project\models\Parameter;
                     ],
         ]);
         ?>
+        
+        <?= count($group)>1?$form->field($model, 'group_id')->dropDownList(Group::get_user_group(Yii::$app->user->identity->id), ['prompt' => '']):'' ?>
 
-        <?= $form->field($model, 'corporation_id')->dropDownList(Corporation::get_corporation_id(),['prompt' => '其他', 'class' => 'form-control selectcss2']); ?>                 
+        <?= $form->field($model, 'corporation_id')->dropDownList(Corporation::get_corporation_id($model->group_id),['prompt' => '其他', 'class' => 'form-control selectcss2']); ?>                 
                 
         <?= $form->field($model, 'corporation_name')->textInput(['maxlength' => true])->label('') ?> 
 
-        <?= $form->field($model, 'subsidy_bd')->dropDownList(User::get_bd(),['prompt' => '']) ?>
+        <?= $form->field($model, 'subsidy_bd')->dropDownList($model->group_id?User::get_bd(null, UserGroup::get_group_userid($model->group_id)):[],['prompt' => '']) ?>
         
         <?= $form->field($model, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
 
@@ -80,11 +86,23 @@ use project\models\Parameter;
             var v=$('#clouldsubsidy-corporation_id').val();
             if(v){
                 $.getJSON("<?= Url::toRoute('common/corporation-info') ?>", {id: v}, function (data) {$('#clouldsubsidy-subsidy_bd').val(data.bd).trigger('change');});
+            }else{
+                $('#clouldsubsidy-subsidy_bd').val('').trigger('change');
             }
         });
                     
         //Initialize Select2 Elements
         $(".selectcss2").select2();
+        
+        $('#clouldsubsidy-group_id').change(function(){
+            var v=$('#clouldsubsidy-group_id').val();
+            if(v){
+                $.getJSON("<?= Url::toRoute(['group-corporation']) ?>", {id: v}, function (data) {$("select#clouldsubsidy-corporation_id").html(data.corporation).trigger('change');$("select#clouldsubsidy-subsidy_bd").html(data.bd).trigger('change');});
+            }else{
+                $("select#clouldsubsidy-corporation_id").html('<option value="">其他</option>');
+                $("select#clouldsubsidy-subsidy_bd").html('<option value=""></option>');
+            }
+        });
     });
 <?php $this->endBlock() ?>
 </script>

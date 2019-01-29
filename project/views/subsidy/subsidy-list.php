@@ -7,6 +7,8 @@ use yii\bootstrap\Modal;
 use project\models\User;
 use kartik\daterange\DateRangePicker;
 use project\models\Parameter;
+use project\models\UserGroup;
+use project\models\Group;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -21,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
 
             <p>
-            <?= Html::a('增加补贴', ['#'], ['data-toggle' => 'modal', 'data-target' => '#subsidy-modal','class' => 'btn btn-success subsidy-create']) ?>
+            <?= count(Group::get_user_group(Yii::$app->user->identity->id))?Html::a('增加补贴', ['#'], ['data-toggle' => 'modal', 'data-target' => '#subsidy-modal','class' => 'btn btn-success subsidy-create']):'' ?>
             <?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['subsidy-export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning pull-right']) ?>
             </p>
             <?=
@@ -33,6 +35,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'attribute' => 'group_id',
+                        'value' =>function($model) {
+                            return $model->group_id?$model->group->title:$model->group_id;   //主要通过此种方式实现
+                        },
+                        'format' => 'raw',
+                        'filter' => Group::get_user_group(Yii::$app->user->identity->id),   
+                        'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
+                    ],
                     [
                         'attribute' => 'corporation_name',
                         'value' =>
@@ -47,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             function($model) {
                                 return $model->subsidy_bd?($model->subsidyBd->nickname?$model->subsidyBd->nickname:$model->subsidyBd->username):'';
                             },
-                        'filter' => User::get_bd(),
+                        'filter' => User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))),
                     ],
                     [
                         'attribute' => 'annual',

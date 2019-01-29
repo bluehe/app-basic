@@ -11,7 +11,7 @@ class m180928_135501_create_train_table extends Migration {
         $table = '{{%train}}';
         $userTable = '{{%user}}';
         $corporationTable = '{{%corporation}}';
-
+        $groupTable = '{{%group}}';
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
@@ -19,7 +19,8 @@ class m180928_135501_create_train_table extends Migration {
         }
         $this->createTable($table, [
             'id' => $this->primaryKey(),
-            'uid' => $this->integer(),           
+            'uid' => $this->integer(),  
+            'group_id' => $this->integer()->comment('项目'),
             'created_at' => $this->integer()->notNull(),           
             'updated_at' => $this->integer()->notNull(),
             'train_type' => $this->string(),
@@ -35,6 +36,7 @@ class m180928_135501_create_train_table extends Migration {
             'reply_uid' => $this->integer(),
             'reply_at' => $this->integer(),
             'train_stat' => $this->smallInteger()->notNull()->defaultValue(1),
+            "FOREIGN KEY ([[group_id]]) REFERENCES {$groupTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[uid]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[reply_uid]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",

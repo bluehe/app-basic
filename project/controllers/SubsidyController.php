@@ -11,6 +11,12 @@ use project\actions\UpdateAction;
 use project\actions\DeleteAction;
 use project\actions\CreateAction;
 use project\components\ExcelHelper;
+use project\models\Corporation;
+use yii\helpers\Html;
+use project\models\UserGroup;
+use project\models\User;
+use project\models\Group;
+use project\models\Parameter;
 
 /**
  * SubsidyController implements the CRUD actions for ClouldSubsidy model.
@@ -39,6 +45,7 @@ class SubsidyController extends Controller
                 'modelClass' => ClouldSubsidy::className(),
                 'successRedirect'=>Yii::$app->request->referrer,
                 'ajax'=>true,
+                'default_group'=>true,
             ],
             'subsidy-update' => [
                 'class' => UpdateAction::className(),
@@ -52,6 +59,32 @@ class SubsidyController extends Controller
             ],
 
         ];
+    }
+    
+    public function actionGroupCorporation($id) {
+
+        $corporation= Corporation::get_corporation_id($id);
+
+        $str_corporation = Html::tag('option', '其他', array('value' => ''));
+        if ($corporation) {   
+            foreach ($corporation as $value => $name) {
+                $str_corporation .= Html::tag('option', Html::encode($name), array('value' => $value));
+            }
+        }
+        
+        
+        $user = UserGroup::get_group_userid($id);
+        
+        $bds = User::get_bd(null, $user);
+
+        $str = Html::tag('option', '', array('value' => ''));
+        if ($user&&$bds) {   
+            foreach ($bds as $value => $name) {
+                $str .= Html::tag('option', Html::encode($name), array('value' => $value));
+            }
+        }
+        return json_encode(['corporation'=>$str_corporation,'bd'=>$str]);  
+        
     }
     
     public function actionSubsidyExport() {
@@ -71,6 +104,12 @@ class SubsidyController extends Controller
                 ->setCellValue( 'E1', $searchModel->getAttributeLabel('subsidy_time'))
                 ->setCellValue( 'F1', $searchModel->getAttributeLabel('subsidy_amount'))
                 ->setCellValue( 'G1', $searchModel->getAttributeLabel('subsidy_note'));
+        
+        $group_count=count(Group::get_user_group(Yii::$app->user->identity->id));
+        
+        if($group_count>1){
+            $objectPhpExcel->getActiveSheet()->setCellValue( 'H1', $searchModel->getAttributeLabel('group_id'));
+        }
 
         foreach($models as $key=>$model){
             $k=$key+2;
@@ -81,6 +120,10 @@ class SubsidyController extends Controller
                     ->setCellValue( 'E'.$k, $model->subsidy_time)
                     ->setCellValue( 'F'.$k, $model->subsidy_amount)
                     ->setCellValue( 'G'.$k, $model->subsidy_note);
+            
+            if($group_count>1){
+                $objectPhpExcel->getActiveSheet()->setCellValue( 'H'.$k, $model->group_id?$model->group->title:$model->group_id);
+            }
                     
         }
         

@@ -81,6 +81,10 @@ class CorporationController extends Controller
         $model = new Corporation();
         //$model->scenario='industry';
         $model->loadDefaultValues();
+        $group = Group::get_user_group(Yii::$app->user->identity->id);
+        if(count($group)==1){
+            $model->group_id= key($group);   
+        }
         if ($model->load(Yii::$app->request->post())) {
             
             if (Yii::$app->request->isAjax) {
@@ -122,7 +126,7 @@ class CorporationController extends Controller
             }
             return $this->redirect(Yii::$app->request->referrer);
             
-        }else{
+        }else{                        
             $model->base_bd=Yii::$app->user->identity->id;
             return $this->renderAjax('corporation-create', [
                         'model' => $model,
@@ -337,7 +341,7 @@ class CorporationController extends Controller
         
     }
     
-     public function actionGroupBd($id,$bd_id=null) {
+    public function actionGroupBd($id,$bd_id=null) {
 
         $user = UserGroup::get_group_userid($id);
         

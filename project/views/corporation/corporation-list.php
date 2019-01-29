@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php Pjax::begin(); ?>
             <div class="clearfix" style="margin-bottom:10px;">
                 
-                <?= in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)?Html::a('添加企业', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-success corporation-create']):'' ?>
+                <?= count(Group::get_user_group(Yii::$app->user->identity->id))&&(in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id))?Html::a('添加企业', ['#'], ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','class' => 'btn btn-success corporation-create']):'' ?>
                 <?= Html::a('<i class="fa fa-filter" title="选择需要显示的列"></i>', ['#'], ['data-toggle' => 'modal', 'data-target' => '#list-modal', 'class' => 'btn btn-danger pull-right column-change','style'=>'margin-left:15px']) ?>
                 <?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['corporation-export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning pull-right']) ?>
                 <?php if(in_array(Yii::$app->user->identity->role, [User::ROLE_OB_DATA,User::ROLE_BD,User::ROLE_PM])||Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)):?>
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return '<span class="bd-list" data-toggle="modal" data-target="#list-modal" style="cursor: pointer">'.($model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'<span class="not-set" style="cursor: pointer">(未设置)</span>').'</span>';
                         },
                         'format'=>'raw',
-                        'filter' => User::get_bd(null, Corporation::get_existbd()), 
+                        'filter' => User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))), 
                     ],
                     ['attribute' =>'huawei_account','visible'=> is_array($column)&&in_array('huawei_account',$column),],  
                     [

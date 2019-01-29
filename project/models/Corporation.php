@@ -400,8 +400,8 @@ class Corporation extends \yii\db\ActiveRecord
     }
     
     //得到ID-name 键值数组
-    public static function get_corporation_id() {
-        $corporation = static::find()->where(['not',['base_company_name'=>'']])->orderBy(['id'=>SORT_ASC])->all();
+    public static function get_corporation_id($group=null) {
+        $corporation = static::find()->where(['not',['base_company_name'=>'']])->andWhere(['group_id'=>$group])->orderBy(['id'=>SORT_ASC])->all();
         return ArrayHelper::map($corporation, 'id', 'base_company_name');
     }
        
