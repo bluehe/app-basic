@@ -13,6 +13,7 @@ class m180919_163400_create_activity_data extends Migration {
     public function up() {
         $table = '{{%activity_data}}';
         $corporationTable = '{{%corporation}}';
+        $groupTable = '{{%group}}';
       
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -21,6 +22,7 @@ class m180919_163400_create_activity_data extends Migration {
         }
         $this->createTable($table, [
             'id' => $this->primaryKey(),
+            'group_id' => $this->integer()->comment('项目'),
             'corporation_id' => $this->integer()->notNull(),
             'statistics_time' => $this->integer()->notNull(),
             'projectman_usercount' => $this->integer()->notNull()->defaultValue(0),
@@ -61,6 +63,7 @@ class m180919_163400_create_activity_data extends Migration {
             'deploy_vmcount' => $this->float()->notNull()->defaultValue(0),
                
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
+            "FOREIGN KEY ([[group_id]]) REFERENCES {$groupTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
            
            
                 ], $tableOptions);

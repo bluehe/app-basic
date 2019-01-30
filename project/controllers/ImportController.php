@@ -14,6 +14,8 @@ use project\models\Corporation;
 use project\models\ActivityData;
 use project\models\ActivityChange;
 use project\models\ImportText;
+use project\models\Group;
+use project\models\UserGroup;
 
 
 class ImportController extends Controller { 
@@ -25,7 +27,7 @@ class ImportController extends Controller {
                 'class' => IndexAction::className(),
                 'data' => function(){
                     $dataProvider = new ActiveDataProvider([
-                        'query' => ImportLog::find(),
+                        'query' => ImportLog::find()->andWhere(['or',['group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],['group_id'=>NULL]]),
                         'sort' => ['defaultOrder' => [                            
                             'id' => SORT_DESC,
                         ]],
@@ -63,10 +65,34 @@ class ImportController extends Controller {
         }
     }
     
+    public function actionBindGroup($id) {
+        $model = ImportLog::findOne($id);
+        
+        if (Yii::$app->request->isPost&&$model->load(Yii::$app->request->post())) {
+       
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', '操作成功。');
+            } else {
+                Yii::$app->session->setFlash('error', '操作失败。');
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            if ($model !== null) {
+                $model->scenario='group';
+                return $this->renderAjax('bind-group', [
+                            'model' => $model,
+                ]);
+            } else {
+                Yii::$app->session->setFlash('error', '内容不存在。');
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+        }
+    }
+    
     public function actionInduce($id) {
         $model = ImportLog::findOne($id);
         if ($model !== null) {
-            if($model->statistics_at){
+            if($model->statistics_at&&$model->group_id){
                 
                 //字段检测
                 $zd= ImportData::get_field_by_log($id);        
@@ -112,6 +138,7 @@ class ImportController extends Controller {
                     $model_a=new ActivityData();
                     $model_a->loadDefaultValues();
                     $model_a->statistics_time=$model->statistics_at;
+                    $model_a->group_id=$model->group_id;
                     
                     $num_add=$num_update=$num_delete=0;
                     //新增
@@ -133,15 +160,13 @@ class ImportController extends Controller {
                     
                     //更新
                     $corporation_update= array_intersect(array_keys($corporation_datas), $corporation_exist);
-                    ActivityData::deleteAll(['statistics_time'=>$model->statistics_at,'corporation_id'=>$corporation_update]);
+                    ActivityData::deleteAll(['statistics_time'=>$model->statistics_at,'corporation_id'=>$corporation_update]);//不需要项目
                     foreach($corporation_update as $update){
                         $model_update = clone $model_a;
                         $model_update->corporation_id=$update;
                         foreach($corporation_datas[$update] as $item=>$value){
                             if(isset($field_idcode[$item])){
-                                $model_update->{$field_idcode[$item]}=$value;
-                                
-                                
+                                $model_update->{$field_idcode[$item]}=$value;                                                              
                             }
                         }
                         if($model_update->save()){
@@ -159,25 +184,25 @@ class ImportController extends Controller {
                     
                     
                     //状态变化
-                    ImportLog::updateAll(['stat'=> ImportLog::STAT_COVER], ['and',['statistics_at'=>$model->statistics_at],['not',['id'=>$model->id]]]);
+                    ImportLog::updateAll(['stat'=> ImportLog::STAT_COVER], ['and',['statistics_at'=>$model->statistics_at,'group_id'=>$model->group_id],['not',['id'=>$model->id]]]);
                     $model->stat= ImportLog::STAT_INDUCE;
                     $model->save();
                     
                     //生成区间活跃数据
                     //删除旧数据
-                    ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at]]);
-                    ActivityChange::updateAll(['health'=> ActivityChange::HEALTH_WA],['>','end_time',$model->statistics_at]);//健康度
+                    ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at],['group_id'=>$model->group_id]]);
+                    ActivityChange::updateAll(['health'=> ActivityChange::HEALTH_WA],['and',['group_id'=>$model->group_id],['>','end_time',$model->statistics_at]]);//健康度
                     //前部分区间
-                    $pre_time= ActivityData::get_pre_time($model->statistics_at);
+                    $pre_time= ActivityData::get_pre_time($model->statistics_at,$model->group_id);
                     if($pre_time){                       
-                        ActivityChange::induce_data($pre_time, $model->statistics_at);
+                        ActivityChange::induce_data($pre_time, $model->statistics_at,$model->group_id);
                                                
                     }
                     //后部分区间
-                    $next_time= ActivityData::get_next_time($model->statistics_at);
+                    $next_time= ActivityData::get_next_time($model->statistics_at,$model->group_id);
                     if($next_time){
-                        ActivityChange::induce_data($model->statistics_at,$next_time);
-                        ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time]);                       
+                        ActivityChange::induce_data($model->statistics_at,$next_time,$model->group_id);
+                        ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time,'group_id'=>$model->group_id]);                       
                     }
                                         
                     //设置活跃标志
@@ -198,11 +223,11 @@ class ImportController extends Controller {
                 }
                  
             }else{
-                Yii::$app->session->setFlash('error', '请先设置统计日期');                
+                Yii::$app->session->setFlash('error', '请先设置统计日期或项目');                
             }
             
         } else {
-            Yii::$app->session->setFlash('error', '项目不存在。');           
+            Yii::$app->session->setFlash('error', '内容不存在。');           
         }
         return $this->redirect(Yii::$app->request->referrer);
         
@@ -211,17 +236,17 @@ class ImportController extends Controller {
     public function actionClean($id) {
         $model = ImportLog::findOne($id);
         if ($model !== null) {
-            ActivityData::deleteAll(['statistics_time'=>$model->statistics_at]);
-            ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at]]);
-            ActivityChange::updateAll(['health'=> ActivityChange::HEALTH_WA],['>','end_time',$model->statistics_at]);//健康度
+            ActivityData::deleteAll(['statistics_time'=>$model->statistics_at,'group_id'=>$model->group_id]);
+            ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at],['group_id'=>$model->group_id]]);
+            ActivityChange::updateAll(['health'=> ActivityChange::HEALTH_WA],['and',['>','end_time',$model->statistics_at],['group_id'=>$model->group_id]]);//健康度
             
-            $pre_time= ActivityData::get_pre_time($model->statistics_at);
-            $next_time= ActivityData::get_next_time($model->statistics_at);
+            $pre_time= ActivityData::get_pre_time($model->statistics_at,$model->group_id);
+            $next_time= ActivityData::get_next_time($model->statistics_at,$model->group_id);
             if($pre_time&&$next_time){
-                ActivityChange::induce_data($pre_time,$next_time);          
+                ActivityChange::induce_data($pre_time,$next_time,$model->group_id);          
             }
             if($next_time){
-                ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time]);
+                ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time,'group_id'=>$model->group_id]);
             }
             $model->stat= ImportLog::STAT_START;
             $model->save();
@@ -248,7 +273,7 @@ class ImportController extends Controller {
     
     public function actionStart($id) {       
         $model = ImportLog::findOne($id);
-        if ($model !== null) {
+        if ($model !== null&&$model->group_id) {
                           
             $transaction = Yii::$app->db->beginTransaction();
             try {               
@@ -289,6 +314,7 @@ class ImportController extends Controller {
                         //不存在
                         $corporation=new Corporation();
                         $corporation->loadDefaultValues();
+                        $corporation->group_id=$model->group_id;
                         $corporation->huawei_account=trim($data[$field_huawei_account]);
                         $corporation->base_company_name=$field_corporation_name&&isset($data[$field_corporation_name])?trim($data[$field_corporation_name]):trim($data[$field_huawei_account]);
                         $corporation->save(false); 
@@ -366,9 +392,14 @@ class ImportController extends Controller {
             
             $model= new ImportLog();
             $model->stat= ImportLog::STAT_UPLOAD;
+            $model->uid=Yii::$app->user->identity->id;
             $model->created_at=time();
             $model->name=$filenames[0];
             $model->patch=$f_name;
+            $group = Group::get_user_group(Yii::$app->user->identity->id);
+            if(count($group)==1){
+                $model->group_id= key($group);   
+            }
             
             if (@move_uploaded_file($files['tmp_name'][0], $filename)&&$model->save()) {                
 

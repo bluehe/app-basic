@@ -8,6 +8,7 @@ use kartik\file\FileInput;
 use yii\bootstrap\Modal;
 use project\components\CommonHelper;
 use project\models\ImportLog;
+use project\models\UserGroup;
 
 
 /* @var $this yii\web\View */
@@ -72,13 +73,27 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'attribute' => 'group_id',
+                        'value' =>function($model) {
+                            return ($model->group_id?$model->group->title:'<span class="not-set">(未设置)</span>').' '.($model->stat == ImportLog::STAT_INDUCE?'':Html::a('设置项目', '#', [
+                                        'data-toggle' => 'modal',
+                                        'data-target' => '#import-modal',
+                                        'class' => 'btn btn-success btn-xs bind-group',
+                                        'data-id' => $model->id,
+                              
+                            ]));   //主要通过此种方式实现
+                        },
+                        'format' => 'raw',                       
+                        'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
+                    ],
                     'created_at:datetime',
                     'name',                  
                     [
                         'attribute' => 'statistics_at',
                         'value' =>
                         function($model) {
-                            return ($model->statistics_at>0?date('Y-m-d',$model->statistics_at):'未设置').' '.($model->stat == ImportLog::STAT_INDUCE?'':Html::a('设置日期', '#', [
+                            return ($model->statistics_at>0?date('Y-m-d',$model->statistics_at):'<span class="not-set">(未设置)</span>').' '.($model->stat == ImportLog::STAT_INDUCE?'':Html::a('设置日期', '#', [
                                         'data-toggle' => 'modal',
                                         'data-target' => '#import-modal',
                                         'class' => 'btn btn-success btn-xs bind',
@@ -89,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         
-                    ],
+                    ],                    
                     [
                         'attribute' => 'stat',
                         'value' =>
@@ -124,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 Modal::begin([
     'id' => 'import-modal',
-    'header' => '<h4 class="modal-title">设置日期</h4>',
+    'header' => '<h4 class="modal-title"></h4>',
     'options' => [
         'tabindex' => false
     ],
@@ -135,7 +150,19 @@ Modal::end();
 <?php $this->beginBlock('import') ?>
     
     $('.import-index').on('click', '.bind', function () {
+        $('#import-modal .modal-title').html('设置日期');
+        $('#import-modal .modal-body').html('');
         $.get('<?= Url::toRoute('bind') ?>', {id: $(this).closest('tr').data('key')},
+                function (data) {
+                    $('#import-modal .modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.import-index').on('click', '.bind-group', function () {
+        $('#import-modal .modal-title').html('设置项目');
+        $('#import-modal .modal-body').html('');
+        $.get('<?= Url::toRoute('bind-group') ?>', {id: $(this).closest('tr').data('key')},
                 function (data) {
                     $('#import-modal .modal-body').html(data);
                 }

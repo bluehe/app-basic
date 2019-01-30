@@ -9,6 +9,7 @@ use project\models\ActivitySearch;
 use project\models\ColumnSetting;
 use project\components\ExcelHelper;
 use project\models\ActivityChange;
+use project\models\Group;
 
 
 class ActivityController extends Controller { 
@@ -109,11 +110,19 @@ class ActivityController extends Controller {
         $objectPhpExcel = $objectreader->load($fileName);
         $objSheet = $objectPhpExcel->getActiveSheet();
         
-        $objSheet->setCellValue( 'A1', '时间段')
-            ->setCellValue( 'B1', '客户经理')
-            ->setCellValue( 'C1', '公司')
-            ->setCellValue( 'D1', $searchModel->getAttributeLabel('is_act'));
-        $r='E';
+        $group_count=count(Group::get_user_group(Yii::$app->user->identity->id));
+        $r='A';
+        if($group_count>1){
+            $objSheet->insertNewColumnBefore('A');
+            $objSheet->setCellValue( 'A1', $searchModel->getAttributeLabel('group_id'))->getStyle( 'A1')->getFont()->setBold(true);
+            $r++;
+        }
+        
+        $objSheet->setCellValue( $r++.'1', '时间段')
+            ->setCellValue( $r++.'1', '客户经理')
+            ->setCellValue( $r++.'1', '公司')
+            ->setCellValue( $r++.'1', $searchModel->getAttributeLabel('is_act'));
+        
         foreach($column as $c){
             $objSheet->setCellValue( $r.'1', $searchModel->getAttributeLabel($c));
             $r++;
@@ -122,15 +131,20 @@ class ActivityController extends Controller {
       
         foreach($models as $key=>$model){
             $k=$key+2;
-            $objSheet->setCellValue( 'A'.$k, date('Y-m-d',$model->start_time+86400).' ~ '.date('Y-m-d',$model->end_time))
-                ->setCellValue( 'B'.$k, $model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'')
-                ->setCellValue( 'C'.$k, $model->corporation->base_company_name)
-                ->setCellValue( 'D'.$k, $model->Act);                       
+            $r='A';
+            if($group_count>1){
+                $objSheet->setCellValue( 'A'.$k, $model->group_id?$model->group->title:$model->group_id);
+                $r++;
+            }
+            $objSheet->setCellValue( $r++.$k, date('Y-m-d',$model->start_time+86400).' ~ '.date('Y-m-d',$model->end_time))
+                ->setCellValue( $r++.$k, $model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'')
+                ->setCellValue( $r++.$k, $model->corporation->base_company_name)
+                ->setCellValue( $r++.$k, $model->Act);                       
             
-            $r='E';
             foreach($column as $c){
                 if(preg_match("/\S+_d$/",$c)){
-                    $c_v=$model->data->{substr($c,0,-2)};                    
+                    $str=substr($c,0,-2);
+                    $c_v= !empty($model->data->$str)?$model->data->$str:'';                    
                 }else{
                     $c_v=$model->$c;
                     if($c_v!=0){

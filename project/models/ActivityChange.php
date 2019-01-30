@@ -81,8 +81,8 @@ class ActivityChange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['start_time', 'end_time', 'corporation_id', 'type'], 'required'],
-            [['start_time', 'end_time', 'bd_id','corporation_id', 'type', 'is_act', 'act_trend','health', 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount'], 'integer'],
+            [['group_id','start_time', 'end_time', 'corporation_id', 'type'], 'required'],
+            [['group_id','start_time', 'end_time', 'bd_id','corporation_id', 'type', 'is_act', 'act_trend','health', 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount'], 'integer'],
             [['projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount'], 'number'],
             [['corporation_id', 'start_time', 'end_time'], 'unique', 'targetAttribute' => ['corporation_id', 'start_time', 'end_time'],'message'=>'已经存在此项数据'],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
@@ -104,6 +104,7 @@ class ActivityChange extends \yii\db\ActiveRecord
     {
         return array_merge([
             'id'=>'ID',
+            'group_id' => '项目',
             'start_time' => '开始时间',
             'end_time' => '结束时间',
             'bd_id' => '客户经理',
@@ -250,6 +251,14 @@ class ActivityChange extends \yii\db\ActiveRecord
         return $this->hasOne(Corporation::className(), ['id' => 'corporation_id']);
     }
     
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroup()
+    {
+        return $this->hasOne(Group::className(), ['id' => 'group_id']);
+    }
+    
     public function getBd()
     {
         return $this->hasOne(User::className(), ['id' => 'bd_id']);
@@ -261,17 +270,18 @@ class ActivityChange extends \yii\db\ActiveRecord
     }
     
     //生成数据
-    public static function induce_data($start_time,$end_time,$corporation_id='') {
+    public static function induce_data($start_time,$end_time,$group_id,$corporation_id='') {
         $corporation_bd= CorporationBd::get_bd_by_time($end_time);
         $model_change=new ActivityChange();
         $model_change->loadDefaultValues();
         $model_change->start_time=$start_time;
         $model_change->end_time=$end_time;
+        $model_change->group_id=$group_id;
                         
         $codes= self::$List['column_activity'];//计算字段
         $typeadd_codes= Field::get_typeadd_code($end_time);//排除字段
-        $news= ActivityData::get_data_by_time($end_time,$corporation_id);
-        $olds= ActivityData::get_data_by_time($start_time,$corporation_id);
+        $news= ActivityData::get_data_by_time($end_time,$group_id,$corporation_id);
+        $olds= ActivityData::get_data_by_time($start_time,$group_id,$corporation_id);
         $new_keys= array_keys($news);
         $old_keys= array_keys($olds);
         //新增
@@ -352,25 +362,46 @@ class ActivityChange extends \yii\db\ActiveRecord
         return true;
     }
     
-    //设定健康度
-    public static function set_health() {
+    //设定趋势
+    public static function set_trend() {
         
-        $end_times = static::find()->where(['health'=>self::HEALTH_WA])->select(['end_time'])->orderBy(['end_time'=>SORT_DESC])->distinct()->limit(5)->column();
+        $datas = static::find()->where(['act_trend'=>self::TREND_WA])->all();
+        foreach($datas as $data){
+            $model_old= static::find()->where(['corporation_id'=>$data->corporation_id])->andWhere(['<','start_time',$data->start_time])->orderBy(['start_time'=>SORT_DESC])->one();
+            $old=$model_old==null?self::ACT_N:$model_old->is_act;
+            $v=$data->is_act-$old;
+            switch ($v){
+                case 0:$data->act_trend=self::TREND_UC;break;
+                case 1:$data->act_trend=self::TREND_IN;break;
+                case -1:$data->act_trend=self::TREND_DE;break;
+                default:$data->act_trend=self::TREND_WA;
+            }
+            static::updateAll(['act_trend'=>$data->act_trend], ['id'=>$data->id]);
+           // $data->save();
+            
+        }
+        return true;
+    }
+    
+    //设定健康度
+    public static function set_health($group_id=null) {
+        
+        $end_times = static::find()->where(['health'=>self::HEALTH_WA])->andFilterWhere(['group_id'=>$group_id])->select(['end_time','group_id'])->orderBy(['end_time'=>SORT_DESC])->groupBy(['end_time','group_id'])->limit(5)->all();
         if($end_times){
             
             foreach ($end_times as $end_time){
-                $s= static::find()->where(['<=','end_time',$end_time])->select(['end_time'])->distinct()->limit(4)->orderBy(['end_time'=>SORT_DESC])->column();//最近四次时间
+                $s= static::find()->where(['<=','end_time',$end_time->end_time])->andFilterWhere(['group_id'=>$end_time->group_id])->select(['end_time'])->distinct()->limit(4)->orderBy(['end_time'=>SORT_DESC])->column();//最近四次时间
                 $start_time=min($s);
 //                $datas=$activity_data=$activity_num=$corporation_allocate=null;
         
                 //每个时间段计算
-                $datas=static::find()->where(['health'=>self::HEALTH_WA,'end_time'=>$end_time])->all();
+                $datas=static::find()->andFilterWhere(['health'=>self::HEALTH_WA,'end_time'=>$end_time->end_time,'group_id'=>$end_time->group_id])->all();
                 //当期历史数据
-                $activity_data=ActivityData::find()->where(['statistics_time'=>$end_time])->select(['corporation_id','projectman_projectcount','projectman_issuecount','codehub_commitcount','codehub_repositorysize','pipeline_executecount','codecheck_execount','codeci_buildtotaltime','testman_totalexecasecount','deploy_execount','projectman_membercount','projectman_storagecount','codehub_all_usercount','pipeline_pipecount','codecheck_usercount','deploy_envcount'])->indexBy('corporation_id')->all();
+                $activity_data=ActivityData::find()->andFilterWhere(['statistics_time'=>$end_time->end_time])->select(['corporation_id','projectman_projectcount','projectman_issuecount','codehub_commitcount','codehub_repositorysize','pipeline_executecount','codecheck_execount','codeci_buildtotaltime','testman_totalexecasecount','deploy_execount','projectman_membercount','projectman_storagecount','codehub_all_usercount','pipeline_pipecount','codecheck_usercount','deploy_envcount'])->indexBy('corporation_id')->all();
                 //当期活跃周数
-                $activity_num=static::find()->where(['is_act'=>self::ACT_Y])->andWhere(['between','end_time',$start_time-1,$end_time+1])->select(['corporation_id','num'=>'count(corporation_id)'])->groupBy(['corporation_id'])->indexBy('corporation_id')->asArray()->all();
+                $activity_num=static::find()->where(['is_act'=>self::ACT_Y])->andWhere(['between','end_time',$start_time-1,$end_time->end_time+1])->select(['corporation_id','num'=>'count(corporation_id)'])->groupBy(['corporation_id'])->indexBy('corporation_id')->asArray()->all();
                 //企业下拨额
-                $corporation_allocate= CorporationMeal::find()->andWhere(['<=','start_time',$end_time])->andWhere(['>=','end_time',$end_time])->select(['amount'=>'SUM(amount)','devcloud_count'=>'SUM(devcloud_count)','devcloud_amount'=>'SUM(devcloud_amount)','cloud_amount'=>'SUM(cloud_amount)','corporation_id'])->indexBy('corporation_id')->groupBy(['corporation_id'])->asArray()->all();
+                $corporation_allocate= CorporationMeal::find()->andWhere(['<=','start_time',$end_time->end_time])->andWhere(['>=','end_time',$end_time->end_time])->select(['amount'=>'SUM(amount)','devcloud_count'=>'SUM(devcloud_count)','devcloud_amount'=>'SUM(devcloud_amount)','cloud_amount'=>'SUM(cloud_amount)','corporation_id'])->indexBy('corporation_id')->groupBy(['corporation_id'])->asArray()->all();
                 
                 
                 foreach($datas as $data){
@@ -568,27 +599,6 @@ class ActivityChange extends \yii\db\ActiveRecord
             }
         }
         return $res_and&&$res_or;
-    }
-       
-    //设定趋势
-    public static function set_trend() {
-        
-        $datas = static::find()->where(['act_trend'=>self::TREND_WA])->all();
-        foreach($datas as $data){
-            $model_old= static::find()->where(['corporation_id'=>$data->corporation_id])->andWhere(['<','start_time',$data->start_time])->orderBy(['start_time'=>SORT_DESC])->one();
-            $old=$model_old==null?self::ACT_N:$model_old->is_act;
-            $v=$data->is_act-$old;
-            switch ($v){
-                case 0:$data->act_trend=self::TREND_UC;break;
-                case 1:$data->act_trend=self::TREND_IN;break;
-                case -1:$data->act_trend=self::TREND_DE;break;
-                default:$data->act_trend=self::TREND_WA;
-            }
-            static::updateAll(['act_trend'=>$data->act_trend], ['id'=>$data->id]);
-           // $data->save();
-            
-        }
-        return true;
     }
     
     //活跃度趋势

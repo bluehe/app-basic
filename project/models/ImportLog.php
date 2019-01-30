@@ -37,10 +37,13 @@ class ImportLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['stat'], 'integer'],
-            [['created_at'], 'required'],
+            [['group_id','uid','stat'], 'integer'],
+            [['uid','created_at'], 'required'],
+            [['group_id'], 'required','on'=>'group'],
             [['name', 'patch'], 'string', 'max' => 64],
             [['statistics_at'],'safe'],
+            [['uid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['uid' => 'id']],
+            [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
         ];
     }
 
@@ -51,6 +54,8 @@ class ImportLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'uid' => '创建人',
+            'group_id' => '项目',
             'name' => '名称',
             'patch' => '路径',
             'statistics_at' => '统计日期',
@@ -71,6 +76,22 @@ class ImportLog extends \yii\db\ActiveRecord
      public function getStat() {
         $stat = isset(self::$List['stat'][$this->stat]) ? self::$List['stat'][$this->stat] : null;
         return $stat;
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getU()
+    {
+        return $this->hasOne(User::className(), ['id' => 'uid']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroup()
+    {
+        return $this->hasOne(Group::className(), ['id' => 'group_id']);
     }
 
     /**

@@ -54,7 +54,7 @@ class ActivitySearch extends ActivityChange
     public function rules()
     {
         return [
-            [['id','bd_id', 'corporation_id','type','is_act','act_trend','health'], 'integer'],
+            [['id','group_id','bd_id', 'corporation_id','type','is_act','act_trend','health'], 'integer'],
             [[ 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount','projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount', 'projectman_usercount_d', 'projectman_projectcount_d', 'projectman_membercount_d', 'projectman_versioncount_d', 'projectman_issuecount_d', 'codehub_all_usercount_d', 'codehub_repositorycount_d', 'codehub_commitcount_d', 'pipeline_usercount_d', 'pipeline_pipecount_d', 'pipeline_executecount_d', 'codecheck_usercount_d', 'codecheck_taskcount_d', 'codecheck_codelinecount_d', 'codecheck_issuecount_d', 'codecheck_execount_d', 'codeci_usercount_d', 'codeci_buildcount_d', 'codeci_allbuildcount_d', 'testman_usercount_d', 'testman_casecount_d', 'testman_totalexecasecount_d', 'deploy_usercount_d', 'deploy_envcount_d', 'deploy_execount_d','projectman_storagecount_d', 'codehub_repositorysize_d', 'pipeline_elapse_time_d', 'codeci_buildtotaltime_d', 'deploy_vmcount_d'], 'safe'],
             [[ 'start_time', 'end_time','corporation','h_h','h_c','h_i','h_a','h_r','h_v','h_d'],'safe'],
         ];
@@ -79,7 +79,7 @@ class ActivitySearch extends ActivityChange
     public function search($params,$start=0,$end=0,$sum=1,$annual='', $pageSize = '')
     {
         $subQuery = ActivityChange::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end]])->orderBy(['start_time'=>SORT_DESC])->limit(ActivityChange::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end]])->count());
-        $query = ActivityChange::find()->from(['c'=>$subQuery])->joinWith(['corporation','data d']);
+        $query = ActivityChange::find()->from(['c'=>$subQuery])->joinWith(['corporation','data d','group']);
         if($annual=='all'){
             
             
@@ -92,6 +92,7 @@ class ActivitySearch extends ActivityChange
                 'start_time'=>'MIN(start_time)',
                 'end_time'=>'MAX(end_time)',
                 'bd_id',
+                'group_id'=>'c.group_id',
                 'corporation_id'=>'c.corporation_id',
                 'is_act'=>'MAX(is_act)',
                 'act_trend'=>'SUM(CASE WHEN is_act='.ActivityChange::ACT_Y.' THEN 1  ELSE 0 END)/count(*)',
@@ -227,6 +228,7 @@ class ActivitySearch extends ActivityChange
         $query->andFilterWhere([
             'act_trend'=>$this->act_trend,
             'health'=>$this->health,
+            'c.group_id'=>$this->group_id,
         ]);
         
         
@@ -272,6 +274,8 @@ class ActivitySearch extends ActivityChange
         CommonHelper::searchNumber($query, $business_activity_search?'h_r':"c.h_r", $this->h_r,$business_activity_search);
         CommonHelper::searchNumber($query, $business_activity_search?'h_v':"c.h_v", $this->h_v,$business_activity_search);
         CommonHelper::searchNumber($query, $business_activity_search?'h_d':"c.h_d", $this->h_d,$business_activity_search);
+        
+        $query->andWhere(['or',['c.group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],['c.group_id'=>NULL]]);
         
 //        if($this->projectman_usercount){
 //            CommonHelper::searchNumber($query, $business_activity_search?'projectman_usercount':'c.projectman_usercount', $this->projectman_usercount,$business_activity_search);

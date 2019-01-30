@@ -11,6 +11,8 @@ use yii\bootstrap\Modal;
 use project\models\User;
 use kartik\widgets\Select2;
 use project\models\Parameter;
+use project\models\UserGroup;
+use project\models\Group;
 
 $this->title = '活跃数据';
 $this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['activity/index']];
@@ -126,6 +128,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions' => ['class' => 'table table-bordered table-hover'],
                 'rowOptions'=>function($model, $key, $index, $grid) {return Yii::$app->request->get('sum',1)?'':["class" => $model->type== ActivityChange::TYPE_ADD ?'bg-teal-gradient':($model->type== ActivityChange::TYPE_DELETE?'bg-orange' :'')  ];},
                 'columns' => [
+                     [
+                        'attribute' => 'group_id',
+                        'value' =>function($model) {
+                            return ($model->group_id?$model->group->title:'<span class="not-set">(未设置)</span>');   //主要通过此种方式实现
+                        },
+                        'format' => 'raw',
+                        'filter' => Group::get_user_group(Yii::$app->user->identity->id),
+                        'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
+                    ],
                     [
                         'attribute' => 'start_time',
                         'label' => '时间段',

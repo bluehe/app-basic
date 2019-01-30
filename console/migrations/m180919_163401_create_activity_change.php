@@ -14,6 +14,7 @@ class m180919_163401_create_activity_change extends Migration {
         $table = '{{%activity_change}}';
         $userTable = '{{%user}}';
         $corporationTable = '{{%corporation}}';
+        $groupTable = '{{%group}}';
       
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -22,6 +23,7 @@ class m180919_163401_create_activity_change extends Migration {
         }
         $this->createTable($table, [
             'id' => $this->primaryKey(),
+            'group_id' => $this->integer()->comment('项目'),
             'start_time' => $this->integer()->notNull(),
             'end_time' => $this->integer()->notNull(),
             'bd_id' => $this->integer(),
@@ -77,6 +79,7 @@ class m180919_163401_create_activity_change extends Migration {
                
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
             "FOREIGN KEY ([[bd_id]]) REFERENCES {$userTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
+            "FOREIGN KEY ([[group_id]]) REFERENCES {$groupTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",
            
                 ], $tableOptions);
             
