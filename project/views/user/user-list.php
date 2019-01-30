@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use project\models\User;
+use project\models\Group;
 
 /* @var $this yii\web\View */
 /* @var $searchModel dh\models\UserSearch */
@@ -59,16 +60,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                     ],
-//                    [
-//                        'label' => '用户组',
-//                        'format' => 'raw',
-//                        'value' =>
-//                        function($model) {
-//                            $group = $model->groups;
-//                            return Html::tag('span', 'Lv.' . $level, ['class' => 'badge icon_level_c' . ceil($level / Yii::$app->params['level_c'])]);
-//                        },
-//                        'headerOptions' => ['width' => '60'],
-//                    ],
+                    [
+                        'label' => '项目',
+                        'format' => 'raw',
+                        'value' =>
+                        function($model) {
+                            $group = Group::get_user_group($model->id);
+                            return implode(',', $group);
+                        },
+                        'headerOptions' => ['width' => '60'],
+                    ],
                   
                     [
                         'attribute' => 'last_login',
