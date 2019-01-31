@@ -13,6 +13,7 @@ use project\models\CorporationIndustry;
 use project\models\Industry;
 use project\models\Train;
 use project\models\ClouldSubsidy;
+use project\models\UserGroup;
 
 class StatisticsController extends Controller {
 
@@ -53,11 +54,14 @@ class StatisticsController extends Controller {
     
     public function actionCorporation() {
          
+        $annual=Yii::$app->request->get('annual',null);
+        $group=Yii::$app->request->get('group',null);
+        
         //行业
         $series['industry'] = [];
         $drilldown['industry']=[];
         
-        $industry_num= CorporationIndustry::get_industry_total();
+        $industry_num= CorporationIndustry::get_industry_total($annual,$group);
         $industrys= Industry::find()->where(['id'=> array_keys($industry_num)])->indexBy('id')->all();
         $parent=$sum=[];
         
@@ -89,7 +93,7 @@ class StatisticsController extends Controller {
         //注册资金
         $series['capital']=[];       
         $data_capital=[];     
-        $capitals= Corporation::get_capital_total();
+        $capitals= Corporation::get_capital_total($annual,$group);
         foreach($capitals as $capital){
             $data_capital[] = ['name' =>  $capital['title'], 'y' => (int) $capital['num']];
         }
@@ -98,7 +102,7 @@ class StatisticsController extends Controller {
         //研发规模
         $series['scale']=[];       
         $data_scale=[];     
-        $scales= Corporation::get_scale_total();
+        $scales= Corporation::get_scale_total($annual,$group);
         foreach($scales as $scale){
             $data_scale[] = ['name' =>  $scale['title'], 'y' => (int) $scale['num']];
         }
@@ -110,7 +114,7 @@ class StatisticsController extends Controller {
         $end = strtotime('today');
         $start = strtotime('-1 year',$end);
         $sum=Yii::$app->request->get('sum',1);//1-天；2-周；3-月
-        $annual=Yii::$app->request->get('annual');
+        
 
         if (Yii::$app->request->get('range')) {
             $range = explode('~', Yii::$app->request->get('range'));
@@ -118,14 +122,19 @@ class StatisticsController extends Controller {
             $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]) : $end;
         }
 
-        $allocate_total= CorporationMeal::get_amount_total($start,$end,$sum,0,$annual);
-        $base_amount= (float)CorporationMeal::get_amount_base($start,$annual);
+        $allocate_total= CorporationMeal::get_amount_total($start,$end,$sum,0,$annual,$group);
+        $base_amount= (float)CorporationMeal::get_amount_base($start,$annual,$group);
                
-        $clould_total= ClouldSubsidy::get_amount_total($start,$end,$sum,$annual);
-        $base_clould=$base_clould_cost=(float)ClouldSubsidy::get_amount_base($start,$annual);
+        $clould_total= ClouldSubsidy::get_amount_total($start,$end,$sum,$annual,$group);
+        $base_clould=$base_clould_cost=(float)ClouldSubsidy::get_amount_base($start,$annual,$group);
         
         $cache = Yii::$app->cache;
-        $cost_total = $cache->get('allocate_cost_'.$annual);
+        if(!$group){
+            $group_id= implode(',',UserGroup::get_user_groupid(Yii::$app->user->identity->id));
+        }else{
+            $group_id=$group;
+        }
+        $cost_total = $cache->get('allocate_cost_'.$annual.'_'.$group_id);
         if ($cost_total === false) {
             $cost_total=[];
         }
@@ -189,7 +198,7 @@ class StatisticsController extends Controller {
                 }else{
                     $k=date('Y-m-d', $i);
                     $base_clould_cost=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould_cost : $base_clould_cost;
-                    $cost= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual))+$base_clould_cost;
+                    $cost= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+$base_clould_cost;
                     $cost_total[$i]=$cost;
                 }
 
@@ -197,9 +206,9 @@ class StatisticsController extends Controller {
             }
             $series['amount'][] = ['type' => 'areaspline','zIndex'=>2, 'name' => '累计消耗额','color'=>'#90EE7E', 'data' => $data_amount_cost];
             if($old_cost_num!=count($cost_total)){
-                $query = CorporationMeal::find()->select(['SUM(amount)'])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
+                $query = CorporationMeal::find()->select(['SUM(amount)'])->andWhere(['group_id'=> explode(',', $group_id)])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
                 $dependency = new \yii\caching\DbDependency(['sql' => $query]);
-                $cache->set('allocate_cost_'.$annual, $cost_total, null, $dependency);
+                $cache->set('allocate_cost_'.$annual.'_'.$group_id, $cost_total, null, $dependency);
             }
 
         }elseif($sum==2){
@@ -266,10 +275,10 @@ class StatisticsController extends Controller {
                 $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
 
                 if(!isset($cost_total[$i])){                       
-                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual))+(float)ClouldSubsidy::get_amount_base($i,$annual);
+                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+(float)ClouldSubsidy::get_amount_base($i,$annual,$group);
                 }
                 if(!isset($cost_total[$l+86400])){
-                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual))+(float)ClouldSubsidy::get_amount_base($l+86400,$annual);
+                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual,$group))+(float)ClouldSubsidy::get_amount_base($l+86400,$annual,$group);
                 }
 
 
@@ -280,9 +289,9 @@ class StatisticsController extends Controller {
             }
             $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
             if($old_cost_num!=count($cost_total)){
-                $query = CorporationMeal::find()->select(['SUM(amount)'])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
+                $query = CorporationMeal::find()->select(['SUM(amount)'])->andWhere(['group_id'=> explode(',', $group_id)])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
                 $dependency = new \yii\caching\DbDependency(['sql' => $query]);
-                $cache->set('allocate_cost_'.$annual, $cost_total, null, $dependency);
+                $cache->set('allocate_cost_'.$annual.'_'.$group_id, $cost_total, null, $dependency);
             }
         }else{
             //月
@@ -343,10 +352,10 @@ class StatisticsController extends Controller {
                 $l=strtotime('+1 months',$i)-86400<$end?strtotime('+1 months',$i)-86400:$end;
                 $j = date('Y.n', $i);                                      
                 if(!isset($cost_total[$i])){                       
-                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual))+(float)ClouldSubsidy::get_amount_base($i,$annual);
+                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+(float)ClouldSubsidy::get_amount_base($i,$annual,$group);
                 }
                 if(!isset($cost_total[$l+86400])){
-                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual))+(float)ClouldSubsidy::get_amount_base($l+86400,$annual);
+                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual,$group))+(float)ClouldSubsidy::get_amount_base($l+86400,$annual,$group);
                 }
 
                 $cost=$cost_total[$l+86400]-$cost_total[$i];
@@ -355,16 +364,16 @@ class StatisticsController extends Controller {
             }
             $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
             if($old_cost_num!=count($cost_total)){
-                $query = CorporationMeal::find()->select(['SUM(amount)'])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
+                $query = CorporationMeal::find()->select(['SUM(amount)'])->andWhere(['group_id'=> explode(',', $group_id)])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
                 $dependency = new \yii\caching\DbDependency(['sql' => $query]);
-                $cache->set('allocate_cost_'.$annual, $cost_total, null, $dependency);
+                $cache->set('allocate_cost_'.$annual.'_'.$group_id, $cost_total, null, $dependency);
             }
         }
             
         //下拨金额百分比
         $series['allocate_num']=[]; 
         $data_allocate=[];     
-        $allocate_num= CorporationMeal::get_allocate_num($start,$end,$annual);
+        $allocate_num= CorporationMeal::get_allocate_num($start,$end,$annual,$group);
         foreach($allocate_num as $allocate){
             $data_allocate[] = ['name' =>floatval($allocate['amount']/10000).'万', 'y' => (int) $allocate['num']];
         }
@@ -375,7 +384,7 @@ class StatisticsController extends Controller {
         $data_allocate_bd=[]; 
         $changes=[];
         $bds=[];
-        $allocate_bd= CorporationMeal::get_amount_total($start,$end,3,1,$annual);
+        $allocate_bd= CorporationMeal::get_amount_total($start,$end,3,1,$annual,$group);
         
         $groups = User::get_bd_color();
             
@@ -400,7 +409,7 @@ class StatisticsController extends Controller {
         }
         
      
-        return $this->render('corporation', ['series' => $series,'drilldown'=>$drilldown, 'start' => $start, 'end' => $end,'sum'=>$sum,'annual'=>$annual]);
+        return $this->render('corporation', ['series' => $series,'drilldown'=>$drilldown, 'start' => $start, 'end' => $end,'sum'=>$sum,'annual'=>$annual,'group'=>$group]);
         
     }
     

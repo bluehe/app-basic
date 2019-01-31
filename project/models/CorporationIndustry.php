@@ -68,8 +68,18 @@ class CorporationIndustry extends \yii\db\ActiveRecord
         return self::find()->where(['corporation_id' => $id])->select(['industry_id'])->column();
     }
     
-    public static function get_industry_total() {
-         $data= static::find()->select(['num'=>'count(corporation_id)','industry_id'])->orderBy(['num'=>SORT_DESC])->groupBy(['industry_id'])->indexBy('industry_id')->column();
+    public static function get_industry_total($annual=null,$group_id=null) {
+        $query =  static::find();
+        if($annual){
+            $corporation= CorporationMeal::get_corporation_by_annual($annual);
+            $query->andFilterWhere(['corporation_id'=>$corporation]);
+        }
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
+        $corporation= CorporationMeal::get_corporation_by_group($group_id);
+        $query->andWhere(['corporation_id'=>$corporation]);
+        $data=$query->select(['num'=>'count(corporation_id)','industry_id'])->orderBy(['num'=>SORT_DESC])->groupBy(['industry_id'])->indexBy('industry_id')->column();
          return $data;
      }
 }

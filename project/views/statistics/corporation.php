@@ -9,6 +9,8 @@ use kartik\widgets\SwitchInput;
 use yii\web\JsExpression;
 use kartik\widgets\Select2;
 use project\models\Parameter;
+use project\models\Group;
+use project\models\UserGroup;
 
 $this->title = '企业统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['corporation']];
@@ -25,7 +27,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li class="active"><a href="#amount_line" data-toggle="tab">下拨消耗</a></li>
                 <li><a href="#industry_line" data-toggle="tab">行业规模</a></li>
                 
-                <li class="pull-right headers header">
+                <li class="pull-right header">
+                    <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1?Select2::widget([
+                        'name' => 'group',                        
+                        'data' => Group::get_user_group(Yii::$app->user->identity->id),
+                        'value'=>$group,
+                        'options' => [
+                            'placeholder' => '项目',
+                            'id'=>'group',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'width' => '110%'
+                        ],
+                        'pluginEvents' => [
+                            "change" => "function() {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():'';self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
+                        ]
+                    ]):'';?>
+                    
+                </li>
+                
+                <li class="pull-right header">
                     <?= Select2::widget([
                         'name' => 'annual',                        
                         'data' => Parameter::get_type('allocate_annual'),
@@ -39,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'width' => '110%'
                         ],
                         'pluginEvents' => [
-                            "change" => "function() {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
+                            "change" => "function() {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():'';self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
                         ]
                     ]);?>
                     
@@ -61,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val(); var g=$('#group').length?$('#group').val():'';self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
                     ]
                     ]);
                     ?>
@@ -87,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('input[name=sum]:checked').val();var a=$('#annual').val(); self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a;}",
+                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
                     ]
                     ]);
                     ?>

@@ -256,8 +256,11 @@ class CorporationMeal extends \yii\db\ActiveRecord
         return $time>0?$time:null;       
     }
     
-        public static function get_amount_total($start='', $end='',$sum=1,$group=0,$annual='') {
-        $query= static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'start_time', $end]])->andFilterWhere(['annual'=>$annual])->orderBy(['MAX(start_time)'=>SORT_ASC]);
+        public static function get_amount_total($start='', $end='',$sum=1,$bd=0,$annual=null,$group_id=null) {
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
+        $query= static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'start_time', $end]])->andFilterWhere(['annual'=>$annual])->orderBy(['MAX(start_time)'=>SORT_ASC]);
         if($sum==1){
             //天
             $query->select(['amount'=>'SUM(amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(start_time, '%Y-%m-%d')"])->groupBy(["FROM_UNIXTIME(start_time, '%Y-%m-%d')"])->indexBy(['time']);
@@ -266,7 +269,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
             $query->select(['amount'=>'SUM(amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(start_time, '%Y-W%u')"])->groupBy(["FROM_UNIXTIME(start_time, '%Y-W%u')"])->indexBy(['time']);      
         }else{
             //月
-            if($group==1){
+            if($bd==1){
                 $query->select(['amount'=>'SUM(amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(start_time, '%Y-%m')",'bd'])->groupBy(["FROM_UNIXTIME(start_time, '%Y-%m')",'bd']);
             }else{
                 $query->select(['amount'=>'SUM(amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(start_time, '%Y-%m')"])->groupBy(["FROM_UNIXTIME(start_time, '%Y-%m')"])->indexBy(['time']);
@@ -275,16 +278,33 @@ class CorporationMeal extends \yii\db\ActiveRecord
         return $query->asArray()->all();
     }
 
-    public static function get_amount_base($start='',$annual='') {
-        return static::find()->andFilterWhere(['<','start_time', $start])->andFilterWhere(['annual'=>$annual])->sum('amount');     
+    public static function get_amount_base($start='',$annual=null,$group_id=null) {
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
+        return static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['<','start_time', $start])->andFilterWhere(['annual'=>$annual])->sum('amount');     
     }    
     
-    public static function get_cost_total($time,$annual='') {
-        return static::find()->andFilterWhere(['<','start_time', $time])->andFilterWhere(['annual'=>$annual])->sum("(CASE WHEN ($time-start_time)/(end_time+1-start_time)<1 THEN amount*($time-start_time)/(end_time+1-start_time) ELSE amount END)");     
+    public static function get_cost_total($time,$annual=null,$group_id=null) {
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
+        return static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['<','start_time', $time])->andFilterWhere(['annual'=>$annual])->sum("(CASE WHEN ($time-start_time)/(end_time+1-start_time)<1 THEN amount*($time-start_time)/(end_time+1-start_time) ELSE amount END)");     
     }
     
-    public static function get_allocate_num($start='', $end='',$annual='') {
-        return static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'start_time', $end]])->andFilterWhere(['annual'=>$annual])->select(['amount','num'=>'count(*)'])->orderBy(['num'=>SORT_DESC])->groupBy(['amount'])->asArray()->all();
+    public static function get_allocate_num($start='', $end='',$annual=null,$group_id=null) {
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
+        return static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'start_time', $end]])->andFilterWhere(['annual'=>$annual])->select(['amount','num'=>'count(*)'])->orderBy(['num'=>SORT_DESC])->groupBy(['amount'])->asArray()->all();
+    }
+    
+    public static function get_corporation_by_annual($annual=null) {
+        return static::find()->andFilterWhere(['annual'=>$annual])->select(['corporation_id'])->column();     
+    }
+    
+    public static function get_corporation_by_group($group=null) {
+        return static::find()->andWhere(['group_id'=>$group])->select(['corporation_id'])->column();     
     }
     
 }

@@ -431,11 +431,31 @@ class Corporation extends \yii\db\ActiveRecord
    
 
     
-    public static function get_capital_total() {
-        return static::find()->andWhere(['>','base_registered_capital',0])->select(["(CASE WHEN base_registered_capital>0 AND base_registered_capital<=500 THEN '0-500万' WHEN base_registered_capital>500 AND base_registered_capital<=3000 THEN '500-3000万' WHEN base_registered_capital>3000 AND base_registered_capital<=5000 THEN '3000-5000万' WHEN base_registered_capital>5000 THEN '5000万以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(base_registered_capital)'=>SORT_ASC])->asArray()->all();
+    public static function get_capital_total($annual=null,$group_id=null) {
+        $query =  static::find();
+        if($annual){
+            $corporation= CorporationMeal::get_corporation_by_annual($annual);
+            $query->andWhere(['id'=>$corporation]);
+        }
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
+        $corporation_g= CorporationMeal::get_corporation_by_group($group_id);
+        $query->andWhere(['id'=>$corporation_g]);
+        return $query->andWhere(['>','base_registered_capital',0])->select(["(CASE WHEN base_registered_capital>0 AND base_registered_capital<=500 THEN '0-500万' WHEN base_registered_capital>500 AND base_registered_capital<=3000 THEN '500-3000万' WHEN base_registered_capital>3000 AND base_registered_capital<=5000 THEN '3000-5000万' WHEN base_registered_capital>5000 THEN '5000万以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(base_registered_capital)'=>SORT_ASC])->asArray()->all();
     }
     
-     public static function get_scale_total() {
-        return static::find()->andWhere(['>','develop_scale',0])->select(["(CASE WHEN develop_scale>0 AND develop_scale<=10 THEN '1-10人' WHEN develop_scale>10 AND develop_scale<=20 THEN '11-20人' WHEN develop_scale>20 AND develop_scale<=40 THEN '21-40人' WHEN develop_scale>40 THEN '40人以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(develop_scale)'=>SORT_ASC])->asArray()->all();
+     public static function get_scale_total($annual=null,$group_id=null) {
+        $query =  static::find();
+        if($annual){
+            $corporation= CorporationMeal::get_corporation_by_annual($annual);
+            $query->andWhere(['id'=>$corporation]);
+        }
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
+        $corporation= CorporationMeal::get_corporation_by_group($group_id);
+        $query->andWhere(['id'=>$corporation]);
+        return $query->andWhere(['>','develop_scale',0])->select(["(CASE WHEN develop_scale>0 AND develop_scale<=10 THEN '1-10人' WHEN develop_scale>10 AND develop_scale<=20 THEN '11-20人' WHEN develop_scale>20 AND develop_scale<=40 THEN '21-40人' WHEN develop_scale>40 THEN '40人以上' ELSE '未设置' END) as title,count(*) as num"])->groupBy(['title'])->orderBy(['MAX(develop_scale)'=>SORT_ASC])->asArray()->all();
     }
 }
