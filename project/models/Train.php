@@ -273,11 +273,15 @@ class Train extends \yii\db\ActiveRecord
         return implode('，', $data);
     }
     
-    public static function get_train_num($start, $end,$stat='',$sum=1,$group=1) {
+    public static function get_train_num($start, $end,$stat='',$sum=1,$total=1,$group_id=null) {
         
-        if($group==1){
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
+        
+        if($total==1){
              //所有
-            $query = static::find()->andFilterWhere(['and',['>=', 'train_start', $start],['<=', 'train_end', $end]])->andFilterWhere(['train_stat'=>$stat])->orderBy(['MAX(train_start)'=>SORT_ASC]);
+            $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'train_start', $start],['<=', 'train_end', $end]])->andFilterWhere(['train_stat'=>$stat])->orderBy(['MAX(train_start)'=>SORT_ASC]);
             if($sum==1){
                 //天
                 $query->groupBy(["FROM_UNIXTIME(train_start, '%Y-%m-%d')"])->select(['num'=>'count(*)','time'=>"FROM_UNIXTIME(train_start, '%Y-%m-%d')"])->indexBy(['time']);
@@ -291,7 +295,7 @@ class Train extends \yii\db\ActiveRecord
          
         }else{
             //个人
-            $query = TrainUser::find()->joinWith(['train','user'])->andFilterWhere(['and',['>=', 'train_start', $start],['<=', 'train_end', $end]])->andFilterWhere(['train_stat'=>$stat])->andFilterWhere(['role'=>'sa'])->orderBy(['MAX(train_start)'=>SORT_ASC]);
+            $query = TrainUser::find()->joinWith(['train','user'])->andWhere([self::tableName().'.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'train_start', $start],['<=', 'train_end', $end]])->andFilterWhere(['train_stat'=>$stat])->andFilterWhere(['role'=>'sa'])->orderBy(['MAX(train_start)'=>SORT_ASC]);
             if($sum==1){
                 //天
                 $query->groupBy(["FROM_UNIXTIME(train_start, '%Y-%m-%d')",'user_id'])->select(['num'=>'count(*)','time'=>"FROM_UNIXTIME(train_start, '%Y-%m-%d')",'train_id'=>'MAX(train_id)','user_id']);
@@ -308,15 +312,18 @@ class Train extends \yii\db\ActiveRecord
         return $query->asArray()->all();
     }
     
-    public static function get_train_type($start, $end,$stat='',$group=1) {
+    public static function get_train_type($start, $end,$stat='',$total=1,$group_id=null) {
+        if(!$group_id){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+        }
         
-        if($group==1){
+        if($total==1){
              //所有
-            $query = static::find()->andFilterWhere(['and',['>=', 'train_start', $start],['<=', 'train_end', $end]])->andFilterWhere(['train_stat'=>$stat])->orderBy(['MAX(train_type)'=>SORT_ASC])->groupBy(['train_type'])->select(['num'=>'count(*)','train_type'])->indexBy(['train_type']);
+            $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'train_start', $start],['<=', 'train_end', $end]])->andFilterWhere(['train_stat'=>$stat])->orderBy(['MAX(train_type)'=>SORT_ASC])->groupBy(['train_type'])->select(['num'=>'count(*)','train_type'])->indexBy(['train_type']);
                      
         }else{
             //个人
-            $query = TrainUser::find()->joinWith(['train','user'])->andFilterWhere(['and',['>=', 'train_start', $start],['<=', 'train_end', $end]])->andFilterWhere(['train_stat'=>$stat])->andFilterWhere(['role'=>'sa'])->orderBy(['MAX(train_type)'=>SORT_ASC])->groupBy(['train_type','user_id'])->select(['num'=>'count(*)','train_type','train_id'=>'MAX(train_id)','user_id']);
+            $query = TrainUser::find()->joinWith(['train','user'])->andWhere([self::tableName().'.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'train_start', $start],['<=', 'train_end', $end]])->andFilterWhere(['train_stat'=>$stat])->andFilterWhere(['role'=>'sa'])->orderBy(['MAX(train_type)'=>SORT_ASC])->groupBy(['train_type','user_id'])->select(['num'=>'count(*)','train_type','train_id'=>'MAX(train_id)','user_id']);
             
         }
             

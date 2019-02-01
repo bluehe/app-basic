@@ -524,12 +524,51 @@ class StatisticsController extends Controller {
         return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group,'annual'=>$annual]);
     }
     
+    public function actionHealth() {
+        
+        $end = strtotime('today');
+        $start = strtotime('-1 months +1 days',$end);
+
+        if (Yii::$app->request->get('range')) {
+            $range = explode('~', Yii::$app->request->get('range'));
+            $start = isset($range[0]) ? strtotime($range[0]) : $start;
+            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]): $end;
+        }
+        
+        //健康度
+        $series['health']=[]; 
+        $data_health=$health_value=$health_key=[];
+        $health_total= ActivityChange::get_health($start-86400, $end);      
+        
+        foreach($health_total as $total){
+            $key=$end-$start>=365*86400?date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']):date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
+            $health_value[$key][$total['health']]= (int) $total['num'];
+            if(!in_array($total['health'], $health_key)){
+                $health_key[]=$total['health'];
+            }
+        }
+        asort($health_key);
+        foreach($health_value as $date=>$value){
+            foreach($health_key as $key){
+                $data_health[$key][]=['name' =>$date , 'y' =>  isset($health_value[$date][$key])?$health_value[$date][$key]:0];
+            }
+        }
+       
+        foreach($data_health as $k=>$v){
+            $series['health'][] = ['type' => 'column', 'name' => ActivityChange::$List['health'][$k], 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+        }
+        
+        return $this->render('health', ['series' => $series, 'start' => $start, 'end' => $end]);
+    
+    }
+    
     public function actionTrain() {
         
         $end = strtotime('today')+ 86399;
         $start = strtotime('-30 days',$end);
         $sum=Yii::$app->request->get('sum',1);//1-天；2-周；3-月
-        $group=Yii::$app->request->get('group',1);//1-总；0-个人
+        $total=Yii::$app->request->get('total',1);//1-总；0-个人
+        $group=Yii::$app->request->get('group',null);
 
         if (Yii::$app->request->get('range')) {
             $range = explode('~', Yii::$app->request->get('range'));
@@ -541,10 +580,10 @@ class StatisticsController extends Controller {
         $series['type']=[];
 
         //趋势
-        $train_num = Train::get_train_num($start, $end, Train::STAT_END,$sum,$group);
-        $train_type = Train::get_train_type($start, $end, Train::STAT_END,$group);
+        $train_num = Train::get_train_num($start, $end, Train::STAT_END,$sum,$total,$group);
+        $train_type = Train::get_train_type($start, $end, Train::STAT_END,$total,$group);
                
-        if($group==1){
+        if($total==1){
             $data_train_num = [];            
             if($sum==1){
                 //天
@@ -587,11 +626,11 @@ class StatisticsController extends Controller {
             $data_train_num = [];
             
             
-            foreach ($train_num as $total){
-                if(!in_array($total['user_id'], $users_num)){
-                    $users_num[]=$total['user_id'];
+            foreach ($train_num as $num){
+                if(!in_array($num['user_id'], $users_num)){
+                    $users_num[]=$num['user_id'];
                 }              
-                $data_num_total[$total['time']][$total['user_id']]=$total['num'];
+                $data_num_total[$num['time']][$num['user_id']]=$num['num'];
             }
             if($sum==1){
                 for ($i = ($data_num_total===true?strtotime(key($data_num_total)):$start); $i < $end; $i = $i + 86400) {
@@ -649,45 +688,7 @@ class StatisticsController extends Controller {
             
             
         }
-        return $this->render('train', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group]);
-    }
-    
-   public function actionHealth() {
-        
-        $end = strtotime('today');
-        $start = strtotime('-1 months +1 days',$end);
-
-        if (Yii::$app->request->get('range')) {
-            $range = explode('~', Yii::$app->request->get('range'));
-            $start = isset($range[0]) ? strtotime($range[0]) : $start;
-            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]): $end;
-        }
-        
-        //健康度
-        $series['health']=[]; 
-        $data_health=$health_value=$health_key=[];
-        $health_total= ActivityChange::get_health($start-86400, $end);      
-        
-        foreach($health_total as $total){
-            $key=$end-$start>=365*86400?date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']):date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
-            $health_value[$key][$total['health']]= (int) $total['num'];
-            if(!in_array($total['health'], $health_key)){
-                $health_key[]=$total['health'];
-            }
-        }
-        asort($health_key);
-        foreach($health_value as $date=>$value){
-            foreach($health_key as $key){
-                $data_health[$key][]=['name' =>$date , 'y' =>  isset($health_value[$date][$key])?$health_value[$date][$key]:0];
-            }
-        }
-       
-        foreach($data_health as $k=>$v){
-            $series['health'][] = ['type' => 'column', 'name' => ActivityChange::$List['health'][$k], 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
-        }
-        
-        return $this->render('health', ['series' => $series, 'start' => $start, 'end' => $end]);
-    
+        return $this->render('train', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'group'=>$group]);
     }
 
 }

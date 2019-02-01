@@ -256,7 +256,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
         return $time>0?$time:null;       
     }
     
-        public static function get_amount_total($start='', $end='',$sum=1,$bd=0,$annual=null,$group_id=null) {
+        public static function get_amount_total($start='', $end='',$sum=1,$total=0,$annual=null,$group_id=null) {
         if(!$group_id){
             $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
         }
@@ -269,7 +269,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
             $query->select(['amount'=>'SUM(amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(start_time, '%Y-W%u')"])->groupBy(["FROM_UNIXTIME(start_time, '%Y-W%u')"])->indexBy(['time']);      
         }else{
             //月
-            if($bd==1){
+            if($total==1){
                 $query->select(['amount'=>'SUM(amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(start_time, '%Y-%m')",'bd'])->groupBy(["FROM_UNIXTIME(start_time, '%Y-%m')",'bd']);
             }else{
                 $query->select(['amount'=>'SUM(amount)','num'=>'count(*)','time'=>"FROM_UNIXTIME(start_time, '%Y-%m')"])->groupBy(["FROM_UNIXTIME(start_time, '%Y-%m')"])->indexBy(['time']);

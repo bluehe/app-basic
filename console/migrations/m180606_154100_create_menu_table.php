@@ -69,7 +69,8 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [71, '用户统计', 70, '/statistics/user', 1, '{"icon":"fa fa-user"}'],
             [72, '企业统计', 70, '/statistics/corporation', 2, '{"icon":"fa fa-pie-chart"}'],
             [73, '活跃统计', 70, '/statistics/activity', 3, '{"icon":"fa fa-bar-chart"}'],            
-            [74, '培训统计', 70, '/statistics/train', 4, '{"icon":"fa fa-line-chart"}'],
+            [74, '健康度统计', 70, '/statistics/health', 4, '{"icon":"fa fa-medkit"}'],
+            [75, '培训统计', 70, '/statistics/train', 5, '{"icon":"fa fa-line-chart"}'],
             
         ]);
     }
