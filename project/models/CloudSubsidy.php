@@ -5,7 +5,7 @@ namespace project\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%clould_subsidy}}".
+ * This is the model class for table "{{%cloud_subsidy}}".
  *
  * @property int $id
  * @property int $corporation_id 补贴企业 
@@ -18,14 +18,14 @@ use Yii;
  * @property Corporation $corporation 
  * @property User $subsidyBd 
  */
-class ClouldSubsidy extends \yii\db\ActiveRecord
+class CloudSubsidy extends \yii\db\ActiveRecord
 {
     /**
      *  {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%clould_subsidy}}';
+        return '{{%cloud_subsidy}}';
     }
 
     /**

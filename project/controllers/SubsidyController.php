@@ -3,8 +3,8 @@
 namespace project\controllers;
 
 use Yii;
-use project\models\ClouldSubsidy;
-use project\models\ClouldSubsidySearch;
+use project\models\CloudSubsidy;
+use project\models\CloudSubsidySearch;
 use yii\web\Controller;
 use project\actions\IndexAction;
 use project\actions\UpdateAction;
@@ -15,7 +15,7 @@ use project\models\Group;
 use project\models\Parameter;
 
 /**
- * SubsidyController implements the CRUD actions for ClouldSubsidy model.
+ * SubsidyController implements the CRUD actions for CloudSubsidy model.
  */
 class SubsidyController extends Controller
 {
@@ -28,7 +28,7 @@ class SubsidyController extends Controller
             'subsidy-list' => [
                 'class' => IndexAction::className(),
                 'data' => function(){
-                    $searchModel = new ClouldSubsidySearch();
+                    $searchModel = new CloudSubsidySearch();
                     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
                     return [
                         'dataProvider' => $dataProvider,
@@ -38,20 +38,20 @@ class SubsidyController extends Controller
             ],
             'subsidy-create' => [
                 'class' => CreateAction::className(),
-                'modelClass' => ClouldSubsidy::className(),
+                'modelClass' => CloudSubsidy::className(),
                 'successRedirect'=>Yii::$app->request->referrer,
                 'ajax'=>true,
                 'default_group'=>true,
             ],
             'subsidy-update' => [
                 'class' => UpdateAction::className(),
-                'modelClass' => ClouldSubsidy::className(),
+                'modelClass' => CloudSubsidy::className(),
                 'successRedirect'=>'subsidy-list',
                 'ajax'=>true,
             ],
             'subsidy-delete' => [
                 'class' => DeleteAction::className(),
-                'modelClass' => ClouldSubsidy::className(),
+                'modelClass' => CloudSubsidy::className(),
             ],
 
         ];
@@ -59,7 +59,7 @@ class SubsidyController extends Controller
     
     public function actionSubsidyExport() {
         $start_time= microtime(true);
-        $searchModel = new ClouldSubsidySearch();
+        $searchModel = new CloudSubsidySearch();
         $models = $searchModel->search(Yii::$app->request->queryParams,1000)->getModels();
        
         $fileName= Yii::getAlias('@webroot').'/excel/subsidy_temple.xlsx';

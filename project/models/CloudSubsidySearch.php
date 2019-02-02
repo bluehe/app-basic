@@ -5,13 +5,13 @@ namespace project\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use project\models\ClouldSubsidy;
+use project\models\CloudSubsidy;
 use project\components\CommonHelper;
 
 /**
- * ClouldSubsidySearch represents the model behind the search form of `project\models\ClouldSubsidy`.
+ * CloudSubsidySearch represents the model behind the search form of `project\models\CloudSubsidy`.
  */
-class ClouldSubsidySearch extends ClouldSubsidy
+class CloudSubsidySearch extends CloudSubsidy
 {
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class ClouldSubsidySearch extends ClouldSubsidy
      */
     public function search($params,$pageSize = '')
     {
-        $query = ClouldSubsidy::find()->joinWith(['subsidyBd']);
+        $query = CloudSubsidy::find()->joinWith(['subsidyBd']);
 
         // add conditions that should always apply here
 

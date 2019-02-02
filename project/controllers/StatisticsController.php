@@ -12,7 +12,7 @@ use project\models\CorporationMeal;
 use project\models\CorporationIndustry;
 use project\models\Industry;
 use project\models\Train;
-use project\models\ClouldSubsidy;
+use project\models\CloudSubsidy;
 use project\models\UserGroup;
 
 class StatisticsController extends Controller {
@@ -125,8 +125,8 @@ class StatisticsController extends Controller {
         $allocate_total= CorporationMeal::get_amount_total($start,$end,$sum,0,$annual,$group);
         $base_amount= (float)CorporationMeal::get_amount_base($start,$annual,$group);
                
-        $clould_total= ClouldSubsidy::get_amount_total($start,$end,$sum,$annual,$group);
-        $base_clould=$base_clould_cost=(float)ClouldSubsidy::get_amount_base($start,$annual,$group);
+        $cloud_total= CloudSubsidy::get_amount_total($start,$end,$sum,$annual,$group);
+        $base_cloud=$base_cloud_cost=(float)CloudSubsidy::get_amount_base($start,$annual,$group);
         
         $cache = Yii::$app->cache;
         if(!$group){
@@ -141,14 +141,14 @@ class StatisticsController extends Controller {
 
         $data_allocate_amount = [];
         $data_allocate_num=[];
-        $data_clould_amount = [];
-        $data_clould_num = [];
+        $data_cloud_amount = [];
+        $data_cloud_num = [];
         if($sum==1){                
             //天
 
             $amount_num_start=($allocate_total?strtotime(key($allocate_total)):$start)-86400;
-            $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):$start))-86400;
-            if($amount_num_start<=$clould_num_start){
+            $cloud_num_start=($cloud_total?strtotime(key($cloud_total)):($allocate_total?strtotime(key($allocate_total)):$start))-86400;
+            if($amount_num_start<=$cloud_num_start){
                 if($allocate_total){
                 for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
@@ -159,30 +159,30 @@ class StatisticsController extends Controller {
                 $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
 
                 }
-                if($clould_total){
-                for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
+                if($cloud_total){
+                for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
                     $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
-                    $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
-                    $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
+                    $base_cloud=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']+$base_cloud : $base_cloud;
+                    $data_cloud_amount[] = ['name' => $j, 'y' => $base_cloud/10000];
                 }
-                $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','color'=>'#F7A35C', 'data' => $data_clould_amount];          
+                $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','color'=>'#F7A35C', 'data' => $data_cloud_amount];          
                 }
             }else{
-                if($clould_total){
-                for ($i = $clould_num_start; $i <= $end; $i = $i + 86400) {
+                if($cloud_total){
+                for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
-                    $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
-                    $base_clould=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould : $base_clould;
-                    $data_clould_amount[] = ['name' => $j, 'y' => $base_clould/10000];
+                    $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
+                    $base_cloud=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']+$base_cloud : $base_cloud;
+                    $data_cloud_amount[] = ['name' => $j, 'y' => $base_cloud/10000];
                 }
-                $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴额','color'=>'#F7A35C', 'data' => $data_clould_amount];
+                $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴额','color'=>'#F7A35C', 'data' => $data_cloud_amount];
                 }
 
                 if($allocate_total){
                 for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
-                    $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
+                    $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
                     $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
                     $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
                 }
@@ -191,14 +191,14 @@ class StatisticsController extends Controller {
             }
 
             $old_cost_num= count($cost_total);
-            for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = $i + 86400){                  
-                $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);                    
+            for ($i = $amount_num_start<=$cloud_num_start?$amount_num_start:$cloud_num_start; $i <= $end; $i = $i + 86400){                  
+                $j = $end-($amount_num_start<=$cloud_num_start?$amount_num_start:$cloud_num_start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);                    
                 if(isset($cost_total[$i])){
                     $cost=$cost_total[$i];
                 }else{
                     $k=date('Y-m-d', $i);
-                    $base_clould_cost=isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']+$base_clould_cost : $base_clould_cost;
-                    $cost= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+$base_clould_cost;
+                    $base_cloud_cost=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']+$base_cloud_cost : $base_cloud_cost;
+                    $cost= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+$base_cloud_cost;
                     $cost_total[$i]=$cost;
                 }
 
@@ -214,8 +214,8 @@ class StatisticsController extends Controller {
         }elseif($sum==2){
             //周
             $amount_num_start=($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start)));
-            $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start))));
-            if($amount_num_start<=$clould_num_start){
+            $cloud_num_start=($cloud_total?strtotime(key($cloud_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start))));
+            if($amount_num_start<=$cloud_num_start){
                 if($allocate_total){
                 for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
                     $k=strftime("%Y-W%W",$i);
@@ -230,36 +230,36 @@ class StatisticsController extends Controller {
 
                 }
 
-                if($clould_total){
-                for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
+                if($cloud_total){
+                for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400*7) {
                     $k=strftime("%Y-W%W",$i);
                     $l=($i + 86400*6)<$end?($i + 86400*6):$end;
                     $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                     //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
-                    $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
+                    $data_cloud_amount[] = ['name' => $j, 'y' => isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0];
+                    $data_cloud_num[] = ['name' => $j, 'y' => isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0];
                 }
-                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
+                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
                 }
             }else{
-                if($clould_total){
-                for ($i = $clould_num_start; $i <= $end; $i = $i + 86400*7) {
+                if($cloud_total){
+                for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400*7) {
                     $k=strftime("%Y-W%W",$i);
                     $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                    $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                    $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                     //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];
-                    $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0];
+                    $data_cloud_amount[] = ['name' => $j, 'y' => isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0];
+                    $data_cloud_num[] = ['name' => $j, 'y' => isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0];
                 }
-                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
+                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
                 }
                 if($allocate_total){
                 for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
                     $k=strftime("%Y-W%W",$i);
                     $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                    $j = $end-$clould_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                    $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
                     //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
                     $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
                     $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
@@ -270,15 +270,15 @@ class StatisticsController extends Controller {
             }
 
             $old_cost_num= count($cost_total);
-            for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = $i + 86400*7){
+            for ($i = $amount_num_start<=$cloud_num_start?$amount_num_start:$cloud_num_start; $i <= $end; $i = $i + 86400*7){
                 $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                $j = $end-($amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start)>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                $j = $end-($amount_num_start<=$cloud_num_start?$amount_num_start:$cloud_num_start)>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
 
                 if(!isset($cost_total[$i])){                       
-                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+(float)ClouldSubsidy::get_amount_base($i,$annual,$group);
+                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+(float)CloudSubsidy::get_amount_base($i,$annual,$group);
                 }
                 if(!isset($cost_total[$l+86400])){
-                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual,$group))+(float)ClouldSubsidy::get_amount_base($l+86400,$annual,$group);
+                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual,$group))+(float)CloudSubsidy::get_amount_base($l+86400,$annual,$group);
                 }
 
 
@@ -296,9 +296,9 @@ class StatisticsController extends Controller {
         }else{
             //月
             $amount_num_start=($allocate_total?strtotime(key($allocate_total)):strtotime(date("Y-m",$start)));
-            $clould_num_start=($clould_total?strtotime(key($clould_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(date("Y-m",$start))));
+            $cloud_num_start=($cloud_total?strtotime(key($cloud_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(date("Y-m",$start))));
 
-            if($amount_num_start<=$clould_num_start){
+            if($amount_num_start<=$cloud_num_start){
                 if($allocate_total){
                 for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
                     $k=date("Y-m",$i);
@@ -311,28 +311,28 @@ class StatisticsController extends Controller {
                 $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
                 }
 
-                if($clould_total){
-                for ($i = $clould_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                if($cloud_total){
+                for ($i = $cloud_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
                     $k=date("Y-m",$i);
                     $j = date('Y.n', $i);
 //                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];  
-                    $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0]; 
+                    $data_cloud_amount[] = ['name' => $j, 'y' => isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0];  
+                    $data_cloud_num[] = ['name' => $j, 'y' => isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0]; 
                 }
-                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
+                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
                 }
             }else{
-                if($clould_total){
-                for ($i = $clould_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                if($cloud_total){
+                for ($i = $cloud_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
                     $k=date("Y-m",$i);
                     $j = date('Y.n', $i);
 //                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_clould_amount[] = ['name' => $j, 'y' => isset($clould_total[$k]['amount']) ? (float) $clould_total[$k]['amount']/10000 :0];  
-                    $data_clould_num[] = ['name' => $j, 'y' => isset($clould_total[$k]['num']) ? (float) $clould_total[$k]['num'] :0]; 
+                    $data_cloud_amount[] = ['name' => $j, 'y' => isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0];  
+                    $data_cloud_num[] = ['name' => $j, 'y' => isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0]; 
                 }
-                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_clould_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_clould_num,'yAxis'=>1,];
+                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
                 }
                 if($allocate_total){
                 for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
@@ -348,14 +348,14 @@ class StatisticsController extends Controller {
             }
 
             $old_cost_num= count($cost_total);
-            for ($i = $amount_num_start<=$clould_num_start?$amount_num_start:$clould_num_start; $i <= $end; $i = strtotime('+1 months',$i)){
+            for ($i = $amount_num_start<=$cloud_num_start?$amount_num_start:$cloud_num_start; $i <= $end; $i = strtotime('+1 months',$i)){
                 $l=strtotime('+1 months',$i)-86400<$end?strtotime('+1 months',$i)-86400:$end;
                 $j = date('Y.n', $i);                                      
                 if(!isset($cost_total[$i])){                       
-                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+(float)ClouldSubsidy::get_amount_base($i,$annual,$group);
+                    $cost_total[$i]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+(float)CloudSubsidy::get_amount_base($i,$annual,$group);
                 }
                 if(!isset($cost_total[$l+86400])){
-                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual,$group))+(float)ClouldSubsidy::get_amount_base($l+86400,$annual,$group);
+                   $cost_total[$l+86400]= sprintf("%.0f", (float) CorporationMeal::get_cost_total($l+86400,$annual,$group))+(float)CloudSubsidy::get_amount_base($l+86400,$annual,$group);
                 }
 
                 $cost=$cost_total[$l+86400]-$cost_total[$i];

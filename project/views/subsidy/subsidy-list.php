@@ -71,11 +71,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     ['attribute' =>'subsidy_time',
                     'filter' => DateRangePicker::widget([
-                        'name' => 'ClouldSubsidySearch[subsidy_time]',
+                        'name' => 'CloudSubsidySearch[subsidy_time]',
                         'useWithAddon' => true,
                         'presetDropdown' => true,
                         'convertFormat' => true,
-                        'value' => Yii::$app->request->get('ClouldSubsidySearch')['subsidy_time'],
+                        'value' => Yii::$app->request->get('CloudSubsidySearch')['subsidy_time'],
                         'pluginOptions' => [
                             'timePicker' => false,
                             'locale' => [

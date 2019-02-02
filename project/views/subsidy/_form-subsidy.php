@@ -11,7 +11,7 @@ use project\models\Group;
 use project\models\UserGroup;
 
 /* @var $this yii\web\View */
-/* @var $model project\models\ClouldSubsidy */
+/* @var $model project\models\CloudSubsidy */
 /* @var $form yii\widgets\ActiveForm */
 
 ?>
@@ -70,36 +70,36 @@ use project\models\UserGroup;
 <script>
 <?php $this->beginBlock('subsidy-form') ?>
     function change_corporation(){
-        var v=$('#clouldsubsidy-corporation_id').val();
+        var v=$('#cloudsubsidy-corporation_id').val();
         if(v){
-            $('.field-clouldsubsidy-corporation_name').hide();
+            $('.field-cloudsubsidy-corporation_name').hide();
         }else{
-            $('.field-clouldsubsidy-corporation_name').show();
+            $('.field-cloudsubsidy-corporation_name').show();
         }
     }
     
     $(function () {
         change_corporation();       
-        $('#clouldsubsidy-corporation_id').change(function(){
+        $('#cloudsubsidy-corporation_id').change(function(){
             change_corporation();
-            var v=$('#clouldsubsidy-corporation_id').val();
+            var v=$('#cloudsubsidy-corporation_id').val();
             if(v){
-                $.getJSON("<?= Url::toRoute('common/corporation-info') ?>", {id: v}, function (data) {$('#clouldsubsidy-subsidy_bd').val(data.bd).trigger('change');});
+                $.getJSON("<?= Url::toRoute('common/corporation-info') ?>", {id: v}, function (data) {$('#cloudsubsidy-subsidy_bd').val(data.bd).trigger('change');});
             }else{
-                $('#clouldsubsidy-subsidy_bd').val('').trigger('change');
+                $('#cloudsubsidy-subsidy_bd').val('').trigger('change');
             }
         });
                     
         //Initialize Select2 Elements
         $(".selectcss2").select2();
         
-        $('#clouldsubsidy-group_id').change(function(){
-            var v=$('#clouldsubsidy-group_id').val();
+        $('#cloudsubsidy-group_id').change(function(){
+            var v=$('#cloudsubsidy-group_id').val();
             if(v){
-                $.getJSON("<?= Url::toRoute(['common/group-corporation']) ?>", {id: v}, function (data) {$("select#clouldsubsidy-corporation_id").html(data.corporation).trigger('change');$("select#clouldsubsidy-subsidy_bd").html(data.bd).trigger('change');});
+                $.getJSON("<?= Url::toRoute(['common/group-corporation']) ?>", {id: v}, function (data) {$("select#cloudsubsidy-corporation_id").html(data.corporation).trigger('change');$("select#cloudsubsidy-subsidy_bd").html(data.bd).trigger('change');});
             }else{
-                $("select#clouldsubsidy-corporation_id").html('<option value="">其他</option>');
-                $("select#clouldsubsidy-subsidy_bd").html('<option value=""></option>');
+                $("select#cloudsubsidy-corporation_id").html('<option value="">其他</option>');
+                $("select#cloudsubsidy-subsidy_bd").html('<option value=""></option>');
             }
         });
     });

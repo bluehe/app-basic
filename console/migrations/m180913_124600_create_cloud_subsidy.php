@@ -2,13 +2,13 @@
 
 use yii\db\Migration;
 
-class m180913_124600_create_clould_subsidy extends Migration {
+class m180913_124600_create_cloud_subsidy extends Migration {
 
     /**
      * @inheritdoc
      */
     public function up() {
-        $table = '{{%clould_subsidy}}';
+        $table = '{{%cloud_subsidy}}';
         $corporationTable = '{{%corporation}}';
         $userTable = '{{%user}}';
         $groupTable = '{{%group}}';
@@ -37,7 +37,7 @@ class m180913_124600_create_clould_subsidy extends Migration {
      * @inheritdoc
      */
     public function down() {
-        $this->dropTable('{{%clould_subsidy}}');
+        $this->dropTable('{{%cloud_subsidy}}');
     }
 
 }
