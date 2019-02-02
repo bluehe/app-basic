@@ -418,8 +418,15 @@ class StatisticsController extends Controller {
         $end = strtotime('today');
         $start = strtotime('-1 months +1 days',$end);
         $sum=Yii::$app->request->get('sum',1);
-        $group=Yii::$app->request->get('group',1);
+        $total=Yii::$app->request->get('total',1);
         $annual=Yii::$app->request->get('annual');
+        $group=Yii::$app->request->get('group',null);
+        if(!$group){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+            if(count($group_id)>0){
+                $group=$group_id[0];
+            }
+        }
 
         if (Yii::$app->request->get('range')) {
             $range = explode('~', Yii::$app->request->get('range'));
@@ -429,9 +436,9 @@ class StatisticsController extends Controller {
         $series['activity'] = [];
         
         //活跃数
-        $activity_total = ActivityChange::get_activity_total($start-86400, $end,$sum,$group,$annual);
-        $activity_change = ActivityChange::get_activity_total($start-86400, $end,$sum,$group,$annual,true);
-        if($group==1){
+        $activity_total = ActivityChange::get_activity_total($start-86400, $end,$sum,$total,$annual,false,$group);
+        $activity_change = ActivityChange::get_activity_total($start-86400, $end,$sum,$total,$annual,true,$group);
+        if($total==1){
            
             $data_total = [];
             $data_change = [];
@@ -439,12 +446,12 @@ class StatisticsController extends Controller {
             foreach($activity_change as $change){
                 $changes[date('Y.n.j',$change['start_time']+86400).'-'.date('Y.n.j',$change['end_time'])]=(int) $change['num'];                
             }
-            foreach($activity_total as $total){
-                $key=date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']);
-                $j = $end-$start>=365*86400?date('Y.n.j', $total['start_time']+8640).'-'.date('Y.n.j', $total['end_time']):date('n.j', $total['start_time']+8640).'-'.date('n.j', $total['end_time']);
-                $data_total[]=['name' =>$j , 'y' =>  (int) $total['num']];
+            foreach($activity_total as $row){
+                $key=date('Y.n.j',$row['start_time']+86400).'-'.date('Y.n.j',$row['end_time']);
+                $j = $end-$start>=365*86400?date('Y.n.j', $row['start_time']+8640).'-'.date('Y.n.j', $row['end_time']):date('n.j', $row['start_time']+8640).'-'.date('n.j', $row['end_time']);
+                $data_total[]=['name' =>$j , 'y' =>  (int) $row['num']];
                 $data_change[]=['name' => $j, 'y' =>  isset($changes[$key])?$changes[$key]:0];
-                $data_per[]=['name' => $j, 'y' => isset($changes[$key])?round($changes[$key]/(int)$total['num']*100,2):0];               
+                $data_per[]=['name' => $j, 'y' => isset($changes[$key])?round($changes[$key]/(int)$row['num']*100,2):0];               
             }
             
             $series['activity'][] = ['type' => 'column', 'name' => '下拨企业数', 'data' => $data_total,'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
@@ -473,18 +480,18 @@ class StatisticsController extends Controller {
             }
             
 
-            foreach($activity_total as $total){
+            foreach($activity_total as $row){
                 if($sum){
-                    $et2=date('Y.n.j',$total['end_time']);
+                    $et2=date('Y.n.j',$row['end_time']);
                 }else{
-                    $et2=date('Y.n',$total['end_time']);
+                    $et2=date('Y.n',$row['end_time']);
                 }
                
                 $key=$end-$start>=365*86400?date('Y.n.j',$changes[$et2]['start_time']+86400).'-'.date('Y.n.j',$changes[$et2]['end_time']):date('n.j',$changes[$et2]['start_time']+86400).'-'.date('n.j',$changes[$et2]['end_time']);
 //              $key=$changes[$et2]['start_time'].'-'.$changes[$et2]['end_time'];                
-                $total['bd_id']=$total['bd_id']?$total['bd_id']:0;
-                $data_change[$total['bd_id']][]=['name' => $key, 'y' =>  isset($changes[$et2][$total['bd_id']])?$changes[$et2][$total['bd_id']]:0];
-                $data_per[$total['bd_id']][]=['name' => $key, 'y' => isset($changes[$et2][$total['bd_id']])?round($changes[$et2][$total['bd_id']]/(int)$total['num']*100,2):0];               
+                $row['bd_id']=$row['bd_id']?$row['bd_id']:0;
+                $data_change[$row['bd_id']][]=['name' => $key, 'y' =>  isset($changes[$et2][$row['bd_id']])?$changes[$et2][$row['bd_id']]:0];
+                $data_per[$row['bd_id']][]=['name' => $key, 'y' => isset($changes[$et2][$row['bd_id']])?round($changes[$et2][$row['bd_id']]/(int)$row['num']*100,2):0];               
             }
             
             foreach ($data_change as $gid=>$data){
@@ -502,13 +509,13 @@ class StatisticsController extends Controller {
         $data_item=[]; 
         
         $items=[];
-        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,$annual,false);
-        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount'],$annual);
-        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount',$annual);
-        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount',$annual);
-        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount',$annual);
-        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount',$annual);
-        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime'],$annual);
+        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,$annual,false,$group);
+        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount'],$annual,true,$group);
+        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount',$annual,true,$group);
+        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount',$annual,true,$group);
+        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount',$annual,true,$group);
+        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount',$annual,true,$group);
+        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime'],$annual,true,$group);
         
         arsort($items);
 //        $fv= reset($items);
@@ -521,13 +528,20 @@ class StatisticsController extends Controller {
         }
         $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item];
         
-        return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'group'=>$group,'annual'=>$annual]);
+        return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'annual'=>$annual,'group'=>$group]);
     }
     
     public function actionHealth() {
         
         $end = strtotime('today');
         $start = strtotime('-1 months +1 days',$end);
+        $group=Yii::$app->request->get('group',null);
+        if(!$group){
+            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+            if(count($group_id)>0){
+                $group=$group_id[0];
+            }
+        }
 
         if (Yii::$app->request->get('range')) {
             $range = explode('~', Yii::$app->request->get('range'));
@@ -538,7 +552,7 @@ class StatisticsController extends Controller {
         //健康度
         $series['health']=[]; 
         $data_health=$health_value=$health_key=[];
-        $health_total= ActivityChange::get_health($start-86400, $end);      
+        $health_total= ActivityChange::get_health($start-86400, $end,$group);      
         
         foreach($health_total as $total){
             $key=$end-$start>=365*86400?date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']):date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
@@ -558,7 +572,7 @@ class StatisticsController extends Controller {
             $series['health'][] = ['type' => 'column', 'name' => ActivityChange::$List['health'][$k], 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
         }
         
-        return $this->render('health', ['series' => $series, 'start' => $start, 'end' => $end]);
+        return $this->render('health', ['series' => $series, 'start' => $start, 'end' => $end,'group'=>$group]);
     
     }
     
@@ -682,10 +696,7 @@ class StatisticsController extends Controller {
             
             foreach ($data_train_type as $gid=>$data){
                 $series['type'][] = ['type' => 'column', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];              
-            }
-                
-            
-            
+            }    
             
         }
         return $this->render('train', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'group'=>$group]);

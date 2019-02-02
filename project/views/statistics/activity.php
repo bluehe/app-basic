@@ -9,6 +9,8 @@ use kartik\widgets\SwitchInput;
 use yii\web\JsExpression;
 use kartik\widgets\Select2;
 use project\models\Parameter;
+use project\models\UserGroup;
+use project\models\Group;
 
 $this->title = '活跃统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['activity']];
@@ -27,6 +29,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
  
                 <li class="pull-right header">
+                    <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1?Select2::widget([
+                        'name' => 'group',                        
+                        'data' => Group::get_user_group(Yii::$app->user->identity->id),
+                        'value'=>$group,
+                        'options' => [
+                            'placeholder' => '项目',
+                            'id'=>'group',
+                        ],
+                        'pluginEvents' => [
+                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
+                        ]
+                    ]):'';?>
+                    
+                </li>
+                <li class="pull-right header">
                     <?= Select2::widget([
                         'name' => 'annual',                        
                         'data' => Parameter::get_type('allocate_annual'),
@@ -40,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'width' => '110%'
                         ],
                         'pluginEvents' => [
-                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0;var a=$('#annual').val(); self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g+'&annual='+a;}",
+                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
                         ]
                     ]);?>
                     
@@ -67,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0;var a=$('#annual').val(); self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g+'&annual='+a;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
                     ]
                     ]);
                     ?>
@@ -86,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'offColor' => 'danger',       
                         ],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0;var a=$('#annual').val(); self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g+'&annual='+a;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
                     ]
                     ]);
                     ?>
@@ -95,14 +112,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li class="pull-right activity">
                     <?=
                     SwitchInput::widget([
-                        'name' => 'group',
+                        'name' => 'total',
 //                        'type' => SwitchInput::RADIO,
-                        'value'=>$group,
+                        'value'=>$total,
 //                        'items' => [
 //                            ['label' => '总和', 'value' => 1],
 //                            ['label' => '个人', 'value' => 2],
 //                        ],
-                        'options'=>['class'=>'group'],
+                        'options'=>['class'=>'total'],
                         'pluginOptions'=>[
                             'onText'=>'全员',
                             'offText'=>'个人',
@@ -112,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;g=$('.group').is(':checked')?1:0;var a=$('#annual').val(); self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&group='+g+'&annual='+a;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
                     ]
                     ]);
                     ?>

@@ -613,8 +613,8 @@ class ActivityChange extends \yii\db\ActiveRecord
         return implode(',', $data);
     }
     
-    public static function get_health($start, $end) {
-        return static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['end_time'=>SORT_ASC,'health'=>SORT_ASC])->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(health)','health'=>'MAX(health)'])->groupBy(['end_time','health'])->asArray()->all();        
+    public static function get_health($start, $end,$group_id=null) {
+        return static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['end_time'=>SORT_ASC,'health'=>SORT_ASC])->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(health)','health'=>'MAX(health)'])->groupBy(['end_time','health'])->asArray()->all();        
     }
        
     //数据分析，标准差
@@ -647,9 +647,9 @@ class ActivityChange extends \yii\db\ActiveRecord
     
     }
  
-    public static function get_activity_total($start, $end,$sum=1,$group=1,$annual='',$activity=false) {
+    public static function get_activity_total($start, $end,$sum=1,$total=1,$annual='',$activity=false,$group_id=null) {
               
-        $query = static::find()->alias('c')->joinWith(['data d'])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'bd_id'=>SORT_ASC]);
+        $query = static::find()->alias('c')->joinWith(['data d'])->andWhere(['c.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'bd_id'=>SORT_ASC]);
         if($annual=='all'){
             
             
@@ -689,14 +689,14 @@ class ActivityChange extends \yii\db\ActiveRecord
             //月
             $query->groupBy(["FROM_UNIXTIME(end_time, '%Y-%m')"]);
         }
-        if(!$group){
+        if(!$total){
             $query->addGroupBy(['bd_id']);
         }
         return $query->asArray()->all();
     }
     
-    public static function get_activity_item($start, $end,$items,$annual='',$activity=true) {
-        $query = static::find()->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]]);
+    public static function get_activity_item($start, $end,$items,$annual='',$activity=true,$group_id=null) {
+        $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]]);
          if($annual=='all'){
             
             

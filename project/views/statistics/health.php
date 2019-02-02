@@ -6,6 +6,9 @@ use miloschuman\highcharts\Highcharts;
 use kartik\daterange\DateRangePicker;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+use project\models\UserGroup;
+use project\models\Group;
+use kartik\widgets\Select2;
 
 $this->title = '健康度统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['health']];
@@ -22,6 +25,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li class="active"><a href="#activity_line" data-toggle="tab">健康度统计</a></li>
                
 
+                <li class="pull-right header">
+                    <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1?Select2::widget([
+                        'name' => 'group',                        
+                        'data' => Group::get_user_group(Yii::$app->user->identity->id),
+                        'value'=>$group,
+                        'options' => [
+                            'placeholder' => '项目',
+                            'id'=>'group',
+                        ],
+                        'pluginEvents' => [
+                            "change" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g;}",
+                        ]
+                    ]):'';?>
+                    
+                </li>
  
                 <li class="pull-right">
 <!--                    <button type="button" class="btn btn-default pull-right" id="daterange-btn"><span><i class="fa fa-calendar"></i> 时间选择</span><i class="fa fa-caret-down"></i></button>-->
@@ -45,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val(); self.location='".Url::to(['statistics/health'])."?range='+v;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g;}",
                     ]
                     ]);
                     ?>
