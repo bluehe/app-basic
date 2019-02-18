@@ -124,7 +124,7 @@ class StatisticsController extends Controller {
         }else{
             $series['capital'][] = ['type' => 'pie','radius'=>['25%','50%'], 'name' => '数量', 'data' => $data_capital,'label'=>['formatter'=>"{d}%",'color'=>'#000']];
         }
-        var_dump($series['capital']);
+        var_dump($capitals);
         exit;
         
         //研发规模
