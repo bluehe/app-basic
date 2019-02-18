@@ -109,8 +109,6 @@ class StatisticsController extends Controller {
             $series['industry'][]=['type' => 'pie','name'=>'行业分布','radius'=>['40%','55%'], 'data' =>$e_child,'label'=>['formatter'=>"{b},{c},{d}%"]];
         }
         
-        
-        
         //注册资金
         $series['capital']=[];       
         $data_capital=[];     
@@ -124,8 +122,6 @@ class StatisticsController extends Controller {
         }else{
             $series['capital'][] = ['type' => 'pie','radius'=>['25%','50%'], 'name' => '数量', 'data' => $data_capital,'label'=>['formatter'=>"{d}%",'color'=>'#000']];
         }
-        var_dump($capitals);
-        exit;
         
         //研发规模
         $series['scale']=[];       
