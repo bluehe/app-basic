@@ -185,8 +185,8 @@ class StatisticsController extends Controller {
                         $y_allocate_amount=$base_amount/10000;
                         $data_allocate_amount[] = ['name' => $j, 'y' => $y_allocate_amount,'value' =>[$j,$y_allocate_amount]]; 
                     }
-                    if($chart==1){
-                        $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额', 'data' => $data_allocate_amount];
+                    if($chart=='hightcharts'){
+                        $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
                     }else{
                         $series['amount'][] = ['type' => 'line','areaStyle'=>[], 'z'=>1,'name' => '累计下拨额','data' => $data_allocate_amount]; 
                     }
@@ -199,8 +199,8 @@ class StatisticsController extends Controller {
                         $y_cloud_amount=$base_cloud/10000;
                         $data_cloud_amount[] = ['name' => $j, 'y' =>$y_cloud_amount, 'value' =>[$j,$y_cloud_amount]];
                     }
-                    if($chart==1){
-                        $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴', 'data' => $data_cloud_amount];
+                    if($chart=='hightcharts'){
+                        $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','color'=>'#F7A35C', 'data' => $data_cloud_amount];
                     }else{
                         $series['amount'][] = ['type' => 'line','areaStyle'=>[], 'z'=>3, 'name' => '累计公有云补贴', 'data' => $data_cloud_amount];          
                     }
@@ -216,8 +216,8 @@ class StatisticsController extends Controller {
                         $y_cloud_amount=$base_cloud/10000;
                         $data_cloud_amount[] = ['name' => $j, 'y' =>$y_cloud_amount, 'value' =>[$j,$y_cloud_amount]];
                     }
-                    if($chart==1){
-                        $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','data' => $data_cloud_amount];                            
+                    if($chart=='hightcharts'){
+                        $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','color'=>'#F7A35C', 'data' => $data_cloud_amount];                            
                     }else{
                         $series['amount'][] = ['type' => 'line','areaStyle'=>[], 'z'=>3, 'name' => '累计公有云补贴','data' => $data_cloud_amount];          
                     }
@@ -231,8 +231,8 @@ class StatisticsController extends Controller {
                         $y_allocate_amount=$base_amount/10000;
                         $data_allocate_amount[] = ['name' => $j, 'y' => $y_allocate_amount,'value' =>[$j,$y_allocate_amount]]; 
                     }
-                    if($chart==1){
-                        $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额', 'data' => $data_allocate_amount];
+                    if($chart=='hightcharts'){
+                        $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
                     }else{
                         $series['amount'][] = ['type' => 'line','areaStyle'=>[], 'z'=>1,'name' => '累计下拨额', 'data' => $data_allocate_amount]; 
                     }
@@ -253,8 +253,8 @@ class StatisticsController extends Controller {
                 }
                 $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2), 'value' =>[$j, round($cost/10000,2)]];
             }
-            if($chart==1){
-                $series['amount'][] = ['type' => 'areaspline','zIndex'=>2, 'name' => '累计消耗额', 'data' => $data_amount_cost];
+            if($chart=='hightcharts'){
+                $series['amount'][] = ['type' => 'areaspline','zIndex'=>2, 'name' => '累计消耗额','color'=>'#90EE7E', 'data' => $data_amount_cost];
             }else{
                 $series['amount'][] = ['type' => 'line','areaStyle'=>[],'z'=>2,'smooth'=>true, 'name' => '累计消耗额', 'data' => $data_amount_cost];
             }
