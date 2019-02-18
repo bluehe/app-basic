@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3195f47efaa005d48af5215caa21b9c9",
+    "content-hash": "b7db4fae3257739baf0add5cc6af0678",
     "packages": [
         {
             "name": "2amigos/qrcode-library",
@@ -566,6 +566,51 @@
                 "zikula"
             ],
             "time": "2018-08-27T06:10:37+00:00"
+        },
+        {
+            "name": "daixianceng/yii2-echarts",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/daixianceng/yii2-echarts.git",
+                "reference": "511995efe02025b4b2d7f5723a5be668a06d1f2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/daixianceng/yii2-echarts/zipball/511995efe02025b4b2d7f5723a5be668a06d1f2c",
+                "reference": "511995efe02025b4b2d7f5723a5be668a06d1f2c",
+                "shasum": ""
+            },
+            "require": {
+                "npm-asset/echarts": "*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "daixianceng\\echarts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Cosmo",
+                    "email": "daixianceng@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Echarts widget for Yii2.",
+            "homepage": "https://github.com/daixianceng/yii2-echarts",
+            "keywords": [
+                "chart",
+                "echarts",
+                "extension",
+                "yii2"
+            ],
+            "time": "2018-09-02T02:53:11+00:00"
         },
         {
             "name": "dmstr/yii2-adminlte-asset",
@@ -2385,6 +2430,39 @@
             "description": "netease NOS SDK for PHP",
             "homepage": "https://c.163.com/product/nos",
             "time": "2016-08-11T12:24:47+00:00"
+        },
+        {
+            "name": "npm-asset/echarts",
+            "version": "4.1.0-patch1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/apache/incubator-echarts.git",
+                "reference": "02842e2f02a3ca9fca479732e3e91dc6a2b214db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/apache/incubator-echarts/zipball/02842e2f02a3ca9fca479732e3e91dc6a2b214db",
+                "reference": "02842e2f02a3ca9fca479732e3e91dc6a2b214db",
+                "shasum": null
+            },
+            "require": {
+                "npm-asset/zrender": "4.0.4"
+            },
+            "type": "npm-asset"
+        },
+        {
+            "name": "npm-asset/zrender",
+            "version": "4.0.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/zrender/-/zrender-4.0.4.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "npm-asset",
+            "license": [
+                "BSD"
+            ]
         },
         {
             "name": "phpoffice/phpexcel",

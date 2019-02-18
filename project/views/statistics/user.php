@@ -5,6 +5,7 @@ use yii\widgets\Pjax;
 use miloschuman\highcharts\Highcharts;
 use kartik\daterange\DateRangePicker;
 use yii\helpers\Url;
+use daixianceng\echarts\ECharts;
 
 $this->title = '用户统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['user']];
@@ -51,6 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
             </ul>
             <div class="tab-content no-padding">
                 <div class="tab-pane active" id="signup_line">
+                    <?php if($chart==1):?>
+                    
+                    
                     <?=
                     Highcharts::widget([
                         'scripts' => [
@@ -70,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
                             'title' => [
                                 'text' => '用户趋势统计',
-                        ],
+                            ],
                             'xAxis' => [
                                 'type' => 'category'
                             ],
@@ -96,9 +100,47 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                             'series' => $series['day'],
-                    ]
+                        ]
                     ]);
                     ?>
+                    <?php else:?>
+                    <?=
+                        ECharts::widget([
+                            'theme'=>'light',
+                            'responsive'=>true,
+                            'options' => [
+                                'style'=>'height:400px'
+                            ],
+                            'pluginOptions' => [
+                                'option' => [
+                                    'title' => [
+                                        'text' => '用户趋势统计',
+                                        'left'=>'center',
+                                        'top'=>'10px',
+                                    ],
+                                    'legend'=>['show'=>true,'bottom'=>'10px'],
+                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                    'xAxis' => [                
+                                        'type' => 'category',
+                                        'boundaryGap'=>true,
+                                        'axisLabel'=>['rotate'=>45],
+                                        'splitLine'=>['show'=>true]
+                                    ],
+                                    'yAxis' => [
+                                        'type' => 'value',
+                                        'name' => '数量',
+                                    ],
+                                    'tooltip' => [
+                                        'trigger' => 'axis',
+
+                                    ],
+                                    'series' => $series['day']
+                                ]
+                            ]
+                            
+                        ])
+                    ?>
+                    <?php endif;?>
                 </div>
 
             </div>

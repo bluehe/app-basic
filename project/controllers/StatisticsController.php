@@ -14,10 +14,13 @@ use project\models\Industry;
 use project\models\Train;
 use project\models\CloudSubsidy;
 use project\models\UserGroup;
+use yii\web\JsExpression;
 
 class StatisticsController extends Controller {
 
     public function actionUser() {
+        
+        $chart=Yii::$app->siteConfig->business_charts;
 
         $start = strtotime('-30 days');
         $end = strtotime('today') + 86399;
@@ -37,22 +40,30 @@ class StatisticsController extends Controller {
         $data_signup = [];
         $data_log = [];
        
-
+       
         for ($i = $start; $i < $end; $i = $i + 86400) {
             $j = date('Y-m-d', $i);
-            $data_signup[] = ['name' => $j, 'y' => isset($day_signup[$j]) ? (int) $day_signup[$j] : 0];
-            $data_log[] = ['name' => $j, 'y' => isset($day_log[$j]) ? (int) $day_log[$j] : 0];
-           
+            $y_signup=isset($day_signup[$j]) ? (int) $day_signup[$j] : 0;
+            $y_log=isset($day_log[$j]) ? (int) $day_log[$j] : 0;
+            $data_signup[] = ['name' => $j, 'y' =>$y_signup , 'value' => [$j,$y_signup]];
+            $data_log[] = ['name' => $j, 'y' => $y_log, 'value' => [$j,$y_log]];
+
         }
-        $series['day'][] = ['type' => 'line', 'name' => '注册', 'data' => $data_signup];
-        $series['day'][] = ['type' => 'line', 'name' => '登录', 'data' => $data_log];
-      
-
-
-        return $this->render('user', ['series' => $series, 'start' => $start, 'end' => $end]);
+    
+        if($chart==1){
+            $series['day'][] = ['type' => 'line', 'name' => '注册', 'data' => $data_signup];
+            $series['day'][] = ['type' => 'line', 'name' => '登录', 'data' => $data_log];            
+        }else{
+            $series['day'][] = ['type' => 'line', 'name' => '注册','symbol'=>'circle','label'=>['show'=>true,'color'=>'#000'],'symbolSize'=>8, 'data' => $data_signup];
+            $series['day'][] = ['type' => 'line', 'name' => '登录', 'symbol'=>'diamond','label'=>['show'=>true,'color'=>'#000'],'symbolSize'=>8,'data' => $data_log];           
+        }        
+       
+        return $this->render('user', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end]);
     }
     
     public function actionCorporation() {
+        
+        $chart=Yii::$app->siteConfig->business_charts;
          
         $annual=Yii::$app->request->get('annual',null);
         $group=Yii::$app->request->get('group',null);
@@ -63,11 +74,12 @@ class StatisticsController extends Controller {
         
         $industry_num= CorporationIndustry::get_industry_total($annual,$group);
         $industrys= Industry::find()->where(['id'=> array_keys($industry_num)])->indexBy('id')->all();
-        $parent=$sum=[];
+        $parent=$sum=$e_chart=[];
         
         foreach($industry_num as $key=>$num){
             if($industrys[$key]['parent_id']){
                 $parent[$industrys[$key]['parent_id']][]=[$industrys[$key]['name'],(int)$num];
+                $e_chart[$industrys[$key]['parent_id']][]=['name'=>$industrys[$key]['name'],'value'=>(int)$num];
                 $sum[$industrys[$key]['parent_id']]=isset($sum[$industrys[$key]['parent_id']])?$sum[$industrys[$key]['parent_id']]+$num:(int)$num;
             }else{
                 //$parent[$industrys[$key]['id']][]=[$industrys[$key]['name'],(int)$num];
@@ -77,36 +89,52 @@ class StatisticsController extends Controller {
         
         $parents= Industry::find()->where(['id'=> array_keys($sum)])->indexBy('id')->all();
         arsort($sum);
-        $serie_data=$drilldown_data=[];
+        $serie_data=$drilldown_data=$e_parent=$e_child=[];
         foreach($sum as $k=>$s){
             if(isset($parent[$k])){
                 $serie_data[]=['name'=>$parents[$k]['name'],'y'=>$s,'drilldown'=>$parents[$k]['name']];
                 $drilldown_data[]=['name'=>$parents[$k]['name'],'id'=>$parents[$k]['name'],'data'=>$parent[$k]];
+                $e_parent[]=['name'=>$parents[$k]['name'],'value'=>$s];
+                $e_child= array_merge($e_child,$e_chart[$k]);
             }else{
                 $serie_data[]=['name'=>$parents[$k]['name'],'y'=>$s,'drilldown'=>false];
+                $e_parent[]=$e_child[]=['name'=>$parents[$k]['name'],'value'=>$s];                
             }
         }
-        
-        $series['industry'][]=['name'=>'一级分类','colorByPoint'=>true,'data'=>$serie_data];
-        $drilldown['industry']=['series'=>$drilldown_data];
+        if($chart==1){
+            $series['industry'][]=['name'=>'一级分类','colorByPoint'=>true,'data'=>$serie_data];
+            $drilldown['industry']=['series'=>$drilldown_data];
+        }else{
+            $series['industry'][]=['type' => 'pie','name'=>'行业分布','radius'=>[0,'30%'],'selectedMode'=>'single', 'label'=>['normal'=>['position'=>'inner']], 'data' => $e_parent];
+            $series['industry'][]=['type' => 'pie','name'=>'行业分布','radius'=>['40%','55%'], 'data' =>$e_child,'label'=>['formatter'=>"{b},{c},{d}%"]];
+        }
         
         //注册资金
         $series['capital']=[];       
         $data_capital=[];     
         $capitals= Corporation::get_capital_total($annual,$group);
         foreach($capitals as $capital){
-            $data_capital[] = ['name' =>  $capital['title'], 'y' => (int) $capital['num']];
+            $data_capital[] = ['name' =>  $capital['title'], 'y' => (int) $capital['num'],'value'=>(int) $capital['num']];
         }
-        $series['capital'][] = ['type' => 'pie','innerSize'=>'50%', 'name' => '数量', 'data' => $data_capital];
+        
+        if($chart==1){
+            $series['capital'][] = ['type' => 'pie','innerSize'=>'50%', 'name' => '数量', 'data' => $data_capital];
+        }else{
+            $series['capital'][] = ['type' => 'pie','radius'=>['25%','50%'], 'name' => '数量', 'data' => $data_capital,'label'=>['formatter'=>"{d}%",'color'=>'#000']];
+        }
         
         //研发规模
         $series['scale']=[];       
         $data_scale=[];     
         $scales= Corporation::get_scale_total($annual,$group);
         foreach($scales as $scale){
-            $data_scale[] = ['name' =>  $scale['title'], 'y' => (int) $scale['num']];
+            $data_scale[] = ['name' =>  $scale['title'], 'y' => (int) $scale['num'],'value'=>(int) $scale['num']];
         }
-        $series['scale'][] = ['type' => 'pie','innerSize'=>'50%', 'name' => '数量', 'data' => $data_scale];
+        if($chart==1){
+            $series['scale'][] = ['type' => 'pie','innerSize'=>'50%', 'name' => '数量', 'data' => $data_scale];
+        }else{
+            $series['scale'][] = ['type' => 'pie','radius'=>['25%','50%'], 'name' => '数量', 'data' => $data_scale,'label'=>['formatter'=>"{d}%",'color'=>'#000']];
+        }
         
         
         //下拨额
@@ -148,49 +176,71 @@ class StatisticsController extends Controller {
 
             $amount_num_start=($allocate_total?strtotime(key($allocate_total)):$start)-86400;
             $cloud_num_start=($cloud_total?strtotime(key($cloud_total)):($allocate_total?strtotime(key($allocate_total)):$start))-86400;
-            if($amount_num_start<=$cloud_num_start){
-                if($allocate_total){
-                for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
-                    $k=date('Y-m-d', $i);
-                    $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
-                    $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
-                    $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
+            if($amount_num_start<=$cloud_num_start){                               
+                if($allocate_total||$base_amount){
+                    for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
+                        $k=date('Y-m-d', $i);
+                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
+                        $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
+                        $y_allocate_amount=$base_amount/10000;
+                        $data_allocate_amount[] = ['name' => $j, 'y' => $y_allocate_amount,'value' =>[$j,$y_allocate_amount]]; 
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额', 'data' => $data_allocate_amount];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','areaStyle'=>[], 'z'=>1,'name' => '累计下拨额','data' => $data_allocate_amount]; 
+                    }
                 }
-                $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
-
+                if($cloud_total||$base_cloud){
+                    for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400) {
+                        $k=date('Y-m-d', $i);
+                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
+                        $base_cloud=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']+$base_cloud : $base_cloud;
+                        $y_cloud_amount=$base_cloud/10000;
+                        $data_cloud_amount[] = ['name' => $j, 'y' =>$y_cloud_amount, 'value' =>[$j,$y_cloud_amount]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴', 'data' => $data_cloud_amount];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','areaStyle'=>[], 'z'=>3, 'name' => '累计公有云补贴', 'data' => $data_cloud_amount];          
+                    }
                 }
-                if($cloud_total){
-                for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400) {
-                    $k=date('Y-m-d', $i);
-                    $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
-                    $base_cloud=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']+$base_cloud : $base_cloud;
-                    $data_cloud_amount[] = ['name' => $j, 'y' => $base_cloud/10000];
-                }
-                $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','color'=>'#F7A35C', 'data' => $data_cloud_amount];          
-                }
+                              
             }else{
-                if($cloud_total){
-                for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400) {
-                    $k=date('Y-m-d', $i);
-                    $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
-                    $base_cloud=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']+$base_cloud : $base_cloud;
-                    $data_cloud_amount[] = ['name' => $j, 'y' => $base_cloud/10000];
-                }
-                $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴额','color'=>'#F7A35C', 'data' => $data_cloud_amount];
+                
+                if($cloud_total||$base_cloud){
+                    for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400) {
+                        $k=date('Y-m-d', $i);
+                        $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);                  
+                        $base_cloud=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']+$base_cloud : $base_cloud;
+                        $y_cloud_amount=$base_cloud/10000;
+                        $data_cloud_amount[] = ['name' => $j, 'y' =>$y_cloud_amount, 'value' =>[$j,$y_cloud_amount]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'area','zIndex'=>3, 'name' => '累计公有云补贴','data' => $data_cloud_amount];                            
+                    }else{
+                        $series['amount'][] = ['type' => 'line','areaStyle'=>[], 'z'=>3, 'name' => '累计公有云补贴','data' => $data_cloud_amount];          
+                    }
                 }
 
-                if($allocate_total){
-                for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
-                    $k=date('Y-m-d', $i);
-                    $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
-                    $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
-                    $data_allocate_amount[] = ['name' => $j, 'y' => $base_amount/10000]; 
+                if($allocate_total||$base_amount){
+                    for ($i = $amount_num_start; $i <= $end; $i = $i + 86400) {
+                        $k=date('Y-m-d', $i);
+                        $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i):date('n.j', $i);
+                        $base_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']+$base_amount : $base_amount;
+                        $y_allocate_amount=$base_amount/10000;
+                        $data_allocate_amount[] = ['name' => $j, 'y' => $y_allocate_amount,'value' =>[$j,$y_allocate_amount]]; 
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额', 'data' => $data_allocate_amount];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','areaStyle'=>[], 'z'=>1,'name' => '累计下拨额', 'data' => $data_allocate_amount]; 
+                    }
                 }
-                $series['amount'][] = ['type' => 'area','zIndex'=>1, 'name' => '累计下拨额','color'=>'#7CB5EC', 'data' => $data_allocate_amount];
-                }
+           
             }
 
-            $old_cost_num= count($cost_total);
+            $old_cost_num= count($cost_total);            
             for ($i = $amount_num_start<=$cloud_num_start?$amount_num_start:$cloud_num_start; $i <= $end; $i = $i + 86400){                  
                 $j = $end-($amount_num_start<=$cloud_num_start?$amount_num_start:$cloud_num_start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);                    
                 if(isset($cost_total[$i])){
@@ -201,10 +251,13 @@ class StatisticsController extends Controller {
                     $cost= sprintf("%.0f", (float) CorporationMeal::get_cost_total($i,$annual,$group))+$base_cloud_cost;
                     $cost_total[$i]=$cost;
                 }
-
-                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
+                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2), 'value' =>[$j, round($cost/10000,2)]];
             }
-            $series['amount'][] = ['type' => 'areaspline','zIndex'=>2, 'name' => '累计消耗额','color'=>'#90EE7E', 'data' => $data_amount_cost];
+            if($chart==1){
+                $series['amount'][] = ['type' => 'areaspline','zIndex'=>2, 'name' => '累计消耗额', 'data' => $data_amount_cost];
+            }else{
+                $series['amount'][] = ['type' => 'line','areaStyle'=>[],'z'=>2,'smooth'=>true, 'name' => '累计消耗额', 'data' => $data_amount_cost];
+            }
             if($old_cost_num!=count($cost_total)){
                 $query = CorporationMeal::find()->select(['SUM(amount)'])->andWhere(['group_id'=> explode(',', $group_id)])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
                 $dependency = new \yii\caching\DbDependency(['sql' => $query]);
@@ -216,57 +269,88 @@ class StatisticsController extends Controller {
             $amount_num_start=($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start)));
             $cloud_num_start=($cloud_total?strtotime(key($cloud_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(strftime("%Y-W%W",$start))));
             if($amount_num_start<=$cloud_num_start){
-                if($allocate_total){
-                for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
-                    $k=strftime("%Y-W%W",$i);
-                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                    $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                    //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
-                    $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
+              
+                if($allocate_total||$base_amount){
+                    for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
+                        $k=strftime("%Y-W%W",$i);
+                        $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                        //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                        $y_allocate_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0;
+                        $y_allocate_num=isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0;
+                        $data_allocate_amount[] = ['name' => $j, 'y' =>$y_allocate_amount,'value' =>[$j,$y_allocate_amount]];                            
+                        $data_allocate_num[] = ['name' => $j, 'y' =>$y_allocate_num,'value' =>[$j, $y_allocate_num]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+                        $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','z'=>3, 'name' => '当期下拨额','data' => $data_allocate_amount];
+                        $series['amount'][] = ['type' => 'bar','z'=>1, 'name' => '当期下拨数','label'=>['show'=>true,'color'=>'#000','position'=>'top','formatter'=>new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")], 'data' => $data_allocate_num,'yAxisIndex'=>1,];
+                    }
                 }
-                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
 
+                if($cloud_total||$base_cloud){
+                    for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400*7) {
+                        $k=strftime("%Y-W%W",$i);
+                        $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                        $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                        //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                        $y_cloud_amount=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0;
+                        $y_cloud_num=isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0;
+                        $data_cloud_amount[] = ['name' => $j, 'y' =>$y_cloud_amount, 'value' => [$j,$y_cloud_amount]];
+                        $data_cloud_num[] = ['name' => $j, 'y' =>$y_cloud_num, 'value' => [$j,$y_cloud_num]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                        $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','z'=>4, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                        $series['amount'][] = ['type' => 'bar','z'=>2, 'name' => '当期公有云补贴数','label'=>['show'=>true,'color'=>'#000','position'=>'top','formatter'=>new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")],  'data' => $data_cloud_num,'yAxisIndex'=>1,];
+                     }
                 }
 
-                if($cloud_total){
-                for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400*7) {
-                    $k=strftime("%Y-W%W",$i);
-                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                    $j = $end-$amount_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                    //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_cloud_amount[] = ['name' => $j, 'y' => isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0];
-                    $data_cloud_num[] = ['name' => $j, 'y' => isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0];
-                }
-                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
-                }
             }else{
-                if($cloud_total){
-                for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400*7) {
-                    $k=strftime("%Y-W%W",$i);
-                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                    $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                    //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_cloud_amount[] = ['name' => $j, 'y' => isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0];
-                    $data_cloud_num[] = ['name' => $j, 'y' => isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0];
+               
+                if($cloud_total||$base_cloud){
+                    for ($i = $cloud_num_start; $i <= $end; $i = $i + 86400*7) {
+                        $k=strftime("%Y-W%W",$i);
+                        $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                        $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                        //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                        $y_cloud_amount=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0;
+                        $y_cloud_num=isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0;
+                        $data_cloud_amount[] = ['name' => $j, 'y' =>$y_cloud_amount, 'value' => [$j,$y_cloud_amount]];
+                        $data_cloud_num[] = ['name' => $j, 'y' =>$y_cloud_num, 'value' => [$j,$y_cloud_num]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                        $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','z'=>3, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                        $series['amount'][] = ['type' => 'bar','z'=>1, 'name' => '当期公有云补贴数','label'=>['show'=>true,'color'=>'#000','position'=>'top','formatter'=>new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")],  'data' => $data_cloud_num,'yAxisIndex'=>1,];
+                    }
                 }
-                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
+                if($allocate_total||$base_amount){
+                    for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
+                        $k=strftime("%Y-W%W",$i);
+                        $l=($i + 86400*6)<$end?($i + 86400*6):$end;
+                        $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
+                        //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;              
+                        $y_allocate_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0;
+                        $y_allocate_num=isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0;
+                        $data_allocate_amount[] = ['name' => $j, 'y' =>$y_allocate_amount,'value' =>[$j,$y_allocate_amount]];                            
+                        $data_allocate_num[] = ['name' => $j, 'y' =>$y_allocate_num,'value' =>[$j, $y_allocate_num]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+                        $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','z'=>4, 'name' => '当期下拨额','data' => $data_allocate_amount];
+                        $series['amount'][] = ['type' => 'bar','z'=>2, 'name' => '当期下拨数','label'=>['show'=>true,'color'=>'#000','position'=>'top','formatter'=>new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")], 'data' => $data_allocate_num,'yAxisIndex'=>1,];
+                    }
                 }
-                if($allocate_total){
-                for ($i = $amount_num_start; $i <= $end; $i = $i + 86400*7) {
-                    $k=strftime("%Y-W%W",$i);
-                    $l=($i + 86400*6)<$end?($i + 86400*6):$end;
-                    $j = $end-$cloud_num_start>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $l):date('n.j', $i).'-'.date('n.j', $l);
-                    //$base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
-                    $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
-                }
-                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
-                }
+          
             }
 
             $old_cost_num= count($cost_total);
@@ -283,11 +367,14 @@ class StatisticsController extends Controller {
 
 
                 $cost=$cost_total[$l+86400]-$cost_total[$i];
-                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
-
+                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2),'value'=>[$j,round($cost/10000,2)]];
 
             }
-            $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
+            if($chart==1){
+                $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
+            }else{
+                $series['amount'][] = ['type' => 'line','smooth'=>true,'z'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
+            }
             if($old_cost_num!=count($cost_total)){
                 $query = CorporationMeal::find()->select(['SUM(amount)'])->andWhere(['group_id'=> explode(',', $group_id)])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
                 $dependency = new \yii\caching\DbDependency(['sql' => $query]);
@@ -299,51 +386,79 @@ class StatisticsController extends Controller {
             $cloud_num_start=($cloud_total?strtotime(key($cloud_total)):($allocate_total?strtotime(key($allocate_total)):strtotime(date("Y-m",$start))));
 
             if($amount_num_start<=$cloud_num_start){
-                if($allocate_total){
-                for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
-                    $k=date("Y-m",$i);
-                    $j = date('Y.n', $i);
-//                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
-                    $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
-                }
-                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                if($allocate_total||$base_amount){
+                    for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                        $k=date("Y-m",$i);
+                        $j = date('Y.n', $i);
+    //                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
+                        $y_allocate_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0;
+                        $y_allocate_num=isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0;
+                        $data_allocate_amount[] = ['name' => $j, 'y' =>$y_allocate_amount,'value' =>[$j,$y_allocate_amount]];                            
+                        $data_allocate_num[] = ['name' => $j, 'y' =>$y_allocate_num,'value' =>[$j, $y_allocate_num]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+                        $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','z'=>3, 'name' => '当期下拨额','data' => $data_allocate_amount];
+                        $series['amount'][] = ['type' => 'bar','z'=>1, 'name' => '当期下拨数','label'=>['show'=>true,'color'=>'#000','position'=>'top','formatter'=>new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")], 'data' => $data_allocate_num,'yAxisIndex'=>1,];
+                    }
                 }
 
-                if($cloud_total){
-                for ($i = $cloud_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
-                    $k=date("Y-m",$i);
-                    $j = date('Y.n', $i);
+                if($cloud_total||$base_cloud){
+                    for ($i = $cloud_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                        $k=date("Y-m",$i);
+                        $j = date('Y.n', $i);
 //                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_cloud_amount[] = ['name' => $j, 'y' => isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0];  
-                    $data_cloud_num[] = ['name' => $j, 'y' => isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0]; 
-                }
-                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
+                        $y_cloud_amount=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0;
+                        $y_cloud_num=isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0;
+                        $data_cloud_amount[] = ['name' => $j, 'y' =>$y_cloud_amount, 'value' => [$j,$y_cloud_amount]];
+                        $data_cloud_num[] = ['name' => $j, 'y' =>$y_cloud_num, 'value' => [$j,$y_cloud_num]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                        $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','z'=>4, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                        $series['amount'][] = ['type' => 'bar','z'=>2, 'name' => '当期公有云补贴数','label'=>['show'=>true,'color'=>'#000','position'=>'top','formatter'=>new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")],  'data' => $data_cloud_num,'yAxisIndex'=>1,];
+                    }
                 }
             }else{
-                if($cloud_total){
-                for ($i = $cloud_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
-                    $k=date("Y-m",$i);
-                    $j = date('Y.n', $i);
+                if($cloud_total||$base_cloud){
+                    for ($i = $cloud_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                        $k=date("Y-m",$i);
+                        $j = date('Y.n', $i);
 //                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_cloud_amount[] = ['name' => $j, 'y' => isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0];  
-                    $data_cloud_num[] = ['name' => $j, 'y' => isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0]; 
+                        $y_cloud_amount=isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount']/10000 :0;
+                        $y_cloud_num=isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] :0;
+                        $data_cloud_amount[] = ['name' => $j, 'y' =>$y_cloud_amount, 'value' => [$j,$y_cloud_amount]];
+                        $data_cloud_num[] = ['name' => $j, 'y' =>$y_cloud_num, 'value' => [$j,$y_cloud_num]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                        $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','z'=>3, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
+                        $series['amount'][] = ['type' => 'bar','z'=>1, 'name' => '当期公有云补贴数','label'=>['show'=>true,'color'=>'#000','position'=>'top','formatter'=>new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")],  'data' => $data_cloud_num,'yAxisIndex'=>1,];
+                    }
                 }
-                $series['amount'][] = ['type' => 'line','zIndex'=>3, 'name' => '当期公有云补贴额', 'data' => $data_cloud_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>1, 'name' => '当期公有云补贴数', 'data' => $data_cloud_num,'yAxis'=>1,];
-                }
-                if($allocate_total){
-                for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
-                    $k=date("Y-m",$i);
-                    $j = date('Y.n', $i);
+                if($allocate_total||$base_amount){
+                    for ($i = $amount_num_start; $i <= $end; $i= strtotime('+1 months',$i)) {
+                        $k=date("Y-m",$i);
+                        $j = date('Y.n', $i);
 //                      $base_amount=isset($amount_num[$k]) ? (float) $amount_num[$k]['num']+$base_amount : $base_amount;
-                    $data_allocate_amount[] = ['name' => $j, 'y' => isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0];
-                    $data_allocate_num[] = ['name' => $j, 'y' => isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0];
-                }
-                $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
-                $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                        $y_allocate_amount=isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount']/10000 :0;
+                        $y_allocate_num=isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] :0;
+                        $data_allocate_amount[] = ['name' => $j, 'y' =>$y_allocate_amount,'value' =>[$j,$y_allocate_amount]];                            
+                        $data_allocate_num[] = ['name' => $j, 'y' =>$y_allocate_num,'value' =>[$j, $y_allocate_num]];
+                    }
+                    if($chart==1){
+                        $series['amount'][] = ['type' => 'line','zIndex'=>4, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+                        $series['amount'][] = ['type' => 'column','zIndex'=>2, 'name' => '当期下拨数', 'data' => $data_allocate_num,'yAxis'=>1,];
+                    }else{
+                        $series['amount'][] = ['type' => 'line','z'=>4, 'name' => '当期下拨额','data' => $data_allocate_amount];
+                        $series['amount'][] = ['type' => 'bar','z'=>2, 'name' => '当期下拨数','label'=>['show'=>true,'color'=>'#000','position'=>'top','formatter'=>new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")], 'data' => $data_allocate_num,'yAxisIndex'=>1,];
+                    }
                 }
             }
 
@@ -359,10 +474,14 @@ class StatisticsController extends Controller {
                 }
 
                 $cost=$cost_total[$l+86400]-$cost_total[$i];
-                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2)];
+                $data_amount_cost[] = ['name' => $j, 'y' => round($cost/10000,2),'value'=>[$j,round($cost/10000,2)]];
 
             }
-            $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
+            if($chart==1){
+                $series['amount'][] = ['type' => 'spline','zIndex'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
+            }else{
+                $series['amount'][] = ['type' => 'line','smooth'=>true,'z'=>5, 'name' => '当期消耗额', 'data' => $data_amount_cost];
+            }
             if($old_cost_num!=count($cost_total)){
                 $query = CorporationMeal::find()->select(['SUM(amount)'])->andWhere(['group_id'=> explode(',', $group_id)])->andFilterWhere(['annual'=>$annual])->createCommand()->getRawSql();
                 $dependency = new \yii\caching\DbDependency(['sql' => $query]);
@@ -375,9 +494,13 @@ class StatisticsController extends Controller {
         $data_allocate=[];     
         $allocate_num= CorporationMeal::get_allocate_num($start,$end,$annual,$group);
         foreach($allocate_num as $allocate){
-            $data_allocate[] = ['name' =>floatval($allocate['amount']/10000).'万', 'y' => (int) $allocate['num']];
+            $data_allocate[] = ['name' =>floatval($allocate['amount']/10000).'万', 'y' => (int) $allocate['num'],'value'=>(int) $allocate['num']];
         }
-        $series['allocate_num'][] = ['type' => 'pie','innerSize'=>'50%', 'name' => '数量', 'data' => $data_allocate];
+        if($chart==1){
+            $series['allocate_num'][] = ['type' => 'pie','innerSize'=>'50%', 'name' => '数量', 'data' => $data_allocate];
+        }else{
+            $series['allocate_num'][] = ['type' => 'pie','radius'=>['25%','50%'], 'name' => '数量', 'data' => $data_allocate,'label'=>['formatter'=>"{c}家,{d}%",'color'=>'#000']];
+        }
         
         //BD下拨金额
         $series['allocate_bd']=[];       
@@ -399,17 +522,24 @@ class StatisticsController extends Controller {
   
         foreach($changes as $key=>$change){
             foreach($bds as $b=>$bd){
-                $data_allocate_bd[$key][] = ['name' =>$b?$groups[$b]['name']:'未分配', 'y' => isset($change[$b])?$change[$b]/10000:0];
+                $y_allocate_bd=isset($change[$b])?$change[$b]/10000:0;
+                $data_allocate_bd[$key][] = ['name' =>$b?$groups[$b]['name']:'未分配', 'y' =>$y_allocate_bd,'value'=>[$y_allocate_bd,$b?$groups[$b]['name']:'未分配']];
             }
         
         }
-        foreach($data_allocate_bd as $k=>$allocate){
-            $series['allocate_bd'][] = ['type' => 'bar', 'name' => $k, 'data' => $allocate];
-            
+        if($chart==1){
+            foreach($data_allocate_bd as $k=>$allocate){
+                $series['allocate_bd'][] = ['type' => 'bar', 'name' => $k, 'data' => $allocate];
+            }
+        }else{
+            foreach($data_allocate_bd as $k=>$allocate){
+                $series['allocate_bd'][] = ['type' => 'bar', 'name' => $k,'stack'=>$allocate[0]['name'], 'data' => array_reverse($allocate)];
+
+            }
         }
         
      
-        return $this->render('corporation', ['series' => $series,'drilldown'=>$drilldown, 'start' => $start, 'end' => $end,'sum'=>$sum,'annual'=>$annual,'group'=>$group]);
+        return $this->render('corporation', ['chart'=>$chart,'series' => $series,'drilldown'=>$drilldown, 'start' => $start, 'end' => $end,'sum'=>$sum,'annual'=>$annual,'group'=>$group]);
         
     }
     

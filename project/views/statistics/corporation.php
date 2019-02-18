@@ -11,6 +11,7 @@ use kartik\widgets\Select2;
 use project\models\Parameter;
 use project\models\Group;
 use project\models\UserGroup;
+use daixianceng\echarts\ECharts;
 
 $this->title = '企业统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['corporation']];
@@ -24,8 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="nav-tabs-custom">
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#amount_line" data-toggle="tab">下拨消耗</a></li>
-                <li><a href="#industry_line" data-toggle="tab">行业规模</a></li>
+                <li class="active"><a href="#amount_line" data-toggle="tab">企业统计</a></li>
                 
                 <li class="pull-right header">
                     <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1?Select2::widget([
@@ -120,9 +120,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </ul>
             <div class="tab-content no-padding">
                 <div class="tab-pane row active" id="amount_line">
-               
-                    <section class="col-md-12">
-                   
+                <?php if($chart==1):?>
+                    <section class="col-md-12">                    
                     <?=
                     Highcharts::widget([
                         'scripts' => [
@@ -219,10 +218,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'series' => $series['amount'],
                     ]
                     ]);
-                    ?>
-                     </section>
-                    <section class="col-md-6">
-               <?=
+                    ?>                   
+                    </section>
+                    <section class="col-md-6">                    
+                    <?=
                         Highcharts::widget([
                             'scripts' => [
                                 'highcharts-more',
@@ -253,8 +252,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'cursor' => 'pointer',
                                         'dataLabels' => [
                                             'enabled' => true,                                        
-                                            'format' => '{point.y}家 , {point.percentage:.1f} %',
-                                            
+                                            'format' => '{point.y}家 , {point.percentage:.2f} %',                                            
                                         ],
                                         'showInLegend' => true,
                                     ]
@@ -263,9 +261,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ]);
                         ?>
-                        </section>
-                    <section class="col-md-6">
-                         <?=
+                    </section>
+                    <section class="col-md-6">                   
+                    <?=
                     Highcharts::widget([
                         'scripts' => [
                             'highcharts-more',
@@ -314,9 +312,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                     ?>
                     </section>
-                    
-                </div>
-                <div class="tab-pane row" id="industry_line">
                     <section class="col-md-6">
                     <?=
                     Highcharts::widget([
@@ -363,7 +358,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                     ?>
                     </section>
-                    <section class="col-md-3">
+                    <section class="col-md-3">                        
                           <?=
                         Highcharts::widget([
                             'scripts' => [
@@ -406,9 +401,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'series' => $series['capital'],
                             ]
                         ]);
-                        ?>
+                        ?>                      
                     </section>
-                    <section class="col-md-3">
+                    <section class="col-md-3">                       
                          <?=
                         Highcharts::widget([
                             'scripts' => [
@@ -451,9 +446,201 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                         ?>
                     </section>
-                </div>
-               
-                
+                    <?php else:?>
+                    <section class="col-md-12">
+                    <?=
+                        ECharts::widget([
+                            'theme'=>'light',
+                            'responsive'=>true,
+                            'options' => [
+                                'style'=>'height:400px'
+                            ],
+                            'pluginOptions' => [
+                                'option' => [
+                                    'title' => [
+                                        'text' => '下拨消耗统计',
+                                        'left'=>'center',
+                                        'top'=>'10px',
+                                    ],
+                                    'legend'=>['show'=>true,'bottom'=>'10px'],
+                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                                    'xAxis' => [                
+                                        'type' => 'category',
+                                        'boundaryGap'=>true,
+                                        'axisLabel'=>['rotate'=>45],
+                                        'splitLine'=>['show'=>true]
+                                    ],
+                                    'yAxis' => [
+                                        ['type' => 'value','name' => '金额（万元）','min'=>0],
+                                        ['type' => 'value','name' => '数量','min'=>0,'splitLine'=>['show'=>false]]                                    
+                                    ],
+                                    'tooltip' => [
+                                        'trigger' => 'axis',
+
+                                    ],
+                                    'series' => $series['amount']
+                                ]
+                            ]
+                            
+                        ])
+                    ?>
+                    </section>
+                    <section class="col-md-6">
+                        <?=
+                        ECharts::widget([
+                            'theme'=>'light',
+                            'responsive'=>true,
+                            'options' => [
+                                'style'=>'height:400px'
+                            ],
+                            'pluginOptions' => [
+                                'option' => [
+                                    'title' => [
+                                        'text' => '企业下拨金额',
+                                        'left'=>'center',
+                                        'top'=>'10px',
+                                    ],
+                                    'legend'=>['show'=>true,'bottom'=>'10px'],
+                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                          
+                                    'tooltip' => [
+                                        'trigger' => 'axis',
+
+                                    ],
+                                    'series' => $series['allocate_num']
+                                ]
+                            ]
+                            
+                        ])
+                    ?>                    
+                    </section>
+                    <section class="col-md-6">
+                       <?=
+                        ECharts::widget([
+                            'theme'=>'light',
+                            'responsive'=>true,
+                            'options' => [
+                                'style'=>'height:400px'
+                            ],
+                            'pluginOptions' => [
+                                'option' => [
+                                    'title' => [
+                                        'text' => '下拨金额',
+                                        'left'=>'center',
+                                        'top'=>'10px',
+                                    ],
+                                    'legend'=>['show'=>true,'bottom'=>'10px'],
+                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[],'magicType'=>['type'=>['stack', 'tiled']]]],                         
+                                    'xAxis' => [
+                                        'type' => 'value',
+                                        'name' => '金额（万元）',
+                                        'min'=>0,
+                                        'nameLocation'=>'middle'
+                                        
+                                    ],
+                                    'yAxis' => [                
+                                        'type' => 'category',
+                                        'splitLine'=>['show'=>true]
+                                    ],
+                                    
+                                    'tooltip' => [
+                                        'trigger' => 'axis',
+
+                                    ],
+                                    'series' => $series['allocate_bd']
+                                ]
+                            ]
+                            
+                        ])
+                    ?> 
+                    </section>
+                    <section class="col-md-6">
+                    <?=
+                    ECharts::widget([
+                        'theme'=>'light',
+                        'responsive'=>true,
+                        'options' => [
+                            'style'=>'height:400px'
+                        ],
+                        'pluginOptions' => [
+                            'option' => [
+                                'title' => [
+                                    'text' => '企业行业分布',
+                                    'left'=>'center',
+                                    'top'=>'10px',
+                                ],
+                                'legend'=>['show'=>true,'bottom'=>'10px'],
+                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                                'tooltip' => [
+                                    'trigger' => 'axis',
+                                ],
+                                'series' => $series['industry']
+                            ]
+                        ]
+                    ]);
+                    ?>
+                    </section>
+                    <section class="col-md-3">
+                    <?=
+                    ECharts::widget([
+                        'theme'=>'light',
+                        'responsive'=>true,
+                        'options' => [
+                            'style'=>'height:400px'
+                        ],
+                        'pluginOptions' => [
+                            'option' => [
+                                'title' => [
+                                    'text' => '企业注册资金',
+                                    'left'=>'center',
+                                    'top'=>'10px',
+                                ],
+                                'legend'=>['show'=>true,'bottom'=>'10px'],
+                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                                'tooltip' => [
+                                    'trigger' => 'axis',
+                                ],
+                                'series' => $series['capital']
+                            ]
+                        ]
+                    ]);
+                    ?>                       
+                    </section>
+                    <section class="col-md-3">
+                    <?=
+                    ECharts::widget([
+                        'theme'=>'light',
+                        'responsive'=>true,
+                        'options' => [
+                            'style'=>'height:400px'
+                        ],
+                        'pluginOptions' => [
+                            'option' => [
+                                'title' => [
+                                    'text' => '企业研发规模',
+                                    'left'=>'center',
+                                    'top'=>'10px',
+                                ],
+                                'legend'=>['show'=>true,'bottom'=>'10px'],
+                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                                'tooltip' => [
+                                    'trigger' => 'axis',
+                                ],
+                                'series' => $series['scale']
+                            ]
+                        ]
+                    ]);
+                    ?>                       
+                    </section>
+                    <?php endif;?>
+                                                    
+                 </div>              
             </div>
         </div>
         <?php Pjax::end(); ?>
@@ -465,21 +652,3 @@ $this->params['breadcrumbs'][] = $this->title;
 $cssString = '.header .form-group {margin-bottom:0;}';  
 $this->registerCss($cssString); 
 ?>
-<script>
-<?php $this->beginBlock('corporation-show') ?>
-$('.nav a').on('shown.bs.tab',function (e) {
-    
-    var $id=$(this).attr('href');
-    if($id=='#industry_line'){
-        $('.nav .headers').hide();
-    }else{
-        $('.nav .headers').show();
-    }
-    $($id).find('[data-highcharts-chart]').each(function(){
-        $('#'+$(this).attr('id')).highcharts().reflow();
-    })
-         
-})
-<?php $this->endBlock() ?>
-</script>
-<?php $this->registerJs($this->blocks['corporation-show'], \yii\web\View::POS_END); ?>

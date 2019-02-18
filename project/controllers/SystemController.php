@@ -111,6 +111,7 @@ class SystemController extends Controller {
             $system['captcha_open'] = isset($system['captcha_open']) ? implode(',', $system['captcha_open']) : '';
             $res = System::setSystem($system);
             if ($res) {
+                Yii::$app->cache->delete('system');
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
                 Yii::$app->session->setFlash('error', '更新失败。');
@@ -231,6 +232,7 @@ class SystemController extends Controller {
 
             $res = System::setSystem($system);
             if ($res) {
+                Yii::$app->cache->delete('system');
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
                 Yii::$app->session->setFlash('error', '更新失败。');
@@ -426,6 +428,7 @@ class SystemController extends Controller {
             $system = Yii::$app->request->post('System');
             $res = System::setSystem($system);
             if ($res) {
+                Yii::$app->cache->delete('system');
                 Yii::$app->session->setFlash('success', '更新成功。');
             } elseif ($res === false) {
                 Yii::$app->session->setFlash('error', '更新失败。');
