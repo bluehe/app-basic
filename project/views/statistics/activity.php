@@ -11,6 +11,7 @@ use kartik\widgets\Select2;
 use project\models\Parameter;
 use project\models\UserGroup;
 use project\models\Group;
+use daixianceng\echarts\ECharts;
 
 $this->title = '活跃统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['activity']];
@@ -25,9 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#activity_line" data-toggle="tab">活跃统计</a></li>
-                <li><a href="#item_pie" data-toggle="tab">活跃项目</a></li>
-
- 
+               
                 <li class="pull-right header">
                     <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1?Select2::widget([
                         'name' => 'group',                        
@@ -136,7 +135,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 </li>
             </ul>
             <div class="tab-content no-padding">
-                <div class="tab-pane active" id="activity_line">
+                <div class="tab-pane row active" id="activity_line">
+                    <?php if($chart==1):?>
+                    <section class="col-md-12">
                     <?=
                     Highcharts::widget([
                         'scripts' => [
@@ -188,8 +189,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                     ]);
                     ?>
-                </div>
-                <div class="tab-pane row" id="item_pie">
+                    </section>
                     <section class="col-md-6">
                          <?=
                         Highcharts::widget([
@@ -233,6 +233,73 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                         ?>
                     </section>
+                    <?php else:?>
+                    <section class="col-md-12">
+                    <?=
+                    ECharts::widget([
+                        'theme'=>'light',
+                        'responsive'=>true,
+                        'options' => [
+                            'style'=>'height:400px'
+                        ],
+                        'pluginOptions' => [
+                            'option' => [
+                                'title' => [
+                                    'text' => '活跃企业趋势统计',
+                                    'left'=>'center',
+                                    'top'=>'10px',
+                                ],
+                                'legend'=>['show'=>true,'bottom'=>'10px'],
+                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                                'xAxis' => [                
+                                    'type' => 'category',
+                                    'boundaryGap'=>true,
+                                   
+                                    'splitLine'=>['show'=>true]
+                                ],
+                                'yAxis' => [
+                                    ['type' => 'value','name' => '数量','min'=>0,'splitNumber'=>5],
+                                    ['type' => 'value','name' => '活跃率','min'=>0,'max'=>100,'splitLine'=>['show'=>false],'axisLabel'=>['formatter'=>'{value}%']]                                    
+                                ],
+                                'tooltip' => [
+                                    'trigger' => 'axis',                                  
+                                ],
+                                'series' => $series['activity']
+                            ]
+                        ]
+
+                    ])
+                    ?>
+                    </section>
+                    <section class="col-md-6">
+                        <?=
+                        ECharts::widget([
+                        'theme'=>'light',
+                        'responsive'=>true,
+                        'options' => [
+                            'style'=>'height:400px'
+                        ],
+                        'pluginOptions' => [
+                            'option' => [
+                                'title' => [
+                                    'text' => '活跃项目',
+                                    'left'=>'center',
+                                    'top'=>'10px',
+                                ],
+                                'legend'=>['show'=>true,'bottom'=>'10px'],
+                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                                'tooltip' => [
+                                    'trigger' => 'axis',
+                                ],
+                                'series' => $series['item']
+                            ]
+                        ]
+                        ]);
+                        ?>
+                    </section>
+                    <?php endif;?>
                 </div>
                 
             </div>
@@ -248,19 +315,19 @@ $this->registerCss($cssString);
 ?>
 <script>
 <?php $this->beginBlock('activity-show') ?>
-$('.nav a').on('shown.bs.tab',function (e) {
-    
-    var $id=$(this).attr('href');
-    if($id=='#item_pie'){
-        $('.nav .activity').hide();
-    }else{
-        $('.nav .activity').show();
-    }
-    $($id).find('[data-highcharts-chart]').each(function(){
-        $('#'+$(this).attr('id')).highcharts().reflow();
-    })
-         
-})
+//$('.nav a').on('shown.bs.tab',function (e) {
+//    
+//    var $id=$(this).attr('href');
+//    if($id=='#item_pie'){
+//        $('.nav .activity').hide();
+//    }else{
+//        $('.nav .activity').show();
+//    }
+//    $($id).find('[data-highcharts-chart]').each(function(){
+//        $('#'+$(this).attr('id')).highcharts().reflow();
+//    })
+//         
+//})
 <?php $this->endBlock() ?>
 </script>
 <?php $this->registerJs($this->blocks['activity-show'], \yii\web\View::POS_END); ?>

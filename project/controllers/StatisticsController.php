@@ -545,6 +545,7 @@ class StatisticsController extends Controller {
     
     public function actionActivity() {
 
+        $chart=Yii::$app->siteConfig->business_charts;
         $end = strtotime('today');
         $start = strtotime('-1 months +1 days',$end);
         $sum=Yii::$app->request->get('sum',1);
@@ -579,14 +580,20 @@ class StatisticsController extends Controller {
             foreach($activity_total as $row){
                 $key=date('Y.n.j',$row['start_time']+86400).'-'.date('Y.n.j',$row['end_time']);
                 $j = $end-$start>=365*86400?date('Y.n.j', $row['start_time']+8640).'-'.date('Y.n.j', $row['end_time']):date('n.j', $row['start_time']+8640).'-'.date('n.j', $row['end_time']);
-                $data_total[]=['name' =>$j , 'y' =>  (int) $row['num']];
-                $data_change[]=['name' => $j, 'y' =>  isset($changes[$key])?$changes[$key]:0];
-                $data_per[]=['name' => $j, 'y' => isset($changes[$key])?round($changes[$key]/(int)$row['num']*100,2):0];               
+                $data_total[]=['name' =>$j , 'y' =>  (int) $row['num'], 'value' =>  [$j,(int) $row['num']]];
+                $data_change[]=['name' => $j, 'y' =>  isset($changes[$key])?$changes[$key]:0, 'value' =>  [$j,isset($changes[$key])?$changes[$key]:0]];
+                $data_per[]=['name' => $j, 'y' => isset($changes[$key])?round($changes[$key]/(int)$row['num']*100,2):0,'value' => [$j,isset($changes[$key])?round($changes[$key]/(int)$row['num']*100,2):0]];               
             }
             
-            $series['activity'][] = ['type' => 'column', 'name' => '下拨企业数', 'data' => $data_total,'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
-            $series['activity'][] = ['type' => 'column', 'name' => '活跃企业数', 'data' => $data_change,'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
-            $series['activity'][] = ['type' => 'spline', 'name' => '活跃率', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];                           
+            if($chart==1){
+                $series['activity'][] = ['type' => 'column', 'name' => '下拨企业数', 'data' => $data_total,'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
+                $series['activity'][] = ['type' => 'column', 'name' => '活跃企业数', 'data' => $data_change,'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
+                $series['activity'][] = ['type' => 'spline', 'name' => '活跃率', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];   
+            }else{
+                $series['activity'][] = ['type' => 'bar', 'name' => '下拨企业数', 'data' => $data_total,'label'=>['show'=>true,'position'=>'top']];
+                $series['activity'][] = ['type' => 'bar', 'name' => '活跃企业数', 'data' => $data_change,'label'=>['show'=>true],'barGap'=>'-100%'];
+                $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => '活跃率', 'data' => $data_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];   
+            }
         }else{
             
             $data_change=[];
@@ -620,16 +627,28 @@ class StatisticsController extends Controller {
                 $key=$end-$start>=365*86400?date('Y.n.j',$changes[$et2]['start_time']+86400).'-'.date('Y.n.j',$changes[$et2]['end_time']):date('n.j',$changes[$et2]['start_time']+86400).'-'.date('n.j',$changes[$et2]['end_time']);
 //              $key=$changes[$et2]['start_time'].'-'.$changes[$et2]['end_time'];                
                 $row['bd_id']=$row['bd_id']?$row['bd_id']:0;
-                $data_change[$row['bd_id']][]=['name' => $key, 'y' =>  isset($changes[$et2][$row['bd_id']])?$changes[$et2][$row['bd_id']]:0];
-                $data_per[$row['bd_id']][]=['name' => $key, 'y' => isset($changes[$et2][$row['bd_id']])?round($changes[$et2][$row['bd_id']]/(int)$row['num']*100,2):0];               
+                $y_change=isset($changes[$et2][$row['bd_id']])?$changes[$et2][$row['bd_id']]:0;
+                $y_per=isset($changes[$et2][$row['bd_id']])?round($changes[$et2][$row['bd_id']]/(int)$row['num']*100,2):0;
+                $data_change[$row['bd_id']][]=['name' => $key, 'y' => $y_change ,'value'=>[$key,$y_change]];
+                $data_per[$row['bd_id']][]=['name' => $key, 'y' =>$y_per,'value'=>[$key,$y_per]];               
             }
             
-            foreach ($data_change as $gid=>$data){
-                $series['activity'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
-               
-            }
-            foreach ($data_per as $gid=>$per){
-                 $series['activity'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+            if($chart==1){
+                foreach ($data_change as $gid=>$data){
+                    $series['activity'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+
+                }
+                foreach ($data_per as $gid=>$per){
+                     $series['activity'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                }
+            }else{
+                foreach ($data_change as $gid=>$data){
+                    $series['activity'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
+
+                }
+                foreach ($data_per as $gid=>$per){
+                     $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                }
             }
                                
         }
@@ -654,11 +673,16 @@ class StatisticsController extends Controller {
 //        $items[$fk]=$fv;
         
         foreach ($items as $key=>$item){
-            $data_item[] = ['name' =>  $key, 'y' =>$item];
+            $data_item[] = ['name' =>  $key, 'y' =>$item,'value'=>$item];
         }
-        $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item];
+        if($chart==1){
+            $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item];
+        }else{
+            $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item,'label'=>['formatter'=>"{b}:{c}家,{d}%",'color'=>'#000']];
+        }
+    
         
-        return $this->render('activity', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'annual'=>$annual,'group'=>$group]);
+        return $this->render('activity', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'annual'=>$annual,'group'=>$group]);
     }
     
     public function actionHealth() {
