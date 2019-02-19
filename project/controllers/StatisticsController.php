@@ -657,14 +657,14 @@ class StatisticsController extends Controller {
         $series['item']=[];       
         $data_item=[]; 
         
-        $items=[];
-        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,$annual,false,$group);
+        $items=[];       
         $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount'],$annual,true,$group);
         $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount',$annual,true,$group);
         $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount',$annual,true,$group);
-        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount',$annual,true,$group);
-        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount',$annual,true,$group);
         $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime'],$annual,true,$group);
+        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount',$annual,true,$group);
+        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount',$annual,true,$group);       
+        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,$annual,false,$group);
         
         arsort($items);
 //        $fv= reset($items);
@@ -678,7 +678,7 @@ class StatisticsController extends Controller {
         if($chart==1){
             $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item];
         }else{
-            $series['item'][] = ['type' => 'pie','name' => '数量', 'data' => $data_item,'label'=>['formatter'=>"{b}:{c}家,{d}%",'color'=>'#000']];
+            $series['item'][] = ['type' => 'pie','radius'=>[0,'60%'],'selectedMode'=>'single','name' => '数量', 'data' => $data_item,'label'=>['formatter'=>"{b}:{c}家,{d}%",'color'=>'#000']];
         }
     
         
@@ -686,7 +686,7 @@ class StatisticsController extends Controller {
     }
     
     public function actionHealth() {
-        
+        $chart=Yii::$app->siteConfig->business_charts;
         $end = strtotime('today');
         $start = strtotime('-1 months +1 days',$end);
         $group=Yii::$app->request->get('group',null);
@@ -718,20 +718,27 @@ class StatisticsController extends Controller {
         asort($health_key);
         foreach($health_value as $date=>$value){
             foreach($health_key as $key){
-                $data_health[$key][]=['name' =>$date , 'y' =>  isset($health_value[$date][$key])?$health_value[$date][$key]:0];
+                $y_health=isset($health_value[$date][$key])?$health_value[$date][$key]:0;
+                $data_health[$key][]=['name' =>$date , 'y' => $y_health,'value'=>[$date,$y_health]];
             }
         }
        
-        foreach($data_health as $k=>$v){
-            $series['health'][] = ['type' => 'column', 'name' => ActivityChange::$List['health'][$k], 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+        if($chart==1){
+            foreach($data_health as $k=>$v){
+                $series['health'][] = ['type' => 'column', 'name' => ActivityChange::$List['health'][$k], 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+            }
+        }else{
+            foreach($data_health as $k=>$v){
+                $series['health'][] = ['type' => 'bar', 'name' => ActivityChange::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+            }
         }
         
-        return $this->render('health', ['series' => $series, 'start' => $start, 'end' => $end,'group'=>$group]);
+        return $this->render('health', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'group'=>$group]);
     
     }
     
     public function actionTrain() {
-        
+        $chart=Yii::$app->siteConfig->business_charts;
         $end = strtotime('today')+ 86399;
         $start = strtotime('-30 days',$end);
         $sum=Yii::$app->request->get('sum',1);//1-天；2-周；3-月
@@ -758,32 +765,36 @@ class StatisticsController extends Controller {
                 for ($i = ($train_num===true?strtotime(key($train_num)):$start); $i < $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
                     $j = $end-($train_num===true?strtotime(key($train_num)):$start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);
-                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];          
+                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0, 'value' => [$j,isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0]];          
                 }
             }elseif($sum==2){
                 //周
                 for ($i = ($train_num?strtotime(key($train_num)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
                     $k=strftime("%Y-W%W",$i);
                     $j = $end-($train_num?strtotime(key($train_num)):strtotime(strftime("%Y-W%W",$start)))>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $i + 86400*7-1):date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
-                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];          
+                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0, 'value' =>[$j, isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0]];          
                 }
             }else{
                 //月
                 for ($i = ($train_num?strtotime(key($train_num)):strtotime(date("Y-m",$start))); $i < $end; $i= strtotime('+1 months',$i)) {
                     $k=date("Y-m",$i);
                     $j = date('Y.n', $i);
-                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0];         
+                    $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0,'value' =>[$j,isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0]];         
                 }
             }
             $series['num'][] = ['type' => 'line', 'name' => '次数', 'data' => $data_train_num,'showInLegend'=>false];
-            
+
             //类型
             $data_train_type = [];
             foreach($train_type as $type){
-                 $data_train_type[] = ['name' => Train::$List['train_type'][$type['train_type']], 'y' => (int) $type['num']];
+                 $data_train_type[] = ['name' => Train::$List['train_type'][$type['train_type']], 'y' => (int) $type['num'],'value'=>[Train::$List['train_type'][$type['train_type']],(int) $type['num']]];
                  //$series['type'][] = ['type' => 'column', 'name' => Train::$List['train_type'][$type['train_type']], 'data'=>[(int) $type['num']]];
-            }            
-            $series['type'][] = ['type' => 'column', 'name' => '次数', 'data' => $data_train_type,'showInLegend'=>false,'colorByPoint'=>false];            
+            }
+            if($chart==1){          
+                $series['type'][] = ['type' => 'column', 'name' => '次数', 'data' => $data_train_type,'showInLegend'=>false,'colorByPoint'=>false];  
+            }else{
+                $series['type'][] = ['type' => 'bar', 'name' => '次数', 'data' => $data_train_type,'label'=>['show'=>true]];
+            }
         }else{
                      
             $groups = User::get_user_color();
@@ -805,7 +816,8 @@ class StatisticsController extends Controller {
                     $k=date('Y-m-d', $i);
                     $j = $end-($data_num_total===true?strtotime(key($data_num_total)):$start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);
                     foreach($users_num as $user){
-                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];
+                        $y_train_num=isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0;
+                        $data_train_num[$user][] = ['name' => $j, 'y' => $y_train_num,'value'=>[$j,$y_train_num]];
                     }
                 }
             }elseif($sum==2){
@@ -813,7 +825,8 @@ class StatisticsController extends Controller {
                     $k=strftime("%Y-W%W",$i);
                     $j = $end-($data_num_total===true?strtotime(key($data_num_total)):strtotime(strftime("%Y-W%W",$start)))>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $i + 86400*7-1):date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
                     foreach($users_num as $user){
-                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];                    
+                        $y_train_num=isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0;
+                        $data_train_num[$user][] = ['name' => $j, 'y' => $y_train_num,'value'=>[$j,$y_train_num]];                    
                     }      
                 }
             }else{
@@ -821,7 +834,8 @@ class StatisticsController extends Controller {
                     $k=date("Y-m",$i);
                     $j = date('Y.n', $i);
                     foreach($users_num as $user){
-                        $data_train_num[$user][] = ['name' => $j, 'y' => isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0];                   
+                        $y_train_num=isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0;
+                        $data_train_num[$user][] = ['name' => $j, 'y' => $y_train_num,'value'=>[$j,$y_train_num]];                   
                     }         
                 }
             }
@@ -844,16 +858,23 @@ class StatisticsController extends Controller {
             
             foreach($data_type_total as $k=>$type){
                 foreach($users_type as $user){
-                    $data_train_type[$user][] = ['name' => Train::$List['train_type'][$k], 'y' => isset($data_type_total[$k][$user]) ? (int) $data_type_total[$k][$user] : 0];                   
+                    $y_train_type=isset($data_type_total[$k][$user]) ? (int) $data_type_total[$k][$user] : 0;
+                    $data_train_type[$user][] = ['name' => Train::$List['train_type'][$k], 'y' =>$y_train_type,'value'=>[Train::$List['train_type'][$k],$y_train_type] ];                   
                 }      
             }
+            if($chart==1){          
+                foreach ($data_train_type as $gid=>$data){
+                    $series['type'][] = ['type' => 'column', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];              
+                }     
+            }else{
+                foreach ($data_train_type as $gid=>$data){
+                    $series['type'][] = ['type' => 'bar', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];              
+                }
+            }
             
-            foreach ($data_train_type as $gid=>$data){
-                $series['type'][] = ['type' => 'column', 'name' => $gid?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&$groups[$gid]['color']?'#'.$groups[$gid]['color']:''];              
-            }    
             
         }
-        return $this->render('train', ['series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'group'=>$group]);
+        return $this->render('train', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'group'=>$group]);
     }
 
 }

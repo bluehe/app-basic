@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 use project\models\UserGroup;
 use project\models\Group;
 use kartik\widgets\Select2;
+use daixianceng\echarts\ECharts;
 
 $this->title = '健康度统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['health']];
@@ -74,7 +75,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             </ul>
             <div class="tab-content no-padding">
-                <div class="tab-pane active" id="activity_line">
+                <div class="tab-pane row active" id="activity_line">
+                    <?php if($chart==1):?>
+                    <section class="col-md-12">
                     <?=
                     Highcharts::widget([
                         'scripts' => [
@@ -123,6 +126,47 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                     ]);
                     ?>
+                    </section>
+                    <?php else:?>
+                    <section class="col-md-12">
+                    <?=
+                        ECharts::widget([
+                            'theme'=>'light',
+                            'responsive'=>true,
+                            'options' => [
+                                'style'=>'height:400px'
+                            ],
+                            'pluginOptions' => [
+                                'option' => [
+                                    'title' => [
+                                        'text' => '健康度',
+                                        'left'=>'center',
+                                        'top'=>'10px',
+                                    ],
+                                    'legend'=>['show'=>true,'bottom'=>'10px'],
+                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[],'magicType'=>['type'=>['stack', 'tiled']]]],                         
+                                    'xAxis' => [
+                                        'type' => 'category',
+                                        'boundaryGap'=>true,                                  
+                                        'splitLine'=>['show'=>true]
+                                    ],
+                                    'yAxis' => [                
+                                       'type' => 'value','name' => '数量','min'=>0
+                                    ],
+                                    
+                                    'tooltip' => [
+                                        'trigger' => 'axis',
+
+                                    ],
+                                    'series' => $series['health']
+                                ]
+                            ]
+                            
+                        ])
+                    ?> 
+                </section>
+                <?php endif;?>
                 </div>
                
                 

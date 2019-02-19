@@ -9,6 +9,7 @@ use kartik\widgets\SwitchInput;
 use project\models\UserGroup;
 use project\models\Group;
 use kartik\widgets\Select2;
+use daixianceng\echarts\ECharts;
 
 $this->title = '培训统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['train']];
@@ -127,7 +128,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </ul>
             <div class="tab-content no-padding">
                 <div class="tab-pane active row" id="num_line">
-                    <div class="col-md-8">
+                    <?php if($chart==1):?>
+                    <section class="col-md-8">
                     <?=
                     Highcharts::widget([
                         'scripts' => [
@@ -178,8 +180,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                     ]);
                     ?>
-                        </div>
-                    <div class="col-md-4">
+                    </section>
+                    <section class="col-md-4">
                         <?=
                     Highcharts::widget([
                         'scripts' => [
@@ -219,7 +221,87 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                     ]);
                     ?>
-                            </div>
+                    </section>
+                    <?php else:?>
+                    <section class="col-md-8">
+                    <?=
+                        ECharts::widget([
+                            'theme'=>'light',
+                            'responsive'=>true,
+                            'options' => [
+                                'style'=>'height:400px'
+                            ],
+                            'pluginOptions' => [
+                                'option' => [
+                                    'title' => [
+                                        'text' => '培训咨询次数',
+                                        'left'=>'center',
+                                        'top'=>'10px',
+                                    ],
+                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                                    'legend'=>['show'=>true,'bottom'=>'10px'],
+                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                    'xAxis' => [                
+                                        'type' => 'category',
+                                        'boundaryGap'=>true,
+                                        'axisLabel'=>['rotate'=>45],
+                                        'splitLine'=>['show'=>true]
+                                    ],
+                                    'yAxis' => [
+                                        'type' => 'value',
+                                        'name' => '数量',
+                                        'min'=>0
+                                    ],
+                                    'tooltip' => [
+                                        'trigger' => 'axis',
+
+                                    ],
+                                    'series' => $series['num']
+                                ]
+                            ]
+                            
+                        ])
+                    ?>
+                    </section>
+                    <section class="col-md-4">
+                    <?=
+                        ECharts::widget([
+                            'theme'=>'light',
+                            'responsive'=>true,
+                            'options' => [
+                                'style'=>'height:400px'
+                            ],
+                            'pluginOptions' => [
+                                'option' => [
+                                    'title' => [
+                                        'text' => '培训咨询类型',
+                                        'left'=>'center',
+                                        'top'=>'10px',
+                                    ],
+                                    'legend'=>['show'=>true,'bottom'=>'10px'],
+                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[],'magicType'=>['type'=>['stack', 'tiled']]]],
+                                    'xAxis' => [
+                                        'type' => 'category',
+                                        'boundaryGap'=>true,                                  
+                                        'splitLine'=>['show'=>true]
+                                    ],
+                                    'yAxis' => [                
+                                       'type' => 'value','name' => '数量','min'=>0
+                                    ],
+                                    
+                                    'tooltip' => [
+                                        'trigger' => 'axis',
+
+                                    ],
+                                    'series' => $series['type']
+                                ]
+                            ]
+                            
+                        ])
+                    ?> 
+                    </section>
+                    <?php endif;?>
                 </div>
             </div>
         </div>
