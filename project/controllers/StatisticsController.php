@@ -579,7 +579,7 @@ class StatisticsController extends Controller {
             }
             foreach($activity_total as $row){
                 $key=date('Y.n.j',$row['start_time']+86400).'-'.date('Y.n.j',$row['end_time']);
-                $j = $end-$start>=365*86400?date('Y.n.j', $row['start_time']+8640).'-'.date('Y.n.j', $row['end_time']):date('n.j', $row['start_time']+8640).'-'.date('n.j', $row['end_time']);
+                $j = $end-$start>=365*86400?date('Y.n.j', $row['start_time']+86400).'-'.date('Y.n.j', $row['end_time']):date('n.j', $row['start_time']+86400).'-'.date('n.j', $row['end_time']);
                 $data_total[]=['name' =>$j , 'y' =>  (int) $row['num'], 'value' =>  [$j,(int) $row['num']]];
                 $data_change[]=['name' => $j, 'y' =>  isset($changes[$key])?$changes[$key]:0, 'value' =>  [$j,isset($changes[$key])?$changes[$key]:0]];
                 $data_per[]=['name' => $j, 'y' => isset($changes[$key])?round($changes[$key]/(int)$row['num']*100,2):0,'value' => [$j,isset($changes[$key])?round($changes[$key]/(int)$row['num']*100,2):0]];               
