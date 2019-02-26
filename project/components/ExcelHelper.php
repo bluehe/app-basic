@@ -9,12 +9,14 @@ use project\models\Corporation;
 use project\models\Parameter;
 use project\models\Industry;
 use project\models\Meal;
+use project\models\UserGroup;
+use project\models\Group;
 
 
 class ExcelHelper {
 
     public static function set_corporation_excel($objSheet,$line_num=700) {
-        $line_bd= implode(',', User::get_bd());
+        $line_bd= implode(',', User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))));
         for($i=2;$i<=$line_num;$i++){
             //BD选择
             $objSheet->getCell('D'.$i)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  

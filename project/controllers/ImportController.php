@@ -133,7 +133,7 @@ class ImportController extends Controller {
                 $corporation_datas=ImportData::get_data_indexcorporation($id,$field_exist);
                 if(!empty($corporation_datas)){
                                      
-                    $corporation_exist= ActivityData::get_corporationid_by_time($model->statistics_at);//活跃中已经存在企业ID
+                    $corporation_exist= ActivityData::get_corporationid_by_time($model->statistics_at,$model->group_id);//活跃中已经存在企业ID
                     
                     $model_a=new ActivityData();
                     $model_a->loadDefaultValues();
