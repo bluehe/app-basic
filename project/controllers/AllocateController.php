@@ -14,6 +14,7 @@ use project\models\Corporation;
 use project\models\Meal;
 USE project\models\Parameter;
 use project\models\ColumnSetting;
+use project\models\Group;
 
 
 class AllocateController extends Controller { 
