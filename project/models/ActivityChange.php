@@ -13,6 +13,7 @@ use Yii;
  * @property int $bd_id
  * @property int $corporation_id
  * @property int $type
+ * @property int $is_allocate
  * @property int $is_act
  * @property int $act_trend
  * @property int $projectman_usercount
@@ -53,6 +54,9 @@ class ActivityChange extends \yii\db\ActiveRecord
     const TYPE_UPDATE = 1;
     const TYPE_ADD = 2;
     const TYPE_DELETE = 3;
+    const ALLOCATE_D = 0;
+    const ALLOCATE_N = 1;
+    const ALLOCATE_Y = 2;
     const ACT_D = 0;
     const ACT_N = 1;
     const ACT_Y = 2;
@@ -82,7 +86,7 @@ class ActivityChange extends \yii\db\ActiveRecord
     {
         return [
             [['group_id','start_time', 'end_time', 'corporation_id', 'type'], 'required'],
-            [['group_id','start_time', 'end_time', 'bd_id','corporation_id', 'type', 'is_act', 'act_trend','health', 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount'], 'integer'],
+            [['group_id','start_time', 'end_time', 'bd_id','corporation_id', 'type','is_allocate', 'is_act', 'act_trend','health', 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount'], 'integer'],
             [['projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount'], 'number'],
             [['corporation_id', 'start_time', 'end_time'], 'unique', 'targetAttribute' => ['corporation_id', 'start_time', 'end_time'],'message'=>'已经存在此项数据'],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
@@ -90,6 +94,8 @@ class ActivityChange extends \yii\db\ActiveRecord
             ['health', 'default', 'value' => self::HEALTH_WA],
             ['type', 'default', 'value' => self::TYPE_UPDATE],
             ['type', 'in', 'range' => [self::TYPE_UPDATE, self::TYPE_ADD, self::TYPE_DELETE]],
+            ['is_allocate', 'default', 'value' => self::ALLOCATE_D],
+            ['is_allocate', 'in', 'range' => [self::ALLOCATE_D, self::ALLOCATE_N, self::ALLOCATE_Y]],
             ['is_act', 'default', 'value' => self::ACT_D],
             ['is_act', 'in', 'range' => [self::ACT_D, self::ACT_Y, self::ACT_N]],
             ['act_trend', 'default', 'value' => self::TREND_WA],
@@ -110,6 +116,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             'bd_id' => '客户经理',
             'corporation_id' => '公司',
             'type' => '类型',
+            'is_allocate' => '是否下拨',
             'is_act' => '历史活跃',
             'act_trend' => '趋势',
             'health' => '健康度',
@@ -131,6 +138,10 @@ class ActivityChange extends \yii\db\ActiveRecord
             self::TYPE_UPDATE => "正常",
             self::TYPE_ADD => "新增",
             self::TYPE_DELETE => "减少"
+        ],
+         'is_allocate' => [
+            self::ALLOCATE_Y => "是",
+            self::ALLOCATE_N => "否"
         ],
         'is_act' => [
             self::ACT_Y => "是",
@@ -226,6 +237,11 @@ class ActivityChange extends \yii\db\ActiveRecord
     public function getType() {
         $type = isset(self::$List['type'][$this->type]) ? self::$List['type'][$this->type] : null;
         return $type;
+    }
+    
+    public function getAllocate() {
+        $is_allocate = isset(self::$List['is_allocate'][$this->is_allocate]) ? self::$List['is_allocate'][$this->is_allocate] : null;
+        return $is_allocate;
     }
     
     public function getAct() {
@@ -334,6 +350,15 @@ class ActivityChange extends \yii\db\ActiveRecord
         }
         return true;
 
+    }
+    
+    //设定活跃有效
+    public static function set_allocate() {
+        $ids=static::find()->alias('a')->andWhere(['is_allocate'=> self::ALLOCATE_D])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.end_time>=b.start_time AND a.end_time<=b.end_time')])->select(['id'])->column();
+          
+        static::updateAll(['is_allocate'=> self::ALLOCATE_N], ['id'=>$ids]);
+        static::updateAll(['is_allocate'=> self::ALLOCATE_Y],['is_allocate'=> self::ALLOCATE_D]);
+        return true;
     }
            
     //设定活跃
@@ -697,7 +722,7 @@ class ActivityChange extends \yii\db\ActiveRecord
     
     public static function get_activity_item($start, $end,$items,$annual='',$activity=true,$group_id=null) {
         $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]]);
-         if($annual=='all'){
+        if($annual=='all'){
             
             
         }elseif($annual){

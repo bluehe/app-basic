@@ -15,6 +15,8 @@ use project\models\Meal;
 USE project\models\Parameter;
 use project\models\ColumnSetting;
 use project\models\Group;
+use project\models\ActivityChange;
+use project\models\UserGroup;
 
 
 class AllocateController extends Controller { 
@@ -56,6 +58,8 @@ class AllocateController extends Controller {
             }            
      
             if($model->save()){
+                ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D], ['corporation_id'=>$model->corporation_id]);
+                ActivityChange::set_allocate();
                 Yii::$app->session->setFlash('success', '更新成功');
             }else{
                 Yii::$app->session->setFlash('error', '更新失败');
@@ -272,6 +276,7 @@ class AllocateController extends Controller {
                         if(isset($data[$index['group_id']])&&array_search(trim($data[$index['group_id']]), $group)){
                             $corporation->group_id= array_search(trim($data[$index['group_id']]), $group);
                         }else{
+                            $notice_error[]=$company_name. ' {未指明项目组或项目组不存在}';
                             $num['fail']++;
                             continue;
                         }
@@ -279,6 +284,7 @@ class AllocateController extends Controller {
                         if(!isset($data[$index['group_id']])||(isset($data[$index['group_id']])&&array_search(trim($data[$index['group_id']]), $group))){
                             $corporation->group_id= key($group);          
                         }else{
+                            $notice_error[]=$company_name. ' {未指明项目组或项目组不存在}';
                             $num['fail']++;
                             continue;
                         }
@@ -286,6 +292,7 @@ class AllocateController extends Controller {
                     $corporation->save();
                     
                 }elseif(!Yii::$app->user->can('企业修改',['id'=>$corporation->id])){
+                    $notice_error[]=$company_name. ' {无操作权限}';
                     $num['fail']++;
                     continue;
                 }
@@ -314,6 +321,7 @@ class AllocateController extends Controller {
                             }
                             $corporation->stat= CorporationMeal::get_allocate($corporation->id)?Corporation::STAT_AGAIN:Corporation::STAT_ALLOCATE;
                         }else{
+                            $notice_error[]=$data[$corporation->id]. ' {下拨时间出错}';
                             $num['fail']++;
                             continue;
                         }
@@ -355,8 +363,8 @@ class AllocateController extends Controller {
 //                        }
                     if(isset($data[$index['devcloud_amount']])&&isset($data[$index['cloud_amount']])&&isset($data[$index['devcloud_count']])){
                         $allocate->devcloud_count=trim($data[$index['devcloud_count']]);
-                        $allocate->devcloud_amount=trim($data[$index['devcloud_amount']]);
-                        $allocate->cloud_amount=trim($data[$index['cloud_amount']]);                          
+                        $allocate->devcloud_amount=str_replace([',','¥'], '',trim($data[$index['devcloud_amount']]));
+                        $allocate->cloud_amount=str_replace([',','¥'], '',trim($data[$index['cloud_amount']]));                          
                     }
 
                     $corporation->huawei_account=$allocate->huawei_account;
@@ -373,7 +381,7 @@ class AllocateController extends Controller {
 
 
                     if($allocate->save()&&$corporation->save(false)){
-
+                        ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D], ['corporation_id'=>$allocate->corporation_id]);                        
                         $num[$num_key]++;
                     }else{
                         $errors=$allocate->getErrors();
@@ -389,9 +397,9 @@ class AllocateController extends Controller {
                     }
 
                 }
-              
+                
             }
-           
+            ActivityChange::set_allocate();
             if($notice_error){
                 Yii::$app->session->setFlash('error', $notice_error);
             }

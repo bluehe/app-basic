@@ -29,6 +29,7 @@ class m180919_163401_create_activity_change extends Migration {
             'bd_id' => $this->integer(),
             'corporation_id' => $this->integer()->notNull(),
             'type' => $this->integer()->notNull(),
+            'is_allocate' => $this->integer()->comment('是否下拨'),
             'is_act' => $this->integer()->notNull()->defaultValue(0),
             'act_trend' => $this->integer()->notNull()->defaultValue(0),
             'health' => $this->integer()->notNull()->defaultValue(-1),

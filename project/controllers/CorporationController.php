@@ -24,6 +24,7 @@ use project\models\System;
 use project\models\UserGroup;
 use yii\helpers\Html;
 use project\models\Group;
+use project\models\ActivityChange;
 
 
 /**
@@ -179,6 +180,8 @@ class CorporationController extends Controller
                         $allocate->end_time = $allocate->end_time?strtotime($allocate->end_time)+86399:strtotime('+1 year', $allocate->start_time)-1;                     
                         $allocate->user_id = Yii::$app->user->identity->id;
                         $allocate->save(false);
+                        ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D], ['corporation_id'=>$allocate->corporation_id]);
+                        ActivityChange::set_allocate();
                         $model->huawei_account=$allocate->huawei_account;
                     }
                     $model->base_registered_time= strtotime($model->base_registered_time);
@@ -310,6 +313,8 @@ class CorporationController extends Controller
                     if(!$corporation->save()){
                         throw new \Exception('请修改企业信息！');                            
                     }
+                    ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D], ['corporation_id'=>$model->corporation_id]);
+                    ActivityChange::set_allocate();
                 
                     $transaction->commit();
                     Yii::$app->session->setFlash('success', '下拨成功。');

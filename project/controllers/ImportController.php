@@ -204,6 +204,9 @@ class ImportController extends Controller {
                         ActivityChange::induce_data($model->statistics_at,$next_time,$model->group_id);
                         ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time,'group_id'=>$model->group_id]);                       
                     }
+                    
+                    //设置活跃有效
+                    ActivityChange::set_allocate();
                                         
                     //设置活跃标志
                     ActivityChange::set_activity();
@@ -251,6 +254,9 @@ class ImportController extends Controller {
             $model->stat= ImportLog::STAT_START;
             $model->save();
             
+            //设置活跃有效
+            ActivityChange::set_allocate();
+                    
             ActivityChange::set_activity();
             
             //设置趋势
