@@ -58,8 +58,9 @@ class AllocateController extends Controller {
             }            
      
             if($model->save()){
-                ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D], ['corporation_id'=>$model->corporation_id]);
+                ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D,'health'=> ActivityChange::HEALTH_WA], ['corporation_id'=>$model->corporation_id]);
                 ActivityChange::set_allocate();
+                ActivityChange::set_health();
                 Yii::$app->session->setFlash('success', '更新成功');
             }else{
                 Yii::$app->session->setFlash('error', '更新失败');
@@ -381,7 +382,7 @@ class AllocateController extends Controller {
 
 
                     if($allocate->save()&&$corporation->save(false)){
-                        ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D], ['corporation_id'=>$allocate->corporation_id]);                        
+                        ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D,'health'=> ActivityChange::HEALTH_WA], ['corporation_id'=>$allocate->corporation_id]);                        
                         $num[$num_key]++;
                     }else{
                         $errors=$allocate->getErrors();
@@ -400,6 +401,7 @@ class AllocateController extends Controller {
                 
             }
             ActivityChange::set_allocate();
+            ActivityChange::set_health();
             if($notice_error){
                 Yii::$app->session->setFlash('error', $notice_error);
             }
