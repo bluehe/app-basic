@@ -150,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value' => function($model) {
                             return $model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'';
                         },
-                        'filter' => User::get_bd(),
+                        'filter' => User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))),
                     ],
                     [
                         'attribute' => 'corporation',
