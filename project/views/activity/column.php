@@ -20,7 +20,7 @@ use project\models\ActivityChange;
         ]);
         ?>
         
-        <?= $form->field($model, 'content')->checkboxList(array_merge(ActivityChange::$List['column_activity'],ActivityChange::$List['column_data']), ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
+        <?= $form->field($model, 'content')->checkboxList(array_merge(ActivityChange::$List['column_usual'],ActivityChange::$List['column_activity'],ActivityChange::$List['column_data']), ['itemOptions' => ['labelOptions' => ['class' => 'checkbox-inline']]]) ?>
      
 
         <div class="col-md-6 col-xs-6 text-right">

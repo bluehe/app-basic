@@ -169,7 +169,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::tag('span', $model->Allocate,['class' => ($model->is_allocate== ActivityChange::ALLOCATE_Y ? 'text-green' : ($model->is_allocate== ActivityChange::ALLOCATE_N ? 'text-red' : ''))]);                        
                         },
                         'format' => 'raw',
-                        'filter' => ActivityChange::$List['is_allocate'],         
+                        'filter' => ActivityChange::$List['is_allocate'],
+                        'visible'=> is_array($column)&&in_array('is_allocate',$column),
                     ],
                     [
                         'attribute' => 'is_act',
@@ -177,7 +178,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::tag('span', $model->Act,['class' => ($model->is_act== ActivityChange::ACT_Y ? 'text-green' : ($model->is_act== ActivityChange::ACT_N ? 'text-red' : ''))]);                        
                         },
                         'format' => 'raw',
-                        'filter' => ActivityChange::$List['is_act'],         
+                        'filter' => ActivityChange::$List['is_act'],
+                        'visible'=> is_array($column)&&in_array('is_act',$column),
                     ],
                     [
                         'attribute' => 'act_trend',
@@ -186,7 +188,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['act_trend'], 
-                        'visible'=> Yii::$app->request->get('dev',0),      
+                        'visible'=> Yii::$app->request->get('dev',0)&&is_array($column)&&in_array('is_act',$column),      
                     ],
                     [
                         'attribute' => 'health',
@@ -194,7 +196,8 @@ $this->params['breadcrumbs'][] = $this->title;
                            return Yii::$app->request->get('sum',1)?'<span class="sparktristate_health">'.ActivityChange::get_health_line($model->corporation_id,$start-86400, $end).'</span>':'<span style="color:'.ActivityChange::$List['health_color'][$model->health].'">'.$model->Health.'</span>';                       
                         },
                         'format' => 'raw',
-                        'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['health'],  
+                        'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['health'],
+                        'visible'=> is_array($column)&&in_array('health',$column),
                     ],   
                     [
                     'attribute' => 'projectman_usercount',

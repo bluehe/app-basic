@@ -116,10 +116,10 @@ class ActivityChange extends \yii\db\ActiveRecord
             'bd_id' => '客户经理',
             'corporation_id' => '公司',
             'type' => '类型',
-            'is_allocate' => '下拨期',
-            'is_act' => '历史活跃',
+            ],
+            self::$List['column_usual'],
+            [
             'act_trend' => '趋势',
-            'health' => '健康度',
             'h_h' => '健康度h',
             'h_c' => '健康度c',
             'h_i' => '健康度i',
@@ -168,6 +168,11 @@ class ActivityChange extends \yii\db\ActiveRecord
             self::HEALTH_H3 => "#90ee7e",
             self::HEALTH_H4 => "#00a65a"
         ],
+        'column_usual'=>[
+            'is_allocate' => '下拨',
+            'is_act' => '活跃',           
+            'health' => '健康度',
+            ],
         'column_activity'=>[
             'projectman_usercount' => '项目用户数',
             'projectman_projectcount' => '当前项目数',
