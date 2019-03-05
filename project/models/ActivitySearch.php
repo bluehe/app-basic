@@ -54,7 +54,7 @@ class ActivitySearch extends ActivityChange
     public function rules()
     {
         return [
-            [['id','group_id','bd_id', 'corporation_id','type','is_act','act_trend','health'], 'integer'],
+            [['id','group_id','bd_id', 'corporation_id','type','is_allocate','is_act','act_trend','health'], 'integer'],
             [[ 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount','projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount', 'projectman_usercount_d', 'projectman_projectcount_d', 'projectman_membercount_d', 'projectman_versioncount_d', 'projectman_issuecount_d', 'codehub_all_usercount_d', 'codehub_repositorycount_d', 'codehub_commitcount_d', 'pipeline_usercount_d', 'pipeline_pipecount_d', 'pipeline_executecount_d', 'codecheck_usercount_d', 'codecheck_taskcount_d', 'codecheck_codelinecount_d', 'codecheck_issuecount_d', 'codecheck_execount_d', 'codeci_usercount_d', 'codeci_buildcount_d', 'codeci_allbuildcount_d', 'testman_usercount_d', 'testman_casecount_d', 'testman_totalexecasecount_d', 'deploy_usercount_d', 'deploy_envcount_d', 'deploy_execount_d','projectman_storagecount_d', 'codehub_repositorysize_d', 'pipeline_elapse_time_d', 'codeci_buildtotaltime_d', 'deploy_vmcount_d'], 'safe'],
             [[ 'start_time', 'end_time','corporation','h_h','h_c','h_i','h_a','h_r','h_v','h_d'],'safe'],
         ];
@@ -94,6 +94,7 @@ class ActivitySearch extends ActivityChange
                 'bd_id',
                 'group_id'=>'c.group_id',
                 'corporation_id'=>'c.corporation_id',
+                'is_allocate'=>'MAX(is_allocate)',
                 'is_act'=>'MAX(is_act)',
                 'act_trend'=>'SUM(CASE WHEN is_act='.ActivityChange::ACT_Y.' THEN 1  ELSE 0 END)/count(*)',
                 'health'=>'SUM(CASE WHEN health!='.ActivityChange::HEALTH_WA.' THEN health  ELSE 0 END)/count(*)',
@@ -244,9 +245,16 @@ class ActivitySearch extends ActivityChange
                 $query->andFilterWhere(['not',['c.corporation_id' => $ids]]);
             }
             
+            $ids1=ActivityChange::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end],['is_allocate' => ActivityChange::ALLOCATE_Y]])->andFilterWhere(['bd_id'=>$this->bd_id])->select(['corporation_id'])->distinct()->column();
+            if($this->is_allocate== ActivityChange::ALLOCATE_Y){
+                $query->andFilterWhere(['c.corporation_id' => $ids1]);
+            }elseif($this->is_allocate== ActivityChange::ALLOCATE_N){
+                $query->andFilterWhere(['not',['c.corporation_id' => $ids1]]);
+            }
+            
         }else{
             //历史标准分次
-            $query->andFilterWhere([ 'is_act' => $this->is_act]);
+            $query->andFilterWhere([ 'is_act' => $this->is_act,'is_allocate'=> $this->is_allocate]);
         }
   
         $business_activity_search=(System::getValue('business_activity_search')==2)&&$sum;//搜索方式
@@ -276,188 +284,7 @@ class ActivitySearch extends ActivityChange
         CommonHelper::searchNumber($query, $business_activity_search?'h_d':"c.h_d", $this->h_d,$business_activity_search);
         
         $query->andWhere(['or',['c.group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],['c.group_id'=>NULL]]);
-        
-//        if($this->projectman_usercount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'projectman_usercount':'c.projectman_usercount', $this->projectman_usercount,$business_activity_search);
-//        }
-//        if($this->projectman_projectcount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'projectman_projectcount':'c.projectman_projectcount', $this->projectman_projectcount,$business_activity_search);
-//        }
-//        if($this->projectman_membercount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'projectman_membercount':'c.projectman_membercount', $this->projectman_membercount,$business_activity_search);
-//        }
-//        if($this->projectman_versioncount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'projectman_versioncount':'c.projectman_versioncount', $this->projectman_versioncount,$business_activity_search);
-//        }
-//        if($this->projectman_issuecount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'projectman_issuecount':'c.projectman_issuecount', $this->projectman_issuecount,$business_activity_search);
-//        }
-//        if($this->projectman_storagecount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'projectman_storagecount':'c.projectman_storagecount', $this->projectman_storagecount,$business_activity_search);
-//        }
-//        if($this->codehub_all_usercount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codehub_all_usercount':'c.codehub_all_usercount', $this->codehub_all_usercount,$business_activity_search);
-//        }
-//        if($this->codehub_repositorycount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codehub_repositorycount':'c.codehub_repositorycount', $this->codehub_repositorycount,$business_activity_search);
-//        }
-//        if($this->codehub_commitcount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codehub_commitcount':'c.codehub_commitcount', $this->codehub_commitcount,$business_activity_search);
-//        }
-//        if($this->codehub_repositorysize){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codehub_repositorysize':'c.codehub_repositorysize', $this->codehub_repositorysize,$business_activity_search);
-//        }
-//        if($this->pipeline_usercount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'pipeline_usercount':'c.pipeline_usercount', $this->pipeline_usercount,$business_activity_search);
-//        }
-//        if($this->pipeline_pipecount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'pipeline_pipecount':'c.pipeline_pipecount', $this->pipeline_pipecount,$business_activity_search);
-//        }
-//        if($this->pipeline_executecount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'pipeline_executecount':'c.pipeline_executecount', $this->pipeline_executecount,$business_activity_search);
-//        }
-//        if($this->pipeline_elapse_time){
-//            CommonHelper::searchNumber($query, $business_activity_search?'pipeline_elapse_time':'c.pipeline_elapse_time', $this->pipeline_elapse_time,$business_activity_search);
-//        }
-//        if($this->codecheck_usercount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codecheck_usercount':'c.codecheck_usercount', $this->codecheck_usercount,$business_activity_search);
-//        }
-//        if($this->codecheck_taskcount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codecheck_taskcount':'c.codecheck_taskcount', $this->codecheck_taskcount,$business_activity_search);
-//        }
-//        if($this->codecheck_codelinecount){
-//            CommonHelper::searchNumber($query,$business_activity_search?'codecheck_codelinecount':'c.codecheck_codelinecount', $this->codecheck_codelinecount,$business_activity_search);
-//        }
-//        if($this->codecheck_issuecount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codecheck_issuecount':'c.codecheck_issuecount', $this->codecheck_issuecount,$business_activity_search);
-//        }
-//        if($this->codecheck_execount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codecheck_execount':'c.codecheck_execount', $this->codecheck_execount,$business_activity_search);
-//        }
-//        if($this->codeci_usercount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codeci_usercount':'c.codeci_usercount', $this->codeci_usercount,$business_activity_search);
-//        }
-//        if($this->codeci_buildcount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codeci_buildcount':'c.codeci_buildcount', $this->codeci_buildcount,$business_activity_search);
-//        }
-//        if($this->codeci_allbuildcount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codeci_allbuildcount':'c.codeci_allbuildcount', $this->codeci_allbuildcount,$business_activity_search);
-//        }
-//        if($this->codeci_buildtotaltime){
-//            CommonHelper::searchNumber($query, $business_activity_search?'codeci_buildtotaltime':'c.codeci_buildtotaltime', $this->codeci_buildtotaltime,$business_activity_search);
-//        }
-//        if($this->testman_usercount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'testman_usercount':'c.testman_usercount', $this->testman_usercount,$business_activity_search);
-//        }
-//        if($this->testman_casecount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'testman_casecount':'c.testman_casecount', $this->testman_casecount,$business_activity_search);
-//        }
-//        if($this->testman_totalexecasecount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'testman_totalexecasecount':'c.testman_totalexecasecount', $this->testman_totalexecasecount,$business_activity_search);
-//        }
-//        if($this->deploy_usercount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'deploy_usercount':'c.deploy_usercount', $this->deploy_usercount,$business_activity_search);
-//        }
-//        if($this->deploy_envcount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'deploy_envcount':'c.deploy_envcount', $this->deploy_envcount,$business_activity_search);
-//        }
-//        if($this->deploy_execount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'deploy_execount':'c.deploy_execount', $this->deploy_execount,$business_activity_search);
-//        }
-//        if($this->deploy_vmcount){
-//            CommonHelper::searchNumber($query, $business_activity_search?'deploy_vmcount':'c.deploy_vmcount', $this->deploy_vmcount,$business_activity_search);
-//        }
-        
-//        if($this->projectman_usercount_d){
-//            CommonHelper::searchNumber($query, $business_activity_search?'projectman_usercount_d':'d.projectman_usercount', $this->projectman_usercount_d,$business_activity_search);
-//        }
-//        if($this->projectman_projectcount_d){
-//            CommonHelper::searchNumber($query, 'd.projectman_projectcount', $this->projectman_projectcount_d,$business_activity_search);
-//        }
-//        if($this->projectman_membercount_d){
-//            CommonHelper::searchNumber($query, 'd.projectman_membercount', $this->projectman_membercount_d,$business_activity_search);
-//        }
-//        if($this->projectman_versioncount_d){
-//            CommonHelper::searchNumber($query, 'd.projectman_versioncount', $this->projectman_versioncount_d,$business_activity_search);
-//        }
-//        if($this->projectman_issuecount_d){
-//            CommonHelper::searchNumber($query, 'd.projectman_issuecount', $this->projectman_issuecount_d,$business_activity_search);
-//        }
-//        if($this->projectman_storagecount_d){
-//            CommonHelper::searchNumber($query, 'd.projectman_storagecount', $this->projectman_storagecount_d,$business_activity_search);
-//        }
-//        if($this->codehub_all_usercount_d){
-//            CommonHelper::searchNumber($query, 'd.codehub_all_usercount', $this->codehub_all_usercount_d,$business_activity_search);
-//        }
-//        if($this->codehub_repositorycount_d){
-//            CommonHelper::searchNumber($query, 'd.codehub_repositorycount', $this->codehub_repositorycount_d,$business_activity_search);
-//        }
-//        if($this->codehub_commitcount_d){
-//            CommonHelper::searchNumber($query, 'd.codehub_commitcount', $this->codehub_commitcount_d,$business_activity_search);
-//        }
-//        if($this->codehub_repositorysize_d){
-//            CommonHelper::searchNumber($query, 'd.codehub_repositorysize', $this->codehub_repositorysize_d,$business_activity_search);
-//        }
-//        if($this->pipeline_usercount_d){
-//            CommonHelper::searchNumber($query, 'd.pipeline_usercount', $this->pipeline_usercount_d,$business_activity_search);
-//        }
-//        if($this->pipeline_pipecount_d){
-//            CommonHelper::searchNumber($query, 'd.pipeline_pipecount', $this->pipeline_pipecount_d,$business_activity_search);
-//        }
-//        if($this->pipeline_executecount_d){
-//            CommonHelper::searchNumber($query, 'd.pipeline_executecount', $this->pipeline_executecount_d,$business_activity_search);
-//        }
-//        if($this->pipeline_elapse_time_d){
-//            CommonHelper::searchNumber($query, 'd.pipeline_elapse_time', $this->pipeline_elapse_time_d,$business_activity_search);
-//        }
-//        if($this->codecheck_usercount_d){
-//            CommonHelper::searchNumber($query, 'd.codecheck_usercount', $this->codecheck_usercount_d,$business_activity_search);
-//        }
-//        if($this->codecheck_taskcount_d){
-//            CommonHelper::searchNumber($query, 'd.codecheck_taskcount', $this->codecheck_taskcount_d,$business_activity_search);
-//        }
-//        if($this->codecheck_codelinecount_d){
-//            CommonHelper::searchNumber($query,'d.codecheck_codelinecount', $this->codecheck_codelinecount_d,$business_activity_search);
-//        }
-//        if($this->codecheck_issuecount_d){
-//            CommonHelper::searchNumber($query, 'd.codecheck_issuecount', $this->codecheck_issuecount_d,$business_activity_search);
-//        }
-//        if($this->codecheck_execount_d){
-//            CommonHelper::searchNumber($query, 'd.codecheck_execount', $this->codecheck_execount_d,$business_activity_search);
-//        }
-//        if($this->codeci_usercount_d){
-//            CommonHelper::searchNumber($query, 'd.codeci_usercount', $this->codeci_usercount_d,$business_activity_search);
-//        }
-//        if($this->codeci_buildcount_d){
-//            CommonHelper::searchNumber($query, 'd.codeci_buildcount', $this->codeci_buildcount_d,$business_activity_search);
-//        }
-//        if($this->codeci_allbuildcount_d){
-//            CommonHelper::searchNumber($query, 'd.codeci_allbuildcount', $this->codeci_allbuildcount_d,$business_activity_search);
-//        }
-//        if($this->codeci_buildtotaltime_d){
-//            CommonHelper::searchNumber($query, 'd.codeci_buildtotaltime', $this->codeci_buildtotaltime_d,$business_activity_search);
-//        }
-//        if($this->testman_usercount_d){
-//            CommonHelper::searchNumber($query, 'd.testman_usercount', $this->testman_usercount_d,$business_activity_search);
-//        }
-//        if($this->testman_casecount_d){
-//            CommonHelper::searchNumber($query, 'd.testman_casecount', $this->testman_casecount_d,$business_activity_search);
-//        }
-//        if($this->testman_totalexecasecount_d){
-//            CommonHelper::searchNumber($query, 'd.testman_totalexecasecount', $this->testman_totalexecasecount_d,$business_activity_search);
-//        }
-//        if($this->deploy_usercount_d){
-//            CommonHelper::searchNumber($query, 'd.deploy_usercount', $this->deploy_usercount_d,$business_activity_search);
-//        }
-//        if($this->deploy_envcount_d){
-//            CommonHelper::searchNumber($query, 'd.deploy_envcount', $this->deploy_envcount_d,$business_activity_search);
-//        }
-//        if($this->deploy_execount_d){
-//            CommonHelper::searchNumber($query, 'd.deploy_execount', $this->deploy_execount_d,$business_activity_search);
-//        }
-//        if($this->deploy_vmcount_d){
-//            CommonHelper::searchNumber($query, 'd.deploy_vmcount', $this->deploy_vmcount_d,$business_activity_search);
-//        }        
+          
         
       
         return $dataProvider;

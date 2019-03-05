@@ -164,6 +164,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                     ],
                     [
+                        'attribute' => 'is_allocate',
+                        'value' => function($model) {                                
+                            return Html::tag('span', $model->Allocate,['class' => ($model->is_allocate== ActivityChange::ALLOCATE_Y ? 'text-green' : ($model->is_allocate== ActivityChange::ALLOCATE_N ? 'text-red' : ''))]);                        
+                        },
+                        'format' => 'raw',
+                        'filter' => ActivityChange::$List['is_allocate'],         
+                    ],
+                    [
                         'attribute' => 'is_act',
                         'value' => function($model) {                                
                             return Html::tag('span', $model->Act,['class' => ($model->is_act== ActivityChange::ACT_Y ? 'text-green' : ($model->is_act== ActivityChange::ACT_N ? 'text-red' : ''))]);                        

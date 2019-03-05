@@ -116,7 +116,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             'bd_id' => '客户经理',
             'corporation_id' => '公司',
             'type' => '类型',
-            'is_allocate' => '是否下拨',
+            'is_allocate' => '下拨期',
             'is_act' => '历史活跃',
             'act_trend' => '趋势',
             'health' => '健康度',
@@ -139,7 +139,7 @@ class ActivityChange extends \yii\db\ActiveRecord
             self::TYPE_ADD => "新增",
             self::TYPE_DELETE => "减少"
         ],
-         'is_allocate' => [
+        'is_allocate' => [
             self::ALLOCATE_Y => "是",
             self::ALLOCATE_N => "否"
         ],
