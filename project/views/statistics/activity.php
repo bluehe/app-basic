@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'id'=>'group',
                         ],
                         'pluginEvents' => [
-                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
+                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g+'&allocate='+allocate;}",
                         ]
                     ]):'';?>
                     
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'width' => '110%'
                         ],
                         'pluginEvents' => [
-                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
+                            "change" => "function() {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g+'&allocate='+allocate;}",
                         ]
                     ]);?>
                     
@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g+'&allocate='+allocate;}",
                     ]
                     ]);
                     ?>
@@ -99,10 +99,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'onText'=>'次',
                             'offText'=>'月',
                             'onColor' => 'success',
-                            'offColor' => 'danger',       
+                            'offColor' => 'danger',  
+//                            'size' => 'mini'
                         ],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g+'&allocate='+allocate;}",
                     ]
                     ]);
                     ?>
@@ -128,7 +129,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g+'&allocate='+allocate;}",
+                    ]
+                    ]);
+                    ?>
+                </li>
+                <li class="pull-right activity">
+                    <?=
+                    SwitchInput::widget([
+                        'name' => 'allocate',
+//                        'type' => SwitchInput::RADIO,
+                        'value'=>$allocate,
+//                        'items' => [
+//                            ['label' => '总和', 'value' => 1],
+//                            ['label' => '个人', 'value' => 2],
+//                        ],
+                        'options'=>['class'=>'allocate'],
+                        'pluginOptions'=>[
+                            'onText'=>'下拨',
+                            'offText'=>'全部',
+                            'onColor' => 'success',
+                            'offColor' => 'danger', 
+//                            'size' => 'mini'
+                        ],
+                        'labelOptions' => ['style' => 'font-size: 12px'],
+                        'pluginEvents' => [
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g+'&allocate='+allocate;}",
                     ]
                     ]);
                     ?>

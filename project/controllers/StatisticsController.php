@@ -552,6 +552,7 @@ class StatisticsController extends Controller {
         $total=Yii::$app->request->get('total',1);
         $annual=Yii::$app->request->get('annual');
         $group=Yii::$app->request->get('group',null);
+        $allocate=Yii::$app->request->get('allocate',ActivityChange::ALLOCATE_Y)?ActivityChange::ALLOCATE_Y:null;
         if(!$group){
             $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
             if(count($group_id)>0){
@@ -567,8 +568,8 @@ class StatisticsController extends Controller {
         $series['activity'] = [];
         
         //活跃数
-        $activity_total = ActivityChange::get_activity_total($start-86400, $end,$sum,$total,$annual,false,$group);
-        $activity_change = ActivityChange::get_activity_total($start-86400, $end,$sum,$total,$annual,true,$group);
+        $activity_total = ActivityChange::get_activity_total($start-86400, $end,$sum,$total,$annual,false,$group,$allocate);
+        $activity_change = ActivityChange::get_activity_total($start-86400, $end,$sum,$total,$annual,true,$group,$allocate);
         if($total==1){
            
             $data_total = [];
@@ -658,13 +659,13 @@ class StatisticsController extends Controller {
         $data_item=[]; 
         
         $items=[];       
-        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount'],$annual,true,$group);
-        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount',$annual,true,$group);
-        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount',$annual,true,$group);
-        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime'],$annual,true,$group);
-        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount',$annual,true,$group);
-        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount',$annual,true,$group);       
-        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,$annual,false,$group);
+        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount'],$annual,true,$group,$allocate);
+        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount',$annual,true,$group,$allocate);
+        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount',$annual,true,$group,$allocate);
+        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime'],$annual,true,$group,$allocate);
+        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount',$annual,true,$group,$allocate);
+        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount',$annual,true,$group,$allocate);       
+        $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,$annual,false,$group,$allocate);
         
         arsort($items);
 //        $fv= reset($items);
@@ -682,7 +683,7 @@ class StatisticsController extends Controller {
         }
     
         
-        return $this->render('activity', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'annual'=>$annual,'group'=>$group]);
+        return $this->render('activity', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'annual'=>$annual,'group'=>$group,'allocate'=>$allocate]);
     }
     
     public function actionHealth() {
@@ -690,6 +691,7 @@ class StatisticsController extends Controller {
         $end = strtotime('today');
         $start = strtotime('-1 months +1 days',$end);
         $group=Yii::$app->request->get('group',null);
+        $allocate=Yii::$app->request->get('allocate',ActivityChange::ALLOCATE_Y)?ActivityChange::ALLOCATE_Y:null;
         if(!$group){
             $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
             if(count($group_id)>0){
@@ -706,7 +708,7 @@ class StatisticsController extends Controller {
         //健康度
         $series['health']=[]; 
         $data_health=$health_value=$health_key=[];
-        $health_total= ActivityChange::get_health($start-86400, $end,$group);      
+        $health_total= ActivityChange::get_health($start-86400, $end,$group,$allocate);      
         
         foreach($health_total as $total){
             $key=$end-$start>=365*86400?date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']):date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
@@ -733,7 +735,7 @@ class StatisticsController extends Controller {
             }
         }
         
-        return $this->render('health', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'group'=>$group]);
+        return $this->render('health', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'group'=>$group,'allocate'=>$allocate]);
     
     }
     

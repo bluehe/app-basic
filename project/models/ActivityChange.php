@@ -638,8 +638,8 @@ class ActivityChange extends \yii\db\ActiveRecord
         return implode(',', $data);
     }
     
-    public static function get_health($start, $end,$group_id=null) {
-        return static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['end_time'=>SORT_ASC,'health'=>SORT_ASC])->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(health)','health'=>'MAX(health)'])->groupBy(['end_time','health'])->asArray()->all();        
+    public static function get_health($start, $end,$group_id=null,$allocate=null) {
+        return static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['is_allocate'=>$allocate])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end]])->orderBy(['end_time'=>SORT_ASC,'health'=>SORT_ASC])->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(health)','health'=>'MAX(health)'])->groupBy(['end_time','health'])->asArray()->all();        
     }
        
     //数据分析，标准差
@@ -672,7 +672,7 @@ class ActivityChange extends \yii\db\ActiveRecord
     
     }
  
-    public static function get_activity_total($start, $end,$sum=1,$total=1,$annual='',$activity=false,$group_id=null) {
+    public static function get_activity_total($start, $end,$sum=1,$total=1,$annual='',$activity=false,$group_id=null,$allocate=null) {
               
         $query = static::find()->alias('c')->joinWith(['data d'])->andWhere(['c.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]])->joinWith(['corporation'])->orderBy(['end_time'=>SORT_ASC,'bd_id'=>SORT_ASC]);
         if($annual=='all'){
@@ -706,6 +706,9 @@ class ActivityChange extends \yii\db\ActiveRecord
                 $query->andWhere(['is_act'=>self::ACT_Y]);  
             }
         }
+        if($allocate){
+            $query->andWhere(['is_allocate'=>$allocate]);  
+        }
         $query->select(['start_time'=>'MIN(start_time)','end_time'=>'MAX(end_time)','num'=>'count(distinct c.corporation_id)','corporation_id'=>'c.corporation_id','bd_id']);
         if($sum){
             //周
@@ -720,7 +723,7 @@ class ActivityChange extends \yii\db\ActiveRecord
         return $query->asArray()->all();
     }
     
-    public static function get_activity_item($start, $end,$items,$annual='',$activity=true,$group_id=null) {
+    public static function get_activity_item($start, $end,$items,$annual='',$activity=true,$group_id=null,$allocate=null) {
         $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['and',['>=', 'start_time', $start],['<=', 'end_time', $end],['not',['type'=> self::TYPE_DELETE]]]);
         if($annual=='all'){
             
@@ -744,6 +747,9 @@ class ActivityChange extends \yii\db\ActiveRecord
         }else{
            $ids=static::find()->andFilterWhere(['and',['>=','start_time',$start],['<=','end_time',$end],['not',['type'=> self::TYPE_DELETE]],['is_act' => ActivityChange::ACT_Y]])->select(['corporation_id'])->distinct()->column();
            $query->andFilterWhere(['not',['corporation_id' => $ids]]);
+        }
+        if($allocate){
+            $query->andWhere(['is_allocate'=>$allocate]);  
         }
         return $query->select(['num'=>'count(distinct corporation_id)'])->scalar();
     }

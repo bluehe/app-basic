@@ -10,6 +10,7 @@ use project\models\UserGroup;
 use project\models\Group;
 use kartik\widgets\Select2;
 use daixianceng\echarts\ECharts;
+use kartik\widgets\SwitchInput;
 
 $this->title = '健康度统计';
 $this->params['breadcrumbs'][] = ['label' => '数据统计', 'url' => ['health']];
@@ -64,7 +65,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate;}",
+                    ]
+                    ]);
+                    ?>
+                </li>
+                
+                <li class="pull-right activity">
+                    <?=
+                    SwitchInput::widget([
+                        'name' => 'allocate',
+                        'value'=>$allocate,
+                        'options'=>['class'=>'allocate'],
+                        'pluginOptions'=>[
+                            'onText'=>'下拨',
+                            'offText'=>'全部',
+                            'onColor' => 'success',
+                            'offColor' => 'danger', 
+//                            'size' => 'mini'
+                        ],
+                        'labelOptions' => ['style' => 'font-size: 12px'],
+                        'pluginEvents' => [
+                            'switchChange.bootstrapSwitch' => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate;}",
                     ]
                     ]);
                     ?>

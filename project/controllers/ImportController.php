@@ -314,6 +314,10 @@ class ImportController extends Controller {
                         Yii::$app->session->setFlash('error', '文件首行不存在或还未设置<<华为云账号>>字段');
                         return $this->redirect(Yii::$app->request->referrer);
                     }
+                    if(!$field_corporation_name){
+                        Yii::$app->session->setFlash('error', '文件首行不存在或还未设置<<企业名称>>字段');
+                        return $this->redirect(Yii::$app->request->referrer);
+                    }
                 }else{
                     Yii::$app->session->setFlash('error', '没有有效数据');
                     return $this->redirect(Yii::$app->request->referrer);
