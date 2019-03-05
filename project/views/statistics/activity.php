@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            'size' => 'mini'
                         ],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g+'&allocate='+allocate;}",
+                            'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('.sum').is(':checked')?1:0;t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0;var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/activity'])."?range='+v+'&sum='+s+'&total='+t+'&annual='+a+'&group='+g+'&allocate='+allocate;}",
                     ]
                     ]);
                     ?>
