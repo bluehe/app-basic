@@ -91,8 +91,22 @@ class ImportController extends Controller {
     
     public function actionInduce($id) {
         $model = ImportLog::findOne($id);
-        if ($model !== null) {
+        if ($model !== null) {            
             if($model->statistics_at&&$model->group_id){
+                
+                //清除原有数据
+                ActivityData::deleteAll(['statistics_time'=>$model->statistics_at,'group_id'=>$model->group_id]);
+                ActivityChange::deleteAll(['and',['<=','start_time',$model->statistics_at],['>=','end_time',$model->statistics_at],['group_id'=>$model->group_id]]);
+                ActivityChange::updateAll(['health'=> ActivityChange::HEALTH_WA],['and',['>','end_time',$model->statistics_at],['group_id'=>$model->group_id]]);//健康度
+
+                $pre_time= ActivityData::get_pre_time($model->statistics_at,$model->group_id);
+                $next_time= ActivityData::get_next_time($model->statistics_at,$model->group_id);
+                if($pre_time&&$next_time){
+                    ActivityChange::induce_data($pre_time,$next_time,$model->group_id);          
+                }
+                if($next_time){
+                    ActivityChange::updateAll(['act_trend'=> ActivityChange::TREND_WA],['start_time'=> $next_time,'group_id'=>$model->group_id]);
+                }
                 
                 //字段检测
                 $zd= ImportData::get_field_by_log($id);        
