@@ -305,13 +305,14 @@ class ImportController extends Controller {
                 //项目处理
                 if(isset($datas[0])){
                                       
-                    $keys= array_filter(array_keys(json_decode($datas[0],true)));                                               
+                    $data_v= json_decode($datas[0],true);//去除0值和空值
+                    $keys= array_filter(array_keys($data_v));                                               
                     $exits_key= Field::get_name_id($keys);
                    
                     $field_huawei_account=Field::get_code_name('huawei_account', $keys);
                     $field_corporation_name=Field::get_code_name('corporation_name', $keys);
-                    if(!$field_huawei_account){
-                        Yii::$app->session->setFlash('error', '文件首行不存在或还未设置<<华为云账号>>字段');
+                    if(!$field_huawei_account||!preg_match("/[\w|-]{6,32}$/",$data_v[$field_huawei_account])){
+                        Yii::$app->session->setFlash('error', '文件首行不存在、还未设置或设置错误<<华为云账号>>字段');
                         return $this->redirect(Yii::$app->request->referrer);
                     }
                     if(!$field_corporation_name){

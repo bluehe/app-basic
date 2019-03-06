@@ -237,6 +237,10 @@ class AllocateController extends Controller {
             //项目处理
             if(isset($datas[0])){
                 $keys= array_filter(array_keys($datas[0]));
+                if(!in_array($index['corporation_id'], $keys)){
+                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['corporation_id'].'>>字段');
+                    return false;
+                }
                 if(!in_array($index['huawei_account'], $keys)){
                     Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['huawei_account'].'>>字段');
                     return false;
