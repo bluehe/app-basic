@@ -50,7 +50,7 @@ use project\models\CorporationMeal;
                         </dl>
                     </div>
                          <?php
-                    }elseif(in_array($stat->stat,[Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])&&$allocate= CorporationMeal::get_allocate($stat->corporation_id, $stat->created_at)){
+                    }elseif(in_array($stat->stat,[Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])&&$allocate= CorporationMeal::get_allocate($stat->corporation_id, $stat->created_at,$stat->stat)){
                         ?>
                     <div class="timeline-body">
                         <dl class="dl-horizontal">

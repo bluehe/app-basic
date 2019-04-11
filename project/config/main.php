@@ -132,7 +132,8 @@ return [
         ],
         'session' => [
             // this is the name of the session cookie used for login on the app
-            'name' => 'advanced-project',
+            'name' => 'docker-project',
+//            'timeout' => 1440,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -140,6 +141,23 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => yii\log\EmailTarget::className(),//当触发levels配置的错误级别时，发送到message to配置的邮箱中（请改成自己的邮箱）
+                    'levels' => ['error', 'warning'],
+                    /*'categories' => [//默认匹配所有分类。启用此项后，仅匹配数组中的分类信息会触发邮件提醒（白名单）
+                        'yii\db\*',
+                        'yii\web\HttpException:*',
+                    ],*/
+                    'except' => [//以下配置，除了匹配数组中的分类信息都会触发邮件提醒（黑名单）
+                        'yii\web\HttpException:404',
+                        'yii\web\HttpException:403',
+                        'yii\debug\Module::checkAccess',
+                    ],
+                    'message' => [
+                        'to' => ['179611207@qq.com'],//此处修改成自己接收错误的邮箱
+                        'subject' => '来自 APP 的新日志消息',
+                    ],
                 ],
             ],
         ],

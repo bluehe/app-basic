@@ -209,8 +209,8 @@ class CorporationMeal extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'bd']);
     }
     
-    public static function get_allocate($corporation_id,$time=null) {
-        $model= static::find()->where(['corporation_id'=>$corporation_id]);
+    public static function get_allocate($corporation_id,$time=null,$stat=null) {
+        $model= static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['stat'=>$stat]);
         if($time){
             $model->andWhere(['created_at'=>$time]);
         }else{
