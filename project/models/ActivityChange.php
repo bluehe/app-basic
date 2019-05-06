@@ -291,7 +291,7 @@ class ActivityChange extends \yii\db\ActiveRecord
     }
     
     //生成数据
-    public static function induce_data($start_time,$end_time,$group_id,$corporation_id='') {
+    public static function induce_data($start_time,$end_time,$group_id) {
         $corporation_bd= CorporationBd::get_bd_by_time($end_time);
         $model_change=new ActivityChange();
         $model_change->loadDefaultValues();
@@ -301,8 +301,8 @@ class ActivityChange extends \yii\db\ActiveRecord
                         
         $codes= self::$List['column_activity'];//计算字段
         $typeadd_codes= Field::get_typeadd_code($end_time);//排除字段
-        $news= ActivityData::get_data_by_time($end_time,$group_id,$corporation_id);
-        $olds= ActivityData::get_data_by_time($start_time,$group_id,$corporation_id);
+        $news= ActivityData::get_data_by_time($end_time,$group_id);
+        $olds= ActivityData::get_data_by_time($start_time,$group_id);
         $new_keys= array_keys($news);
         $old_keys= array_keys($olds);
         //新增
@@ -568,6 +568,14 @@ class ActivityChange extends \yii\db\ActiveRecord
             $condition=[$f=>$model->value];
         }
         return $condition;
+    }
+    
+    //真实活跃-固定规则
+    public static function is_real_activity($model) {
+        if(!$model->data){
+            return false;
+        }
+        return $model->projectman_usercount>0||$model->projectman_issuecount>0||$model->testman_totalexecasecount>0||$model->codehub_commitcount>0||($model->codehub_commitcount>0&&($model->codecheck_execount>0||$model->codeci_allbuildcount>0||$model->codeci_buildtotaltime>0||$model->deploy_execount>0));
     }
     
     //是否活跃

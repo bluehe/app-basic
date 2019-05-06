@@ -160,7 +160,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'contentOptions'=>function($model) {                            
-                            return ['class' => ActivityChange::is_activity($model) ?'bg-green' : ''];                           
+                            return ['class' => ActivityChange::is_real_activity($model) ?'bg-green' : ''];                           
                         },
                     ],
                     [
