@@ -18,6 +18,7 @@ class IndexAction extends \yii\base\Action
     /** @var $viewFile string 模板路径，默认为action id  */
     public $viewFile = null;
 
+    public $ajax = false;
 
     public function run()
     {
@@ -26,7 +27,12 @@ class IndexAction extends \yii\base\Action
             $data = call_user_func( $this->data );
         }
         $this->viewFile === null && $this->viewFile = $this->id;
-        return $this->controller->render($this->viewFile, $data);
+        if($this->ajax){
+            return $this->controller->renderAjax($this->viewFile, $data);
+        }else{
+            return $this->controller->render($this->viewFile, $data);
+        }
+        
     }
 
 }
