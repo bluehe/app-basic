@@ -51,6 +51,27 @@ class CorporationAccount extends \yii\db\ActiveRecord
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
         ];
     }
+    
+    public function beforeSave($insert) {
+        // 注意，重载之后要调用父类同名函数
+        if (parent::beforeSave($insert)) {
+            if($this->password){
+                $this->password = base64_encode($this->password);              
+            }          
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this->password=$this->password?base64_decode($this->password):'';
+    }
 
     /**
      * {@inheritdoc}
