@@ -24,9 +24,9 @@ use yii\widgets\ActiveForm;
         
         <?= $form->field($model, 'account_name')->textInput(['maxlength' => true,'disabled'=>true]) ?>
 
-        <?= $form->field($model, 'user_name')->textInput(['maxlength' => true,'autocomplete'=>'off']) ?>
+        <?= $form->field($model, 'user_name')->textInput(['maxlength' => true]) ?>
                 
-        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true,'autocomplete'=>'off']) ?>                            
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>                            
         
         <div class="col-md-6 col-xs-6 text-right">
 
