@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use project\models\CorporationAccount;
 
 //$this->title = '添加套餐';
 //$this->params['breadcrumbs'][] = ['label' => '业务中心', 'url' => ['meal/meal-list']];
@@ -23,11 +22,11 @@ use project\models\CorporationAccount;
         ]);
         ?>
         
-       <?= $form->field($model, 'account_name')->textInput(['maxlength' => true,'disabled'=>true]) ?>
+        <?= $form->field($model, 'account_name')->textInput(['maxlength' => true,'disabled'=>true]) ?>
 
-                <?= $form->field($model, 'user_name')->textInput(['maxlength' => true,'autocomplete'=>'off']) ?>
+        <?= $form->field($model, 'user_name')->textInput(['maxlength' => true,'autocomplete'=>'off']) ?>
                 
-                <?= $form->field($model, 'password')->passwordInput(['maxlength' => true,'autocomplete'=>'off']) ?>                            
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true,'autocomplete'=>'off']) ?>                            
         
         <div class="col-md-6 col-xs-6 text-right">
 

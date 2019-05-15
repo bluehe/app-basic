@@ -105,7 +105,7 @@ class HealthController extends Controller {
                     $cache=Yii::$app->cache;
                     $cache->set('accountToken_'.$model->id,$auth['token'], strtotime($token['expires_at'])-time());
 
-//                    CorporationAccount::set_corporation_account_list($id);
+                    CorporationAccount::set_corporation_account_list($id);
                     
                     Yii::$app->session->setFlash('success', '操作成功。');
                 }else{
