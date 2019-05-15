@@ -211,6 +211,10 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/statistics/train', '2', null, null, null, '1482820123', '1482820123'],
             ['/statistics/corporation', '2', null, null, null, '1482820123', '1482820123'],
             ['/statistics/health', '2', null, null, null, '1482820123', '1482820123'],
+            
+            //数据管理
+            ['/health/*', '2', null, null, null, '1482820123', '1482820123'],
+            ['/health/index', '2', null, null, null, '1482820123', '1482820123'],
                       
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
@@ -245,6 +249,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['数据导入', '2', '数据导入', null, null, '1482820123', '1482820123'],
 //            ['历史数据', '2', '历史数据', null, null, '1482820123', '1482820123'], 
             ['活跃数据', '2', '活跃数据', null, null, '1482820123', '1482820123'],
+            ['数据管理', '2', '数据管理', null, null, '1482820123', '1482820123'],
             
             ['数据统计', '2', '数据统计', null, null, '1482820123', '1482820123'],
             ['用户统计', '2', '用户统计', null, null, '1482820123', '1482820123'],
@@ -333,6 +338,9 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['bd', '活跃数据'],
             ['sa', '活跃数据'],
             ['ob', '活跃数据'],
+            
+            ['数据管理', '/health/*'],
+            ['superadmin', '数据管理'],
             
             ['用户统计', '/statistics/user'],
             ['企业统计', '/statistics/corporation'],
