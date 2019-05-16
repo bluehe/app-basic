@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\Pjax;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use project\models\CorporationAccount;
@@ -12,6 +13,7 @@ $this->title = '用户管理';
 $this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['health/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php Pjax::begin(); ?> 
 <div class="user-index">
 
         <div class="box-body">
@@ -61,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
 </div>
-
+<?php Pjax::end(); ?>
 <script>
 <?php $this->beginBlock('user') ?>
    
