@@ -13,7 +13,7 @@ $this->title = '用户管理';
 $this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['health/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php Pjax::begin(); ?> 
+<?php Pjax::begin(['id'=>'corporation_user']); ?> 
 <div class="user-index">
 
         <div class="box-body">
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
 </div>
-<?php Pjax::end(); ?>
+
 <script>
 <?php $this->beginBlock('user') ?>
    
@@ -108,3 +108,4 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $this->endBlock() ?>
 </script>
 <?php $this->registerJs($this->blocks['user'], \yii\web\View::POS_END); ?>
+<?php Pjax::end(); ?>

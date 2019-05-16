@@ -134,7 +134,7 @@ class CorporationAccount extends \yii\db\ActiveRecord
     }
     
     public static function get_last_username($corporation_id) {
-        $name= static::find()->where(['corporation_id'=>$corporation_id])->andWhere('user_name REGEXP "^user[:digit:]{1,}$"')->select(['user_name'])->orderBy(['user_name'=>SORT_DESC])->scalar();
+        $name= static::find()->where(['corporation_id'=>$corporation_id])->andWhere('user_name REGEXP "^user[0123456789]{1,}$"')->select(['user_name'])->orderBy(['user_name'=>SORT_DESC])->scalar();
         return $name?++$name:'user01';       
     }
     

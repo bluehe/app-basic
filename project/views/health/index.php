@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
 use kartik\daterange\DateRangePicker;
 use yii\helpers\Url;
 use project\models\ActivityChange;
@@ -21,7 +20,6 @@ $this->title = '活跃数据';
 $this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['activity/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php Pjax::begin(); ?> 
 <div class="activity-index">
 
     <div class="box box-primary">
@@ -264,4 +262,3 @@ Modal::end();
 <?php $this->endBlock() ?>
 </script>
 <?php $this->registerJs($this->blocks['health'], \yii\web\View::POS_END); ?>
-<?php Pjax::end(); ?>
