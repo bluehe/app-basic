@@ -127,6 +127,61 @@ class HealthController extends Controller {
         
     }
     
+    public function actionAccountUpdate($id) {
+       
+        
+        $model = CorporationAccount::findOne($id);
+        $model->scenario='create';
+       
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+                 
+            $model->add_type= CorporationAccount::TYPE_ADD;
+            if(!$model->user_name){
+                $model->user_name=$model->account_name;
+            }
+            
+            $auth = CurlHelper::authToken($model);
+            if($auth['code']=='201'){
+                $token=$auth['content']['token'];
+                $model->domain_id=$token['user']['domain']['id'];
+                $model->user_id=$token['user']['id'];
+                foreach($token['roles'] as $role){
+                    if($role['name']=="secu_admin"){
+                        $model->is_admin= CorporationAccount::ADMIN_YES;
+                        break;
+                    }
+                }
+                if($model->save()){
+                    $cache=Yii::$app->cache;
+                    $cache->set('accountToken_'.$model->id,$auth['token'], strtotime($token['expires_at'])-time());
+
+                    CorporationAccount::set_corporation_account_list($id);
+                    
+                    Yii::$app->session->setFlash('success', '操作成功。');
+                }else{
+                    Yii::$app->session->setFlash('error', '操作失败。');
+                }
+            }else{
+                Yii::$app->session->setFlash('error', '请求失败。');
+            }
+           
+            return $this->redirect(Yii::$app->request->referrer);
+            
+        }else{                        
+                      
+            return $this->renderAjax('account-update', [
+                        'model' => $model,
+        ]);
+            
+        }
+        
+    }
+    
     public function actionAccountAdd($id) {
         $corporation = Corporation::findOne($id);
         

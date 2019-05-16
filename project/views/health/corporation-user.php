@@ -51,8 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
                    
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{delete}', //只需要展示删除和更新
-                        'buttons' => [                          
+                        'template' => '{update} {delete}', //只需要展示删除和更新
+                        'buttons' => [
+                            'update' => function($url, $model, $key) {
+                               return CorporationAccount::get_corporationaccount_exist($model->corporation_id, CorporationAccount::ADMIN_YES)?'':Html::button('<i class="fa fa-paper-plane"></i> 提升', ['class' => 'btn btn-primary btn-xs account-update',]);
+                            },
                             'delete' => function($url, $model, $key) {
                                 return $model->add_type== CorporationAccount::TYPE_CHECK?'':Html::button('<i class="fa fa-trash-o"></i> 删除', ['class' => 'btn btn-danger btn-xs account-delete']);
                             },
@@ -70,6 +73,15 @@ $this->params['breadcrumbs'][] = $this->title;
     $('.user-index').on('click', '.account-create', function () {
         $('#item-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/account-create') ?>',{id: $(this).data('id')},
+                function (data) {
+                    $('#item-modal .modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.user-index').on('click', '.account-update', function () {
+        $('#item-modal .modal-body').html('');
+        $.get('<?= Url::toRoute('health/account-update') ?>',{id:$(this).parents('tr').data('key')},
                 function (data) {
                     $('#item-modal .modal-body').html(data);
                 }
