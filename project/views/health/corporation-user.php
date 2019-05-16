@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
 
             <p>
-                <?= Html::button('添加账号', ['data-id'=>$corporation_id,'class' => 'btn btn-success account-create',]) ?>
+                <?= CorporationAccount::get_corporationaccount_exist($corporation_id, CorporationAccount::ADMIN_YES)?'':Html::button('添加账号', ['data-id'=>$corporation_id,'class' => 'btn btn-success account-create',]) ?>
                 <?= CorporationAccount::get_corporationaccount_exist($corporation_id, CorporationAccount::ADMIN_YES)?Html::button('添加用户', ['data-id'=>$corporation_id,'class' => 'btn btn-warning pull-right account-add']):'' ?>
             </p>
             <?=
