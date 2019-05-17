@@ -305,12 +305,17 @@ class HealthController extends Controller {
             
             $add_members= array_diff($model->member, array_keys($members));
             $delete_members= array_diff(array_keys($members), $model->member);
-                 
-            
+                
+            $num_success=$num_fail=0;
             if(count($add_members)>0){
                 foreach ($add_members as $add){                 
                     $account = CorporationAccount::findOne(['user_id'=>$add]);
-                    CurlHelper::addMember($model->project_uuid, $account, $token);
+                    $auth=CurlHelper::addMember($model->project_uuid, $account, $token);
+                    if($auth['code']=='200'&&$auth['content']['status']=='success'){
+                        ++$num_success;
+                    }else{
+                        ++$num_fail;
+                    }
                 }
                 
             }
@@ -318,12 +323,19 @@ class HealthController extends Controller {
             if(count($delete_members)>0){
                 foreach ($delete_members as $delete){
                     if($members[$delete]!=3){
-                        CurlHelper::deleteMember($model->project_uuid, $delete, $token);
+                        $auth=CurlHelper::deleteMember($model->project_uuid, $delete, $token);
+                        if($auth['code']=='200'&&$auth['content']['status']=='success'){
+                            ++$num_success;
+                        }else{
+                            ++$num_fail;
+                        }
+                    }else{
+                        ++$num_fail;
                     }
                 }
                 
             }
-            Yii::$app->session->setFlash('success', '操作成功。');
+            Yii::$app->session->setFlash('warning', '操作成功'.$num_success.'个，失败'.$num_fail.'个。');
             return $this->redirect(Yii::$app->request->referrer);
             
         }else{                        
