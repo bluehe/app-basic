@@ -182,4 +182,54 @@ class CurlHelper {
 
     }
     
+    public static function addProject($project,$token){
+        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects';
+        $params='{"name":"'.$project->name.'", "description": "'.$project->description.'", "type": "normal", "homepage": ""}';
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::posturl($url, $params,$headerArray);
+       
+        return $data;
+
+    }
+    
+    public static function listProject($token){
+        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects?1,100';      
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::geturl($url,$headerArray);       
+        return $data;
+
+    }
+    
+    public static function addMember($project_uuid,$account,$token){
+        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects/'.$project_uuid.'/members';
+        $params='{
+            "user_id": "'.$account->user_id.'",
+            "user_name": "'.$account->user_name.'",
+            "domain_id": "'.$account->domain_id.'",
+            "domain_name": "'.$account->account_name.'",
+            "role": 4
+        }';
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::posturl($url, $params,$headerArray);
+       
+        return $data;
+
+    }
+    
+    public static function deleteMember($project_uuid,$user_id,$token){
+        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects/'.$project_uuid.'/members/'.$user_id;      
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::delurl($url,'',$headerArray);       
+        return $data;
+
+    }
+    
+    public static function listMember($project_uuid,$token){
+        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects/'.$project_uuid.'/members';      
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::geturl($url,$headerArray);       
+        return $data;
+
+    }
+    
 }

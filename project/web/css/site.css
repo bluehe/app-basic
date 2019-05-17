@@ -279,8 +279,11 @@ a.desc:after {
 #columnsetting-content .checkbox-inline {
     width: 140px;
 }
-#columnsetting-content .checkbox-inline:first-child {
+#columnsetting-content .checkbox-inline:first-child,#corporationproject-member .checkbox-inline:first-child {
     margin-left: 10px;
+}
+#corporationproject-member .checkbox-inline {
+    width: 140px;
 }
 
 @media (min-width: 768px){

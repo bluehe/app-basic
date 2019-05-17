@@ -4,6 +4,7 @@ namespace project\models;
 
 use Yii;
 use project\components\CurlHelper;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%corporation_account}}".
@@ -129,6 +130,11 @@ class CorporationAccount extends \yii\db\ActiveRecord
         return static::find()->where(['corporation_id'=>$id])->andFilterWhere(['is_admin'=>$is_admin])->one();
     }
     
+    public static function get_corporation_member($id,$is_admin=null) {
+        $p = static::find()->where(['corporation_id'=>$id])->andFilterWhere(['is_admin'=>$is_admin])->orderBy(['is_admin'=>SORT_ASC,'user_name'=>SORT_ASC])->all();
+        return ArrayHelper::map($p, 'user_id', 'user_name');
+    }
+    
     public static function get_corporation_account_num($id,$is_admin=null) {
         return static::find()->where(['corporation_id'=>$id])->andFilterWhere(['is_admin'=>$is_admin])->count();
     }
@@ -138,8 +144,8 @@ class CorporationAccount extends \yii\db\ActiveRecord
         return $name?++$name:'user01';       
     }
     
-    public static function get_token($corporation_id,$is_admin) {
-        $account= static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['is_admin'=>$is_admin])->one();  
+    public static function get_token($corporation_id,$is_admin=null) {
+        $account= static::find()->where(['corporation_id'=>$corporation_id,'add_type'=>[self::TYPE_ADD, self::TYPE_SYSTEM]])->andFilterWhere(['is_admin'=>$is_admin])->orderBy(['is_admin'=>SORT_ASC,'add_type'=>SORT_ASC,'id'=>SORT_ASC])->one();  
         if($account){
             $cache=Yii::$app->cache;
             $token = $cache->get('accountToken_'.$account->id);

@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
 
             <p>
-                <?= CorporationAccount::get_corporationaccount_exist($corporation_id, CorporationAccount::ADMIN_YES)?Html::button('添加用户', ['data-id'=>$corporation_id,'class' => 'btn btn-warning account-add']):Html::button('添加账号', ['data-id'=>$corporation_id,'class' => 'btn btn-success account-create',]) ?>
+                <?= CorporationAccount::get_corporationaccount_exist($corporation_id, CorporationAccount::ADMIN_YES)?Html::button('创建用户', ['data-id'=>$corporation_id,'class' => 'btn btn-warning account-add']):Html::button('添加账号', ['data-id'=>$corporation_id,'class' => 'btn btn-success account-create',]) ?>
             </p>
             <?=
             GridView::widget([

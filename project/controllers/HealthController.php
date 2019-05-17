@@ -10,6 +10,7 @@ use project\models\HealthSearch;
 use project\models\CorporationAccount;
 use project\models\Corporation;
 use project\components\CurlHelper;
+use project\models\CorporationProject;
 
 
 class HealthController extends Controller { 
@@ -238,6 +239,101 @@ class HealthController extends Controller {
             }
         }        
         return json_encode(['stat' => $stat]);
+    }
+    
+    public function actionProjectCreate($id) {
+        
+        $model = new CorporationProject();       
+        $model->corporation_id=$id;
+        $model->name='demo2019';
+        $model->description= '';
+        $model->add_type= CorporationProject::TYPE_ADD;
+                   
+        $token = CorporationAccount::get_token($id);
+        $auth = CurlHelper::addProject($model,$token);
+        if($auth['code']=='200'&&$auth['content']['status']=='success'){
+            $model->project_uuid=$auth['content']['result']['project']['project_uuid'];          
+        }elseif($auth['code']=='200'&&$auth['content']['status']=='failed'){
+            $auth1 = CurlHelper::listProject($token);
+            if($auth1['code']=='200'){
+                foreach ($auth1['content']['result']['projects'] as $project){
+                    if($project['name']=='demo2019'){
+                        $model->project_uuid=$project['project_uuid'];
+                    }
+                }               
+            }
+        }
+        
+        if($model->project_uuid){
+            if($model->save()){
+                $cache=Yii::$app->cache;
+                $cache->set('corporationProject_'.$model->corporation_id,$model->project_uuid);
+                Yii::$app->session->setFlash('success', '操作成功。');
+            }else{
+                Yii::$app->session->setFlash('error', '操作失败。');
+            }
+        }else{
+            Yii::$app->session->setFlash('error', '请求失败。');
+        }
+           
+        return $this->redirect(Yii::$app->request->referrer);
+   
+    }
+    
+    public function actionMemberList($id) {
+       
+        
+        $model = CorporationProject::findOne(['corporation_id'=>$id]);
+        
+        $members=[];
+        $token = CorporationAccount::get_token($id);
+        $auth_member= CurlHelper::listMember($model->project_uuid, $token);
+        if($auth_member['code']=='200'&&$auth_member['content']['status']=='success'){
+            
+            foreach ($auth_member['content']['result']['members'] as $member){
+                $members[$member['user_id']]=$member['role_id'];
+            }
+            $model->member= array_keys($members);
+        }
+       
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            
+            $add_members= array_diff($model->member, array_keys($members));
+            $delete_members= array_diff(array_keys($members), $model->member);
+                 
+            
+            if(count($add_members)>0){
+                foreach ($add_members as $add){                 
+                    $account = CorporationAccount::findOne(['user_id'=>$add]);
+                    CurlHelper::addMember($model->project_uuid, $account, $token);
+                }
+                
+            }
+            
+            if(count($delete_members)>0){
+                foreach ($delete_members as $delete){
+                    if($members[$delete]!=3){
+                        CurlHelper::deleteMember($model->project_uuid, $delete, $token);
+                    }
+                }
+                
+            }
+            Yii::$app->session->setFlash('success', '操作成功。');
+            return $this->redirect(Yii::$app->request->referrer);
+            
+        }else{                        
+                      
+            return $this->renderAjax('member-list', [
+                        'model' => $model,
+        ]);
+            
+        }
+        
     }
     
 }
