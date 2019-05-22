@@ -379,17 +379,17 @@ class HealthController extends Controller {
             }
 
 
-            echo $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->corporation_id;
+            $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->corporation_id;
             
-            //exec($command,$output,$status);
+            exec($command,$output,$status);
                        
-//            if(file_exists($targetPath.'/'.$model->corporation_id)&&$model->save()){                   
-//                Yii::$app->session->setFlash('success', '操作成功。');
-//            }else{
-//                Yii::$app->session->setFlash('error', '操作失败。');
-//            }
-//                      
-//            return $this->redirect(Yii::$app->request->referrer);
+            if(file_exists($targetPath.'/'.$model->corporation_id)&&$model->save()){                   
+                Yii::$app->session->setFlash('success', '操作成功。'.$status);
+            }else{
+                Yii::$app->session->setFlash('error', '操作失败。'.$status);
+            }
+                      
+            return $this->redirect(Yii::$app->request->referrer);
             
         }else{                        
                       
