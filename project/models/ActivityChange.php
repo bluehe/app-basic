@@ -65,11 +65,11 @@ class ActivityChange extends \yii\db\ActiveRecord
     const TREND_UC = 2;
     const TREND_IN = 3;
     const HEALTH_WA = -1;
-    const HEALTH_H0 = 1;
-    const HEALTH_H1 = 2;
-    const HEALTH_H2 = 3;
-    const HEALTH_H3 = 4;
-    const HEALTH_H4 = 5;
+    const HEALTH_H1 = 1;
+    const HEALTH_H2 = 2;
+    const HEALTH_H3 = 3;
+    const HEALTH_H4 = 4;
+    const HEALTH_H5 = 5;
     
     /**
      * {@inheritdoc}
@@ -154,19 +154,19 @@ class ActivityChange extends \yii\db\ActiveRecord
         ],
         'health' => [
             self::HEALTH_WA => "未计算",
-            self::HEALTH_H0 => "H0",
             self::HEALTH_H1 => "H1",
             self::HEALTH_H2 => "H2",
             self::HEALTH_H3 => "H3",
-            self::HEALTH_H4 => "H4"
+            self::HEALTH_H4 => "H4",
+            self::HEALTH_H5 => "H5"
         ],
         'health_color' => [
             self::HEALTH_WA => "#dd4b39",
-            self::HEALTH_H0 => "#909090",
-            self::HEALTH_H1 => "#f7a35c",
-            self::HEALTH_H2 => "#7cb5ec",
-            self::HEALTH_H3 => "#90ee7e",
-            self::HEALTH_H4 => "#00a65a"
+            self::HEALTH_H1 => "#909090",
+            self::HEALTH_H2 => "#f7a35c",
+            self::HEALTH_H3 => "#7cb5ec",
+            self::HEALTH_H4 => "#90ee7e",
+            self::HEALTH_H5 => "#00a65a"
         ],
         'column_usual'=>[
             'is_allocate' => '下拨',
@@ -443,43 +443,43 @@ class ActivityChange extends \yii\db\ActiveRecord
                         $acd=$activity_data[$data->corporation_id];//企业历史数据
                         
                         //设定c
-                        if($acd->projectman_projectcount>20&&$acd->projectman_issuecount>30&&$acd->codehub_commitcount>20&&$acd->codehub_repositorysize>100&&$acd->pipeline_executecount>20&&$acd->codecheck_execount>20&&$acd->codeci_buildtotaltime>200&&$acd->testman_totalexecasecount>20&&$acd->deploy_execount>20){
+                        if(abs($acd->projectman_projectcount)>20||abs($acd->projectman_issuecount)>30||abs($acd->codehub_commitcount)>20||abs($acd->codehub_repositorysize)>100||abs($acd->pipeline_executecount)>20||abs($acd->codecheck_execount)>20||abs($acd->codeci_buildtotaltime)>200||abs($acd->testman_totalexecasecount)>20||abs($acd->deploy_execount)>20){
                             $c=3;
-                        }elseif($acd->projectman_projectcount>5&&$acd->projectman_issuecount>10&&$acd->codehub_commitcount>5&&$acd->codehub_repositorysize>10&&$acd->pipeline_executecount>10&&$acd->codecheck_execount>10&&$acd->codeci_buildtotaltime>10&&$acd->testman_totalexecasecount>10&&$acd->deploy_execount>10){
+                        }elseif(abs($acd->projectman_projectcount)>5||abs($acd->projectman_issuecount)>10||abs($acd->codehub_commitcount)>5||abs($acd->codehub_repositorysize)>10||abs($acd->pipeline_executecount)>10||abs($acd->codecheck_execount)>10||abs($acd->codeci_buildtotaltime)>100||abs($acd->testman_totalexecasecount)>10||abs($acd->deploy_execount)>10){
                             $c=2;
-                        }elseif($acd->projectman_projectcount>1&&$acd->projectman_issuecount>0&&$acd->codehub_commitcount>0&&$acd->codehub_repositorysize>0&&$acd->pipeline_executecount>0&&$acd->codecheck_execount>0&&$acd->codeci_buildtotaltime>0&&$acd->testman_totalexecasecount>0&&$acd->deploy_execount>0){
+                        }elseif(abs($acd->projectman_projectcount)>1||abs($acd->projectman_issuecount)>1||abs($acd->codehub_commitcount)>0||abs($acd->codehub_repositorysize)>0||abs($acd->pipeline_executecount)>0||abs($acd->codecheck_execount)>0||abs($acd->codeci_buildtotaltime)>0||abs($acd->testman_totalexecasecount)>0||abs($acd->deploy_execount)>0){
                             $c=1;
                         }
                         
                         //设定i
-                        if($acd->projectman_projectcount>0||$acd->projectman_membercount>0||$acd->projectman_issuecount>0||$acd->projectman_storagecount>0){
+                        if(abs($acd->projectman_projectcount)>0||abs($acd->projectman_membercount)>0||abs($acd->projectman_issuecount)>0){
                             $i=$i+0.5;           
                         }
-                        if($acd->codehub_all_usercount>0||$acd->codehub_commitcount>0||$acd->codehub_repositorysize>0){
+                        if(abs($acd->codehub_repositorycount)>0||abs($acd->codehub_commitcount)>0||abs($acd->codehub_repositorysize)>0){
+                            $i=$i+0.5;
+                        }                       
+                        if(abs($acd->codecheck_codelinecount)>0||abs($acd->codecheck_execount)>0||abs($acd->codecheck_taskcount)>0){
                             $i=$i+0.5;
                         }
-                        if($acd->pipeline_pipecount>0||$acd->pipeline_executecount>0){
+                        if(abs($acd->testman_totalexecasecount)>0||abs($acd->testman_casecount)>0){
                             $i=$i+0.5;
                         }
-                        if($acd->codecheck_usercount>0||$acd->codecheck_execount>0){
+                        if(abs($acd->codeci_buildcount)>0||abs($acd->codeci_buildtotaltime)>0){
                             $i=$i+0.5;
                         }
-                        if($acd->codeci_buildtotaltime>0){
+                        if(abs($acd->deploy_envcount)>0||abs($acd->deploy_execount)>0){
                             $i=$i+0.5;
                         }
-                        if($acd->testman_totalexecasecount>0){
+                        if(abs($acd->pipeline_pipecount)>0||abs($acd->pipeline_elapse_time)>0){
                             $i=$i+0.5;
                         }
-                        if($acd->deploy_envcount>0||$acd->deploy_execount>0){
-                            $i=$i+0.5;
-                        }
-                        
-                        $m=$acd->projectman_membercount?$acd->projectman_membercount:0;
+                                               
+//                        $m=$acd->projectman_membercount?$acd->projectman_membercount:0;
  
                     }
                     
                     //设定a
-                    $a=isset($activity_num[$data->corporation_id])&&$activity_num[$data->corporation_id]['num']>0?$activity_num[$data->corporation_id]['num']-1:0;
+                    $a=isset($activity_num[$data->corporation_id])&&$activity_num[$data->corporation_id]['num']>0?$activity_num[$data->corporation_id]['num']:0;
                     
                     $r=0;
                     $v=0;
@@ -493,13 +493,13 @@ class ActivityChange extends \yii\db\ActiveRecord
                         //设定v
                         if($set['cloud_amount']==0){
                             $v=0;
-                        }elseif($set['cloud_amount']>0&&$set['cloud_amount']<=1000){
+                        }elseif($set['cloud_amount']>0&&$set['cloud_amount']<=5000){
                             $v=1;
-                        }elseif($set['cloud_amount']>1000&&$set['cloud_amount']<=10000){
+                        }elseif($set['cloud_amount']>5000&&$set['cloud_amount']<=50000){
                             $v=2;
-                        }elseif($set['cloud_amount']>10000&&$set['cloud_amount']<=100000){
+                        }elseif($set['cloud_amount']>50000&&$set['cloud_amount']<=300000){
                             $v=3;
-                        }elseif($set['cloud_amount']>100000&&$set['cloud_amount']<=500000){
+                        }elseif($set['cloud_amount']>300000&&$set['cloud_amount']<=1200000){
                             $v=4;
                         }else{
                             $v=5;
@@ -530,18 +530,18 @@ class ActivityChange extends \yii\db\ActiveRecord
                     $data->h_d=$d;
                     //$data->h_membercount=$m;
                     
-                    $data->h_h=0.3*(0.2*$data->h_v+0.8*$data->h_d)+0.7*(0.2*$data->h_c+0.3*$data->h_i+0.5*$data->h_a)*$data->h_r;
+                    $data->h_h=0.2*(0.2*$data->h_v+0.8*$data->h_d)+0.8*(0.2*$data->h_c+0.3*$data->h_i+0.5*$data->h_a)*$data->h_r;
                     
-                    if($data->h_i==0&&$data->h_c==0&&$data->h_a==0&&$m<=1){
-                        $data->health= self::HEALTH_H0;
-                    }elseif($data->h_a==0&&$data->h_c>0&&$data->h_c<=2&&$m>1){
-                        $data->health= self::HEALTH_H1;
-                    }elseif($data->h_h>=2.5){
-                        $data->health= self::HEALTH_H4;
+                    if($data->h_h>=2.5){
+                        $data->health= self::HEALTH_H5;
                     }elseif($data->h_h>=1.5&&$data->h_h<2.5){
+                        $data->health= self::HEALTH_H4;
+                    }elseif($data->h_h>=1&&$data->h_h<1.5){
                         $data->health= self::HEALTH_H3;
-                    }else{
+                    }elseif($data->h_h>=0.5&&$data->h_h<1){
                         $data->health= self::HEALTH_H2;
+                    }else{
+                        $data->health= self::HEALTH_H1;
                     }     
                     
                     $data->save();

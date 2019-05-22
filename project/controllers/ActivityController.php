@@ -25,7 +25,7 @@ class ActivityController extends Controller {
                     $sum=Yii::$app->request->get('sum',1);
                     $dev=Yii::$app->request->get('dev',0);
                     $annual=Yii::$app->request->get('annual');
-
+                    
                     if (Yii::$app->request->get('range')) {
                         $range = explode('~', Yii::$app->request->get('range'));
                         $start = isset($range[0])? strtotime($range[0]) : $start;

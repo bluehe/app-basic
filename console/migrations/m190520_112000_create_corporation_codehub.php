@@ -3,28 +3,31 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `corporation_project`.
+ * Handles the creation of table `corporation_codehub`.
  */
-class m190516_140200_create_corporation_project extends Migration {
+class m190520_112000_create_corporation_codehub extends Migration {
 
     /**
      * @inheritdoc
      */
     public function up() {
-        $table = '{{%corporation_project}}';
+        $table = '{{%corporation_codehub}}';
         $corporationTable = '{{%corporation}}';
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB COMMENT="企业项目表"';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB COMMENT="企业仓库表"';
         }
         $this->createTable($table, [
             'id' => $this->primaryKey(),
-            'corporation_id' => $this->integer()->comment('企业ID'),           
+            'corporation_id' => $this->integer()->comment('企业ID'),
             'name' => $this->string(32)->comment('名称'),
-            'description' => $this->string(32)->comment('项目描述'),
             'project_uuid' => $this->string(32)->comment('项目UUID'),
-            'add_type' => $this->smallInteger()->notNull()->defaultValue(1)->comment('添加方式'),
+            'repository_uuid' => $this->string(32)->comment('仓库UUID'),
+            'https_url' => $this->string(128)->comment('仓库URL'),
+            'username' => $this->string(32)->comment('用户名'),
+            'password' => $this->string(32)->comment('密码'),
+            'updated_at' => $this->string(32)->comment('更新时间'),
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",                 
                 ], $tableOptions);
     }
@@ -33,7 +36,7 @@ class m190516_140200_create_corporation_project extends Migration {
      * @inheritdoc
      */
     public function down() {
-        $this->dropTable('{{%corporation_project}}');
+        $this->dropTable('{{%corporation_codehub}}');
     }
 
 }

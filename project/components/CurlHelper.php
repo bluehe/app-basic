@@ -153,17 +153,14 @@ class CurlHelper {
             $data['token']  = trim($matches[1]);
         }
         return $data;
-
     }
     
     public static function addUser($account,$token){
         $url='https://iam.myhuaweicloud.com/v3/users';
         $params='{"user": {"enabled": true,"name": "'.$account->user_name.'","password": "'.$account->password .'"}}';
         $headerArray =array("Content-type:application/json;charset='utf-8'","Accept:application/json","X-Auth-Token:".$token);
-        $data= self::posturl($url, $params,$headerArray);
-       
+        $data= self::posturl($url, $params,$headerArray);      
         return $data;
-
     }
     
     public static function deleteUser($user_id,$token){
@@ -171,7 +168,6 @@ class CurlHelper {
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::delurl($url,'',$headerArray);       
         return $data;
-
     }
     
     public static function listUser($token){
@@ -179,17 +175,14 @@ class CurlHelper {
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::geturl($url,$headerArray);       
         return $data;
-
     }
     
     public static function addProject($project,$token){
         $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects';
         $params='{"name":"'.$project->name.'", "description": "'.$project->description.'", "type": "normal", "homepage": ""}';
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
-        $data= self::posturl($url, $params,$headerArray);
-       
+        $data= self::posturl($url, $params,$headerArray);      
         return $data;
-
     }
     
     public static function listProject($token){
@@ -210,10 +203,8 @@ class CurlHelper {
             "role": 4
         }';
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
-        $data= self::posturl($url, $params,$headerArray);
-       
+        $data= self::posturl($url, $params,$headerArray);       
         return $data;
-
     }
     
     public static function deleteMember($project_uuid,$user_id,$token){
@@ -221,7 +212,6 @@ class CurlHelper {
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::delurl($url,'',$headerArray);       
         return $data;
-
     }
     
     public static function listMember($project_uuid,$token){
@@ -229,7 +219,22 @@ class CurlHelper {
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::geturl($url,$headerArray);       
         return $data;
+    }
+    
+    public static function addCodehub($project_uuid,$codehub,$token){
+        $url='https://api.devcloud.huaweicloud.com/codehub/v1/repositories';
+        $params='{"name":"'.$codehub->name.'", "template_id": "", "project_uuid": "'.$project_uuid.'", "import_members": 1}';
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::posturl($url, $params,$headerArray);      
+        return $data;
 
+    }
+    
+    public static function deleteCodehub($repository_uuid,$token){
+        $url='https://api.devcloud.huaweicloud.com/codehub/v1/repositories/'.$repository_uuid;      
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::delurl($url,'',$headerArray);       
+        return $data;
     }
     
 }
