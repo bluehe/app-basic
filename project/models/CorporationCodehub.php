@@ -35,11 +35,34 @@ class CorporationCodehub extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['corporation_id','username','password','https_url'], 'required'],
             [['corporation_id'], 'integer'],
+            [['username', 'password'], 'trim'],
             [['name', 'project_uuid', 'repository_uuid', 'username', 'password', 'updated_at'], 'string', 'max' => 32],
             [['https_url'], 'string', 'max' => 128],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
         ];
+    }
+    
+     public function beforeSave($insert) {
+        // 注意，重载之后要调用父类同名函数
+        if (parent::beforeSave($insert)) {
+            if($this->password){
+                $this->password = base64_encode($this->password);              
+            }          
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this->password=$this->password?base64_decode($this->password):'';
     }
 
     /**
@@ -66,5 +89,9 @@ class CorporationCodehub extends \yii\db\ActiveRecord
     public function getCorporation()
     {
         return $this->hasOne(Corporation::className(), ['id' => 'corporation_id']);
+    }
+    
+    public static function get_codehub_exist($id) {
+        return static::find()->where(['corporation_id'=>$id])->exists();
     }
 }

@@ -16,6 +16,7 @@ use project\models\Corporation;
 use project\models\CorporationMeal;
 use project\models\CorporationAccount;
 use project\models\CorporationProject;
+use project\models\CorporationCodehub;
 
 $this->title = '活跃数据';
 $this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['activity/index']];
@@ -199,14 +200,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{user} {project}',
+                        'template' => '{user} {project} {codehub}',
                         'buttons' => [                           
                             'user' => function($url, $model, $key) {
                                 return CorporationAccount::get_corporationaccount_exist($model->corporation_id)?Html::a('<i class="fa fa-users"></i> 用户管理', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal', 'data-id'=>$model->corporation_id,'class' => 'btn btn-xs corporation-user '.(CorporationAccount::get_corporationaccount_exist($model->corporation_id, CorporationAccount::ADMIN_YES)?'btn-danger':'btn-warning'),]):Html::a('<i class="fa fa-user"></i> 添加账号', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal','data-id'=>$model->corporation_id,'class' => 'btn btn-success btn-xs account-create',]);
                             },
                             'project' => function($url, $model, $key) {
                                 return CorporationAccount::get_token($model->corporation_id)?(CorporationProject::get_corporationproject_exist($model->corporation_id)?Html::a('<i class="fa fa-user"></i> 成员管理', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal','data-id'=>$model->corporation_id,'class' => 'btn btn-warning btn-xs member-list',]):Html::a('<i class="fa fa-cubes"></i> 创建项目', ['project-create', 'id' => $model->corporation_id], ['class' => 'btn btn-success btn-xs','data-method' => 'post',])):'';
-                            },                           
+                            },
+                            'codehub'=>function($url, $model, $key) {
+                                return CorporationProject::get_corporationproject_exist($model->corporation_id)?(CorporationCodehub::get_codehub_exist($model->corporation_id)?Html::button('<i class="fa fa-retweet"></i> 代码提交', ['data-id'=>$model->corporation_id,'class' => 'btn btn-warning btn-xs codehub-exec',]):Html::a('<i class="fa fa-server"></i> 添加仓库', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal','data-id'=>$model->corporation_id,'class' => 'btn btn-success btn-xs codehub-create',])):'';
+                            },
                         ],
                        
                     ],
@@ -266,6 +270,27 @@ Modal::end();
         $.get('<?= Url::toRoute('health/member-list') ?>',{id: $(this).data('id')},
                 function (data) {
                     $('#item-modal .modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.activity-index').on('click', '.codehub-create', function () {
+        $('.modal-title').html('添加仓库');
+        $('#item-modal .modal-body').html('');
+        $.get('<?= Url::toRoute('health/codehub-create') ?>',{id: $(this).data('id')},
+                function (data) {
+                    $('#item-modal .modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.activity-index').on('click', '.codehub-exec', function () {
+        
+        $.getJSON('<?= Url::toRoute('health/codehub-exec') ?>',{id: $(this).data('id')},
+                function (data) {
+                    if (data.stat == 'success') {
+                               
+                    } 
                 }
         );
     });

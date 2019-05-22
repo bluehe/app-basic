@@ -11,6 +11,7 @@ use project\models\CorporationAccount;
 use project\models\Corporation;
 use project\components\CurlHelper;
 use project\models\CorporationProject;
+use project\models\CorporationCodehub;
 
 
 class HealthController extends Controller { 
@@ -75,7 +76,7 @@ class HealthController extends Controller {
         
         $model = new CorporationAccount();
         $model->scenario='create';
-        $model->corporation_id=$id;
+        $model->corporation_id=$corporation->id;
         $model->account_name=$corporation->huawei_account;
         $model->is_admin= CorporationAccount::ADMIN_NO;
        
@@ -346,6 +347,83 @@ class HealthController extends Controller {
             
         }
         
+    }
+    
+    public function actionCodehubCreate($id) {
+        $corporation = Corporation::findOne($id);
+        
+        $model = new CorporationCodehub();
+        $model->corporation_id=$corporation->id;
+        
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            
+            $targetFolder = '/data/git';
+            $targetPath = Yii::getAlias('@webroot') . $targetFolder;
+
+            if (!file_exists($targetPath)) {
+                @mkdir($targetPath, 0777, true);
+            }
+                 
+            if (file_exists($targetPath.'/'.$model->corporation_id)) {
+                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+                    $comm='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
+                }else{
+                    $comm='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
+                } 
+                exec($comm);
+            }
+
+
+            $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->corporation_id;
+            exec($command,$output,$status);
+                       
+            if(file_exists($targetPath.'/'.$model->corporation_id)&&$model->save()){                   
+                Yii::$app->session->setFlash('success', '操作成功。');
+            }else{
+                Yii::$app->session->setFlash('error', '操作失败。');
+            }
+                      
+            return $this->redirect(Yii::$app->request->referrer);
+            
+        }else{                        
+                      
+            return $this->renderAjax('codehub-create', [
+                        'model' => $model,
+            ]);
+            
+        }
+
+    }
+    
+    public function actionCodehubExec() {    
+        
+        //$model=CorporationCodehub::findOne(['corporation_id'=>$id]);
+       
+        $id=4;
+        
+        $targetFolder = '/data/git';
+        $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$id;
+
+        if (!file_exists($targetPath)) {
+            return false;
+        }               
+        echo $command='cd '.$targetPath.' && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
+        exec($command.' 2>&1',$output,$status);
+        var_dump($output);
+        echo $status;
+        
+//        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+//            $comm="call ".Yii::getAlias('@webroot') ."/data/git.sh {$id}";
+//        }else{
+//            $comm=Yii::getAlias('@webroot') ."/data/git.sh {$id}";
+//        } 
+//        exec($comm);
+   
     }
     
 }
