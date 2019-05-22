@@ -384,9 +384,9 @@ class HealthController extends Controller {
             exec($command,$output,$status);
                        
             if(file_exists($targetPath.'/'.$model->corporation_id)&&$model->save()){                   
-                Yii::$app->session->setFlash('success', '操作成功。'.$status);
+                Yii::$app->session->setFlash('success', '操作成功。'.$status. json_encode($output));
             }else{
-                Yii::$app->session->setFlash('error', '操作失败。'.$status);
+                Yii::$app->session->setFlash('error', '操作失败。'.$status. json_encode($output));
             }
                       
             return $this->redirect(Yii::$app->request->referrer);
