@@ -401,31 +401,31 @@ class HealthController extends Controller {
 
     }
     
-    public function actionCodehubExec() {    
+    public function actionCodehubExec($id) {    
         
-        //$model=CorporationCodehub::findOne(['corporation_id'=>$id]);
-       
-        $id=4;
+        $model=CorporationCodehub::findOne(['corporation_id'=>$id]);
         
         $targetFolder = '/data/git';
         $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$id;
 
-        if (!file_exists($targetPath)) {
-            return false;
+        if (!file_exists($targetPath)||!$model) {
+            return json_encode(['status'=>'fail','message'=>'公司或路径不存在']);
         }               
-        echo $command='cd '.$targetPath.' && sudo git pull && sudo echo '.time().' > README.md && sudo git add . && sudo git commit -m "'.time().'" && sudo git push';
-        exec($command.' 2>&1',$output,$status);
-        var_dump($output);
-        echo $status;
         
-//        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-//            echo $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
-//        }else{
-//            echo $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
-//        } 
-//        exec($command.' 2>&1',$output,$status);
-//        var_dump($output);
-//        echo $status;
+        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+//            echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
+            echo $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+        }else{
+            $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+        } 
+        exec($command.' 2>&1',$output,$status);
+        if($status==0){
+            return $this->redirect(Yii::$app->request->referrer);
+            
+        }else{
+            return json_encode(['status'=>'fail','message'=>$output]);
+        }
+
    
     }
     
