@@ -413,21 +413,19 @@ class HealthController extends Controller {
         if (!file_exists($targetPath)) {
             return false;
         }               
-        echo $command1='cd '.$targetPath.' && echo '.time().' > README.md && git add . ';
-        exec($command1.' 2>&1',$output1,$status1);
-        var_dump($output1);
-        echo $status1;
-        echo $command2='cd '.$targetPath.' && git commit -m "'.time().'" && git push';
-        exec($command2.' 2>&1',$output2,$status2);
-        var_dump($output2);
-        echo $status2;
+//        echo $command='cd '.$targetPath.' && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
+//        exec($command.' 2>&1',$output,$status);
+//        var_dump($output);
+//        echo $status;
         
-//        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-//            $comm="call ".Yii::getAlias('@webroot') ."/data/git.sh {$id}";
-//        }else{
-//            $comm=Yii::getAlias('@webroot') ."/data/git.sh {$id}";
-//        } 
-//        exec($comm);
+        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+            $command="call ".Yii::getAlias('@webroot') ."/data/git.sh {$id}";
+        }else{
+            $command=Yii::getAlias('@webroot') ."/data/git.sh {$id}";
+        } 
+        exec($command.' 2>&1',$output,$status);
+        var_dump($output);
+        echo $status;
    
     }
     
