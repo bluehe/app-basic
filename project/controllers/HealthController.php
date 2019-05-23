@@ -409,7 +409,8 @@ class HealthController extends Controller {
         $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$id;
 
         if (!file_exists($targetPath)||!$model) {
-            return json_encode(['status'=>'fail','message'=>'公司或路径不存在']);
+            Yii::$app->session->setFlash('error', '公司或路径不存在。');          
+            return $this->redirect(Yii::$app->request->referrer);
         }               
         
         if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
@@ -420,11 +421,11 @@ class HealthController extends Controller {
         } 
         exec($command.' 2>&1',$output,$status);
         if($status==0){
-            return $this->redirect(Yii::$app->request->referrer);
-            
+            Yii::$app->session->setFlash('success', '操作成功。');                        
         }else{
-            return json_encode(['status'=>'fail','message'=>$output]);
+            Yii::$app->session->setFlash('error', '操作失败。'.json_encode($output));
         }
+        return $this->redirect(Yii::$app->request->referrer);
 
    
     }
