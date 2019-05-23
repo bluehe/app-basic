@@ -421,7 +421,7 @@ class HealthController extends Controller {
         if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
             $command="call ".Yii::getAlias('@webroot') ."/data/git.sh {$id}";
         }else{
-            $command=Yii::getAlias('@webroot') ."/data/git.sh {$targetPath}";
+            $command=Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
         } 
         exec($command.' 2>&1',$output,$status);
         var_dump($output);
