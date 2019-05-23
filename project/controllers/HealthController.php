@@ -503,8 +503,7 @@ class HealthController extends Controller {
         return json_encode(['stat' => $stat]);
     }
     
-    public function actionCodehubExec() {  
-        $id=3;
+    public function actionCodehubExec($id) {    
         
         $model=CorporationCodehub::findOne($id);
         
@@ -520,12 +519,9 @@ class HealthController extends Controller {
 //                   echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
                     $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
                 }else{
-                    echo $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+                    $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
                 } 
                 exec($command.' >>codecommit.log 2>&1',$output,$status);
-                var_dump($output);
-                echo $status;
-                exit;
                 if($status==0){
                     $message='操作成功';
                     $stat='success';                      
