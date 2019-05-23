@@ -414,9 +414,13 @@ class HealthController extends Controller {
             return false;
         }               
         echo $command='cd '.$targetPath.' && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
-        exec($command.' 2>&1',$output,$status);
-        var_dump($output);
-        echo $status;
+        exec($command.' 2>&1',$output1,$status1);
+        var_dump($output1);
+        echo $status1;
+        echo $command2='cd '.$targetPath.' && git commit -m "'.time().'" && git push';
+        exec($command2.' 2>&1',$output2,$status2);
+        var_dump($output2);
+        echo $status2;
         
 //        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
 //            $comm="call ".Yii::getAlias('@webroot') ."/data/git.sh {$id}";
