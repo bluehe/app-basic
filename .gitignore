@@ -38,3 +38,4 @@ phpunit.phar
 /project/web/assets/
 /project/web/data/import_data/
 /git/
+/project/web/data/git/

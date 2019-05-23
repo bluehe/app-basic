@@ -442,7 +442,7 @@ class HealthController extends Controller {
                  
             if (file_exists($targetPath.'/'.$model->corporation_id)) {
                 if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-                    echo $comm='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
+                    $comm='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
                 }else{
                     $comm='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
                 } 
