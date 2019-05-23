@@ -395,7 +395,7 @@ class HealthController extends Controller {
                 if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
                     $comm='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
                 }else{
-                    $comm='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
+                    $comm='cd '.$targetPath.' && sudo rm -rf '.$model->corporation_id;
                 } 
                 exec($comm.' >>demo.log');
             }
@@ -444,7 +444,7 @@ class HealthController extends Controller {
                 if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
                     $comm='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
                 }else{
-                    $comm='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
+                    $comm='cd '.$targetPath.' && sudo rm -rf '.$model->corporation_id;
                 } 
                 exec($comm.' >>demo.log');
             }
@@ -489,7 +489,7 @@ class HealthController extends Controller {
                 if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
                     $command='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
                 }else{
-                    $command='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
+                    $command='cd '.$targetPath.' && sudo rm -rf '.$model->corporation_id;
                 } 
                 exec($command.' >>demo.log 2>&1',$output,$status);
             }
