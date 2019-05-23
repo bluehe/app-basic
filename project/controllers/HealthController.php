@@ -369,21 +369,21 @@ class HealthController extends Controller {
                 @mkdir($targetPath, 0777, true);
             }
                  
-            if (file_exists($targetPath.'/'.$model->corporation_id)) {
+            if (file_exists($targetPath.'/'.$corporation->huawei_account)) {
                 if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-                    $comm='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
+                    $comm='cd '.$targetPath.' && rd/s/q '.$corporation->huawei_account;
                 }else{
-                    $comm='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
+                    $comm='cd '.$targetPath.' && rm -rf '.$corporation->huawei_account;
                 } 
                 exec($comm);
             }
 
 
-            $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->corporation_id;
+            $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$corporation->huawei_account;
             
             exec($command,$output,$status);
                        
-            if(file_exists($targetPath.'/'.$model->corporation_id)&&$model->save()){                   
+            if(file_exists($targetPath.'/'.$corporation->huawei_account)&&$model->save()){                   
                 Yii::$app->session->setFlash('success', '操作成功。');
             }else{
                 Yii::$app->session->setFlash('error', '操作失败。'.$status.$command. json_encode($output));
