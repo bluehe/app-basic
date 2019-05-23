@@ -521,7 +521,7 @@ class HealthController extends Controller {
                 }else{
                     $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
                 } 
-                exec($command.' >>demo.log 2>&1',$output,$status);
+                exec($command.' >>codecommit.log 2>&1',$output,$status);
                 if($status==0){
                     $message='操作成功';
                     $stat='success';                      
