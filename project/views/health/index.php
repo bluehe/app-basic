@@ -285,13 +285,10 @@ Modal::end();
     });
     
     $('.activity-index').on('click', '.codehub-exec', function () {
-        
+        var _this=$(this);
+        _this.addClass('disabled').removeClass('codehub-exec');
         $.getJSON('<?= Url::toRoute('health/codehub-exec') ?>',{id: $(this).data('id')},
-                function (data) {
-                    if (data.stat == 'success') {
-                               
-                    } 
-                }
+            function (data) {}
         );
     });
 
