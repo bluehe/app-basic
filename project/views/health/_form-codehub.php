@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use project\models\CorporationCodehub;
 
 ?>
 
@@ -23,7 +24,9 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
                 
-        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>                            
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>    
+        
+        <?= $form->field($model, 'ci')->radioList(CorporationCodehub::$List['ci'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
         
         <div class="col-md-6 col-xs-6 text-right">
 

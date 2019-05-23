@@ -5,6 +5,7 @@ use yii\widgets\Pjax;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use project\models\CorporationAccount;
+use project\models\CorporationProject;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -20,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <p>
                 <?= CorporationAccount::get_corporationaccount_exist($corporation_id, CorporationAccount::ADMIN_YES)?Html::button('创建用户', ['data-id'=>$corporation_id,'class' => 'btn btn-warning account-add']):Html::button('添加账号', ['data-id'=>$corporation_id,'class' => 'btn btn-success account-create',]) ?>
+                <?= CorporationProject::get_corporationproject_exist($corporation_id)?Html::button('成员管理', ['data-id'=>$corporation_id,'class' => 'btn btn-danger pull-right member-list',]):'' ?>
             </p>
             <?=
             GridView::widget([
@@ -72,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
    
     $('.user-index').on('click', '.account-create', function () {
         $('#item-modal .modal-body').html('');
-        $.get('<?= Url::toRoute('health/account-create') ?>',{id: $(this).data('id')},
+        $.get('<?= Url::toRoute('health/account-create') ?>',{corporationid: $(this).data('id')},
                 function (data) {
                     $('#item-modal .modal-body').html(data);
                 }
@@ -90,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
     $('.user-index').on('click', '.account-add', function () { 
         var $id=$(this).data('id');
-        $.getJSON('<?= Url::toRoute('health/account-add') ?>',{id: $id},
+        $.getJSON('<?= Url::toRoute('health/account-add') ?>',{corporation_id: $id},
                 function (data) {                  
                     if(data.stat=='success'){
                         $.get('<?= Url::toRoute('health/corporation-user') ?>',{id: $id},
@@ -115,6 +117,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
         );
         return false;
+    });
+    
+    $('.user-index').on('click', '.member-list', function () {
+        $('.modal-title').html('成员管理');
+        $('#item-modal .modal-body').html('');
+        $.get('<?= Url::toRoute('health/member-list') ?>',{corporation_id: $(this).data('id')},
+                function (data) {
+                    $('#item-modal .modal-body').html(data);
+                }
+        );
     });
 
 <?php $this->endBlock() ?>

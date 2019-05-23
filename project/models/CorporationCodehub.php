@@ -15,12 +15,16 @@ use Yii;
  * @property string $https_url 仓库URL
  * @property string $username 用户名
  * @property string $password 密码
- * @property string $updated_at 更新时间
+ * @property string $ci 持续集成
  *
  * @property Corporation $corporation
  */
 class CorporationCodehub extends \yii\db\ActiveRecord
 {
+    
+    const CI_YES = 1;
+    const CI_NO = 2;
+    
     /**
      * {@inheritdoc}
      */
@@ -35,10 +39,10 @@ class CorporationCodehub extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corporation_id','username','password','https_url'], 'required'],
-            [['corporation_id'], 'integer'],
+            [['corporation_id','username','password','https_url','ci'], 'required'],
+            [['corporation_id','ci'], 'integer'],
             [['username', 'password'], 'trim'],
-            [['name', 'project_uuid', 'repository_uuid', 'username', 'password', 'updated_at'], 'string', 'max' => 32],
+            [['name', 'project_uuid', 'repository_uuid', 'username', 'password'], 'string', 'max' => 32],
             [['https_url'], 'string', 'max' => 128],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
         ];
@@ -79,8 +83,21 @@ class CorporationCodehub extends \yii\db\ActiveRecord
             'https_url' => '仓库URL',
             'username' => '用户名',
             'password' => '密码',
-            'updated_at' => '更新时间',
+            'ci' => '持续集成',
         ];
+    }
+    
+    public static $List = [       
+        'ci'=>[
+            self::CI_YES=>'是',
+            self::CI_NO=>'否',      
+        ],
+       
+    ];
+    
+    public function getCi() {
+        $stat = isset(self::$List['ci'][$this->ci]) ? self::$List['ci'][$this->ci] : null;
+        return $stat;
     }
 
     /**

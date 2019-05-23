@@ -68,11 +68,30 @@ class HealthController extends Controller {
                               
                 }
             ],
+            'codehub-list' => [     
+                'class' => IndexAction::className(),
+                'ajax'=>true,
+                'data' => function(){                  
+                    $id=Yii::$app->request->get('id');                                      
+                    $dataProvider = new ActiveDataProvider([
+                        'query' => CorporationCodehub::find()->andWhere(['corporation_id'=> $id]),
+                        'sort'=>['defaultOrder' => [
+                            'id' => SORT_ASC,
+                        ]]
+                    ]);
+                    return [
+                        'dataProvider' => $dataProvider,
+                        'corporation_id'=>$id
+                    ];
+                              
+                }
+            ],
+                    
         ];
     }
     
-    public function actionAccountCreate($id) {
-        $corporation = Corporation::findOne($id);
+    public function actionAccountCreate($corporation_id) {
+        $corporation = Corporation::findOne($corporation_id);
         
         $model = new CorporationAccount();
         $model->scenario='create';
@@ -107,7 +126,7 @@ class HealthController extends Controller {
                     $cache=Yii::$app->cache;
                     $cache->set('accountToken_'.$model->id,$auth['token'], strtotime($token['expires_at'])-time());
 
-                    CorporationAccount::set_corporation_account_list($id);
+                    CorporationAccount::set_corporation_account_list($corporation_id);
                     
                     Yii::$app->session->setFlash('success', '操作成功。');
                 }else{
@@ -184,19 +203,19 @@ class HealthController extends Controller {
         
     }
     
-    public function actionAccountAdd($id) {
-        $corporation = Corporation::findOne($id);
+    public function actionAccountAdd($corporation_id) {
+        $corporation = Corporation::findOne($corporation_id);
         
         $model = new CorporationAccount();
         $model->scenario='create';
-        $model->corporation_id=$id;
+        $model->corporation_id=$corporation_id;
         $model->account_name=$corporation->huawei_account;
         $model->is_admin= CorporationAccount::ADMIN_NO;         
         $model->add_type= CorporationAccount::TYPE_SYSTEM;
               
-        $model->user_name= CorporationAccount::get_last_username($id);
+        $model->user_name= CorporationAccount::get_last_username($corporation_id);
         $model->password=substr(md5($model->account_name.$model->user_name),0,8).'a1';
-        $token = CorporationAccount::get_token($id, CorporationAccount::ADMIN_YES);
+        $token = CorporationAccount::get_token($corporation_id, CorporationAccount::ADMIN_YES);
         
         if(!$token){
             return false;
@@ -242,15 +261,15 @@ class HealthController extends Controller {
         return json_encode(['stat' => $stat]);
     }
     
-    public function actionProjectCreate($id) {
+    public function actionProjectCreate($corporation_id) {
         
         $model = new CorporationProject();       
-        $model->corporation_id=$id;
+        $model->corporation_id=$corporation_id;
         $model->name='demo2019';
         $model->description= '';
         $model->add_type= CorporationProject::TYPE_ADD;
                    
-        $token = CorporationAccount::get_token($id);
+        $token = CorporationAccount::get_token($corporation_id);
         $auth = CurlHelper::addProject($model,$token);
         if($auth['code']=='200'&&$auth['content']['status']=='success'){
             $model->project_uuid=$auth['content']['result']['project']['project_uuid'];          
@@ -281,13 +300,13 @@ class HealthController extends Controller {
    
     }
     
-    public function actionMemberList($id) {
+    public function actionMemberList($corporation_id) {
        
         
-        $model = CorporationProject::findOne(['corporation_id'=>$id]);
+        $model = CorporationProject::findOne(['corporation_id'=>$corporation_id]);
         
         $members=[];
-        $token = CorporationAccount::get_token($id);
+        $token = CorporationAccount::get_token($corporation_id);
         $auth_member= CurlHelper::listMember($model->project_uuid, $token);
         if($auth_member['code']=='200'&&$auth_member['content']['status']=='success'){
             
@@ -349,11 +368,14 @@ class HealthController extends Controller {
         
     }
     
-    public function actionCodehubCreate($id) {
-        $corporation = Corporation::findOne($id);
+    public function actionCodehubCreate($corporation_id) {
+        $corporation_account = CorporationAccount::find()->where(['corporation_id'=>$corporation_id,'add_type'=>[CorporationAccount::TYPE_ADD, CorporationAccount::TYPE_SYSTEM]])->orderBy(['is_admin'=>SORT_ASC,'add_type'=>SORT_ASC,'id'=>SORT_ASC])->one();  
         
         $model = new CorporationCodehub();
-        $model->corporation_id=$corporation->id;
+        $model->corporation_id=$corporation_account->corporation_id;
+        $model->ci= CorporationCodehub::CI_YES;
+        $model->username=$corporation_account->account_name.'/'.$corporation_account->user_name;
+        $model->password=$corporation_account->password;
         
         if ($model->load(Yii::$app->request->post())) {
             
@@ -375,13 +397,13 @@ class HealthController extends Controller {
                 }else{
                     $comm='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
                 } 
-                exec($comm);
+                exec($comm.' >>demo.log');
             }
 
 
             $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->corporation_id;
             
-            exec($command.' 2>&1',$output,$status);
+            exec($command.' >>demo.log 2>&1',$output,$status);
                        
             if(file_exists($targetPath.'/'.$model->corporation_id)&&$model->save()){                   
                 Yii::$app->session->setFlash('success', '操作成功。');
@@ -401,31 +423,118 @@ class HealthController extends Controller {
 
     }
     
+    public function actionCodehubUpdate($id) {
+        $model = CorporationCodehub::findOne($id);
+        
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            
+            $targetFolder = '/data/git';
+            $targetPath = Yii::getAlias('@webroot') . $targetFolder;
+
+            if (!file_exists($targetPath)) {
+                @mkdir($targetPath, 0777, true);
+            }
+                 
+            if (file_exists($targetPath.'/'.$model->corporation_id)) {
+                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+                    echo $comm='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
+                }else{
+                    $comm='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
+                } 
+                exec($comm.' >>demo.log');
+            }
+
+
+            $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->corporation_id;
+            
+            exec($command.' >>demo.log 2>&1',$output,$status);
+                       
+            if(file_exists($targetPath.'/'.$model->corporation_id)&&$model->save()){                   
+                Yii::$app->session->setFlash('success', '操作成功。');
+            }else{
+                Yii::$app->session->setFlash('error', '操作失败。'.$status.$command. json_encode($output));
+            }
+                      
+            return $this->redirect(Yii::$app->request->referrer);
+            
+        }else{                        
+                      
+            return $this->renderAjax('codehub-create', [
+                        'model' => $model,
+            ]);
+            
+        }
+
+    }
+    
+    public function actionCodehubDelete($id)
+    {
+        $model = CorporationCodehub::findOne($id);
+        $stat='error';
+        if ($model !== null) {
+            $targetFolder = '/data/git';
+            $targetPath = Yii::getAlias('@webroot') . $targetFolder;
+
+            if (!file_exists($targetPath)) {
+                @mkdir($targetPath, 0777, true);
+            }
+            
+            $status=0;
+            if (file_exists($targetPath.'/'.$model->corporation_id)) {
+                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+                    $command='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
+                }else{
+                    $command='cd '.$targetPath.' && rm -rf '.$model->corporation_id;
+                } 
+                exec($command.' >>demo.log 2>&1',$output,$status);
+            }
+            if($status==0&&$model->delete()){
+                $stat='success';
+            }else{
+                $stat='fail';
+            }
+        }
+
+        return json_encode(['stat' => $stat]);
+    }
+    
     public function actionCodehubExec($id) {    
         
-        $model=CorporationCodehub::findOne(['corporation_id'=>$id]);
+        $model=CorporationCodehub::findOne($id);
         
-        $targetFolder = '/data/git';
-        $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$id;
+        $stat='error';
+        if($model){
+            $targetFolder = '/data/git';
+            $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$model->corporation_id;
 
-        if (!file_exists($targetPath)||!$model) {
-            Yii::$app->session->setFlash('error', '公司或路径不存在。');          
-            return $this->redirect(Yii::$app->request->referrer);
-        }               
-        
-        if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-//            echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
-            echo $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
-        }else{
-            $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
-        } 
-        exec($command.' 2>&1',$output,$status);
-        if($status==0){
-            Yii::$app->session->setFlash('success', '操作成功。');                        
-        }else{
-            Yii::$app->session->setFlash('error', '操作失败。'.json_encode($output));
+            if (!file_exists($targetPath)) {
+                $message='公司不存在';
+            }else{  
+                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+//                   echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
+                    $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+                }else{
+                    $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+                } 
+                exec($command.' >>demo.log 2>&1',$output,$status);
+                if($status==0){
+                    $message='操作成功';
+                    $stat='success';                      
+                }else{
+                    $message='操作失败:'.json_encode($output);                  
+                }
+            }
+        }else{          
+           $message='公司不存在';
         }
-        return $this->redirect(Yii::$app->request->referrer);
+        
+       
+        return json_encode(['stat'=>$stat,'message'=>$message]);
 
    
     }

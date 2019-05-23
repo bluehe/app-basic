@@ -27,7 +27,7 @@ class m190520_112000_create_corporation_codehub extends Migration {
             'https_url' => $this->string(128)->comment('仓库URL'),
             'username' => $this->string(32)->comment('用户名'),
             'password' => $this->string(32)->comment('密码'),
-            'updated_at' => $this->string(32)->comment('更新时间'),
+            'ci' => $this->smallInteger()->notNull()->defaultValue(1)->comment('持续集成'),
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE",                 
                 ], $tableOptions);
     }
