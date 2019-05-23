@@ -413,7 +413,7 @@ class HealthController extends Controller {
         if (!file_exists($targetPath)) {
             return false;
         }               
-        echo $command='cd '.$targetPath.' && sudo git pull && sudo echo '.time().' > README.md && git add . && sudo git commit -m "'.time().'" && sudo git push';
+        echo $command='sudo cd '.$targetPath.' && sudo git pull && sudo echo '.time().' > README.md && git add . && sudo git commit -m "'.time().'" && sudo git push';
         exec($command.' 2>&1',$output,$status);
         var_dump($output);
         echo $status;
