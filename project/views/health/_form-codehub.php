@@ -20,7 +20,7 @@ use project\models\CorporationCodehub;
         ]);
         ?>
         
-        <?= $form->field($model, 'https_url')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'repository_name')->textInput(['maxlength' => true,'disabled'=>true]) ?>
 
         <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
                 

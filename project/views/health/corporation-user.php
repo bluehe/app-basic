@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
 
             <p>
-                <?= CorporationAccount::get_corporationaccount_exist($corporation_id, CorporationAccount::ADMIN_YES)?Html::button('创建用户', ['data-id'=>$corporation_id,'class' => 'btn btn-warning account-add']):Html::button('添加账号', ['data-id'=>$corporation_id,'class' => 'btn btn-success account-create',]) ?>
+                <?= CorporationAccount::get_corporationaccount_exist($corporation_id, CorporationAccount::ADMIN_YES)?Html::button('创建用户', ['data-id'=>$corporation_id,'class' => 'btn btn-warning account-create']):Html::button('添加账号', ['data-id'=>$corporation_id,'class' => 'btn btn-success account-add',]) ?>
                 <?= CorporationProject::get_corporationproject_exist($corporation_id)?Html::button('成员管理', ['data-id'=>$corporation_id,'class' => 'btn btn-danger pull-right member-list',]):'' ?>
             </p>
             <?=
@@ -72,9 +72,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
 <?php $this->beginBlock('user') ?>
    
-    $('.user-index').on('click', '.account-create', function () {
+    $('.user-index').on('click', '.account-add', function () {
         $('#item-modal .modal-body').html('');
-        $.get('<?= Url::toRoute('health/account-create') ?>',{corporationid: $(this).data('id')},
+        $.get('<?= Url::toRoute('health/account-add') ?>',{corporationid: $(this).data('id')},
                 function (data) {
                     $('#item-modal .modal-body').html(data);
                 }
@@ -90,9 +90,9 @@ $this->params['breadcrumbs'][] = $this->title;
         );
     });
     
-    $('.user-index').on('click', '.account-add', function () { 
+    $('.user-index').on('click', '.account-create', function () { 
         var $id=$(this).data('id');
-        $.getJSON('<?= Url::toRoute('health/account-add') ?>',{corporation_id: $id},
+        $.getJSON('<?= Url::toRoute('health/account-create') ?>',{corporation_id: $id},
                 function (data) {                  
                     if(data.stat=='success'){
                         $.get('<?= Url::toRoute('health/corporation-user') ?>',{id: $id},

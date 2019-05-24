@@ -80,7 +80,6 @@ class CurlHelper {
         return $info;
     }
 
-
     private static function posturl($url,$params,$headerArray =[],$returnHeader=false){
         $params  = is_array($params)?json_encode($params):$params;          
         $curl = curl_init();
@@ -126,7 +125,6 @@ class CurlHelper {
         return $info;
     }
 
-
     function puturl($url,$data){
         $data = json_encode($data);
         $ch = curl_init(); //初始化CURL句柄 
@@ -139,9 +137,6 @@ class CurlHelper {
         curl_close($ch);
         return json_decode($output,true);
     }
-
-    
-
 
     public static function authToken($account){
         $url='https://iam.myhuaweicloud.com/v3/auth/tokens';
@@ -221,19 +216,32 @@ class CurlHelper {
         return $data;
     }
     
-    public static function addCodehub($project_uuid,$codehub,$token){
+    public static function addCodehub($project_uuid,$repository_name,$token){
         $url='https://api.devcloud.huaweicloud.com/codehub/v1/repositories';
-        $params='{"name":"'.$codehub->name.'", "template_id": "", "project_uuid": "'.$project_uuid.'", "import_members": 1}';
+        $params='{"name":"'.$repository_name.'", "template_id": "283823", "project_uuid": "'.$project_uuid.'", "import_members": 0}';
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::posturl($url, $params,$headerArray);      
         return $data;
-
     }
     
     public static function deleteCodehub($repository_uuid,$token){
         $url='https://api.devcloud.huaweicloud.com/codehub/v1/repositories/'.$repository_uuid;      
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::delurl($url,'',$headerArray);       
+        return $data;
+    }
+    
+    public static function listCodehub($project_uuid,$token){
+        $url='https://api.devcloud.huaweicloud.com/codehub/v2/projects/'.$project_uuid.'/repositories?1,100';      
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::geturl($url,$headerArray);       
+        return $data;
+    }
+    
+    public static function getCodehub($repository_uuid,$token){
+        $url='https://api.devcloud.huaweicloud.com/codehub/v2/repositories/'.$repository_uuid;      
+        $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
+        $data= self::geturl($url,$headerArray);       
         return $data;
     }
     

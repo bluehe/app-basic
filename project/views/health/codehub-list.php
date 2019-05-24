@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
 
             <p>
-                <?= CorporationProject::get_corporationproject_exist($corporation_id)?Html::button('添加仓库', ['data-id'=>$corporation_id,'class' => 'btn btn-success codehub-create',]):'' ?>
+                <?= CorporationProject::get_corporationproject_exist($corporation_id)?Html::button('创建仓库', ['data-id'=>$corporation_id,'class' => 'btn btn-success codehub-create',]):'' ?>
             </p>
            
             <?=
@@ -31,16 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    'repository_name',
                     [
-                        'attribute' => 'https_url',
-                        'value' =>function($model) {
-                            return substr($model->https_url, strrpos($model->https_url,'/')+1);
+                        'attribute' => 'updated_at',
+                        'value' =>
+                        function($model) {
+                            return $model->updated_at > 0 ? date('Y-m-d H:i', $model->updated_at) : '';
                         },
-                        'format' => 'raw',
-                        
                     ],
-                    'username',
-//                    'password',
                     [
                         'attribute' => 'ci',
                         'value' =>function($model) {
@@ -48,20 +46,36 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         
-                    ],                  
+                    ],
+                    [
+                        'attribute' => 'add_type',
+                        'value' =>function($model) {
+                            return $model->Type;
+                        },
+                        'format' => 'raw',
+                        
+                    ],
+                    ['class' => 'yii\grid\ActionColumn',
+                        'header' => '代码操作',
+                        'template' => '{commit}', 
+                        'buttons' => [
+                            
+                            'commit'=>function($url, $model, $key) {
+                                return $model->username?Html::button('<i class="fa fa-retweet"></i> 代码提交', ['class' => 'btn btn-warning btn-xs codehub-exec',]):'';
+                            },
+                        ],                        
+                    ],
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{update} {delete} {commit}', //只需要展示删除和更新
+                        'template' => '{update} {delete}', //只需要展示删除和更新
                         'buttons' => [
                             'update' => function($url, $model, $key) {
                                 return Html::button('<i class="fa fa-pencil"></i> 修改', ['class' => 'btn btn-primary btn-xs codehub-update',]);
                             },
                             'delete' => function($url, $model, $key) {
-                                return Html::button('<i class="fa fa-trash-o"></i> 删除', ['class' => 'btn btn-danger btn-xs codehub-delete']);
+                                return $model->add_type== CorporationCodehub::TYPE_CHECK?'':Html::button('<i class="fa fa-trash-o"></i> 删除', ['class' => 'btn btn-danger btn-xs codehub-delete']);
                             },
-                            'commit'=>function($url, $model, $key) {
-                                return Html::button('<i class="fa fa-retweet"></i> 代码提交', ['class' => 'btn btn-warning btn-xs codehub-exec',]);
-                            },
+                           
                         ],
                     ],
                 ],
@@ -72,13 +86,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script>
 <?php $this->beginBlock('codehub') ?>
-   
-    $('.codehub-index').on('click', '.codehub-create', function () {
-        $('.modal-title').html('添加仓库');
-        $('#item-modal .modal-body').html('');
-        $.get('<?= Url::toRoute('health/codehub-create') ?>',{corporation_id: $(this).data('id')},
-                function (data) {
-                    $('#item-modal .modal-body').html(data);
+    
+    $('.codehub-index').on('click', '.codehub-create', function () { 
+        var $id=$(this).data('id');
+        $.getJSON('<?= Url::toRoute('health/codehub-create') ?>',{corporation_id: $id},
+                function (data) {                  
+                    if(data.stat=='success'){
+                        $.get('<?= Url::toRoute('health/codehub-list') ?>',{id: $id},
+                            function (data1) {
+                                $('#item-modal .modal-body').html(data1);
+                            }
+                    );
+                    }
+                   
                 }
         );
     });
