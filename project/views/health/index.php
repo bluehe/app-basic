@@ -131,8 +131,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'bd_id',
                         'value' => function($model) {
-                            return $model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'';
+                            return '<span class="bd-list" data-toggle="modal" data-target="#item-modal" data-id='.$model->corporation_id.' style="cursor: pointer">'.($model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'<span class="not-set" style="cursor: pointer">(未设置)</span>').'</span>';
                         },
+                        'format'=>'raw',
                         'filter' => User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))),
                     ],
                     [
@@ -266,6 +267,26 @@ Modal::end();
         $('.modal-title').html('仓库管理');
         $('#item-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/codehub-list') ?>',{id: $(this).data('id')},
+                function (data) {
+                    $('#item-modal .modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.activity-index').on('click', '.corporation-view', function () {
+        //$('.modal-title').html('企业查看');
+        $('#corporation-modal .modal-body').html('');
+        $.get('<?= Url::toRoute('corporation/corporation-view') ?>',{id: $(this).data('id')},
+                function (data) {
+                    $('#corporation-modal .modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.activity-index').on('click', '.bd-list', function () {
+        $('.modal-title').html('客户经理');
+        $('#item-modal .modal-body').html('');
+        $.get('<?= Url::toRoute('corporation/corporation-bd') ?>',{id: $(this).data('id')},
                 function (data) {
                     $('#item-modal .modal-body').html(data);
                 }
