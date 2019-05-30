@@ -575,7 +575,7 @@ class ActivityChange extends \yii\db\ActiveRecord
         if(!$model->data){
             return false;
         }
-        return $model->projectman_usercount>0||$model->projectman_issuecount>0||$model->testman_totalexecasecount>0||$model->codehub_commitcount>0||($model->codehub_commitcount>0&&($model->codecheck_execount>0||$model->codeci_allbuildcount>0||$model->codeci_buildtotaltime>0||$model->deploy_execount>0));
+        return ($model->projectman_usercount>0&&$model->projectman_usercount!=$model->projectman_membercount)||$model->projectman_issuecount>0||$model->testman_totalexecasecount>0||$model->codehub_commitcount>0||($model->codehub_commitcount>0&&($model->codecheck_execount>0||$model->codeci_allbuildcount>0||$model->codeci_buildtotaltime>0||$model->deploy_execount>0));
     }
     
     //是否活跃
