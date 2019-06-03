@@ -24,7 +24,9 @@ use project\models\CorporationCodehub;
 
         <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
                 
-        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>    
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>   
+        
+        <?= $form->field($model, 'total_num')->textInput(['maxlength' => true]) ?>
         
         <?= $form->field($model, 'ci')->radioList(CorporationCodehub::$List['ci'], ['itemOptions' => ['labelOptions' => ['class' => 'radio-inline']]]) ?>
         

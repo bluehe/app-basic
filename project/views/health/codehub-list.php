@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'format' => 'raw',
                         
                     ],
+                    'total_num',
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '代码操作',
                         'template' => '{commit}', 

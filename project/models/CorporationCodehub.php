@@ -103,7 +103,7 @@ class CorporationCodehub extends \yii\db\ActiveRecord
             'username' => '用户名',
             'password' => '密码',
             'ci' => '持续集成',
-            'total_num' => '总次数',
+            'total_num' => '定时次数',
             'left_num' => '剩余次数',
         ];
     }
@@ -178,6 +178,7 @@ class CorporationCodehub extends \yii\db\ActiveRecord
                     
                     //增加仓库
                     $model = new CorporationCodehub();
+                    $model->loadDefaultValues();
                     $model->corporation_id=$project->corporation_id;
                     $model->project_id=$project->id;
                     $model->repository_name=$codehub['repository_name'];
@@ -191,6 +192,7 @@ class CorporationCodehub extends \yii\db\ActiveRecord
                     $model->updated_at=strtotime($codehub['updated_at']);
                     $model->ci= static::CI_NO;
                     $model->save();
+                    return $model->getErrors();
                 }
                 
                 //删除不存在仓库

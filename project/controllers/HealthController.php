@@ -91,18 +91,18 @@ class HealthController extends Controller {
                         Yii::$app->session->set('memberlist_url',Yii::$app->request->referrer);
                     }
                     
-                    $id=Yii::$app->request->get('id'); 
-                    CorporationCodehub::set_corporation_codehub_list($id);
+                    $corporation_id=Yii::$app->request->get('id'); 
+                    CorporationCodehub::set_corporation_codehub_list($corporation_id);
                
                     $dataProvider = new ActiveDataProvider([
-                        'query' => CorporationCodehub::find()->andWhere(['corporation_id'=> $id]),
+                        'query' => CorporationCodehub::find()->andWhere(['corporation_id'=> $corporation_id]),
                         'sort'=>['defaultOrder' => [
                             'id' => SORT_ASC,
                         ]]
                     ]);
                     return [
                         'dataProvider' => $dataProvider,
-                        'corporation_id'=>$id
+                        'corporation_id'=>$corporation_id
                     ];
                               
                 }
@@ -405,7 +405,7 @@ class HealthController extends Controller {
         $auth = CurlHelper::addCodehub($project->project_uuid,$model->repository_name,$token);
         if($auth['code']=='200'&&$auth['content']['status']=='success'){
             $model->repository_uuid=$auth['content']['result']['repository_uuid'];
-            sleep(1);
+            sleep(2);
             $auth1 = CurlHelper::getCodehub($model->repository_uuid, $token);
             if($auth1['code']=='200'&&$auth1['content']['status']=='success'){
 
@@ -448,6 +448,10 @@ class HealthController extends Controller {
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            
+            if($model->left_num>$model->total_num){
+                $model->left_num=$model->total_num;
             }
             
             $targetFolder = '/data/git';
