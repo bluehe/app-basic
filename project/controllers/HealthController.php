@@ -452,14 +452,16 @@ class HealthController extends Controller {
             
 
             $model->left_num=$model->total_num;
+            
+            $targetFolder = '/data/git';
+            $targetPath = Yii::getAlias('@webroot') . $targetFolder;
+
+            if (!file_exists($targetPath)) {
+                @mkdir($targetPath, 0777, true);
+            }
                         
             if($model->username!=$codehub->username||$model->password!=$codehub->password||$model->https_url!=$codehub->https_url){        
-                $targetFolder = '/data/git';
-                $targetPath = Yii::getAlias('@webroot') . $targetFolder;
-
-                if (!file_exists($targetPath)) {
-                    @mkdir($targetPath, 0777, true);
-                }
+                
 
                 if (file_exists($targetPath.'/'.$model->id)) {
                     if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
