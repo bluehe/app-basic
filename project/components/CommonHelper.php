@@ -4,6 +4,7 @@ namespace project\components;
 
 use Yii;
 use project\models\System;
+use project\models\CorporationCodehub;
 
 class CommonHelper {
 
@@ -192,6 +193,32 @@ class CommonHelper {
             $cache->set('corporation_'.$rule, $corporation);
         }
         return $corporation[$key][Yii::$app->user->identity->id];
+        
+    }
+    
+    public static function codehubExec($id) {
+        $model=CorporationCodehub::findOne($id);
+        
+        $stat =false;
+        if($model){
+            $targetFolder = '/data/git';
+            $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$model->id;
+
+            if (file_exists($targetPath)) { 
+                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+//                   echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
+                    $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+                }else{
+                    $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+                } 
+                exec($command.' >>codecommit.log 2>&1',$output,$status);
+                if($status==0){
+                    $stat=true;                      
+                }
+            }
+        }
+
+        return $stat;
         
     }
     

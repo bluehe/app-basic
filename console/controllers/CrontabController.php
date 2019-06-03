@@ -7,6 +7,7 @@ use yii\console\ExitCode;
 use common\models\Crontab;
 use project\models\CorporationCodehub;
 use project\models\CodehubExec;
+use project\components\CommonHelper;
 
 /**
  * 定时任务调度控制器
@@ -114,7 +115,7 @@ class CrontabController extends Controller
         $left_hour = $H>=8&&$H<18?($left_day - floor($day_num/10*(17-$H))):$left_day;
         $r=$left_hour>0?mt_rand(0,floor((59-$i)/$left_hour)):0;
         if($left_hour<=0 || $r){
-            Yii::info('无任务或者随机跳过,总次数：'.$gitexec_sum.'，当天剩余次数：'.$left_day.'，当前小时剩余次数：'.$left_hour.'，随机数：'.$r, 'gitexec');               
+            Yii::info('无任务或者随机跳过,总次数：'.$gitexec_sum.'，当天剩余次数：'.$left_day.'，当前小时剩余次数：'.$left_hour.'，随机数：'.$r, 'gitexec');     
             return ExitCode::OK;
         }
 
@@ -123,7 +124,7 @@ class CrontabController extends Controller
             $key = array_rand($codehubs);
             $id = $codehubs[$key];
 
-            $stat = CorporationCodehub::codehub_exec($id);
+            $stat = CommonHelper::codehubExec($id);
 
             if($stat){
                 $model = CorporationCodehub::findOne($id);

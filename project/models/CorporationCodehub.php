@@ -208,29 +208,4 @@ class CorporationCodehub extends \yii\db\ActiveRecord
         return false;
     }
     
-    public static function codehub_exec($id) {
-        $model=static::findOne($id);
-        
-        $stat =false;
-        if($model){
-            $targetFolder = '/data/git';
-            $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$model->id;
-
-            if (file_exists($targetPath)) { 
-                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-//                   echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
-                    $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
-                }else{
-                    $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
-                } 
-                exec($command.' >>codecommit.log 2>&1',$output,$status);
-                if($status==0){
-                    $stat=true;                      
-                }
-            }
-        }
-
-        return $stat;
-        
-    }
 }

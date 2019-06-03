@@ -13,6 +13,7 @@ use project\components\CurlHelper;
 use project\models\CorporationProject;
 use project\models\CorporationCodehub;
 use project\models\CodehubExec;
+use project\components\CommonHelper;
 
 
 class HealthController extends Controller { 
@@ -535,7 +536,7 @@ class HealthController extends Controller {
     
     public function actionCodehubExec($id) {    
         
-        $stat = CorporationCodehub::codehub_exec($id)?'success':'error';
+        $stat = CommonHelper::codehubExec($id)?'success':'error';
         
         $exec = new CodehubExec();
         $exec->codehub_id=$id;
