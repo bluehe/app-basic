@@ -129,7 +129,7 @@ class CrontabController extends Controller
                 $model = CorporationCodehub::findOne($id);
                 $model->left_num--;
                 $model->save();
-                Yii::info('执行成功', 'gitexec');
+                Yii::info('执行成功,ID:'.$id, 'gitexec');
             }else{
                 Yii::error('执行失败', 'gitexec');
             }
