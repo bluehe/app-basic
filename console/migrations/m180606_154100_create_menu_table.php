@@ -42,6 +42,7 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [17, '计划任务', 10, '/system/crontab', 7, '{"icon":"fa fa-clock-o", "multi-action":[ "crontab", "crontab-create", "crontab-update"]}'],
             [18, '业务设置', 10, '/system/business', 8, '{"icon":"fa fa-sitemap"}'],
             [19, '项目管理', 10, '/group/index', 9, '{"icon":"fa fa-cubes"}'],
+            [110, '项目管理', 10, '/crontab/index', 10, '{"icon":"fa fa-adjust"}'],
 
             [20, '账号信息', NULL, '/account/index', 2, '{"icon":"fa fa-list-alt"}'],
             [21, '注册信息', 20, '/account/index', 1, '{"icon":"fa fa-pencil-square-o"}'],

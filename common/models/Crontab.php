@@ -25,19 +25,17 @@ class Crontab extends \yii\db\ActiveRecord
      * switch字段的文字映射
      * @var array
      */
-    private $switchTextMap = [
-            0 => '关闭',
-            1 => '开启',
-    ];
+    
+    const SWITCH_OFF = 0;
+    const SWITCH_ON = 1;
 
     /**
      * status字段的文字映射
      * @var array
      */
-    private $statusTextMap = [
-            0 => '正常',
-            1 => '任务保存',
-    ];
+    
+    const STATUS_YES = 0;
+    const STATUS_NO = 1;
     
     /**
      * {@inheritdoc}
@@ -53,6 +51,7 @@ class Crontab extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name','route','crontab_str','switch'], 'required'],
             [['switch', 'status'], 'integer'],
             [['last_rundate', 'next_rundate'], 'safe'],
             [['execmemory', 'exectime'], 'number'],
@@ -78,31 +77,27 @@ class Crontab extends \yii\db\ActiveRecord
             'exectime' => '任务执行消耗时间',
         ];
     }
-
-    /**
-     * 获取switch字段对应的文字
-     * @author jlb
-     * @return ''|string
-     */
-    public function getSwitchText()
-    {
-    	if(!isset($this->switchTextMap[$this->switch])) {
-    		return '';
-    	}
-    	return $this->switchTextMap[$this->switch];
+    
+    public static $List = [  
+        'switch'=>[
+            self::SWITCH_OFF=>'关闭',
+            self::SWITCH_ON=>'开启',      
+        ],
+        'status'=>[
+            self::STATUS_YES=>'正常',
+            self::STATUS_NO=>'保存',      
+        ],
+       
+    ];
+    
+    public function getSwitch() {
+        $switch = isset(self::$List['switch'][$this->switch]) ? self::$List['switch'][$this->switch] : null;
+        return $switch;
     }
-
-    /**
-     * 获取status字段对应的文字
-     * @author jlb
-     * @return ''|string
-     */
-    public function getStatusText()
-    {
-    	if(!isset($this->statusTextMap[$this->status])) {
-    		return '';
-    	}
-    	return $this->statusTextMap[$this->status];
+    
+    public function getStatus() {
+        $stat = isset(self::$List['status'][$this->status]) ? self::$List['status'][$this->status] : null;
+        return $stat;
     }
 
     /**
