@@ -131,7 +131,7 @@ class CrontabController extends Controller
                 $model->save();
                 Yii::info('执行成功', 'gitexec');
             }else{
-                Yii::info('执行失败', 'gitexec');
+                Yii::error('执行失败', 'gitexec');
             }
 
             $exec = new CodehubExec();
@@ -141,7 +141,7 @@ class CrontabController extends Controller
             $exec->stat = $stat?CodehubExec::STAT_YES:CodehubExec::STAT_NO;
             $exec->save();
         }else{
-            Yii::info('未找到执行任务', 'gitexec');
+            Yii::warning('未找到执行任务', 'gitexec');
         }
 
         return ExitCode::OK;
