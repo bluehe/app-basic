@@ -460,7 +460,7 @@ class HealthController extends Controller {
                 @mkdir($targetPath, 0777, true);
             }
                         
-            if($model->username!=$codehub->username||$model->password!=$codehub->password||$model->https_url!=$codehub->https_url){        
+            if(!file_exists($targetPath.'/'.$model->id)||$model->username!=$codehub->username||$model->password!=$codehub->password||$model->https_url!=$codehub->https_url){        
                 
 
                 if (file_exists($targetPath.'/'.$model->id)) {
