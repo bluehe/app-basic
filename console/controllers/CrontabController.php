@@ -93,59 +93,55 @@ class CrontabController extends Controller
         $w = date('w');
         $H = date('H');
         $m = date('m');
-        if ($w>0&&$w<6&&$H>=8&&$H<18){
-            //按分钟执行，一天为600次
-            $cache=Yii::$app->cache;
-            $gitexec_sum=$cache->get('gitexec_sum');
-            if($gitexec_sum==null){
-                $gitexec_sum= CorporationCodehub::find()->sum('total_num');
-                $cache->set('gitexec_sum', $gitexec_sum);
-            }
-                       
-            $left_num = CorporationCodehub::find()->sum('left_num');
-            
-            $day_num= floor($gitexec_sum/5);//每天需要处理的执行数
-            
-            $left_day=$left_num-$day_num*(5-$w);//当天剩余执行数
-            $left_hour = $left_day - floor($day_num/10*(17-$H));
-            $r=mt_rand(0,floor((59-$m)/$left_hour));
-            if($left_hour<=0 || $r){
-                Yii::info('无任务或者随机跳过,总次数：'.$gitexec_sum.'，当天剩余次数：'.$left_day.'，当前小时剩余次数：'.$left_hour.'，随机数：'.$r, 'gitexec');               
-                return ExitCode::OK;
-            }
-            
-            $codehubs = CorporationCodehub::find()->where(['>','left_num',0])->select(['id'])->column();
-            if(count($codehubs)>0){
-                $key = array_rand($codehubs);
-                $id = $codehubs[$key];
+       
+        //按分钟执行，一天为600次
+        $cache=Yii::$app->cache;
+        $gitexec_sum=$cache->get('gitexec_sum');
+        if($gitexec_sum==null){
+            $gitexec_sum= CorporationCodehub::find()->sum('total_num');
+            $cache->set('gitexec_sum', $gitexec_sum);
+        }
 
-                $stat = CorporationCodehub::codehub_exec($id);
-                
-                if($stat){
-                    $model = CorporationCodehub::findOne($id);
-                    $model->left_num--;
-                    $model->save();
-                    Yii::info('执行成功', 'gitexec');
-                }else{
-                    Yii::info('执行失败', 'gitexec');
-                }
+        $left_num = CorporationCodehub::find()->sum('left_num');
 
-                $exec = new CodehubExec();
-                $exec->codehub_id=$id;
-                $exec->updated_at=time();
-                $exec->type= CodehubExec::TYPE_SYSTEM;
-                $exec->stat = $stat?CodehubExec::STAT_YES:CodehubExec::STAT_NO;
-                $exec->save();
-            }else{
-                Yii::info('未找到执行任务', 'gitexec');
-            }
+        $day_num= floor($gitexec_sum/5);//每天需要处理的执行数
 
-            return ExitCode::OK;
-            
-        }else{
-            Yii::warning('不在任务时间内', 'gitexec');
+        $left_day=$w>0&&$w<6?($left_num-$day_num*(5-$w)):$left_num;//当天剩余执行数
+        $left_hour = $H>=8&&$H<18?($left_day - floor($day_num/10*(17-$H))):$left_day;
+        $r=mt_rand(0,floor((59-$m)/$left_hour));
+        if($left_hour<=0 || $r){
+            Yii::info('无任务或者随机跳过,总次数：'.$gitexec_sum.'，当天剩余次数：'.$left_day.'，当前小时剩余次数：'.$left_hour.'，随机数：'.$r, 'gitexec');               
             return ExitCode::OK;
         }
+
+        $codehubs = CorporationCodehub::find()->where(['>','left_num',0])->select(['id'])->column();
+        if(count($codehubs)>0){
+            $key = array_rand($codehubs);
+            $id = $codehubs[$key];
+
+            $stat = CorporationCodehub::codehub_exec($id);
+
+            if($stat){
+                $model = CorporationCodehub::findOne($id);
+                $model->left_num--;
+                $model->save();
+                Yii::info('执行成功', 'gitexec');
+            }else{
+                Yii::info('执行失败', 'gitexec');
+            }
+
+            $exec = new CodehubExec();
+            $exec->codehub_id=$id;
+            $exec->updated_at=time();
+            $exec->type= CodehubExec::TYPE_SYSTEM;
+            $exec->stat = $stat?CodehubExec::STAT_YES:CodehubExec::STAT_NO;
+            $exec->save();
+        }else{
+            Yii::info('未找到执行任务', 'gitexec');
+        }
+
+        return ExitCode::OK;
+                   
     }
    
 }
