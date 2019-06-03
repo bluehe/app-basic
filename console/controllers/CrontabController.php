@@ -93,8 +93,8 @@ class CrontabController extends Controller
         $w = date('w');
         $H = date('H');
         $m = date('m');
-        if ($w>0&&$w<6&&$H>=8&&$H<17){
-            //按分钟执行，一天为600次
+        if ($w>0&&$w<6&&$H>=8&&$H<18){
+            //按分钟执行，一天为660次
             $cache=Yii::$app->cache;
             $gitexec_sum=$cache->get('gitexec_sum');
             if($gitexec_sum==null){
@@ -106,7 +106,7 @@ class CrontabController extends Controller
             $day_num= floor($gitexec_sum/5);//每天需要处理的执行数
             
             $left_day=$left_num-$day_num*(5-$w);//当天剩余执行数
-            $left_hour = $left_day - floor($day_num/9*(16-$H));
+            $left_hour = $left_day - floor($day_num/9*(17-$H));
             if($left_hour<=0 || mt_rand(0,floor((59-$m)/$left_hour))){
                 return ExitCode::OK;
             }
