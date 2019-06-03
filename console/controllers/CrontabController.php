@@ -98,10 +98,11 @@ class CrontabController extends Controller
             $cache=Yii::$app->cache;
             $gitexec_sum=$cache->get('gitexec_sum');
             if($gitexec_sum==null){
-                $gitexec_sum= CorporationCodehub::find()->count('total_num');
+                $gitexec_sum= CorporationCodehub::find()->sum('total_num');
+                $cache->set('gitexec_sum', $gitexec_sum);
             }
                        
-            $left_num = CorporationCodehub::find()->count('left_num');
+            $left_num = CorporationCodehub::find()->sum('left_num');
             
             $day_num= floor($gitexec_sum/5);//每天需要处理的执行数
             
