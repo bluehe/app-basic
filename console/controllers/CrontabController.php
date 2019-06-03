@@ -100,7 +100,7 @@ class CrontabController extends Controller
         if($gitexec_sum==null){
             $gitexec_sum= CorporationCodehub::find()->sum('total_num');
             
-            $query = CorporationCodehub::find()->sum('total_num')->createCommand()->getRawSql();
+            $query = CorporationCodehub::find()->select(['SUM(total_num)'])->createCommand()->getRawSql();
             $dependency = new \yii\caching\DbDependency(['sql' => $query]);
 
             $cache->set('gitexec_sum', $gitexec_sum, null, $dependency);
