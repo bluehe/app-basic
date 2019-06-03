@@ -7,7 +7,6 @@ use yii\console\ExitCode;
 use common\models\Crontab;
 use project\models\CorporationCodehub;
 use project\models\CodehubExec;
-use project\components\CommonHelper;
 
 /**
  * 定时任务调度控制器
@@ -124,7 +123,7 @@ class CrontabController extends Controller
             $key = array_rand($codehubs);
             $id = $codehubs[$key];
 
-            $stat = CommonHelper::codehubExec($id);
+            $stat = CorporationCodehub::codehubExec($id);
 
             if($stat){
                 $model = CorporationCodehub::findOne($id);

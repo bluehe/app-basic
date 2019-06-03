@@ -208,4 +208,30 @@ class CorporationCodehub extends \yii\db\ActiveRecord
         return false;
     }
     
+    public static function codehub_exec($id) {
+        $model=CorporationCodehub::findOne($id);
+        
+        $stat =false;
+        if($model){
+            $webroot= dirname(__DIR__).'/web';
+            $targetFolder = '/data/git';
+            $targetPath = $webroot . $targetFolder.'/'.$model->id;
+
+            if (file_exists($targetPath)) { 
+                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+//                   echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
+                    $command="\"C:\Program Files\Git\bin\sh.exe\" ".$webroot ."/data/git.sh {$targetPath} ".time();
+                }else{
+                    $command="sudo ".$webroot ."/data/git.sh {$targetPath} ".time();
+                } 
+                exec($command.' >>codecommit.log 2>&1',$output,$status);
+                if($status==0){
+                    $stat=true;                      
+                }
+            }
+        }
+
+        return $stat;
+        
+    }
 }
