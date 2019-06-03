@@ -123,7 +123,7 @@ class CrontabController extends Controller
             $key = array_rand($codehubs);
             $id = $codehubs[$key];
 
-            $stat = CorporationCodehub::codehubExec($id);
+            $stat = CorporationCodehub::codehub_exec($id);
 
             if($stat){
                 $model = CorporationCodehub::findOne($id);
