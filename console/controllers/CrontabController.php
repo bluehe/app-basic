@@ -112,17 +112,25 @@ class CrontabController extends Controller
             }
             
             $codehubs = CorporationCodehub::find()->where(['>','left_num',0])->select(['id'])->column();
-            $key = array_rand($codehubs);
-            $id = $codehubs[$key];
-            
-            $stat = CorporationCodehub::codehub_exec($id);
-            
-            $exec = new CodehubExec();
-            $exec->codehub_id=$id;
-            $exec->updated_at=time();
-            $exec->type= CodehubExec::TYPE_SYSTEM;
-            $exec->stat = $stat?CodehubExec::STAT_YES:CodehubExec::STAT_NO;
-            $exec->save();
+            if(count($codehubs)>0){
+                $key = array_rand($codehubs);
+                $id = $codehubs[$key];
+
+                $stat = CorporationCodehub::codehub_exec($id);
+                
+                if($stat){
+                    $model = CorporationCodehub::findOne($id);
+                    $model->left_num--;
+                    $model->save();
+                }
+
+                $exec = new CodehubExec();
+                $exec->codehub_id=$id;
+                $exec->updated_at=time();
+                $exec->type= CodehubExec::TYPE_SYSTEM;
+                $exec->stat = $stat?CodehubExec::STAT_YES:CodehubExec::STAT_NO;
+                $exec->save();
+            }
 
             return ExitCode::OK;
             

@@ -450,10 +450,9 @@ class HealthController extends Controller {
                 return \yii\bootstrap\ActiveForm::validate($model);
             }
             
-            if($model->left_num>$model->total_num){
-                $model->left_num=$model->total_num;
-            }
-            
+
+            $model->left_num=$model->total_num;
+                    
             $targetFolder = '/data/git';
             $targetPath = Yii::getAlias('@webroot') . $targetFolder;
 

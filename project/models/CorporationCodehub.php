@@ -229,10 +229,7 @@ class CorporationCodehub extends \yii\db\ActiveRecord
                 }
             }
         }
-        if($stat){
-            $model->left_num--;
-            $model->save();
-        }
+
         return $stat;
         
     }
