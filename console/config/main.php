@@ -29,7 +29,15 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'categories' => ['gitexec'],
+                    'levels' => ['error', 'warning','info'],
+                    'logVars' => ['*'],
+                    'logFile' => '@runtime/logs/gitexec.log',
+                ],
             ],
+            
         ],
     ],
     'params' => $params,
