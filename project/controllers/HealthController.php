@@ -478,8 +478,7 @@ class HealthController extends Controller {
                 exec($command.' >>demo.log 2>&1',$output,$status);
             }         
             
-            if(file_exists($targetPath.'/'.$model->id)&&$model->save()){ 
-                Yii::$app->cache->delete('gitexec_sum');
+            if(file_exists($targetPath.'/'.$model->id)&&$model->save()){
                 Yii::$app->session->setFlash('success', '操作成功。');
             }else{
                 Yii::$app->session->setFlash('error', '操作失败。'.$status.$command. json_encode($output));
