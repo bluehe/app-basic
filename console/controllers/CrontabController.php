@@ -90,9 +90,9 @@ class CrontabController extends Controller
     public function actionGitExec()
     {
 
-        $w = date('w');
-        $H = date('H');
-        $m = date('m');
+        $w = date('w'); //星期
+        $H = date('H'); //小时
+        $i = date('i'); //分钟
        
         //按分钟执行，一天为600次
         $cache=Yii::$app->cache;
@@ -108,7 +108,7 @@ class CrontabController extends Controller
 
         $left_day=$w>0&&$w<6?($left_num-$day_num*(5-$w)):$left_num;//当天剩余执行数
         $left_hour = $H>=8&&$H<18?($left_day - floor($day_num/10*(17-$H))):$left_day;
-        $r=mt_rand(0,floor((59-$m)/$left_hour));
+        $r=mt_rand(0,floor((59-$i)/$left_hour));
         if($left_hour<=0 || $r){
             Yii::info('无任务或者随机跳过,总次数：'.$gitexec_sum.'，当天剩余次数：'.$left_day.'，当前小时剩余次数：'.$left_hour.'，随机数：'.$r, 'gitexec');               
             return ExitCode::OK;
