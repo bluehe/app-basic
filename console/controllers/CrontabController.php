@@ -107,8 +107,9 @@ class CrontabController extends Controller
             
             $left_day=$left_num-$day_num*(5-$w);//当天剩余执行数
             $left_hour = $left_day - floor($day_num/9*(17-$H));
-            if($left_hour<=0 || mt_rand(0,floor((59-$m)/$left_hour))){
-                Yii::info('无任务或者随机跳过', 'gitexec');               
+            $r=mt_rand(0,floor((59-$m)/$left_hour));
+            if($left_hour<=0 || $r){
+                Yii::info('无任务或者随机跳过,总次数：'.$gitexec_sum.'，当天剩余次数：'.$left_day.'，当前小时剩余次数：'.$left_hour.'，随机数：'.$r, 'gitexec');               
                 return ExitCode::OK;
             }
             
