@@ -12,6 +12,7 @@ use project\models\Corporation;
 use project\components\CurlHelper;
 use project\models\CorporationProject;
 use project\models\CorporationCodehub;
+use project\models\CodehubExec;
 
 
 class HealthController extends Controller { 
@@ -393,7 +394,8 @@ class HealthController extends Controller {
        
         $project = CorporationProject::findOne(['corporation_id'=>$corporation_id]);
         
-        $model = new CorporationCodehub();       
+        $model = new CorporationCodehub(); 
+        $model->loadDefaultValues();
         $model->corporation_id=$corporation_id;
         $model->project_id=$project->id;
         $model->repository_name= CorporationCodehub::get_last_codehubname($corporation_id);
@@ -455,21 +457,21 @@ class HealthController extends Controller {
                 @mkdir($targetPath, 0777, true);
             }
                  
-            if (file_exists($targetPath.'/'.$model->corporation_id)) {
+            if (file_exists($targetPath.'/'.$model->id)) {
                 if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-                    $comm='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
+                    $comm='cd '.$targetPath.' && rd/s/q '.$model->id;
                 }else{
-                    $comm='cd '.$targetPath.' && sudo rm -rf '.$model->corporation_id;
+                    $comm='cd '.$targetPath.' && sudo rm -rf '.$model->id;
                 } 
                 exec($comm.' >>demo.log');
             }
 
 
-            $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->corporation_id;
+            $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->id;
             
             exec($command.' >>demo.log 2>&1',$output,$status);
                        
-            if(file_exists($targetPath.'/'.$model->corporation_id)&&$model->save()){                   
+            if(file_exists($targetPath.'/'.$model->id)&&$model->save()){                   
                 Yii::$app->session->setFlash('success', '操作成功。');
             }else{
                 Yii::$app->session->setFlash('error', '操作失败。'.$status.$command. json_encode($output));
@@ -501,11 +503,11 @@ class HealthController extends Controller {
                 if (!file_exists($targetPath)) {
                     @mkdir($targetPath, 0777, true);
                 }
-                if (file_exists($targetPath.'/'.$model->corporation_id)) {
+                if (file_exists($targetPath.'/'.$model->id)) {
                     if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-                        $command='cd '.$targetPath.' && rd/s/q '.$model->corporation_id;
+                        $command='cd '.$targetPath.' && rd/s/q '.$model->id;
                     }else{
-                        $command='cd '.$targetPath.' && sudo rm -rf '.$model->corporation_id;
+                        $command='cd '.$targetPath.' && sudo rm -rf '.$model->id;
                     } 
                     exec($command.' >>demo.log 2>&1',$output,$status);
                 }
@@ -526,38 +528,18 @@ class HealthController extends Controller {
     
     public function actionCodehubExec($id) {    
         
-        $model=CorporationCodehub::findOne($id);
+        $stat = CorporationCodehub::codehub_exec($id)?'success':'error';
         
-        $stat='error';
-        if($model){
-            $targetFolder = '/data/git';
-            $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$model->corporation_id;
-
-            if (!file_exists($targetPath)) {
-                $message='公司不存在';
-            }else{  
-                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-//                   echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
-                    $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
-                }else{
-                    $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
-                } 
-                exec($command.' >>codecommit.log 2>&1',$output,$status);
-                if($status==0){
-                    $message='操作成功';
-                    $stat='success';                      
-                }else{
-                    $message='操作失败:'.json_encode($output);                  
-                }
-            }
-        }else{          
-           $message='公司不存在';
-        }
-        
+        $exec = new CodehubExec();
+        $exec->codehub_id=$id;
+        $exec->user_id=Yii::$app->user->identity->id;
+        $exec->updated_at=time();
+        $exec->type= CodehubExec::TYPE_SYSTEM;
+        $exec->stat = $stat=='success'?CodehubExec::STAT_YES:CodehubExec::STAT_NO;
+        $exec->save();
        
-        return json_encode(['stat'=>$stat,'message'=>$message]);
+        return json_encode(['stat'=>$stat,'message'=>$stat=='success'?'执行成功':'执行失败']);
 
-   
     }
     
 }

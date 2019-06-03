@@ -9,6 +9,7 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'timeZone' => 'Asia/Shanghai',
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],

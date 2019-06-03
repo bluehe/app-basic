@@ -34,6 +34,8 @@ class m190520_112000_create_corporation_codehub extends Migration {
             'username' => $this->string(32)->comment('创建时间'),
             'password' => $this->string(32)->comment('更新时间'),
             'ci' => $this->smallInteger()->notNull()->defaultValue(1)->comment('持续集成'),
+            'total_num' => $this->integer()->notNull()->defaultValue(0)->comment('总次数'),
+            'left_num' => $this->integer()->notNull()->defaultValue(0)->comment('剩余次数'),
             "FOREIGN KEY ([[corporation_id]]) REFERENCES {$corporationTable}([[id]]) ON DELETE SET NULL ON UPDATE CASCADE", 
             "FOREIGN KEY ([[project_id]]) REFERENCES {$projectTable}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
                 ], $tableOptions);

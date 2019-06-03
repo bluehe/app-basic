@@ -48,14 +48,17 @@ class CorporationCodehub extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corporation_id','project_id','https_url','ci'], 'required'],
+            [['corporation_id','project_id','https_url','ci','total_num','left_num'], 'required'],
             [[ 'username','password'], 'required','on'=>'update'],
             [['username', 'password'], 'trim'],
-            [['corporation_id', 'project_id', 'status', 'add_type', 'created_at', 'updated_at', 'ci'], 'integer'],
+            [['corporation_id', 'project_id', 'status', 'add_type', 'created_at', 'updated_at', 'ci','total_num','left_num'], 'integer'],
             [['repository_name', 'project_uuid', 'repository_uuid', 'username', 'password'], 'string', 'max' => 32],
             [['https_url'], 'string', 'max' => 128],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => CorporationProject::className(), 'targetAttribute' => ['project_id' => 'id']],
+            [['total_num','left_num'], 'default', 'value' => 0],
+            [['ci'], 'default', 'value' => self::CI_NO],
+            [['status'], 'default', 'value' => 0],
         ];
     }
     
@@ -100,6 +103,8 @@ class CorporationCodehub extends \yii\db\ActiveRecord
             'username' => '用户名',
             'password' => '密码',
             'ci' => '持续集成',
+            'total_num' => '总次数',
+            'left_num' => '剩余次数',
         ];
     }
     
@@ -199,5 +204,34 @@ class CorporationCodehub extends \yii\db\ActiveRecord
             }
         }
         return false;
+    }
+    
+    public static function codehub_exec($id) {
+        $model=static::findOne($id);
+        
+        $stat =false;
+        if($model){
+            $targetFolder = '/data/git';
+            $targetPath = Yii::getAlias('@webroot') . $targetFolder.'/'.$model->id;
+
+            if (file_exists($targetPath)) { 
+                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+//                   echo $command='cd '.$targetPath.' && git pull && echo '.time().' > README.md && git add . && git commit -m "'.time().'" && git push';
+                    $command="\"C:\Program Files\Git\bin\sh.exe\" ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+                }else{
+                    $command="sudo ".Yii::getAlias('@webroot') ."/data/git.sh {$targetPath} ".time();
+                } 
+                exec($command.' >>codecommit.log 2>&1',$output,$status);
+                if($status==0){
+                    $stat=true;                      
+                }
+            }
+        }
+        if($stat){
+            $model->left_num--;
+            $model->save();
+        }
+        return $stat;
+        
     }
 }
