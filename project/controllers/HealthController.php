@@ -534,7 +534,7 @@ class HealthController extends Controller {
         $exec->codehub_id=$id;
         $exec->user_id=Yii::$app->user->identity->id;
         $exec->updated_at=time();
-        $exec->type= CodehubExec::TYPE_SYSTEM;
+        $exec->type= CodehubExec::TYPE_ADD;
         $exec->stat = $stat=='success'?CodehubExec::STAT_YES:CodehubExec::STAT_NO;
         $exec->save();
        
