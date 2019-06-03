@@ -436,7 +436,7 @@ class HealthController extends Controller {
     }
     
     public function actionCodehubUpdate($id) {
-        $model = CorporationCodehub::findOne($id);
+        $model = $codehub=CorporationCodehub::findOne($id);
         $model->scenario='update';
         
         $corporation_account = CorporationAccount::find()->where(['corporation_id'=>$model->corporation_id,'add_type'=>[CorporationAccount::TYPE_ADD, CorporationAccount::TYPE_SYSTEM]])->orderBy(['is_admin'=>SORT_ASC,'add_type'=>SORT_ASC,'id'=>SORT_ASC])->one();  
@@ -452,28 +452,30 @@ class HealthController extends Controller {
             
 
             $model->left_num=$model->total_num;
-                    
-            $targetFolder = '/data/git';
-            $targetPath = Yii::getAlias('@webroot') . $targetFolder;
+                        
+            if($model->username!=$codehub->username||$model->password!=$codehub->password||$model->https_url!=$codehub->https_url){        
+                $targetFolder = '/data/git';
+                $targetPath = Yii::getAlias('@webroot') . $targetFolder;
 
-            if (!file_exists($targetPath)) {
-                @mkdir($targetPath, 0777, true);
-            }
-                 
-            if (file_exists($targetPath.'/'.$model->id)) {
-                if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-                    $comm='cd '.$targetPath.' && rd/s/q '.$model->id;
-                }else{
-                    $comm='cd '.$targetPath.' && sudo rm -rf '.$model->id;
-                } 
-                exec($comm.' >>demo.log');
-            }
+                if (!file_exists($targetPath)) {
+                    @mkdir($targetPath, 0777, true);
+                }
+
+                if (file_exists($targetPath.'/'.$model->id)) {
+                    if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
+                        $comm='cd '.$targetPath.' && rd/s/q '.$model->id;
+                    }else{
+                        $comm='cd '.$targetPath.' && sudo rm -rf '.$model->id;
+                    } 
+                    exec($comm.' >>demo.log');
+                }
 
 
-            $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->id;
+                $command='cd '.$targetPath.' && git clone https://'. urlencode(trim($model->username)).':'.urlencode(trim($model->password)).'@'. substr($model->https_url, 8).' '.$model->id;
+
+                exec($command.' >>demo.log 2>&1',$output,$status);
+            }         
             
-            exec($command.' >>demo.log 2>&1',$output,$status);
-                       
             if(file_exists($targetPath.'/'.$model->id)&&$model->save()){ 
                 Yii::$app->cache->delete('gitexec_sum');
                 Yii::$app->session->setFlash('success', '操作成功。');
