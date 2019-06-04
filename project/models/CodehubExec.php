@@ -96,4 +96,8 @@ class CodehubExec extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+    
+    public static function get_last_exec($codehub_id,$stat=null) {
+        return static::find()->where(['codehub_id'=>$codehub_id])->andFilterWhere(['stat'=>$stat])->orderBy(['updated_at'=>SORT_DESC])->select(['updated_at'])->scalar();
+    }
 }

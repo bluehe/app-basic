@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use project\models\CorporationCodehub;
 use project\models\CorporationProject;
+use project\models\CodehubExec;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -32,13 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     'repository_name',
-                    [
-                        'attribute' => 'updated_at',
-                        'value' =>
-                        function($model) {
-                            return $model->updated_at > 0 ? date('Y-m-d H:i', $model->updated_at) : '';
-                        },
-                    ],
+//                    [
+//                        'attribute' => 'updated_at',
+//                        'value' =>
+//                        function($model) {
+//                            return $model->updated_at > 0 ? date('Y-m-d H:i', $model->updated_at) : '';
+//                        },
+//                    ],
                     [
                         'attribute' => 'ci',
                         'value' =>function($model) {
@@ -56,6 +57,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         
                     ],
                     'total_num',
+                    [
+                        'label' => '上次执行',
+                        'value' =>function($model) {
+                            $t= CodehubExec::get_last_exec($model->id, CodehubExec::STAT_YES);
+                            return $t?date('Y-m-d H:i',$t):'';
+                        },
+                        'format' => 'raw',
+                        
+                    ],
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '代码操作',
                         'template' => '{commit}', 
