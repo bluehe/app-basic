@@ -98,7 +98,10 @@ class CrontabController extends Controller
         $cache=Yii::$app->cache;
         $gitexec_sum=$cache->get('gitexec_sum');
         if($gitexec_sum==null){
-            $gitexec_sum= CorporationCodehub::find()->sum('total_num');
+            $gitexec_sum= CorporationCodehub::find()->where(['>','total_num',0])->sum('total_num');
+            if(!$gitexec_sum){
+                $gitexec_sum=0;
+            }
             
             $query = CorporationCodehub::find()->select(['SUM(total_num)'])->createCommand()->getRawSql();
             $dependency = new \yii\caching\DbDependency(['sql' => $query]);
@@ -106,12 +109,15 @@ class CrontabController extends Controller
             $cache->set('gitexec_sum', $gitexec_sum, null, $dependency);
         }
 
-        $left_num = CorporationCodehub::find()->sum('left_num');
-
+        $left_num = CorporationCodehub::find()->where(['>','left_num',0])->sum('left_num');
+        if(!$left_num){
+            $left_num=0;
+        }
+        
         $day_num= floor($gitexec_sum/5);//每天需要处理的执行数
 
         $left_day=$w>0&&$w<6?($left_num-$day_num*(5-$w)):$left_num;//当天剩余执行数
-        $left_hour = $H>=8&&$H<18?($left_day - floor($day_num/10*(17-$H))):$left_day;
+        $left_hour = $left_day>0?($H>=8&&$H<18?($left_day - floor($day_num/10*(17-$H))):$left_day):0;
         $r=$left_hour>0?mt_rand(0,floor((59-$i)/$left_hour)):0;
         if($left_hour<=0 || $r){
             Yii::info('无任务或者随机跳过,总次数：'.$gitexec_sum.'，当天剩余次数：'.$left_day.'，当前小时剩余次数：'.$left_hour.'，随机数：'.$r, 'gitexec');     
