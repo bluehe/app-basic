@@ -198,6 +198,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                     ],
+                    [
+                        'label'=>'仓库',
+                        'value' => function($model) {
+                            $num=CorporationCodehub::get_codehub_num($model->corporation_id);
+                            return $num>0?$num.'|'.CorporationCodehub::get_codehub_sum($model->corporation_id).'('.CorporationCodehub::get_codehub_num($model->corporation_id, CorporationCodehub::CI_YES).')':0;
+                        },
+                        'format' => 'raw',
+                    ],
                                 
                     ['class' => 'yii\grid\ActionColumn',
                         'header' => '操作',

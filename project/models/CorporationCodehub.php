@@ -208,6 +208,14 @@ class CorporationCodehub extends \yii\db\ActiveRecord
         return false;
     }
     
+    public static function get_codehub_sum($corporation_id,$ci=null) {
+        return static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['ci'=>$ci])->sum('total_num');
+    }
+    
+    public static function get_codehub_num($corporation_id,$ci=null) {
+        return static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['ci'=>$ci])->count();
+    }
+    
     public static function codehub_exec($id) {
         $model=CorporationCodehub::findOne($id);
         
