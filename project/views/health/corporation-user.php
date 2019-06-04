@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
    
     $('.user-index').on('click', '.account-add', function () {
         $('#item-modal .modal-body').html('');
-        $.get('<?= Url::toRoute('health/account-add') ?>',{corporationid: $(this).data('id')},
+        $.get('<?= Url::toRoute('health/account-add') ?>',{corporation_id: $(this).data('id')},
                 function (data) {
                     $('#item-modal .modal-body').html(data);
                 }
