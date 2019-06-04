@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'account_name',
                     'user_name',
+                    'password',
                     [
                         'attribute' => 'is_admin',
                         'value' =>function($model) {
