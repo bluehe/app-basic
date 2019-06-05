@@ -153,5 +153,12 @@ class CrontabController extends Controller
         return ExitCode::OK;
                    
     }
+    
+    public function actionGitSet()
+    {
+        $num = CorporationCodehub::updateAll(['left_num'=>new \yii\db\Expression('total_num')], ['>','total_num',0]);
+        return $num? ExitCode::OK:ExitCode::UNSPECIFIED_ERROR;;
+        
+    }
    
 }
