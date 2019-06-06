@@ -3,6 +3,7 @@
 namespace project\models;
 
 use Yii;
+use project\components\CurlHelper;
 
 /**
  * This is the model class for table "{{%corporation_project}}".
@@ -86,5 +87,59 @@ class CorporationProject extends \yii\db\ActiveRecord
     
     public static function get_corporationproject_exist($id) {
         return static::find()->where(['corporation_id'=>$id])->exists();
+    }
+    
+    public static function project_delete($corporation_id){
+        //不能删除项目，删除仓库、移除项目成员，删除账号
+        $model = CorporationProject::findOne(['corporation_id'=>$corporation_id]);
+        $stat=false;
+        if ($model !== null) {
+            
+            //删除仓库
+            $codehubs = CorporationCodehub::find()->where(['corporation_id'=>$corporation_id])->all();
+            if($codehubs!==null){
+                //存在仓库
+                foreach ($codehubs as $codehub){
+                    CorporationCodehub::codehub_delete($codehub->id);
+                }
+            }
+            
+            //移除项目成员
+            $members=[];
+            $token = CorporationAccount::get_token($corporation_id);
+            $auth_member= CurlHelper::listMember($model->project_uuid, $token);
+            if($auth_member['code']=='200'&&$auth_member['content']['status']=='success'){
+
+                foreach ($auth_member['content']['result']['members'] as $member){
+                    $members[$member['user_id']]=$member['role_id'];
+                }
+            }           
+            $delete_members= array_keys($members);
+            if(count($delete_members)>1){
+                foreach ($delete_members as $delete){
+                    if($members[$delete]!=3){
+                        $auth=CurlHelper::deleteMember($model->project_uuid, $delete, $token);                      
+                    }
+                }
+                
+            }
+            
+            //删除账号
+            $accounts = CorporationAccount::find()->andWhere(['corporation_id'=> $corporation_id])->all();
+            if(count($accounts)>1){
+                foreach($accounts as $account){
+                    $auth['code']='204';
+                    if($account->add_type==CorporationAccount::TYPE_SYSTEM){
+                        $auth=CurlHelper::deleteUser($account->user_id,$token);
+                        if($auth['code']=='204'){
+                            $account->delete();
+                        }
+                    }                   
+                }
+            }
+            $stat=true;
+            
+        }        
+        return $stat;
     }
 }

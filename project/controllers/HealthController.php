@@ -171,8 +171,7 @@ class HealthController extends Controller {
     }
     
     public function actionAccountUpdate($id) {
-       
-        
+               
         $model = CorporationAccount::findOne($id);
         $model->scenario='create';
        
@@ -323,8 +322,7 @@ class HealthController extends Controller {
     }
     
     public function actionMemberList($corporation_id) {
-       
-        
+            
         $model = CorporationProject::findOne(['corporation_id'=>$corporation_id]);
         
         $members=[];
@@ -495,38 +493,11 @@ class HealthController extends Controller {
 
     }
     
-    public function actionCodehubDelete($id)
-    {
+    public function actionCodehubDelete($id){
         $model = CorporationCodehub::findOne($id);
         $stat='error';
-        if ($model !== null) {
-                       
-            $status=0;
-            if($model->username){
-                $targetFolder = '/data/git';
-                $targetPath = Yii::getAlias('@webroot') . $targetFolder;
-
-                if (!file_exists($targetPath)) {
-                    @mkdir($targetPath, 0777, true);
-                }
-                if (file_exists($targetPath.'/'.$model->id)) {
-                    if(strtoupper(substr(PHP_OS,0,3))==='WIN'){
-                        $command='cd '.$targetPath.' && rd/s/q '.$model->id;
-                    }else{
-                        $command='cd '.$targetPath.' && sudo rm -rf '.$model->id;
-                    } 
-                    exec($command.' >>demo.log 2>&1',$output,$status);
-                }
-            }
-            $auth['code']='200';
-            if($model->add_type== CorporationCodehub::TYPE_SYSTEM){
-                $auth=CurlHelper::deleteCodehub($model->repository_uuid,CorporationAccount::get_token($model->corporation_id));
-            }
-            if($status==0&&$auth['code']==200&&$model->delete()){
-                $stat='success';
-            }else{
-                $stat='fail';
-            }
+        if ($model !== null) {                      
+            $stat = CorporationCodehub::codehub_delete($id)?'success':'error';
         }
 
         return json_encode(['stat' => $stat]);

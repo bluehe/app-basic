@@ -7,6 +7,8 @@ use yii\console\ExitCode;
 use common\models\Crontab;
 use project\models\CorporationCodehub;
 use project\models\CodehubExec;
+use project\models\CorporationMeal;
+use project\models\Corporation;
 
 /**
  * 定时任务调度控制器
@@ -158,6 +160,20 @@ class CrontabController extends Controller
     {
         $num = CorporationCodehub::updateAll(['left_num'=>new \yii\db\Expression('total_num')], ['>','total_num',0]);
         return $num? ExitCode::OK:ExitCode::UNSPECIFIED_ERROR;;
+        
+    }
+    
+    public function actionProjectClean()
+    {
+        
+        $ids = CorporationMeal::find()->groupBy(['corporation_id'])->having(['<=','MAX(end_time)',time()+86400*7])->select(['corporation_id'])->column();
+        $corporation_ids = Corporation::find()->where(['id'=>$ids,'stat'=>[Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN]])->select(['id'])->column();
+        if($corporation_ids){
+            foreach ($corporation_ids as $corporation_id){
+                \project\models\CorporationProject::project_delete($corporation_id)?'1':'2';
+            }
+        }
+        return ExitCode::OK;
         
     }
    
