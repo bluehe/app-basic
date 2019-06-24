@@ -100,9 +100,9 @@ class CorporationProject extends \yii\db\ActiveRecord
             if($codehubs!==null){
                 //存在仓库
                 foreach ($codehubs as $codehub){
-                    CorporationCodehub::codehub_delete($codehub->id);
+                    CorporationCodehub::codehub_delete($codehub->id)?Yii::info($corporation_id.'仓库删除成功'.$codehub->id, 'projectclean'):Yii::info($corporation_id.'仓库删除失败'.$codehub->id, 'projectclean');
                 }
-                Yii::info($corporation_id.'仓库删除', 'projectclean');
+                
             }
             
             //移除项目成员
