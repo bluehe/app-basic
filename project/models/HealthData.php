@@ -282,5 +282,8 @@ class HealthData extends \yii\db\ActiveRecord
         return true;
     }
     
+    public static function get_health($start, $end,$group_id=null,$allocate=null) {
+        return static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['is_allocate'=>$allocate])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->orderBy(['statistics_time'=>SORT_ASC,'level'=>SORT_ASC])->select(['statistics_time','num'=>'count(level)','health'=>'MAX(level)'])->groupBy(['statistics_time','level'])->asArray()->all();        
+    }
     
 }
