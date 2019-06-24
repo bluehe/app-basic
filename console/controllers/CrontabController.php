@@ -169,7 +169,7 @@ class CrontabController extends Controller
         $corporation_ids = Corporation::find()->where(['id'=>$ids,'stat'=>[Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN]])->select(['id'])->column();
         if(count($corporation_ids)>0){
             foreach ($corporation_ids as $corporation_id){
-                CorporationProject::project_delete($corporation_id)?Yii::info($corporation_id.'删除成功', 'projectclean'):Yii::warning($corporation_id.'删除失败', 'projectclean');
+                CorporationProject::project_delete($corporation_id)?Yii::info($corporation_id.'清理成功', 'projectclean'):Yii::warning($corporation_id.'清理失败', 'projectclean');
                
             }
         }
