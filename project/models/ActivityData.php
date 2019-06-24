@@ -136,6 +136,9 @@ class ActivityData extends \yii\db\ActiveRecord
     
     public static function get_data_by_time($statistics_time='',$group_id=null) {   
        return static::find()->where(['statistics_time'=>$statistics_time])->andFilterWhere(['group_id'=>$group_id])->indexBy(['corporation_id'])->asArray()->all();
-
+    }
+    
+    public static function get_member_by_time($statistics_time,$corporation_id) {   
+       return static::find()->where(['corporation_id'=>$corporation_id])->andWhere(['<=','statistics_time',$statistics_time])->limit(1)->select(['projectman_membercount'])->scalar();
     }
 }

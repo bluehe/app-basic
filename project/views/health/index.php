@@ -17,9 +17,10 @@ use project\models\CorporationMeal;
 use project\models\CorporationAccount;
 use project\models\CorporationProject;
 use project\models\CorporationCodehub;
+use project\models\HealthData;
 
-$this->title = '活跃数据';
-$this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['activity/index']];
+$this->title = '健康数据';
+$this->params['breadcrumbs'][] = ['label' => '数据中心', 'url' => ['health/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="activity-index">
@@ -28,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
               
             <ul class="nav nav-tabs" style="margin-bottom:10px;border-bottom:none">
-               
+               <li class="header pull-right" style="margin-left: 20px;"> <div><?= Html::a('<i class="fa fa-filter" title="选择需要显示的列"></i>', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal', 'class' => 'btn btn-danger column-change']) ?></div></li>
 <!--                <li class="header pull-right"> <div><?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning']) ?></div></li>-->
                 
                 <li>
@@ -121,10 +122,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
                     ],
                     [
-                        'attribute' => 'start_time',
+                        'attribute' => 'statistics_time',
                         'label' => '时间段',
                         'value' => function($model) {
-                            return date('Y-m-d',$model->start_time+86400).' ~ '.date('Y-m-d',$model->end_time);
+                            return date('Y-m-d',$model->start_time).' ~ '.date('Y-m-d',$model->end_time);
                         },
                         'filter' => false,
                     ],
@@ -143,53 +144,100 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::tag('span',$model->corporation->base_company_name, ['data-toggle' => 'modal', 'data-target' => '#corporation-modal','data-id'=>$model->corporation_id,'class' => 'corporation-view','style'=>'cursor:pointer']);
                         },
                         'format' => 'raw',
-                        'contentOptions'=>function($model) {                            
-                            return ['class' => ActivityChange::is_real_activity($model) ?'bg-green' : ''];                           
-                        },
+//                        'contentOptions'=>function($model) {                            
+//                            return ['class' => ActivityChange::is_real_activity($model) ?'bg-green' : ''];                           
+//                        },
                     ],
                     [
                         'attribute' => 'is_allocate',
                         'value' => function($model) {                                
-                            return Html::tag('span', $model->Allocate,['class' => ($model->is_allocate== ActivityChange::ALLOCATE_Y ? 'text-green' : ($model->is_allocate== ActivityChange::ALLOCATE_N ? 'text-red' : ''))]);                        
+                            return Html::tag('span', $model->Allocate,['class' => ($model->is_allocate== HealthData::ALLOCATE_Y ? 'text-green' : ($model->is_allocate== HealthData::ALLOCATE_N ? 'text-red' : ''))]);                        
                         },
                         'format' => 'raw',
-                        'filter' => ActivityChange::$List['is_allocate'],
+                        'filter' => HealthData::$List['is_allocate'],
                         
                     ],
                     [
-                        'attribute' => 'is_act',
+                        'attribute' => 'activity_month',
                         'value' => function($model) {                                
-                            return Html::tag('span', $model->Act,['class' => ($model->is_act== ActivityChange::ACT_Y ? 'text-green' : ($model->is_act== ActivityChange::ACT_N ? 'text-red' : ''))]);                        
+                            return Html::tag('span', $model->ActMonth,['class' => ($model->activity_month== HealthData::ACT_Y ? 'text-green' : ($model->activity_month== HealthData::ACT_N ? 'text-red' : ''))]);                        
                         },
                         'format' => 'raw',
-                        'filter' => ActivityChange::$List['is_act'],
+                        'filter' => HealthData::$List['is_act'],
                        
                     ],
+                    [
+                        'attribute' => 'activity_week',
+                        'value' => function($model) {                                
+                            return Html::tag('span', $model->ActWeek,['class' => ($model->activity_week== HealthData::ACT_Y ? 'text-green' : ($model->activity_week== HealthData::ACT_N ? 'text-red' : ''))]);                        
+                        },
+                        'format' => 'raw',
+                        'filter' => HealthData::$List['is_act'],
+                       
+                    ],                   
                     [
                         'attribute' => 'act_trend',
                         'value' => function($model) use($start, $end) {                                
-                            return Yii::$app->request->get('sum',1)?'<span class="sparktristate">'.ActivityChange::get_act_line($model->corporation_id,$start-86400, $end).'</span>':'<i class="fa fa-square '.($model->act_trend==ActivityChange::TREND_UC?'text-gray':($model->act_trend==ActivityChange::TREND_IN?'text-green':($model->act_trend==ActivityChange::TREND_DE?'text-red':'text-yellow'))).'"></i>';                        
+                            return Yii::$app->request->get('sum',1)?'<span class="sparktristate">'.HealthData::get_act_line($model->corporation_id,$start, $end).'</span>':'<i class="fa fa-square '.($model->act_trend==HealthData::TREND_UC?'text-gray':($model->act_trend==HealthData::TREND_IN?'text-green':($model->act_trend==HealthData::TREND_DE?'text-red':'text-yellow'))).'"></i>';                        
                         },
                         'format' => 'raw',
-                        'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['act_trend'], 
+                        'filter' => Yii::$app->request->get('sum',1)?false:HealthData::$List['act_trend'], 
                             
                     ],
                     [
-                        'attribute' => 'health',
-                        'value' => function($model) use($start, $end) {                                
-                           return Yii::$app->request->get('sum',1)?'<span class="sparktristate_health">'.ActivityChange::get_health_line($model->corporation_id,$start-86400, $end).'</span>':'<span style="color:'.ActivityChange::$List['health_color'][$model->health].'">'.$model->Health.'</span>';                       
+                        'attribute' => 'level',
+                        'value' => function($model) {                                
+                           return '<span style="color:'. HealthData::$List['health_color'][$model->level].'">'.$model->Health.'</span>';                       
                         },
                         'format' => 'raw',
-                        'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['health'],
+                        'filter' => HealthData::$List['health'],
                        
-                    ],                   
-                            
+                    ], 
+                    [
+                        'attribute' => 'health_trend',
+                        'value' => function($model) use($start, $end) {                                
+                           return Yii::$app->request->get('sum',1)?'<span class="sparktristate_health">'. HealthData::get_health_line($model->corporation_id,$start, $end).'</span>':'<i class="fa fa-square '.($model->health_trend==HealthData::TREND_UC?'text-gray':($model->health_trend==HealthData::TREND_IN?'text-green':($model->health_trend==HealthData::TREND_DE?'text-red':'text-yellow'))).'"></i>';                       
+                        },
+                        'format' => 'raw',
+                        'filter' => Yii::$app->request->get('sum',1)?false: HealthData::$List['act_trend'],
+                       
+                    ], 
+
+                    [
+                        'attribute' => 'H',
+                        'visible'=> is_array($column)&&in_array('H',$column),
+                    ],
+                    [
+                        'attribute' => 'C',
+                        'visible'=> is_array($column)&&in_array('C',$column),
+                    ],
+                    [
+                        'attribute' => 'I',
+                        'visible'=> is_array($column)&&in_array('I',$column),
+                    ],
+                    [
+                        'attribute' => 'A',
+                        'visible'=> is_array($column)&&in_array('A',$column),
+                    ],
+                    [
+                        'attribute' => 'R',
+                        'visible'=> is_array($column)&&in_array('R',$column),
+                    ],
+                    [
+                        'attribute' => 'V',
+                        'visible'=> is_array($column)&&in_array('V',$column),
+                    ],
+                    [
+                        'attribute' => 'D',
+                        'visible'=> is_array($column)&&in_array('D',$column),
+                    ],
                     [
                         'label'=>'用户数',
-                        'value' => function($model) {
+                        'value' => function($model) use($end) {
                             if(in_array($model->corporation->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN, Corporation::STAT_OVERDUE])&&$meal=CorporationMeal::get_allocate($model->corporation_id)){
-                                $m=$model->data&&$model->data->projectman_membercount?$model->data->projectman_membercount:0;
-                                $u= CorporationAccount::get_corporation_account_num($model->corporation_id);//$model->data&&$model->data->projectman_usercount?$model->data->projectman_usercount:0;
+                                $m= project\models\ActivityData::get_member_by_time($end, $model->corporation_id);
+                                $m=$m?$m:0;
+                                $u= CorporationAccount::get_corporation_account_num($model->corporation_id);
                                 $max= $meal->devcloud_count+5;
                                 return '<span class='.($m<$max-5?'text-green':($m>=$max-5&&$m<=$max?'text-yellow':'text-red')).'>'.$m.'/'.$max.'</span> ('.$u.')';
                             }else{
@@ -295,6 +343,16 @@ Modal::end();
         $('.modal-title').html('客户经理');
         $('#item-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation/corporation-bd') ?>',{id: $(this).data('id')},
+                function (data) {
+                    $('#item-modal .modal-body').html(data);
+                }
+        );
+    });
+    
+    $('.activity-index').on('click', '.column-change', function () {
+        $('#item-modal .modal-title').html('显示项选择');
+        $('#item-modal .modal-body').html('');
+        $.get('<?= Url::toRoute('column') ?>',
                 function (data) {
                     $('#item-modal .modal-body').html(data);
                 }

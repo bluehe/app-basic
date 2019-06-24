@@ -13,6 +13,14 @@ use project\components\CurlHelper;
 use project\models\CorporationProject;
 use project\models\CorporationCodehub;
 use project\models\CodehubExec;
+use project\models\HealthLog;
+use project\models\HealthText;
+use project\models\HealthData;
+use project\components\ExcelHelper;
+use project\models\UserGroup;
+use project\models\Group;
+use project\models\CorporationBd;
+use project\models\ColumnSetting;
 
 
 class HealthController extends Controller { 
@@ -22,13 +30,7 @@ class HealthController extends Controller {
         return [
             'index' => [     
                 'class' => IndexAction::className(),
-                'data' => function(){
-                       
-//            $repository_uuid='8ed8d2b46313434c98f8c6a617ffe897';
-//            $token=CorporationAccount::get_token(4);
-//                    $auth=CurlHelper::getCodehub($repository_uuid, $token);
-//                    var_dump($auth);
-//                    exit;
+                'data' => function(){                     
                     
                     $end = strtotime('today');
                     $start = strtotime('-1 months +1 days',$end);
@@ -44,6 +46,7 @@ class HealthController extends Controller {
                     $searchModel = new HealthSearch();
                     $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$start-86400,$end,$sum,$annual);
 
+                    $column= ColumnSetting::get_column_content(Yii::$app->user->identity->id,'health');
                     return [  
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
@@ -51,6 +54,7 @@ class HealthController extends Controller {
                         'end' => $end,
                         'annual'=>$annual,
                         'sum'=>$sum,
+                        'column'=>$column,
                     ];
                               
                 }
@@ -105,6 +109,20 @@ class HealthController extends Controller {
                         'corporation_id'=>$corporation_id
                     ];
                               
+                }
+            ],
+            'import-list' => [
+                'class' => IndexAction::className(),
+                'data' => function(){
+                    $dataProvider = new ActiveDataProvider([
+                        'query' => HealthLog::find()->andWhere(['or',['group_id'=> UserGroup::get_user_groupid(Yii::$app->user->identity->id)],['group_id'=>NULL]]),
+                        'sort' => ['defaultOrder' => [                            
+                            'id' => SORT_DESC,
+                        ]],
+                    ]);
+                    return [
+                        'dataProvider' => $dataProvider,
+                    ];
                 }
             ],
                     
@@ -517,6 +535,350 @@ class HealthController extends Controller {
        
         return json_encode(['stat'=>$stat,'message'=>$stat=='success'?'执行成功':'执行失败']);
 
+    }
+    
+    public function actionImport() {       
+        //判断是否Ajax
+        if (Yii::$app->request->isAjax) {
+
+            if (empty($_FILES['files'])) {
+                $postMaxSize = ini_get('post_max_size');
+                $fileMaxSize = ini_get('upload_max_filesize');
+                $displayMaxSize = $postMaxSize < $fileMaxSize ? $postMaxSize : $fileMaxSize;
+
+                return json_encode(['error' => '没有文件上传,文件最大为' . $displayMaxSize], JSON_UNESCAPED_UNICODE);
+                // or you can throw an exception
+            }
+
+
+            //目标文件夹，不存在则创建
+            $targetFolder = '/data/health_data';
+            $targetPath = Yii::getAlias('@webroot') . $targetFolder;
+
+            if (!file_exists($targetPath)) {
+                @mkdir($targetPath, 0777, true);
+            }
+
+            $files = $_FILES['files'];
+            $filenames = $files['name'];
+
+            $ext = explode('.', basename($filenames[0]));
+            $f_name = md5(uniqid()) . "." . strtolower(array_pop($ext));
+            $filename = $targetPath . DIRECTORY_SEPARATOR . $f_name;
+            //文件存在则删除
+            if (file_exists($filename)) {
+                @unlink($filename);
+            }
+            
+            $model= new HealthLog();
+            $model->stat= HealthLog::STAT_UPLOAD;
+            $model->uid=Yii::$app->user->identity->id;
+            $model->created_at=time();
+            $model->name=$filenames[0];
+            $model->patch=$f_name;
+            $group = Group::get_user_group(Yii::$app->user->identity->id);
+            if(count($group)==1){
+                $model->group_id= key($group);   
+            }
+            
+            if (@move_uploaded_file($files['tmp_name'][0], $filename)&&$model->save()) {                
+
+                $format = \PHPExcel_IOFactory::identify($filename);
+                $objectreader = \PHPExcel_IOFactory::createReader($format);
+                $objectPhpExcel = $objectreader->load($filename);
+
+                $dataArray = $objectPhpExcel->getActiveSheet()->toArray(null, true, true, true);
+
+                $datas = ExcelHelper::execute_array_label($dataArray);
+
+                //项目处理
+                if(isset($datas[0])){                                           
+                    $health_text=[];
+                    foreach ($datas as $key=>$data) {
+                        $health_text[]=['log_id'=>$model->id,'data'=> json_encode($data)];
+                    }
+                    
+                    if(!empty($health_text)){
+                        if(Yii::$app->db->createCommand()->batchInsert(HealthText::tableName(), ['log_id', 'data'], $health_text)->execute()){
+                            Yii::$app->session->setFlash('success', '导入成功。');
+                        }else{
+                            $model->delete();
+                            Yii::$app->session->setFlash('error', '导入失败。');
+                        }
+                    }                    
+                    return $this->redirect(Yii::$app->request->referrer);
+                    
+                }else{
+                    Yii::$app->session->setFlash('error', '没有有效数据');
+                    //throw new \Exception('没有有效数据');
+                    $model->delete();
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+              
+            }else{
+                Yii::$app->session->setFlash('error', '导入失败。');
+            }           
+        } else {
+            Yii::$app->session->setFlash('error', '导入失败。');
+        }
+        return true;
+        
+    }
+    
+    public function actionInduce($id) {       
+        $model = HealthLog::findOne($id);
+        if ($model !== null) {
+            if($model->statistics_at&&$model->group_id){
+                          
+            $transaction = Yii::$app->db->beginTransaction();
+            try {               
+                
+                HealthData::deleteAll(['log_id'=>$model->id]);
+
+                $datas = HealthText::find()->where(['log_id'=>$model->id])->select(['data'])->column();
+
+                //项目处理
+                if(isset($datas[0])){
+                                      
+                    $data_v= json_decode($datas[0],true);//去除0值和空值
+                    $keys= array_filter(array_keys($data_v));                                               
+                    
+                   
+                    $field_huawei_account= in_array('用户名', $keys)?'用户名':null;
+                    $field_corporation_name=in_array('客户名称', $keys)?'客户名称':null;
+                    if(!$field_huawei_account||!preg_match("/[\w|-]{6,32}$/",$data_v[$field_huawei_account])){
+                        Yii::$app->session->setFlash('error', '文件首行不存在、还未设置或设置错误<<用户名>>字段');
+                        return $this->redirect(Yii::$app->request->referrer);
+                    }
+                    if(!$field_corporation_name){
+                        Yii::$app->session->setFlash('error', '文件首行不存在或还未设置<<客户名称>>字段');
+                        return $this->redirect(Yii::$app->request->referrer);
+                    }
+                }else{
+                    Yii::$app->session->setFlash('error', '没有有效数据');
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+
+                $model_import_data=[];
+                $corporations = Corporation::find()->where(['not',['huawei_account'=>NULL]])->select(['id','huawei_account'])->indexBy('huawei_account')->column();
+                $corporation_bd= CorporationBd::get_bd_by_time($model->statistics_at);
+                foreach ($datas as $data) {
+//                    Yii::$app->session->setFlash('success', json_encode($datas,256));
+//                    return true;
+
+                    //数据处理
+                    $data= array_filter(json_decode($data,true));//去除0值和空值
+
+
+                    //$corporation= Corporation::findOne(['huawei_account'=>trim($data[$field_huawei_account])]);
+                    if(!array_key_exists(trim($data[$field_huawei_account]), $corporations)){
+                        //不存在
+                        $corporation=new Corporation();
+                        $corporation->loadDefaultValues();
+                        $corporation->group_id=$model->group_id;
+                        $corporation->huawei_account=trim($data[$field_huawei_account]);
+                        $corporation->base_company_name=$field_corporation_name&&isset($data[$field_corporation_name])?trim($data[$field_corporation_name]):trim($data[$field_huawei_account]);
+                        $corporation->save(false); 
+                        $corporation_id=$corporation->id;
+                    }else{
+                        $corporation_id=$corporations[trim($data[$field_huawei_account])];
+                    }
+
+
+                    if(isset($data['最近一周是否活跃'])){
+                        $activity_week=$data['最近一周是否活跃']=='活跃'?HealthData::ACT_Y:HealthData::ACT_N;
+                    }else{
+                        $activity_week= HealthData::ACT_D;
+                    }
+                    if(isset($data['最近一月是否活跃'])){
+                        $activity_month=$data['最近一月是否活跃']=='活跃'?HealthData::ACT_Y:HealthData::ACT_N;
+                    }else{
+                        $activity_month= HealthData::ACT_D;
+                    }
+                    if(isset($data['成长等级H'])){
+                        switch (substr($data['成长等级H'], 0, 2)){
+                            case 'H1':$level= HealthData::HEALTH_H1;break;
+                            case 'H2':$level= HealthData::HEALTH_H2;break;
+                            case 'H3':$level= HealthData::HEALTH_H3;break;
+                            case 'H4':$level= HealthData::HEALTH_H4;break;
+                            case 'H5':$level= HealthData::HEALTH_H5;break;
+                            default:$level= HealthData::HEALTH_WA;
+                            
+                        }
+                    }else{
+                        $level= HealthData::HEALTH_WA;
+                    }
+                    $H=isset($data['健康度H'])?$data['健康度H']:0;
+                    $V=isset($data['V'])?$data['V']:0;
+                    $D=isset($data['D'])?$data['D']:0;
+                    $C=isset($data['C'])?$data['C']:0;
+                    $I=isset($data['I'])?$data['I']:0;
+                    $A=isset($data['A'])?$data['A']:0;
+                    $R=isset($data['R'])?$data['R']:0;
+                       
+                    $model_import_data[]=['log_id'=>$model->id,'group_id'=>$model->group_id,'corporation_id'=>$corporation_id,'bd_id'=>isset($corporation_bd[$corporation_id])?$corporation_bd[$corporation_id]:null,'statistics_time'=>$model->statistics_at,'activity_week'=>$activity_week,'activity_month'=>$activity_month,'level'=>$level,'H'=>$H,'V'=>$V,'D'=>$D,'C'=>$C,'I'=>$I,'A'=>$A,'R'=>$R];
+
+                }
+                if(!empty($model_import_data)){
+                    Yii::$app->db->createCommand()->batchInsert(HealthData::tableName(), ['log_id','group_id', 'corporation_id','bd_id','statistics_time','activity_week','activity_month','level','H','V','D','C','I','A','R'], $model_import_data)->execute();
+                }
+                
+                //状态变化
+                HealthLog::updateAll(['stat'=> HealthLog::STAT_COVER], ['and',['statistics_at'=>$model->statistics_at,'group_id'=>$model->group_id],['not',['id'=>$model->id]]]);
+                $model->stat= HealthLog::STAT_INDUCE;
+                $model->save();
+                
+                //生成区间活跃数据
+                
+                //后部分区间
+                $next_time= HealthData::get_next_time($model->statistics_at,$model->group_id);
+                if($next_time){                   
+                    HealthData::updateAll(['act_trend'=> HealthData::TREND_WA,'health_trend'=> HealthData::TREND_WA],['statistics_time'=> $next_time,'group_id'=>$model->group_id]);                       
+                }
+
+                //设置下拨
+                HealthData::set_allocate();
+
+                //设置活跃趋势
+                HealthData::set_activity_trend();
+
+                //设置健康趋势
+                HealthData::set_health_trend();
+
+                //清除缓存
+                Yii::$app->cache->delete('health');
+                    
+                $transaction->commit();
+                Yii::$app->session->setFlash('success', '生成数据成功。');
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+                Yii::$app->session->setFlash('error', '生成数据失败。');
+            }
+                  
+                  
+            }else{
+                Yii::$app->session->setFlash('error', '请先设置统计日期或项目');     
+            }
+        } else {
+            Yii::$app->session->setFlash('error', '项目不存在。');
+        }
+       return $this->redirect(Yii::$app->request->referrer);
+        
+    }
+    
+    public function actionClean($id) {
+        $model = HealthLog::findOne($id);
+        if ($model !== null) {
+            HealthData::deleteAll(['statistics_time'=>$model->statistics_at,'group_id'=>$model->group_id]);
+ 
+            
+            $next_time= HealthData::get_next_time($model->statistics_at,$model->group_id);
+            if($next_time){
+                HealthData::updateAll(['act_trend'=> HealthData::TREND_WA,'health_trend'=> HealthData::TREND_WA],['statistics_time'=> $next_time,'group_id'=>$model->group_id]);
+            }
+            $model->stat= HealthLog::STAT_UPLOAD;
+            $model->save();
+            
+            //设置下拨
+            HealthData::set_allocate();
+
+            //设置活跃趋势
+            HealthData::set_activity_trend();
+
+            //设置健康趋势
+            HealthData::set_health_trend();
+
+            //清除缓存
+            Yii::$app->cache->delete('health');
+//            Yii::$app->cache->flush();
+                   
+            
+        } else {
+            Yii::$app->session->setFlash('error', '项目不存在。');           
+        }
+        return $this->redirect(Yii::$app->request->referrer);
+        
+    }
+    
+    public function actionBind($id) {
+        $model = HealthLog::findOne($id);
+        
+        if (Yii::$app->request->isPost&&$model->load(Yii::$app->request->post())) {
+       
+            $model->statistics_at= strtotime($model->statistics_at);
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', '操作成功。');
+            } else {
+                Yii::$app->session->setFlash('error', '操作失败。');
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            if ($model !== null) {
+                $model->statistics_at= $model->statistics_at>0?date('Y-m-d',$model->statistics_at):'';
+                return $this->renderAjax('bind', [
+                            'model' => $model,
+                ]);
+            } else {
+                Yii::$app->session->setFlash('error', '项目不存在。');
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+        }
+    }
+    
+    public function actionBindGroup($id) {
+        $model = HealthLog::findOne($id);
+        
+        if (Yii::$app->request->isPost&&$model->load(Yii::$app->request->post())) {
+       
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', '操作成功。');
+            } else {
+                Yii::$app->session->setFlash('error', '操作失败。');
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            if ($model !== null) {
+                $model->scenario='group';
+                return $this->renderAjax('bind-group', [
+                            'model' => $model,
+                ]);
+            } else {
+                Yii::$app->session->setFlash('error', '内容不存在。');
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+        }
+    }
+    
+    public function actionColumn() {
+
+        $model=ColumnSetting::get_column(Yii::$app->user->identity->id,'health');
+        if($model==null){
+            $model=new ColumnSetting();
+            $model->uid=Yii::$app->user->identity->id;
+            $model->type='health';
+            
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $column = Yii::$app->request->post('ColumnSetting');
+            $model->content= json_encode($column['content']);
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', '操作成功。');
+            } else {
+                Yii::$app->session->setFlash('error', '操作失败。');
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+          
+            $model->content= json_decode($model->content);
+                
+            return $this->renderAjax('column', [
+                'model' => $model,
+            ]);
+      
+        }
     }
     
 }

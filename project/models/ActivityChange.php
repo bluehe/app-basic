@@ -357,7 +357,7 @@ class ActivityChange extends \yii\db\ActiveRecord
 
     }
     
-    //设定活跃有效
+    //设定下拨
     public static function set_allocate() {
         $ids=static::find()->alias('a')->andWhere(['is_allocate'=> self::ALLOCATE_D])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.end_time>=b.start_time AND a.end_time<=b.end_time')])->select(['id'])->column();
           

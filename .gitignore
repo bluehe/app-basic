@@ -40,3 +40,4 @@ phpunit.phar
 /git/
 /project/web/data/git/
 /project/web/codecommit.log
+/project/web/data/health_data/
