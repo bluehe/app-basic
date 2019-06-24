@@ -15,6 +15,7 @@ use project\models\Train;
 use project\models\CloudSubsidy;
 use project\models\UserGroup;
 use yii\web\JsExpression;
+use project\models\HealthData;
 
 class StatisticsController extends Controller {
 
@@ -686,12 +687,65 @@ class StatisticsController extends Controller {
         return $this->render('activity', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'sum'=>$sum,'total'=>$total,'annual'=>$annual,'group'=>$group,'allocate'=>$allocate]);
     }
     
-    public function actionHealth() {
+//    public function actionHealth() {
+//        $chart=Yii::$app->siteConfig->business_charts;
+//        $end = strtotime('today');
+//        $start = strtotime('-1 months +1 days',$end);
+//        $group=Yii::$app->request->get('group',null);
+//        $allocate=Yii::$app->request->get('allocate',ActivityChange::ALLOCATE_Y)?ActivityChange::ALLOCATE_Y:null;
+//        if(!$group){
+//            $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+//            if(count($group_id)>0){
+//                $group=$group_id[0];
+//            }
+//        }
+//
+//        if (Yii::$app->request->get('range')) {
+//            $range = explode('~', Yii::$app->request->get('range'));
+//            $start = isset($range[0]) ? strtotime($range[0]) : $start;
+//            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]): $end;
+//        }
+//        
+//        //健康度
+//        $series['health']=[]; 
+//        $data_health=$health_value=$health_key=[];
+//        $health_total= ActivityChange::get_health($start-86400, $end,$group,$allocate);      
+//        
+//        foreach($health_total as $total){
+//            $key=$end-$start>=365*86400?date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']):date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
+//            $health_value[$key][$total['health']]= (int) $total['num'];
+//            if(!in_array($total['health'], $health_key)){
+//                $health_key[]=$total['health'];
+//            }
+//        }
+//        asort($health_key);
+//        foreach($health_value as $date=>$value){
+//            foreach($health_key as $key){
+//                $y_health=isset($health_value[$date][$key])?$health_value[$date][$key]:0;
+//                $data_health[$key][]=['name' =>$date , 'y' => $y_health,'value'=>[$date,$y_health]];
+//            }
+//        }
+//       
+//        if($chart==1){
+//            foreach($data_health as $k=>$v){
+//                $series['health'][] = ['type' => 'column', 'name' => ActivityChange::$List['health'][$k], 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+//            }
+//        }else{
+//            foreach($data_health as $k=>$v){
+//                $series['health'][] = ['type' => 'bar', 'name' => ActivityChange::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+//            }
+//        }
+//        
+//        return $this->render('health', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'group'=>$group,'allocate'=>$allocate]);
+//    
+//    }
+    
+     public function actionHealth() {
         $chart=Yii::$app->siteConfig->business_charts;
         $end = strtotime('today');
         $start = strtotime('-1 months +1 days',$end);
         $group=Yii::$app->request->get('group',null);
-        $allocate=Yii::$app->request->get('allocate',ActivityChange::ALLOCATE_Y)?ActivityChange::ALLOCATE_Y:null;
+        $allocate=Yii::$app->request->get('allocate', HealthData::ALLOCATE_Y)?HealthData::ALLOCATE_Y:null;
         if(!$group){
             $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
             if(count($group_id)>0){
@@ -708,10 +762,10 @@ class StatisticsController extends Controller {
         //健康度
         $series['health']=[]; 
         $data_health=$health_value=$health_key=[];
-        $health_total= ActivityChange::get_health($start-86400, $end,$group,$allocate);      
+        $health_total= HealthData::get_health($start-86400, $end,$group,$allocate);      
         
         foreach($health_total as $total){
-            $key=$end-$start>=365*86400?date('Y.n.j',$total['start_time']+86400).'-'.date('Y.n.j',$total['end_time']):date('n.j',$total['start_time']+86400).'-'.date('n.j',$total['end_time']);
+            $key=$end-$start>=365*86400?date('Y.n.j',$total['statistics_time']):date('n.j',$total['statistics_time']);
             $health_value[$key][$total['health']]= (int) $total['num'];
             if(!in_array($total['health'], $health_key)){
                 $health_key[]=$total['health'];
@@ -727,11 +781,11 @@ class StatisticsController extends Controller {
        
         if($chart==1){
             foreach($data_health as $k=>$v){
-                $series['health'][] = ['type' => 'column', 'name' => ActivityChange::$List['health'][$k], 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+                $series['health'][] = ['type' => 'column', 'name' => HealthData::$List['health'][$k], 'data' => $v,'color'=> HealthData::$List['health_color'][$k]];
             }
         }else{
             foreach($data_health as $k=>$v){
-                $series['health'][] = ['type' => 'bar', 'name' => ActivityChange::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> ActivityChange::$List['health_color'][$k]];
+                $series['health'][] = ['type' => 'bar', 'name' => HealthData::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> HealthData::$List['health_color'][$k]];
             }
         }
         
