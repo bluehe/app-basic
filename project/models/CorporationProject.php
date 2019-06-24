@@ -141,6 +141,8 @@ class CorporationProject extends \yii\db\ActiveRecord
             }
             $stat=true;
             
+        }else{
+            $stat=true;
         }        
         return $stat;
     }
