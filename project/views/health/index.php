@@ -155,7 +155,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'filter' => HealthData::$List['is_allocate'],
-                        
+                        'visible'=> is_array($column)&&in_array('is_allocate',$column), 
                     ],
                     [
                         'attribute' => 'activity_month',
@@ -164,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'filter' => HealthData::$List['is_act'],
-                       
+                       'visible'=> is_array($column)&&in_array('activity_month',$column), 
                     ],
                     [
                         'attribute' => 'activity_week',
@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'filter' => HealthData::$List['is_act'],
-                       
+                        'visible'=> is_array($column)&&in_array('activity_week',$column), 
                     ],                   
                     [
                         'attribute' => 'act_trend',
@@ -182,7 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'filter' => Yii::$app->request->get('sum',1)?false:HealthData::$List['act_trend'], 
-                            
+                        'visible'=> is_array($column)&&in_array('act_trend',$column),   
                     ],
                     [
                         'attribute' => 'level',
@@ -191,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'filter' => HealthData::$List['health'],
-                       
+                        'visible'=> is_array($column)&&in_array('level',$column),
                     ], 
                     [
                         'attribute' => 'health_trend',
@@ -200,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'filter' => Yii::$app->request->get('sum',1)?false: HealthData::$List['act_trend'],
-                       
+                        'visible'=> is_array($column)&&in_array('health_trend',$column),
                     ], 
 
                     [

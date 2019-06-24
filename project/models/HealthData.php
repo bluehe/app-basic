@@ -136,6 +136,12 @@ class HealthData extends \yii\db\ActiveRecord
             self::HEALTH_H5 => "#00a65a"
         ],
         'column'=>[
+            'is_allocate' => '是否下拨',
+            'activity_month' => '月活',
+            'activity_week' => '周活',
+            'act_trend' => '活跃趋势',
+            'level' => '健康度',           
+            'health_trend' => '健康度趋势',
             'H' => 'H',          
             'C' => 'C',
             'I' => 'I',

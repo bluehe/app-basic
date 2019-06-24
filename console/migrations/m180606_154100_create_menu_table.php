@@ -68,7 +68,7 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             
             
             [50, '健康度', NULL, '/health/index', 5, '{"icon":"fa fa-expeditedssl"}'],
-            [51, '健康度导入', 50, '/health/impor-list', 2, '{"icon":"fa fa-upload"}'],
+            [51, '健康度导入', 50, '/health/impor-list', 1, '{"icon":"fa fa-upload"}'],
             [52, '数据管理', 50, '/health/index', 2, '{"icon":"fa fa-heartbeat"}'],
             
             [70, '数据统计', NULL, '/statistics/activity', 7, '{"icon":"fa  fa-bar-chart"}'],
