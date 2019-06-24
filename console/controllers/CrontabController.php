@@ -137,7 +137,7 @@ class CrontabController extends Controller
                 $model->save();
                 Yii::info('执行成功,ID:'.$id, 'gitexec');
             }else{
-                Yii::error('执行失败', 'gitexec');
+                Yii::error('执行失败,ID:'.$id, 'gitexec');
             }
 
             $exec = new CodehubExec();
