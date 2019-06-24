@@ -9,6 +9,7 @@ use project\models\CorporationCodehub;
 use project\models\CodehubExec;
 use project\models\CorporationMeal;
 use project\models\Corporation;
+use project\models\CorporationProject;
 
 /**
  * 定时任务调度控制器
@@ -166,9 +167,14 @@ class CrontabController extends Controller
         
         $ids = CorporationMeal::find()->groupBy(['corporation_id'])->having(['<=','MAX(end_time)',time()+86400*7])->select(['corporation_id'])->column();
         $corporation_ids = Corporation::find()->where(['id'=>$ids,'stat'=>[Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN]])->select(['id'])->column();
-        if($corporation_ids){
+        if(count($corporation_ids)>0){
             foreach ($corporation_ids as $corporation_id){
-                \project\models\CorporationProject::project_delete($corporation_id)?'1':'2';
+                $stat=CorporationProject::project_delete($corporation_id);
+                if($stat){
+                    Yii::info($corporation_id.'删除成功', 'projectclean');
+                }else{
+                    Yii::warning($corporation_id.'删除失败', 'projectclean');
+                }
             }
         }
         return ExitCode::OK;

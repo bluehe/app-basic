@@ -36,6 +36,13 @@ return [
                     'logVars' => ['*'],
                     'logFile' => '@runtime/logs/gitexec.log',
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'categories' => ['projectclean'],
+                    'levels' => ['error', 'warning','info'],
+                    'logVars' => ['*'],
+                    'logFile' => '@runtime/logs/projectclean.log',
+                ],
             ],
             
         ],

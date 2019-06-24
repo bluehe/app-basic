@@ -102,6 +102,7 @@ class CorporationProject extends \yii\db\ActiveRecord
                 foreach ($codehubs as $codehub){
                     CorporationCodehub::codehub_delete($codehub->id);
                 }
+                Yii::info($corporation_id.'仓库删除', 'projectclean');
             }
             
             //移除项目成员
@@ -112,7 +113,7 @@ class CorporationProject extends \yii\db\ActiveRecord
 
                 foreach ($auth_member['content']['result']['members'] as $member){
                     $members[$member['user_id']]=$member['role_id'];
-                }
+                }               
             }           
             $delete_members= array_keys($members);
             if(count($delete_members)>1){
@@ -121,7 +122,7 @@ class CorporationProject extends \yii\db\ActiveRecord
                         $auth=CurlHelper::deleteMember($model->project_uuid, $delete, $token);                      
                     }
                 }
-                
+                Yii::info($corporation_id.'移除成员', 'projectclean');               
             }
             
             //删除账号
@@ -136,6 +137,7 @@ class CorporationProject extends \yii\db\ActiveRecord
                         }
                     }                   
                 }
+                Yii::info($corporation_id.'删除账号', 'projectclean');
             }
             $stat=true;
             
