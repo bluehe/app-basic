@@ -113,14 +113,14 @@ class HealthSearch extends HealthData
                     'pageSize' => $pageSize,
                 ],
                 'sort' => ['defaultOrder' => [
-                    'statistics_time' => SORT_ASC,
+                    'statistics_time' => SORT_DESC,
                 ]],
             ]);
         }else{
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
                 'sort' => ['defaultOrder' => [
-                        'statistics_time' => SORT_ASC,
+                        'statistics_time' => SORT_DESC,
                     ]],
             ]);
         }
