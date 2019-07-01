@@ -125,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'statistics_time',
                         'label' => '时间段',
                         'value' => function($model) {
-                            return date('Y-m-d',$model->start_time).' ~ '.date('Y-m-d',$model->end_time);
+                            return Yii::$app->request->get('sum',1)?date('Y-m-d',$model->start_time).' ~ '.date('Y-m-d',$model->end_time):date('Y-m-d',$model->start_time);
                         },
                         'filter' => false,
                     ],
