@@ -124,8 +124,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type' => 'category'
                             ],
                             'yAxis' => [
-                                'title' => ['text' => '数量'],'min'=>0,'reversedStacks'=>false,
-                                'stackLabels'=>['enabled' => true],
+                                ['title' => ['text' => '数量'],'min'=>0,'reversedStacks'=>false,'stackLabels'=>['enabled' => true]],
+                                ['title' => ['text' => '活跃率'],'labels'=>['format'=>'{value} %'],'opposite'=>true,'min'=>0,'max'=>100]
                             ],
                            
                             'tooltip' => [
@@ -133,6 +133,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'crosshairs' => true
                             ],
                             'plotOptions' => [
+                                'spline' => [
+                                    'cursor' => 'pointer',
+                                    'dataLabels' => [
+                                        'enabled' => true,                                      
+                                        'format' => '{y:.2f} %',
+                                        'shadow'=>false,
+                                        'style'=>['textShadow'=>false]
+                                    ],
+                                    'showInLegend' => true,
+                                ],
                                 'column' => [
                                     'cursor' => 'pointer',
                                     'stacking'=>'normal',
@@ -174,7 +184,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'splitLine'=>['show'=>true]
                                     ],
                                     'yAxis' => [                
-                                       'type' => 'value','name' => '数量','min'=>0
+                                        ['type' => 'value','name' => '数量','min'=>0],
+                                        ['type' => 'value','name' => '活跃率','min'=>0,'max'=>100,'splitLine'=>['show'=>false],'axisLabel'=>['formatter'=>'{value}%']]                                    
                                     ],
                                     
                                     'tooltip' => [

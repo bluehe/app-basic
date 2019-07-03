@@ -773,20 +773,28 @@ class StatisticsController extends Controller {
         }
         asort($health_key);
         foreach($health_value as $date=>$value){
+            $sum=0;
             foreach($health_key as $key){
                 $y_health=isset($health_value[$date][$key])?$health_value[$date][$key]:0;
+                $sum+=$y_health;
                 $data_health[$key][]=['name' =>$date , 'y' => $y_health,'value'=>[$date,$y_health]];
             }
+            $health_5=isset($health_value[$date][HealthData::HEALTH_H5])?$health_value[$date][HealthData::HEALTH_H5]:0;
+            $health_4=isset($health_value[$date][HealthData::HEALTH_H4])?$health_value[$date][HealthData::HEALTH_H4]:0;
+            $data_per[]=['name' => $date, 'y' => $sum==0?0: round(($health_4+$health_5)*100/$sum,2),'value' => [$date,$sum==0?0: round(($health_4+$health_5)*100/$sum,2)]]; 
         }
+        
        
         if($chart==1){
             foreach($data_health as $k=>$v){
                 $series['health'][] = ['type' => 'column', 'name' => HealthData::$List['health'][$k], 'data' => $v,'color'=> HealthData::$List['health_color'][$k]];
             }
+            $series['health'][] = ['type' => 'spline', 'name' => '健康率', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];   
         }else{
             foreach($data_health as $k=>$v){
-                $series['health'][] = ['type' => 'bar', 'name' => HealthData::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> HealthData::$List['health_color'][$k]];
+                $series['health'][] = ['type' => 'bar', 'name' => HealthData::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> HealthData::$List['health_color'][$k],'label'=>['show'=>true]];
             }
+            $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => '健康率', 'data' => $data_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];  
         }
         
         return $this->render('health', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'group'=>$group,'allocate'=>$allocate]);
