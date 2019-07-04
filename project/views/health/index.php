@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
 use yii\helpers\Url;
-use project\models\ActivityChange;
 use kartik\widgets\SwitchInput;
 use yii\bootstrap\Modal;
 use project\models\User;
@@ -297,7 +296,7 @@ Modal::end();
 <script>
 <?php $this->beginBlock('health') ?>
     $('.sparktristate').sparkline('html', {type: 'tristate',colorMap:{'1':'#00a65a','-1':'#dd4b39'},tooltipValueLookups: {map: $.range_map({'-1': '不活跃', '1': '活跃','0':'未设置'})}});
-    $('.sparktristate_health').sparkline('html', {type: 'tristate',colorMap:<?php echo json_encode(ActivityChange::$List['health_color'])?>,tooltipValueLookups: {map: $.range_map(<?php echo json_encode(ActivityChange::$List['health'])?>)}});
+    $('.sparktristate_health').sparkline('html', {type: 'tristate',colorMap:<?php echo json_encode(HealthData::$List['health_color'])?>,tooltipValueLookups: {map: $.range_map(<?php echo json_encode(HealthData::$List['health'])?>)}});
    
     $('.activity-index').on('click', '.account-add', function () {
         $('.modal-title').html('添加账号');
