@@ -745,6 +745,7 @@ class StatisticsController extends Controller {
         $end = strtotime('today');
         $start = strtotime('-1 months +1 days',$end);
         $group=Yii::$app->request->get('group',null);
+        $total_get=Yii::$app->request->get('total',1);
         $allocate=Yii::$app->request->get('allocate', HealthData::ALLOCATE_Y)?HealthData::ALLOCATE_Y:null;
         if(!$group){
             $group_id=UserGroup::get_user_groupid(Yii::$app->user->identity->id);
@@ -759,45 +760,91 @@ class StatisticsController extends Controller {
             $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]): $end;
         }
         
+               
         //健康度
         $series['health']=[]; 
-        $data_health=$health_value=$health_key=[];
-        $health_total= HealthData::get_health($start-86400, $end,$group,$allocate);      
-        
-        foreach($health_total as $total){
-            $key=$end-$start>=365*86400?date('Y.n.j',$total['statistics_time']):date('n.j',$total['statistics_time']);
-            $health_value[$key][$total['health']]= (int) $total['num'];
-            if(!in_array($total['health'], $health_key)){
-                $health_key[]=$total['health'];
+        $data_health=$data_per=$health_value=$health_key=[];
+        $health_total= HealthData::get_health($start-86400, $end,$group,$allocate,$total_get);      
+
+        if($total_get==1){
+            foreach($health_total as $total){
+                $key=$end-$start>=365*86400?date('Y.n.j',$total['statistics_time']):date('n.j',$total['statistics_time']);
+                $health_value[$key][$total['health']]= (int) $total['num'];
+                if(!in_array($total['health'], $health_key)){
+                    $health_key[]=$total['health'];
+                }
             }
-        }
-        asort($health_key);
-        foreach($health_value as $date=>$value){
-            $sum=0;
-            foreach($health_key as $key){
-                $y_health=isset($health_value[$date][$key])?$health_value[$date][$key]:0;
-                $sum+=$y_health;
-                $data_health[$key][]=['name' =>$date , 'y' => $y_health,'value'=>[$date,$y_health]];
+            asort($health_key);
+            foreach($health_value as $date=>$value){
+                $sum=0;
+                foreach($health_key as $key){
+                    $y_health=isset($health_value[$date][$key])?$health_value[$date][$key]:0;
+                    $sum+=$y_health;
+                    $data_health[$key][]=['name' =>$date , 'y' => $y_health,'value'=>[$date,$y_health]];
+                }
+                $health_5=isset($health_value[$date][HealthData::HEALTH_H5])?$health_value[$date][HealthData::HEALTH_H5]:0;
+                $health_4=isset($health_value[$date][HealthData::HEALTH_H4])?$health_value[$date][HealthData::HEALTH_H4]:0;
+                $data_per[]=['name' => $date, 'y' => $sum==0?0: round(($health_4+$health_5)*100/$sum,2),'value' => [$date,$sum==0?0: round(($health_4+$health_5)*100/$sum,2)]]; 
             }
-            $health_5=isset($health_value[$date][HealthData::HEALTH_H5])?$health_value[$date][HealthData::HEALTH_H5]:0;
-            $health_4=isset($health_value[$date][HealthData::HEALTH_H4])?$health_value[$date][HealthData::HEALTH_H4]:0;
-            $data_per[]=['name' => $date, 'y' => $sum==0?0: round(($health_4+$health_5)*100/$sum,2),'value' => [$date,$sum==0?0: round(($health_4+$health_5)*100/$sum,2)]]; 
-        }
-        
-       
-        if($chart==1){
-            foreach($data_health as $k=>$v){
-                $series['health'][] = ['type' => 'column', 'name' => HealthData::$List['health'][$k], 'data' => $v,'color'=> HealthData::$List['health_color'][$k]];
+
+            if($chart==1){
+                foreach($data_health as $k=>$v){
+                    $series['health'][] = ['type' => 'column', 'name' => HealthData::$List['health'][$k], 'data' => $v,'color'=> HealthData::$List['health_color'][$k]];
+                }
+                $series['health'][] = ['type' => 'spline', 'name' => '健康率', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];   
+            }else{
+                foreach($data_health as $k=>$v){
+                    $series['health'][] = ['type' => 'bar', 'name' => HealthData::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> HealthData::$List['health_color'][$k],'label'=>['show'=>true]];
+                }
+                $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => '健康率', 'data' => $data_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];  
             }
-            $series['health'][] = ['type' => 'spline', 'name' => '健康率', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];   
         }else{
-            foreach($data_health as $k=>$v){
-                $series['health'][] = ['type' => 'bar', 'name' => HealthData::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> HealthData::$List['health_color'][$k],'label'=>['show'=>true]];
+            
+            $data_per = [];
+            $groups = User::get_bd_color();
+            
+            foreach($health_total as $total){
+                $total['bd_id']=$total['bd_id']?$total['bd_id']:0;
+                $key=$end-$start>=365*86400?date('Y.n.j',$total['statistics_time']):date('n.j',$total['statistics_time']);
+                $health_value[$key][$total['bd_id']][$total['health']]= (int) $total['num'];
+                if(!in_array($total['bd_id'], $health_key)){
+                    $health_key[]=$total['bd_id'];
+                }
             }
-            $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => '健康率', 'data' => $data_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];  
+            asort($health_key);
+            foreach($health_value as $date=>$value){
+                foreach($health_key as $key){
+                    $health_5=isset($health_value[$date][$key][HealthData::HEALTH_H5])?$health_value[$date][$key][HealthData::HEALTH_H5]:0;
+                    $health_4=isset($health_value[$date][$key][HealthData::HEALTH_H4])?$health_value[$date][$key][HealthData::HEALTH_H4]:0;
+                    $sum= isset($health_value[$date][$key])?array_sum($health_value[$date][$key]):0;
+                    $y_health=$health_4+$health_5;
+                    $y_per=$sum?round($y_health/$sum*100,2):0;
+                    $data_health[$key][]=['name' => $date, 'y' => $y_health ,'value'=>[$date,$y_health]];
+                    $data_per[$key][]=['name' => $date, 'y' =>$y_per,'value'=>[$date,$y_per]];
+                }
+            }          
+            
+            if($chart==1){
+                foreach ($data_health as $gid=>$data){
+                    $series['health'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','stacking'=>false];
+
+                }
+                foreach ($data_per as $gid=>$per){
+                     $series['health'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                }
+            }else{
+                foreach ($data_health as $gid=>$data){
+                    $series['health'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
+
+                }
+                foreach ($data_per as $gid=>$per){
+                    $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                }
+            }
+            
         }
         
-        return $this->render('health', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'group'=>$group,'allocate'=>$allocate]);
+        return $this->render('health', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'group'=>$group,'total'=>$total_get,'allocate'=>$allocate]);
     
     }
     

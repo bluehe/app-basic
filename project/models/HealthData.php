@@ -128,10 +128,10 @@ class HealthData extends \yii\db\ActiveRecord
             self::HEALTH_H5 => "H5"
         ],
         'health_color' => [
-            self::HEALTH_WA => "#dd4b39",
-            self::HEALTH_H1 => "#909090",
-            self::HEALTH_H2 => "#f7a35c",
-            self::HEALTH_H3 => "#7cb5ec",
+            self::HEALTH_WA => "#909090",
+            self::HEALTH_H1 => "#dd4b39",
+            self::HEALTH_H2 => "#f6877b",
+            self::HEALTH_H3 => "#f7a35c",
             self::HEALTH_H4 => "#90ee7e",
             self::HEALTH_H5 => "#00a65a"
         ],
@@ -282,8 +282,12 @@ class HealthData extends \yii\db\ActiveRecord
         return true;
     }
     
-    public static function get_health($start, $end,$group_id=null,$allocate=null) {
-        return static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['is_allocate'=>$allocate])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->orderBy(['statistics_time'=>SORT_ASC,'level'=>SORT_ASC])->select(['statistics_time','num'=>'count(level)','health'=>'MAX(level)'])->groupBy(['statistics_time','level'])->asArray()->all();        
+    public static function get_health($start, $end,$group_id=null,$allocate=null,$total=1) {
+        $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['is_allocate'=>$allocate])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->orderBy(['statistics_time'=>SORT_ASC,'level'=>SORT_ASC])->select(['statistics_time','num'=>'count(level)','health'=>'MAX(level)','bd_id'=>'MAX(bd_id)'])->groupBy(['statistics_time','level']);
+        if(!$total){
+            $query->addGroupBy(['bd_id']);
+        }
+        return $query->asArray()->all();
     }
     
 }

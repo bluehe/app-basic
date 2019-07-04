@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'id'=>'group',
                         ],
                         'pluginEvents' => [
-                            "change" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g;}",
+                            "change" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
                         ]
                     ]):'';?>
                     
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkedCalendars' => false,
                         ],
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate;}",
+                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
                     ]
                     ]);
                     ?>
@@ -86,7 +86,34 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'labelOptions' => ['style' => 'font-size: 12px'],
                         'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate;}",
+                            'switchChange.bootstrapSwitch' => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
+                    ]
+                    ]);
+                    ?>
+                </li>
+                
+                <li class="pull-right activity">
+                    <?=
+                    SwitchInput::widget([
+                        'name' => 'total',
+//                        'type' => SwitchInput::RADIO,
+                        'value'=>$total,
+//                        'items' => [
+//                            ['label' => '总和', 'value' => 1],
+//                            ['label' => '个人', 'value' => 2],
+//                        ],
+                        'options'=>['class'=>'total'],
+                        'pluginOptions'=>[
+                            'onText'=>'全员',
+                            'offText'=>'个人',
+                            'onColor' => 'success',
+                            'offColor' => 'danger', 
+//                            'size' => 'mini'
+                        ],
+                        'labelOptions' => ['style' => 'font-size: 12px'],
+                        'pluginEvents' => [
+                            'switchChange.bootstrapSwitch' => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
+                           
                     ]
                     ]);
                     ?>
@@ -120,6 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'title' => [
                                 'text' => '健康度',
                             ],
+                            'legend'=>['itemWidth'=>120],
                             'xAxis' => [
                                 'type' => 'category'
                             ],
@@ -144,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'showInLegend' => true,
                                 ],
                                 'column' => [
-                                    'cursor' => 'pointer',
+                                    'cursor' => 'pointer',                                   
                                     'stacking'=>'normal',
                                     'dataLabels' => [
                                         'enabled' => true,

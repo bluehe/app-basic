@@ -188,7 +188,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'xAxis' => [
                                 'type' => 'category'
                             ],
-                            'yAxis' => [['title' => ['text' => '数量'],'min'=>0],
+                            'yAxis' => [
+                                ['title' => ['text' => '数量'],'min'=>0],
                                 ['title' => ['text' => '活跃率'],'labels'=>['format'=>'{value} %'],'opposite'=>true,'min'=>0,'max'=>100]
                             ],
                             'tooltip' => [
