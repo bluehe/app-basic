@@ -220,6 +220,7 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['/health/*', '2', null, null, null, '1482820123', '1482820123'],
             ['/health/index', '2', null, null, null, '1482820123', '1482820123'],
             ['/health/import-list', '2', null, null, null, '1482820123', '1482820123'],
+            ['/health/column', '2', null, null, null, '1482820123', '1482820123'],
                       
             ['superadmin', '1', '超级管理员', null, null, '1482820123', '1482820123'],         
             ['member', '1', '注册会员', null, null, '1482820123', '1482820123'],
@@ -355,7 +356,8 @@ class m180606_154000_rbac_init extends \yii\db\Migration {
             ['健康度', '/health/*'],  
             ['superadmin', '健康度'],
 
-            ['健康度数据', '/health/index'],            
+            ['健康度数据', '/health/index'],
+            ['健康度数据', '/health/column'],            
             ['pm', '健康度数据'],
             ['bd', '健康度数据'],
             ['sa', '健康度数据'],
