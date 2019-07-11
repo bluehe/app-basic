@@ -266,6 +266,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                            
                         ],
+                        'visible'=> Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),
                        
                     ],
                 ],
