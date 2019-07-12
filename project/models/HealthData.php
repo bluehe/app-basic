@@ -131,7 +131,7 @@ class HealthData extends \yii\db\ActiveRecord
             self::HEALTH_WA => "#909090",
             self::HEALTH_H1 => "#dd4b39",
             self::HEALTH_H2 => "#f6877b",
-            self::HEALTH_H3 => "#f7a35c",
+            self::HEALTH_H3 => "#dfba08",
             self::HEALTH_H4 => "#90ee7e",
             self::HEALTH_H5 => "#00a65a"
         ],
