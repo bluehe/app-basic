@@ -28,6 +28,7 @@ class m190611_111700_create_health_data extends Migration {
             'corporation_id' => $this->integer()->notNull(),
             'bd_id' => $this->integer(),
             'statistics_time' => $this->integer()->notNull(),
+            'activity_day' => $this->integer()->notNull()->defaultValue(0),   
             'activity_week' => $this->integer()->notNull()->defaultValue(0),            
             'activity_month' => $this->integer()->notNull()->defaultValue(0),
             'level' => $this->integer()->notNull()->defaultValue(0),

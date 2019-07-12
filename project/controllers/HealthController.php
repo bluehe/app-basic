@@ -685,6 +685,11 @@ class HealthController extends Controller {
                     }
 
 
+                    if(isset($data['最近一天是否活跃'])){
+                        $activity_day=$data['最近一天是否活跃']=='活跃'?HealthData::ACT_Y:HealthData::ACT_N;
+                    }else{
+                        $activity_day= HealthData::ACT_D;
+                    }
                     if(isset($data['最近一周是否活跃'])){
                         $activity_week=$data['最近一周是否活跃']=='活跃'?HealthData::ACT_Y:HealthData::ACT_N;
                     }else{
@@ -695,6 +700,24 @@ class HealthController extends Controller {
                     }else{
                         $activity_month= HealthData::ACT_D;
                     }
+                    
+                    if(isset($data['日活跃与否'])){
+                        $activity_day=$data['日活跃与否']=='✔'?HealthData::ACT_Y:HealthData::ACT_N;
+                    }else{
+                        $activity_day= HealthData::ACT_D;
+                    }
+                    if(isset($data['周活跃与否'])){
+                        $activity_week=$data['周活跃与否']=='✔'?HealthData::ACT_Y:HealthData::ACT_N;
+                    }else{
+                        $activity_week= HealthData::ACT_D;
+                    }
+                    if(isset($data['月活跃与否'])){
+                        $activity_month=$data['月活跃与否']=='✔'?HealthData::ACT_Y:HealthData::ACT_N;
+                    }else{
+                        $activity_month= HealthData::ACT_D;
+                    }
+                    
+                    
                     if(isset($data['成长等级H'])){
                         switch (substr($data['成长等级H'], 0, 2)){
                             case 'H1':$level= HealthData::HEALTH_H1;break;
@@ -716,11 +739,11 @@ class HealthController extends Controller {
                     $A=isset($data['A'])?$data['A']:0;
                     $R=isset($data['R'])?$data['R']:0;
                        
-                    $model_import_data[]=['log_id'=>$model->id,'group_id'=>$model->group_id,'corporation_id'=>$corporation_id,'bd_id'=>isset($corporation_bd[$corporation_id])?$corporation_bd[$corporation_id]:null,'statistics_time'=>$model->statistics_at,'activity_week'=>$activity_week,'activity_month'=>$activity_month,'level'=>$level,'H'=>$H,'V'=>$V,'D'=>$D,'C'=>$C,'I'=>$I,'A'=>$A,'R'=>$R];
+                    $model_import_data[]=['log_id'=>$model->id,'group_id'=>$model->group_id,'corporation_id'=>$corporation_id,'bd_id'=>isset($corporation_bd[$corporation_id])?$corporation_bd[$corporation_id]:null,'statistics_time'=>$model->statistics_at,'activity_day'=>$activity_day,'activity_week'=>$activity_week,'activity_month'=>$activity_month,'level'=>$level,'H'=>$H,'V'=>$V,'D'=>$D,'C'=>$C,'I'=>$I,'A'=>$A,'R'=>$R];
 
                 }
                 if(!empty($model_import_data)){
-                    Yii::$app->db->createCommand()->batchInsert(HealthData::tableName(), ['log_id','group_id', 'corporation_id','bd_id','statistics_time','activity_week','activity_month','level','H','V','D','C','I','A','R'], $model_import_data)->execute();
+                    Yii::$app->db->createCommand()->batchInsert(HealthData::tableName(), ['log_id','group_id', 'corporation_id','bd_id','statistics_time','activity_day','activity_week','activity_month','level','H','V','D','C','I','A','R'], $model_import_data)->execute();
                 }
                 
                 //状态变化

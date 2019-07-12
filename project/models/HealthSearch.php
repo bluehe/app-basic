@@ -27,7 +27,7 @@ class HealthSearch extends HealthData
     public function rules()
     {
         return [
-            [['id','group_id','bd_id', 'corporation_id','level','activity_week','activity_month','act_trend','health_trend','is_allocate'], 'integer'],
+            [['id','group_id','bd_id', 'corporation_id','level','activity_day','activity_week','activity_month','act_trend','health_trend','is_allocate'], 'integer'],
             [['corporation','H','C','I','A','R','V','D','start_time','end_time'],'safe'],
         ];
     }
@@ -65,6 +65,7 @@ class HealthSearch extends HealthData
                 'bd_id',
                 'group_id'=>'h.group_id',
                 'corporation_id'=>'corporation_id',
+                'activity_day',
                 'activity_week',
                 'activity_month',
                 'level',
@@ -90,6 +91,7 @@ class HealthSearch extends HealthData
                 'group_id'=>'h.group_id',
                 'corporation_id',
                 'level',
+                'activity_day',
                 'activity_week',
                 'activity_month',
                 'is_allocate',
@@ -166,6 +168,7 @@ class HealthSearch extends HealthData
         $query->andFilterWhere([
             'level'=>$this->level,
             'group_id'=>$this->group_id,
+            'activity_day'=>$this->activity_day,
             'activity_week'=>$this->activity_week,
             'activity_month'=>$this->activity_month,
             'is_allocate'=>$this->is_allocate,

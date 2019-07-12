@@ -184,6 +184,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         'visible'=> is_array($column)&&in_array('act_trend',$column),   
                     ],
                     [
+                        'attribute' => 'activity_day',
+                        'value' => function($model) {                                
+                            return Html::tag('span', $model->ActDay,['class' => ($model->activity_day== HealthData::ACT_Y ? 'text-green' : ($model->activity_day== HealthData::ACT_N ? 'text-red' : ''))]);                        
+                        },
+                        'format' => 'raw',
+                        'filter' => HealthData::$List['is_act'],
+                        'visible'=> is_array($column)&&in_array('activity_day',$column), 
+                    ],
+                    [
                         'attribute' => 'level',
                         'value' => function($model) {                                
                            return '<span style="color:'. HealthData::$List['health_color'][$model->level].'">'.$model->Health.'</span>';                       

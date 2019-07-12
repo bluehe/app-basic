@@ -65,7 +65,7 @@ class HealthData extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['log_id', 'group_id', 'corporation_id','bd_id', 'statistics_time', 'activity_week', 'activity_month', 'level', 'act_trend', 'health_trend','is_allocate','start_time','end_time'], 'integer'],
+            [['log_id', 'group_id', 'corporation_id','bd_id', 'statistics_time','activity_day',  'activity_week', 'activity_month', 'level', 'act_trend', 'health_trend','is_allocate','start_time','end_time'], 'integer'],
             [['corporation_id', 'statistics_time', 'level'], 'required'],
             [['H','V', 'D', 'C', 'I', 'A', 'R'], 'number'],
             [['corporation_id', 'statistics_time'], 'unique', 'targetAttribute' => ['corporation_id', 'statistics_time'],'message'=>'已经存在此项数据'], 
@@ -73,7 +73,7 @@ class HealthData extends \yii\db\ActiveRecord
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
             [['bd_id'], 'exist', 'skipOnError' => true, 'targetClass' => CorporationBd::className(), 'targetAttribute' => ['bd_id' => 'id']],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
-            [[ 'activity_week', 'activity_month','level','act_trend', 'health_trend','is_allocate','H','V', 'D', 'C', 'I', 'A', 'R'],'default','value'=>0]
+            [['activity_day', 'activity_week', 'activity_month','level','act_trend', 'health_trend','is_allocate','H','V', 'D', 'C', 'I', 'A', 'R'],'default','value'=>0]
         ];
     }
 
@@ -89,6 +89,7 @@ class HealthData extends \yii\db\ActiveRecord
             'corporation_id' => '企业',
             'bd_id' => '客户经理',
             'statistics_time' => '统计时间',
+            'activity_day' => '日活',
             'activity_week' => '周活',
             'activity_month' => '月活',
             'level' => '健康度',
@@ -139,6 +140,7 @@ class HealthData extends \yii\db\ActiveRecord
             'is_allocate' => '是否下拨',
             'activity_month' => '月活',
             'activity_week' => '周活',
+            'activity_day' => '日活',
             'act_trend' => '活跃趋势',
             'level' => '健康度',           
             'health_trend' => '健康度趋势',
@@ -155,6 +157,11 @@ class HealthData extends \yii\db\ActiveRecord
     public function getAllocate() {
         $is_allocate = isset(self::$List['is_allocate'][$this->is_allocate]) ? self::$List['is_allocate'][$this->is_allocate] : null;
         return $is_allocate;
+    }
+    
+     public function getActDay() {
+        $act = isset(self::$List['is_act'][$this->activity_day]) ? self::$List['is_act'][$this->activity_day] : null;
+        return $act;
     }
     
     public function getActWeek() {
