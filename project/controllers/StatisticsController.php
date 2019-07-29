@@ -660,12 +660,14 @@ class StatisticsController extends Controller {
         $data_item=[]; 
         
         $items=[];       
-        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_usercount','projectman_issuecount'],$annual,true,$group,$allocate);
-        $items['代码托管']=(int) ActivityChange::get_activity_item($start-86400, $end,'codehub_commitcount',$annual,true,$group,$allocate);
-        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,'codecheck_execount',$annual,true,$group,$allocate);
-        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_allbuildcount','codeci_buildtotaltime'],$annual,true,$group,$allocate);
-        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,'testman_totalexecasecount',$annual,true,$group,$allocate);
-        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,'deploy_execount',$annual,true,$group,$allocate);       
+        $items['项目管理']=(int) ActivityChange::get_activity_item($start-86400, $end,['projectman_projectcount','projectman_membercount','projectman_issuecount','projectman_wiki','projectman_docman'],$annual,true,$group,$allocate);
+        $items['代码仓库']=(int) ActivityChange::get_activity_item($start-86400, $end,['codehub_repositorycount','codehub_commitcount','codehub_repositorysize'],$annual,true,$group,$allocate);
+        $items['流水线']=(int) ActivityChange::get_activity_item($start-86400, $end,['pipeline_assignmentscount','pipeline_elapse_time'],$annual,true,$group,$allocate);
+        $items['代码检查']=(int) ActivityChange::get_activity_item($start-86400, $end,['codecheck_taskcount','codecheck_codelinecount','codecheck_execount'],$annual,true,$group,$allocate);
+        $items['编译构建']=(int) ActivityChange::get_activity_item($start-86400, $end,['codeci_buildcount','codeci_buildtotaltime'],$annual,true,$group,$allocate);
+        $items['测试']=(int) ActivityChange::get_activity_item($start-86400, $end,['testman_casecount','testman_execasecount'],$annual,true,$group,$allocate);
+        $items['部署']=(int) ActivityChange::get_activity_item($start-86400, $end,['deploy_envcount','deploy_execount'],$annual,true,$group,$allocate); 
+        $items['发布']=(int) ActivityChange::get_activity_item($start-86400, $end,['releaseman_uploadcount','releaseman_downloadcount'],$annual,true,$group,$allocate); 
         $items['沉默企业']=(int) ActivityChange::get_activity_item($start-86400, $end,null,$annual,false,$group,$allocate);
         
         arsort($items);

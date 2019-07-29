@@ -190,32 +190,33 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['act_trend'], 
                         'visible'=> Yii::$app->request->get('dev',0)&&is_array($column)&&in_array('is_act',$column),      
                     ],
+//                    [
+//                        'attribute' => 'health',
+//                        'value' => function($model) use($start, $end) {                                
+//                           return Yii::$app->request->get('sum',1)?'<span class="sparktristate_health">'.ActivityChange::get_health_line($model->corporation_id,$start-86400, $end).'</span>':'<span style="color:'.ActivityChange::$List['health_color'][$model->health].'">'.$model->Health.'</span>';                       
+//                        },
+//                        'format' => 'raw',
+//                        'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['health'],
+//                        'visible'=> is_array($column)&&in_array('health',$column),
+//                    ],   
+                                
                     [
-                        'attribute' => 'health',
-                        'value' => function($model) use($start, $end) {                                
-                           return Yii::$app->request->get('sum',1)?'<span class="sparktristate_health">'.ActivityChange::get_health_line($model->corporation_id,$start-86400, $end).'</span>':'<span style="color:'.ActivityChange::$List['health_color'][$model->health].'">'.$model->Health.'</span>';                       
-                        },
-                        'format' => 'raw',
-                        'filter' => Yii::$app->request->get('sum',1)?false:ActivityChange::$List['health'],
-                        'visible'=> is_array($column)&&in_array('health',$column),
-                    ],   
-                    [
-                    'attribute' => 'projectman_usercount',
+                    'attribute' => 'devcloud_pv',
                     'value' => function($model) {                                
-                        return Html::tag('span', $model->projectman_usercount?$model->projectman_usercount:'',['class' => ($model->projectman_usercount==0 ? '' : ($model->projectman_usercount >0 ? 'text-green' : 'text-red'))]);
+                        return Html::tag('span', $model->devcloud_pv?$model->devcloud_pv:'',['class' => ($model->devcloud_pv==0 ? '' : ($model->devcloud_pv >0 ? 'text-green' : 'text-red'))]);
 
                     },
                     'format' => 'raw',
                     'contentOptions'=>function($model) {
                         if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('projectman_usercount', $model->start_time, $model->end_time);
-                            $value=$model->projectman_usercount;
+                            $dev= ActivityChange::deviation_data('devcloud_pv', $model->start_time, $model->end_time);
+                            $value=$model->devcloud_pv;
                             return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
                         }else{return [];}
                     },
-                    'visible'=> is_array($column)&&in_array('projectman_usercount',$column),
+                    'visible'=> is_array($column)&&in_array('devcloud_pv',$column),
                     ],
-
+                    
                     [
                     'attribute' => 'projectman_projectcount',
                     'value' => function($model) {
@@ -249,24 +250,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'visible'=> is_array($column)&&in_array('projectman_membercount',$column),
                     ],
-
-                    [
-                    'attribute' => 'projectman_versioncount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->projectman_versioncount?$model->projectman_versioncount:'',['class' => ($model->projectman_versioncount==0 ? '' : ($model->projectman_versioncount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('projectman_versioncount', $model->start_time, $model->end_time);
-                            $value=$model->projectman_versioncount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}        
-                    },
-                    'visible'=> is_array($column)&&in_array('projectman_versioncount',$column),
-                    ],
-
+                  
                     [
                     'attribute' => 'projectman_issuecount',
                     'value' => function($model) {
@@ -283,39 +267,39 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'visible'=> is_array($column)&&in_array('projectman_issuecount',$column),
                     ],
-
+                            
                     [
-                    'attribute' => 'projectman_storagecount',
+                    'attribute' => 'projectman_wiki',
                     'value' => function($model) {
-                        return Html::tag('span', $model->projectman_storagecount?$model->projectman_storagecount:'',['class' => ($model->projectman_storagecount==0 ? '' : ($model->projectman_storagecount >0 ? 'text-green' : 'text-red') )]);
+                        return Html::tag('span', $model->projectman_wiki?$model->projectman_wiki:'',['class' => ($model->projectman_wiki==0 ? '' : ($model->projectman_wiki >0 ? 'text-green' : 'text-red') )]);
 
                     },
                     'format' => 'raw',
                     'contentOptions'=>function($model) {
                         if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('projectman_storagecount', $model->start_time, $model->end_time);
-                            $value=$model->projectman_storagecount;
+                            $dev= ActivityChange::deviation_data('projectman_wiki', $model->start_time, $model->end_time);
+                            $value=$model->projectman_wiki;
                             return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}         
+                        }else{return [];}        
                     },
-                    'visible'=> is_array($column)&&in_array('projectman_storagecount',$column),
+                    'visible'=> is_array($column)&&in_array('projectman_wiki',$column),
                     ],
 
                     [
-                    'attribute' => 'codehub_all_usercount',
+                    'attribute' => 'projectman_docman',
                     'value' => function($model) {
-                        return Html::tag('span', $model->codehub_all_usercount?$model->codehub_all_usercount:'',['class' => ($model->codehub_all_usercount==0 ? '' : ($model->codehub_all_usercount >0 ? 'text-green' : 'text-red') )]);
+                        return Html::tag('span', $model->projectman_docman?$model->projectman_docman:'',['class' => ($model->projectman_docman==0 ? '' : ($model->projectman_docman >0 ? 'text-green' : 'text-red') )]);
 
                     },
                     'format' => 'raw',
                     'contentOptions'=>function($model) {
                         if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('codehub_all_usercount', $model->start_time, $model->end_time);
-                            $value=$model->codehub_all_usercount;
+                            $dev= ActivityChange::deviation_data('projectman_docman', $model->start_time, $model->end_time);
+                            $value=$model->projectman_docman;
                             return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}          
+                        }else{return [];}         
                     },
-                    'visible'=> is_array($column)&&in_array('codehub_all_usercount',$column),
+                    'visible'=> is_array($column)&&in_array('projectman_docman',$column),
                     ],
 
                     [
@@ -370,56 +354,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
 
                     [
-                    'attribute' => 'pipeline_usercount',
+                    'attribute' => 'pipeline_assignmentscount',
                     'value' => function($model) {
-                        return Html::tag('span', $model->pipeline_usercount?$model->pipeline_usercount:'',['class' => ($model->pipeline_usercount==0 ? '' : ($model->pipeline_usercount >0 ? 'text-green' : 'text-red') )]);
+                        return Html::tag('span', $model->pipeline_assignmentscount?$model->pipeline_assignmentscount:'',['class' => ($model->pipeline_assignmentscount==0 ? '' : ($model->pipeline_assignmentscount >0 ? 'text-green' : 'text-red') )]);
 
                     },
                     'format' => 'raw',
                     'contentOptions'=>function($model) {
                         if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('pipeline_usercount', $model->start_time, $model->end_time);
-                            $value=$model->pipeline_usercount;
+                            $dev= ActivityChange::deviation_data('pipeline_assignmentscount', $model->start_time, $model->end_time);
+                            $value=$model->pipeline_assignmentscount;
                             return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
                         }else{return [];} 
                     },
-                    'visible'=> is_array($column)&&in_array('pipeline_usercount',$column),
+                    'visible'=> is_array($column)&&in_array('pipeline_assignmentscount',$column),
                     ],
-            
-                    [
-                    'attribute' => 'pipeline_pipecount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->pipeline_pipecount?$model->pipeline_pipecount:'',['class' => ($model->pipeline_pipecount==0 ? '' : ($model->pipeline_pipecount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('pipeline_pipecount', $model->start_time, $model->end_time);
-                            $value=$model->pipeline_pipecount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}          
-                    },
-                    'visible'=> is_array($column)&&in_array('pipeline_pipecount',$column),
-                    ],
-
-                    [
-                    'attribute' => 'pipeline_executecount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->pipeline_executecount?$model->pipeline_executecount:'',['class' => ($model->pipeline_executecount==0 ? '' : ($model->pipeline_executecount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('pipeline_executecount', $model->start_time, $model->end_time);
-                            $value=$model->pipeline_executecount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}         
-                    }, 
-                    'visible'=> is_array($column)&&in_array('pipeline_executecount',$column),
-                    ],
-
+           
                     [
                     'attribute' => 'pipeline_elapse_time',
                     'value' => function($model) {
@@ -435,23 +385,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         }else{return [];}          
                     },
                     'visible'=> is_array($column)&&in_array('pipeline_elapse_time',$column),
-                    ],
-
-                    [
-                    'attribute' => 'codecheck_usercount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->codecheck_usercount?$model->codecheck_usercount:'',['class' => ($model->codecheck_usercount==0 ? '' : ($model->codecheck_usercount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('codecheck_usercount', $model->start_time, $model->end_time);
-                            $value=$model->codecheck_usercount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}          
-                    },
-                    'visible'=> is_array($column)&&in_array('codecheck_usercount',$column),
                     ],
 
                     [
@@ -489,23 +422,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
 
                     [
-                    'attribute' => 'codecheck_issuecount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->codecheck_issuecount?$model->codecheck_issuecount:'',['class' => ($model->codecheck_issuecount==0 ? '' : ($model->codecheck_issuecount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('codecheck_issuecount', $model->start_time, $model->end_time);
-                            $value=$model->codecheck_issuecount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}
-                    },
-                    'visible'=> is_array($column)&&in_array('codecheck_issuecount',$column),
-                    ],
-
-                    [
                     'attribute' => 'codecheck_execount',
                     'value' => function($model) {
                         return Html::tag('span', $model->codecheck_execount?$model->codecheck_execount:'',['class' => ($model->codecheck_execount==0 ? '' : ($model->codecheck_execount >0 ? 'text-green' : 'text-red') )]);
@@ -521,24 +437,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }, 
                     'visible'=> is_array($column)&&in_array('codecheck_execount',$column),
                     ],
-
-                    [
-                    'attribute' => 'codeci_usercount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->codeci_usercount?$model->codeci_usercount:'',['class' => ($model->codeci_usercount==0 ? '' : ($model->codeci_usercount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('codeci_usercount', $model->start_time, $model->end_time);
-                            $value=$model->codeci_usercount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}        
-                    },
-                    'visible'=> is_array($column)&&in_array('codeci_usercount',$column),
-                    ],
-
+                    
                     [
                     'attribute' => 'codeci_buildcount',
                     'value' => function($model) {
@@ -555,24 +454,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'visible'=> is_array($column)&&in_array('codeci_buildcount',$column),
                     ],
-                     
-                    [
-                    'attribute' => 'codeci_allbuildcount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->codeci_allbuildcount?$model->codeci_allbuildcount:'',['class' => ($model->codeci_allbuildcount==0 ? '' : ($model->codeci_allbuildcount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('codeci_allbuildcount', $model->start_time, $model->end_time);
-                            $value=$model->codeci_allbuildcount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}           
-                    },
-                    'visible'=> is_array($column)&&in_array('codeci_allbuildcount',$column),
-                    ],
-
+                   
                     [
                     'attribute' => 'codeci_buildtotaltime',
                     'value' => function($model) {
@@ -589,24 +471,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'visible'=> is_array($column)&&in_array('codeci_buildtotaltime',$column),
                     ],
-
-                    [
-                    'attribute' => 'testman_usercount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->testman_usercount?$model->testman_usercount:'',['class' => ($model->testman_usercount==0 ? '' : ($model->testman_usercount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('testman_usercount', $model->start_time, $model->end_time);
-                            $value=$model->testman_usercount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                       }else{return [];}           
-                    }, 
-                    'visible'=> is_array($column)&&in_array('testman_usercount',$column),
-                    ],
-
+                
                     [
                     'attribute' => 'testman_casecount',
                     'value' => function($model) {
@@ -625,38 +490,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
 
                     [
-                    'attribute' => 'testman_totalexecasecount',
+                    'attribute' => 'testman_execasecount',
                     'value' => function($model) {
-                        return Html::tag('span', $model->testman_totalexecasecount?$model->testman_totalexecasecount:'',['class' => ($model->testman_totalexecasecount==0 ? '' : ($model->testman_totalexecasecount >0 ? 'text-green' : 'text-red') )]);
+                        return Html::tag('span', $model->testman_execasecount?$model->testman_execasecount:'',['class' => ($model->testman_execasecount==0 ? '' : ($model->testman_execasecount >0 ? 'text-green' : 'text-red') )]);
 
                     },
                     'format' => 'raw',
                     'contentOptions'=>function($model) {
                         if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('testman_totalexecasecount', $model->start_time, $model->end_time);
-                            $value=$model->testman_totalexecasecount;
+                            $dev= ActivityChange::deviation_data('testman_execasecount', $model->start_time, $model->end_time);
+                            $value=$model->testman_execasecount;
                             return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
                         }else{return [];}          
                     },
-                    'visible'=> is_array($column)&&in_array('testman_totalexecasecount',$column),
-                    ],
-
-                    [
-                    'attribute' => 'deploy_usercount',
-                    'value' => function($model) {
-                        return Html::tag('span', $model->deploy_usercount?$model->deploy_usercount:'',['class' => ($model->deploy_usercount==0 ? '' : ($model->deploy_usercount >0 ? 'text-green' : 'text-red') )]);
-
-                    },
-                    'format' => 'raw',
-                    'contentOptions'=>function($model) {
-                        if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('deploy_usercount', $model->start_time, $model->end_time);
-                            $value=$model->deploy_usercount;
-                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
-                        }else{return [];}          
-                    },
-                    'visible'=> is_array($column)&&in_array('deploy_usercount',$column),
-                    ],
+                    'visible'=> is_array($column)&&in_array('testman_execasecount',$column),
+                    ],                  
 
                     [
                     'attribute' => 'deploy_envcount',
@@ -691,30 +539,47 @@ $this->params['breadcrumbs'][] = $this->title;
                     }, 
                     'visible'=> is_array($column)&&in_array('deploy_execount',$column),
                     ],
-
+                            
                     [
-                    'attribute' => 'deploy_vmcount',
+                    'attribute' => 'releaseman_uploadcount',
                     'value' => function($model) {
-                        return Html::tag('span', $model->deploy_vmcount?$model->deploy_vmcount:'',['class' => ($model->deploy_vmcount==0 ? '' : ($model->deploy_vmcount >0 ? 'text-green' : 'text-red') )]);
+                        return Html::tag('span', $model->releaseman_uploadcount?$model->releaseman_uploadcount:'',['class' => ($model->releaseman_uploadcount==0 ? '' : ($model->releaseman_uploadcount >0 ? 'text-green' : 'text-red') )]);
 
                     },
                     'format' => 'raw',
                     'contentOptions'=>function($model) {
                         if(Yii::$app->request->get('dev',0)){
-                            $dev= ActivityChange::deviation_data('deploy_vmcount', $model->start_time, $model->end_time);
-                            $value=$model->deploy_vmcount;
+                            $dev= ActivityChange::deviation_data('releaseman_uploadcount', $model->start_time, $model->end_time);
+                            $value=$model->releaseman_uploadcount;
+                            return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
+                        }else{return [];}          
+                    },
+                    'visible'=> is_array($column)&&in_array('releaseman_uploadcount',$column),
+                    ],
+
+                    [
+                    'attribute' => 'releaseman_downloadcount',
+                    'value' => function($model) {
+                        return Html::tag('span', $model->releaseman_downloadcount?$model->releaseman_downloadcount:'',['class' => ($model->releaseman_downloadcount==0 ? '' : ($model->releaseman_downloadcount >0 ? 'text-green' : 'text-red') )]);
+
+                    },
+                    'format' => 'raw',
+                    'contentOptions'=>function($model) {
+                        if(Yii::$app->request->get('dev',0)){
+                            $dev= ActivityChange::deviation_data('releaseman_downloadcount', $model->start_time, $model->end_time);
+                            $value=$model->releaseman_downloadcount;
                             return  ['class' =>($value>$dev['max']?'bg-teal-gradient':($value>0&&$value<$dev['min']?'bg-orange':''))];
                         }else{return [];}            
                     },
-                    'visible'=> is_array($column)&&in_array('deploy_vmcount',$column),
+                    'visible'=> is_array($column)&&in_array('releaseman_downloadcount',$column),
                     ],
                             
                     [
-                    'attribute' => 'projectman_usercount_d',
+                    'attribute' => 'devcloud_pv_d',
                     'value' => function($model) {                                
-                        return $model->data&&$model->data->projectman_usercount?$model->data->projectman_usercount:'';
+                        return $model->data&&$model->data->devcloud_pv?$model->data->devcloud_pv:'';
                     },
-                    'visible'=> is_array($column)&&in_array('projectman_usercount_d',$column),
+                    'visible'=> is_array($column)&&in_array('devcloud_pv_d',$column),
                     ],
                             
                     [
@@ -734,16 +599,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },                
                     'visible'=> is_array($column)&&in_array('projectman_membercount_d',$column),
                     ],
-                            
-                    [
-                    'attribute' => 'projectman_versioncount_d',
-                    'value' => function($model) {
-                        return $model->data&&$model->data->projectman_versioncount?$model->data->projectman_versioncount:'';
-
-                    },                               
-                    'visible'=> is_array($column)&&in_array('projectman_versioncount_d',$column),
-                    ],
-
+                                              
                     [
                     'attribute' => 'projectman_issuecount_d',
                     'value' => function($model) {
@@ -751,21 +607,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'visible'=> is_array($column)&&in_array('projectman_issuecount_d',$column),
                     ],
-
+                            
                     [
-                    'attribute' => 'projectman_storagecount_d',
+                    'attribute' => 'projectman_wiki_d',
                     'value' => function($model) {
-                        return $model->data&&$model->data->projectman_storagecount?$model->data->projectman_storagecount:'';
-                    },                  
-                    'visible'=> is_array($column)&&in_array('projectman_storagecount_d',$column),
+                        return $model->data&&$model->data->projectman_wiki?$model->data->projectman_wiki:'';
+
+                    },                               
+                    'visible'=> is_array($column)&&in_array('projectman_wiki_d',$column),
                     ],
 
                     [
-                    'attribute' => 'codehub_all_usercount_d',
+                    'attribute' => 'projectman_docman_d',
                     'value' => function($model) {
-                        return $model->data&&$model->data->codehub_all_usercount?$model->data->codehub_all_usercount:'';
+                        return $model->data&&$model->data->projectman_docman?$model->data->projectman_docman:'';
                     },                  
-                    'visible'=> is_array($column)&&in_array('codehub_all_usercount_d',$column),
+                    'visible'=> is_array($column)&&in_array('projectman_docman_d',$column),
                     ],
 
                     [
@@ -793,44 +650,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                             
                     [
-                    'attribute' => 'pipeline_usercount_d',
+                    'attribute' => 'pipeline_assignmentscount_d',
                     'value' => function($model) {
-                       return $model->data&&$model->data->pipeline_usercount?$model->data->pipeline_usercount:'';
+                       return $model->data&&$model->data->pipeline_assignmentscount?$model->data->pipeline_assignmentscount:'';
                     },                   
-                    'visible'=> is_array($column)&&in_array('pipeline_usercount_d',$column),
-                    ],
-            
-                    [
-                    'attribute' => 'pipeline_pipecount_d',
-                    'value' => function($model) {
-                       return $model->data&&$model->data->pipeline_pipecount?$model->data->pipeline_pipecount:'';
-                    },                  
-                    'visible'=> is_array($column)&&in_array('pipeline_pipecount_d',$column),
-                    ],
-
-                    [
-                    'attribute' => 'pipeline_executecount_d',
-                    'value' => function($model) {
-                       return $model->data&&$model->data->pipeline_executecount?$model->data->pipeline_executecount:'';
-                    },                  
-                    'visible'=> is_array($column)&&in_array('pipeline_executecount_d',$column),
+                    'visible'=> is_array($column)&&in_array('pipeline_assignmentscount_d',$column),
                     ],
 
                     [
                     'attribute' => 'pipeline_elapse_time_d',
                     'value' => function($model) {
                        return $model->data&&$model->data->pipeline_elapse_time?$model->data->pipeline_elapse_time:'';
-                    },
-                   
+                    },                  
                     'visible'=> is_array($column)&&in_array('pipeline_elapse_time_d',$column),
-                    ],
-
-                    [
-                    'attribute' => 'codecheck_usercount_d',
-                    'value' => function($model) {
-                       return $model->data&&$model->data->codecheck_usercount?$model->data->codecheck_usercount:'';
-                    },                   
-                    'visible'=> is_array($column)&&in_array('codecheck_usercount_d',$column),
                     ],
 
                     [
@@ -850,27 +682,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
 
                     [
-                    'attribute' => 'codecheck_issuecount_d',
-                    'value' => function($model) {
-                       return $model->data&&$model->data->codecheck_issuecount?$model->data->codecheck_issuecount:'';
-                    },                   
-                    'visible'=> is_array($column)&&in_array('codecheck_issuecount_d',$column),
-                    ],
-
-                    [
                     'attribute' => 'codecheck_execount_d',
                     'value' => function($model) {
                        return $model->data&&$model->data->codecheck_execount?$model->data->codecheck_execount:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('codecheck_execount_d',$column),
-                    ],
-
-                    [
-                    'attribute' => 'codeci_usercount_d',
-                    'value' => function($model) {
-                       return $model->data&&$model->data->codeci_usercount?$model->data->codeci_usercount:'';
-                    },                 
-                    'visible'=> is_array($column)&&in_array('codeci_usercount_d',$column),
                     ],
 
                     [
@@ -880,29 +696,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     },                 
                     'visible'=> is_array($column)&&in_array('codeci_buildcount_d',$column),
                     ],
-                     
-                    [
-                    'attribute' => 'codeci_allbuildcount_d',
-                    'value' => function($model) {
-                        return $model->data&&$model->data->codeci_allbuildcount?$model->data->codeci_allbuildcount:'';
-                    },                  
-                    'visible'=> is_array($column)&&in_array('codeci_allbuildcount_d',$column),
-                    ],
-
+                    
                     [
                     'attribute' => 'codeci_buildtotaltime_d',
                     'value' => function($model) {
                         return $model->data&&$model->data->codeci_buildtotaltime?$model->data->codeci_buildtotaltime:'';
                     },                 
                     'visible'=> is_array($column)&&in_array('codeci_buildtotaltime_d',$column),
-                    ],
-
-                    [
-                    'attribute' => 'testman_usercount_d',
-                    'value' => function($model) {
-                        return $model->data&&$model->data->testman_usercount?$model->data->testman_usercount:'';
-                    },                  
-                    'visible'=> is_array($column)&&in_array('testman_usercount_d',$column),
                     ],
 
                     [
@@ -914,19 +714,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
 
                     [
-                    'attribute' => 'testman_totalexecasecount_d',
+                    'attribute' => 'testman_execasecount_d',
                     'value' => function($model) {
-                        return $model->data&&$model->data->testman_totalexecasecount?$model->data->testman_totalexecasecount:'';
+                        return $model->data&&$model->data->testman_execasecount?$model->data->testman_execasecount:'';
                     },                   
-                    'visible'=> is_array($column)&&in_array('testman_totalexecasecount_d',$column),
-                    ],
-
-                    [
-                    'attribute' => 'deploy_usercount_d',
-                    'value' => function($model) {
-                        return $model->data&&$model->data->deploy_usercount?$model->data->deploy_usercount:'';
-                    },                   
-                    'visible'=> is_array($column)&&in_array('deploy_usercount_d',$column),
+                    'visible'=> is_array($column)&&in_array('testman_execasecount_d',$column),
                     ],
 
                     [
@@ -944,13 +736,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     },                   
                     'visible'=> is_array($column)&&in_array('deploy_execount_d',$column),
                     ],
+                                          
+                    [
+                    'attribute' => 'releaseman_uploadcount_d',
+                    'value' => function($model) {
+                        return $model->data&&$model->data->releaseman_uploadcount?$model->data->releaseman_uploadcount:'';
+                    },                   
+                    'visible'=> is_array($column)&&in_array('releaseman_uploadcount_d',$column),
+                    ],
 
                     [
-                    'attribute' => 'deploy_vmcount_d',
+                    'attribute' => 'releaseman_downloadcount_d',
                     'value' => function($model) {
-                        return $model->data&&$model->data->deploy_vmcount?$model->data->deploy_vmcount:'';
+                        return $model->data&&$model->data->releaseman_downloadcount?$model->data->releaseman_downloadcount:'';
                     },                   
-                    'visible'=> is_array($column)&&in_array('deploy_vmcount_d',$column),
+                    'visible'=> is_array($column)&&in_array('releaseman_downloadcount_d',$column),
                     ],
                             
 

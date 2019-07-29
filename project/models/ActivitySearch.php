@@ -17,36 +17,51 @@ class ActivitySearch extends ActivityChange
     
     public $corporation;
     public $bd_id;
-    public $projectman_usercount_d;
+    public $devcloud_pv_d;
+    
     public $projectman_projectcount_d;
     public $projectman_membercount_d;
-    public $projectman_versioncount_d;
     public $projectman_issuecount_d;
-    public $codehub_all_usercount_d;
+    public $projectman_wiki_d;
+    public $projectman_docman_d;   
+    public $projectman_versioncount_d;    
+    public $projectman_usercount_d;
+    public $projectman_storagecount_d;
+    
     public $codehub_repositorycount_d;
     public $codehub_commitcount_d;
+    public $codehub_repositorysize_d;
+    public $codehub_all_usercount_d;
+    
+    public $pipeline_assignmentscount_d;
+    public $pipeline_elapse_time_d;
     public $pipeline_usercount_d;
     public $pipeline_pipecount_d;
     public $pipeline_executecount_d;
-    public $codecheck_usercount_d;
+        
     public $codecheck_taskcount_d;
-    public $codecheck_codelinecount_d;
-    public $codecheck_issuecount_d;
+    public $codecheck_codelinecount_d;    
     public $codecheck_execount_d;
-    public $codeci_usercount_d;
+    public $codecheck_usercount_d;
+    public $codecheck_issuecount_d;
+        
     public $codeci_buildcount_d;
+    public $codeci_buildtotaltime_d;
+    public $codeci_usercount_d;
     public $codeci_allbuildcount_d;
-    public $testman_usercount_d;
+        
     public $testman_casecount_d;
+    public $testman_execasecount_d;
+    public $testman_usercount_d;
     public $testman_totalexecasecount_d;
-    public $deploy_usercount_d;
+      
     public $deploy_envcount_d;
     public $deploy_execount_d;
-    public $projectman_storagecount_d;
-    public $codehub_repositorysize_d;
-    public $pipeline_elapse_time_d;
-    public $codeci_buildtotaltime_d;
+    public $deploy_usercount_d;
     public $deploy_vmcount_d;
+    
+    public $releaseman_uploadcount_d;
+    public $releaseman_downloadcount_d;
     
     /**
      * @inheritdoc
@@ -55,7 +70,7 @@ class ActivitySearch extends ActivityChange
     {
         return [
             [['id','group_id','bd_id', 'corporation_id','type','is_allocate','is_act','act_trend','health'], 'integer'],
-            [[ 'projectman_usercount', 'projectman_projectcount', 'projectman_membercount', 'projectman_versioncount', 'projectman_issuecount', 'codehub_all_usercount', 'codehub_repositorycount', 'codehub_commitcount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount', 'codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_issuecount', 'codecheck_execount', 'codeci_usercount', 'codeci_buildcount', 'codeci_allbuildcount', 'testman_usercount', 'testman_casecount', 'testman_totalexecasecount', 'deploy_usercount', 'deploy_envcount', 'deploy_execount','projectman_storagecount', 'codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime', 'deploy_vmcount', 'projectman_usercount_d', 'projectman_projectcount_d', 'projectman_membercount_d', 'projectman_versioncount_d', 'projectman_issuecount_d', 'codehub_all_usercount_d', 'codehub_repositorycount_d', 'codehub_commitcount_d', 'pipeline_usercount_d', 'pipeline_pipecount_d', 'pipeline_executecount_d', 'codecheck_usercount_d', 'codecheck_taskcount_d', 'codecheck_codelinecount_d', 'codecheck_issuecount_d', 'codecheck_execount_d', 'codeci_usercount_d', 'codeci_buildcount_d', 'codeci_allbuildcount_d', 'testman_usercount_d', 'testman_casecount_d', 'testman_totalexecasecount_d', 'deploy_usercount_d', 'deploy_envcount_d', 'deploy_execount_d','projectman_storagecount_d', 'codehub_repositorysize_d', 'pipeline_elapse_time_d', 'codeci_buildtotaltime_d', 'deploy_vmcount_d'], 'safe'],
+            [['devcloud_pv','projectman_projectcount', 'projectman_membercount', 'projectman_issuecount','projectman_wiki','projectman_docman', 'codehub_repositorycount', 'codehub_commitcount','pipeline_assignmentscount','codecheck_taskcount', 'codecheck_codelinecount','codecheck_execount','codeci_buildcount','testman_casecount','testman_execasecount', 'deploy_envcount', 'deploy_execount','releaseman_uploadcount','releaseman_downloadcount', 'projectman_usercount', 'projectman_versioncount', 'codehub_all_usercount', 'pipeline_usercount', 'pipeline_pipecount', 'pipeline_executecount', 'codecheck_usercount',  'codecheck_issuecount',  'codeci_usercount',  'codeci_allbuildcount', 'testman_usercount',  'testman_totalexecasecount', 'deploy_usercount','codehub_repositorysize', 'pipeline_elapse_time', 'codeci_buildtotaltime','projectman_storagecount',  'deploy_vmcount','devcloud_pv_d','projectman_projectcount_d', 'projectman_membercount_d', 'projectman_issuecount_d','projectman_wiki_d','projectman_docman_d', 'codehub_repositorycount_d', 'codehub_commitcount_d','pipeline_assignmentscount_d','codecheck_taskcount_d', 'codecheck_codelinecount_d','codecheck_execount_d','codeci_buildcount_d','testman_casecount_d','testman_execasecount_d', 'deploy_envcount_d', 'deploy_execount_d','releaseman_uploadcount_d','releaseman_downloadcount_d', 'projectman_usercount_d', 'projectman_versioncount_d', 'codehub_all_usercount_d', 'pipeline_usercount_d', 'pipeline_pipecount_d', 'pipeline_executecount_d', 'codecheck_usercount_d',  'codecheck_issuecount_d',  'codeci_usercount_d',  'codeci_allbuildcount_d', 'testman_usercount_d',  'testman_totalexecasecount_d', 'deploy_usercount_d','codehub_repositorysize_d', 'pipeline_elapse_time_d', 'codeci_buildtotaltime_d','projectman_storagecount_d',  'deploy_vmcount_d'], 'safe'],
             [[ 'start_time', 'end_time','corporation','h_h','h_c','h_i','h_a','h_r','h_v','h_d'],'safe'],
         ];
     }
@@ -97,74 +112,74 @@ class ActivitySearch extends ActivityChange
                 'is_allocate'=>'MAX(is_allocate)',
                 'is_act'=>'MAX(is_act)',
                 'act_trend'=>'SUM(CASE WHEN is_act='.ActivityChange::ACT_Y.' THEN 1  ELSE 0 END)/count(*)',
-                'health'=>'SUM(CASE WHEN health!='.ActivityChange::HEALTH_WA.' THEN health  ELSE 0 END)/count(*)',
-                'h_h'=>'AVG(h_h)',
-                'h_c'=>'AVG(h_c)',
-                'h_i'=>'AVG(h_i)',
-                'h_a'=>'AVG(h_a)',
-                'h_r'=>'AVG(h_r)',
-                'h_v'=>'AVG(h_v)',
-                'h_d'=>'AVG(h_d)',
-                'projectman_usercount' => 'SUM(c.projectman_usercount)',
+//                'health'=>'SUM(CASE WHEN health!='.ActivityChange::HEALTH_WA.' THEN health  ELSE 0 END)/count(*)',
+//                'h_h'=>'AVG(h_h)',
+//                'h_c'=>'AVG(h_c)',
+//                'h_i'=>'AVG(h_i)',
+//                'h_a'=>'AVG(h_a)',
+//                'h_r'=>'AVG(h_r)',
+//                'h_v'=>'AVG(h_v)',
+//                'h_d'=>'AVG(h_d)',
+                'devcloud_pv' => 'SUM(c.devcloud_pv)',
+
                 'projectman_projectcount' => 'SUM(c.projectman_projectcount)',
                 'projectman_membercount' => 'SUM(c.projectman_membercount)',
-                'projectman_versioncount' => 'SUM(c.projectman_versioncount)',
                 'projectman_issuecount' => 'SUM(c.projectman_issuecount)',
-                'projectman_storagecount' => 'SUM(c.projectman_storagecount)',
-                'codehub_all_usercount' => 'SUM(c.codehub_all_usercount)',
+                'projectman_wiki' => 'SUM(c.projectman_wiki)',
+                'projectman_docman' => 'SUM(c.projectman_docman)',
+
                 'codehub_repositorycount' => 'SUM(c.codehub_repositorycount)',
                 'codehub_commitcount' => 'SUM(c.codehub_commitcount)',
                 'codehub_repositorysize' => 'SUM(c.codehub_repositorysize)',
-                'pipeline_usercount' => 'SUM(c.pipeline_usercount)',
-                'pipeline_pipecount' => 'SUM(c.pipeline_pipecount)',
-                'pipeline_executecount' => 'SUM(c.pipeline_executecount)',
+
+                'pipeline_assignmentscount' => 'SUM(c.pipeline_assignmentscount)',
                 'pipeline_elapse_time' => 'SUM(c.pipeline_elapse_time)',
-                'codecheck_usercount' => 'SUM(c.codecheck_usercount)',
+                
                 'codecheck_taskcount' => 'SUM(c.codecheck_taskcount)',
                 'codecheck_codelinecount' => 'SUM(c.codecheck_codelinecount)',
-                'codecheck_issuecount' => 'SUM(c.codecheck_issuecount)',
                 'codecheck_execount' => 'SUM(c.codecheck_execount)',
-                'codeci_usercount' => 'SUM(c.codeci_usercount)',
+                
                 'codeci_buildcount' => 'SUM(c.codeci_buildcount)',
-                'codeci_allbuildcount' => 'SUM(c.codeci_allbuildcount)',
                 'codeci_buildtotaltime' => 'SUM(c.codeci_buildtotaltime)',
-                'testman_usercount' => 'SUM(c.testman_usercount)',
+                
                 'testman_casecount' => 'SUM(c.testman_casecount)',
-                'testman_totalexecasecount' => 'SUM(c.testman_totalexecasecount)',
-                'deploy_usercount' => 'SUM(c.deploy_usercount)',
+                'testman_execasecount' => 'SUM(c.testman_execasecount)',
+                               
                 'deploy_envcount' => 'SUM(c.deploy_envcount)',
                 'deploy_execount' => 'SUM(c.deploy_execount)',
-                'deploy_vmcount' => 'SUM(c.deploy_vmcount)',
-                'projectman_usercount_d'=>'d.projectman_usercount',
+                
+                'releaseman_uploadcount' => 'SUM(c.releaseman_uploadcount)',
+                'releaseman_downloadcount' => 'SUM(c.releaseman_downloadcount)',
+                
+                'devcloud_pv_d'=>'d.devcloud_pv',
                 'projectman_projectcount_d' => 'd.projectman_projectcount',
                 'projectman_membercount_d' => 'd.projectman_membercount',
-                'projectman_versioncount_d' => 'd.projectman_versioncount',
                 'projectman_issuecount_d' => 'd.projectman_issuecount',
-                'projectman_storagecount_d' => 'd.projectman_storagecount',
-                'codehub_all_usercount_d' => 'd.codehub_all_usercount',
+                'projectman_wiki_d' => 'd.projectman_wiki',
+                'projectman_docman_d' => 'd.projectman_docman',
+
                 'codehub_repositorycount_d' => 'd.codehub_repositorycount',
                 'codehub_commitcount_d' => 'd.codehub_commitcount',
                 'codehub_repositorysize_d' => 'd.codehub_repositorysize',
-                'pipeline_usercount_d' => 'd.pipeline_usercount',
-                'pipeline_pipecount_d' => 'd.pipeline_pipecount',
-                'pipeline_executecount_d' => 'd.pipeline_executecount',
+
+                'pipeline_assignmentscount_d' => 'd.pipeline_assignmentscount',
                 'pipeline_elapse_time_d' => 'd.pipeline_elapse_time',
-                'codecheck_usercount_d' => 'd.codecheck_usercount',
+
                 'codecheck_taskcount_d' => 'd.codecheck_taskcount',
                 'codecheck_codelinecount_d' => 'd.codecheck_codelinecount',
-                'codecheck_issuecount_d' => 'd.codecheck_issuecount',
                 'codecheck_execount_d' => 'd.codecheck_execount',
-                'codeci_usercount_d' => 'd.codeci_usercount',
+
                 'codeci_buildcount_d' => 'd.codeci_buildcount',
-                'codeci_allbuildcount_d' => 'd.codeci_allbuildcount',
                 'codeci_buildtotaltime_d' => 'd.codeci_buildtotaltime',
-                'testman_usercount_d' => 'd.testman_usercount',
+
                 'testman_casecount_d' => 'd.testman_casecount',
-                'testman_totalexecasecount_d' => 'd.testman_totalexecasecount',
-                'deploy_usercount_d' => 'd.deploy_usercount',
+                'testman_execasecount_d' => 'd.testman_execasecount',
+                               
                 'deploy_envcount_d' => 'd.deploy_envcount',
                 'deploy_execount_d' => 'd.deploy_execount',
-                'deploy_vmcount_d' => 'd.deploy_vmcount',
+                
+                'releaseman_uploadcount_d' => 'd.releaseman_uploadcount',
+                'releaseman_downloadcount_d' => 'd.releaseman_downloadcount',
             ])->groupBy('corporation_id');
         }
 

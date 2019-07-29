@@ -272,7 +272,7 @@ class CorporationCodehub extends \yii\db\ActiveRecord
             if($model->add_type== CorporationCodehub::TYPE_SYSTEM){
                 $auth=CurlHelper::deleteCodehub($model->repository_uuid,CorporationAccount::get_token($model->corporation_id));
             }
-            if($status==0&&$auth['code']==200&&$model->delete()){
+            if($status==0&&$auth['code']=='200'&&$model->delete()){
                 $stat=true;
             }
         }

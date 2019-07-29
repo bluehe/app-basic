@@ -229,7 +229,7 @@ class ImportController extends Controller {
                     ActivityChange::set_trend();
                     
                     //设置健康度
-                    ActivityChange::set_health();
+//                    ActivityChange::set_health();
                     
                     //清除缓存
                     Yii::$app->cache->delete('deviation');
@@ -277,7 +277,7 @@ class ImportController extends Controller {
             ActivityChange::set_trend();
             
             //设置健康度
-            ActivityChange::set_health();
+//            ActivityChange::set_health();
             
             //清除缓存
             Yii::$app->cache->delete('deviation');
