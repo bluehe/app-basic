@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
               
             <ul class="nav nav-tabs" style="margin-bottom:10px;border-bottom:none">
-               <li class="header pull-right" style="margin-left: 20px;"> <div><?= Html::a('<i class="fa fa-filter" title="选择需要显示的列"></i>', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal', 'class' => 'btn btn-danger column-change']) ?></div></li>
+               <li class="header pull-right" style="margin-left: 20px;"> <div><?= Html::a('<i class="fa fa-filter" title="选择需要显示的列"></i>', ['#'], ['data-toggle' => 'modal', 'data-target' => '#list-modal', 'class' => 'btn btn-danger column-change']) ?></div></li>
 <!--                <li class="header pull-right"> <div><?= Html::a('<i class="fa fa-share-square-o"></i>全部导出', ['export?'.Yii::$app->request->queryString], ['class' => 'btn btn-warning']) ?></div></li>-->
                 
                 <li>
@@ -131,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'bd_id',
                         'value' => function($model) {
-                            return '<span class="bd-list" data-toggle="modal" data-target="#item-modal" data-id='.$model->corporation_id.' style="cursor: pointer">'.($model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'<span class="not-set" style="cursor: pointer">(未设置)</span>').'</span>';
+                            return '<span class="bd-list" data-toggle="modal" data-target="#list-modal" data-id='.$model->corporation_id.' style="cursor: pointer">'.($model->bd_id?($model->bd->nickname?$model->bd->nickname:$model->bd->username):'<span class="not-set" style="cursor: pointer">(未设置)</span>').'</span>';
                         },
                         'format'=>'raw',
                         'filter' => User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))),
@@ -268,10 +268,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{user} {project}',
                         'buttons' => [                           
                             'user' => function($url, $model, $key) {
-                                return CorporationAccount::get_corporationaccount_exist($model->corporation_id)?Html::a('<i class="fa fa-users"></i> 用户管理', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal', 'data-id'=>$model->corporation_id,'class' => 'btn btn-xs corporation-user '.(CorporationAccount::get_corporationaccount_exist($model->corporation_id, CorporationAccount::ADMIN_YES)?'btn-danger':'btn-warning'),]):Html::a('<i class="fa fa-user"></i> 添加账号', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal','data-id'=>$model->corporation_id,'class' => 'btn btn-success btn-xs account-add',]);
+                                return CorporationAccount::get_corporationaccount_exist($model->corporation_id)?Html::a('<i class="fa fa-users"></i> 用户管理', ['#'], ['data-toggle' => 'modal', 'data-target' => '#list-modal', 'data-id'=>$model->corporation_id,'class' => 'btn btn-xs corporation-user '.(CorporationAccount::get_corporationaccount_exist($model->corporation_id, CorporationAccount::ADMIN_YES)?'btn-danger':'btn-warning'),]):Html::a('<i class="fa fa-user"></i> 添加账号', ['#'], ['data-toggle' => 'modal', 'data-target' => '#list-modal','data-id'=>$model->corporation_id,'class' => 'btn btn-success btn-xs account-add',]);
                             },
                             'project' => function($url, $model, $key) {
-                                return CorporationAccount::get_token($model->corporation_id)?(CorporationProject::get_corporationproject_exist($model->corporation_id)?Html::a('<i class="fa fa-server"></i> 仓库管理', ['#'], ['data-toggle' => 'modal', 'data-target' => '#item-modal','data-id'=>$model->corporation_id,'class' => 'btn btn-warning btn-xs codehub-list',]):Html::a('<i class="fa fa-cubes"></i> 创建项目', ['project-create', 'corporation_id' => $model->corporation_id], ['class' => 'btn btn-success btn-xs','data-method' => 'post',])):'';
+                                return CorporationAccount::get_token($model->corporation_id)?(CorporationProject::get_corporationproject_exist($model->corporation_id)?Html::a('<i class="fa fa-server"></i> 仓库管理', ['#'], ['data-toggle' => 'modal', 'data-target' => '#list-modal','data-id'=>$model->corporation_id,'class' => 'btn btn-warning btn-xs codehub-list',]):Html::a('<i class="fa fa-cubes"></i> 创建项目', ['project-create', 'corporation_id' => $model->corporation_id], ['class' => 'btn btn-success btn-xs','data-method' => 'post',])):'';
                             },
                            
                         ],
@@ -285,7 +285,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <?php
 Modal::begin([
-    'id' => 'item-modal',
+    'id' => 'list-modal',
     'header' => '<h4 class="modal-title"></h4>',
     'options' => [
         'tabindex' => false
@@ -310,30 +310,30 @@ Modal::end();
    
     $('.activity-index').on('click', '.account-add', function () {
         $('.modal-title').html('添加账号');
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/account-add') ?>',{corporation_id: $(this).data('id')},
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
     
     $('.activity-index').on('click', '.corporation-user', function () {
         $('.modal-title').html('用户管理');
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/corporation-user') ?>',{id: $(this).data('id')},
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
     
     $('.activity-index').on('click', '.codehub-list', function () {
         $('.modal-title').html('仓库管理');
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/codehub-list') ?>',{id: $(this).data('id')},
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
@@ -350,20 +350,20 @@ Modal::end();
     
     $('.activity-index').on('click', '.bd-list', function () {
         $('.modal-title').html('客户经理');
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('corporation/corporation-bd') ?>',{id: $(this).data('id')},
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
     
     $('.activity-index').on('click', '.column-change', function () {
-        $('#item-modal .modal-title').html('显示项选择');
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-title').html('显示项选择');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('column') ?>',
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
