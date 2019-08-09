@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if(data.stat=='success'){
                         $.get('<?= Url::toRoute('health/codehub-list') ?>',{id: $id},
                             function (data1) {
-                                $('#item-modal .modal-body').html(data1);
+                                $('#list-modal .modal-body').html(data1);
                             }
                     );
                     }
@@ -116,10 +116,10 @@ $this->params['breadcrumbs'][] = $this->title;
     
     $('.codehub-index').on('click', '.codehub-update', function () {
         $('.modal-title').html('修改仓库');
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/codehub-update') ?>',{id: $(this).parents('tr').data('key')},
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });

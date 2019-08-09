@@ -74,19 +74,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $this->beginBlock('user') ?>
    
     $('.user-index').on('click', '.account-add', function () {
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/account-add') ?>',{corporation_id: $(this).data('id')},
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
     
     $('.user-index').on('click', '.account-update', function () {
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/account-update') ?>',{id:$(this).parents('tr').data('key')},
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if(data.stat=='success'){
                         $.get('<?= Url::toRoute('health/corporation-user') ?>',{id: $id},
                             function (data1) {
-                                $('#item-modal .modal-body').html(data1);
+                                $('#list-modal .modal-body').html(data1);
                             }
                     );
                     }
@@ -122,10 +122,10 @@ $this->params['breadcrumbs'][] = $this->title;
     
     $('.user-index').on('click', '.member-list', function () {
         $('.modal-title').html('成员管理');
-        $('#item-modal .modal-body').html('');
+        $('#list-modal .modal-body').html('');
         $.get('<?= Url::toRoute('health/member-list') ?>',{corporation_id: $(this).data('id')},
                 function (data) {
-                    $('#item-modal .modal-body').html(data);
+                    $('#list-modal .modal-body').html(data);
                 }
         );
     });
