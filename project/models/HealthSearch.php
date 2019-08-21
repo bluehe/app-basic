@@ -167,7 +167,7 @@ class HealthSearch extends HealthData
         // grid filtering conditions
         $query->andFilterWhere([
             'level'=>$this->level,
-            'group_id'=>$this->group_id,
+            'h.group_id'=>$this->group_id,
             'activity_day'=>$this->activity_day,
             'activity_week'=>$this->activity_week,
             'activity_month'=>$this->activity_month,
