@@ -297,4 +297,12 @@ class HealthData extends \yii\db\ActiveRecord
         return $query->asArray()->all();
     }
     
+    public static function get_activity($start, $end,$group_id=null,$allocate=null,$total=1,$type='activity_week') {
+        $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['is_allocate'=>$allocate,$type=>self::ACT_Y])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->orderBy(['statistics_time'=>SORT_ASC])->select(['statistics_time','num'=>'count(distinct corporation_id)','bd_id'=>'MAX(bd_id)'])->groupBy(['statistics_time']);
+        if(!$total){
+            $query->addGroupBy(['bd_id']);
+        }
+        return $query->asArray()->all();
+    }
+    
 }

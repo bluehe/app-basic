@@ -766,15 +766,31 @@ class StatisticsController extends Controller {
         //健康度
         $series['health']=[]; 
         $data_health=$data_per=$health_value=$health_key=[];
-        $health_total= HealthData::get_health($start-86400, $end,$group,$allocate,$total_get);      
+        $data_activity=$data_per_day=$data_per_week=$data_per_month=$activity=$activity_value=[];
+        $health_total= HealthData::get_health($start-86400, $end,$group,$allocate,$total_get);
+        $activity_day= HealthData::get_activity($start-86400, $end, $group, $allocate, $total_get, 'activity_day');
+        $activity_week= HealthData::get_activity($start-86400, $end, $group, $allocate, $total_get, 'activity_week');
+        $activity_month= HealthData::get_activity($start-86400, $end, $group, $allocate, $total_get, 'activity_month');      
 
         if($total_get==1){
+            foreach($activity_day as $one){
+                $activity[$one['statistics_time']]['day']=$one['num'];
+            }
+            foreach($activity_week as $one){
+                $activity[$one['statistics_time']]['week']=$one['num'];
+            }
+            foreach($activity_month as $one){
+                $activity[$one['statistics_time']]['month']=$one['num'];
+            }
             foreach($health_total as $total){
                 $key=$end-$start>=365*86400?date('Y.n.j',$total['statistics_time']):date('n.j',$total['statistics_time']);
                 $health_value[$key][$total['health']]= (int) $total['num'];
                 if(!in_array($total['health'], $health_key)){
                     $health_key[]=$total['health'];
                 }
+                $activity_value[$key]['day']=isset($activity[$total['statistics_time']]['day'])?(int)$activity[$total['statistics_time']]['day']:0;
+                $activity_value[$key]['week']=isset($activity[$total['statistics_time']]['week'])?(int)$activity[$total['statistics_time']]['week']:0;
+                $activity_value[$key]['month']=isset($activity[$total['statistics_time']]['month'])?(int)$activity[$total['statistics_time']]['month']:0;
             }
             asort($health_key);
             foreach($health_value as $date=>$value){
@@ -786,19 +802,46 @@ class StatisticsController extends Controller {
                 }
                 $health_5=isset($health_value[$date][HealthData::HEALTH_H5])?$health_value[$date][HealthData::HEALTH_H5]:0;
                 $health_4=isset($health_value[$date][HealthData::HEALTH_H4])?$health_value[$date][HealthData::HEALTH_H4]:0;
-                $data_per[]=['name' => $date, 'y' => $sum==0?0: round(($health_4+$health_5)*100/$sum,2),'value' => [$date,$sum==0?0: round(($health_4+$health_5)*100/$sum,2)]]; 
+                $data_per[]=['name' => $date, 'y' => $sum==0?0: round(($health_5)*100/$sum,2),'value' => [$date,$sum==0?0: round(($health_5)*100/$sum,2)]]; 
+                $data_activity['day'][]=['name' =>$date , 'y' => $activity_value[$date]['day'],'value'=>[$date,$activity_value[$date]['day']]];
+                $data_activity['week'][]=['name' =>$date , 'y' => $activity_value[$date]['week'],'value'=>[$date,$activity_value[$date]['week']]];
+                $data_activity['month'][]=['name' =>$date , 'y' => $activity_value[$date]['month'],'value'=>[$date,$activity_value[$date]['month']]];
+                $data_activity['total'][]=['name' =>$date , 'y' => $sum,'value'=>[$date,$sum]];
+                $data_per_day[]=['name'=>$date,'y' => $sum==0?0: round($activity_value[$date]['day']*100/$sum,2),'value' => [$date,$sum==0?0: round($activity_value[$date]['day']*100/$sum,2)]];
+                $data_per_week[]=['name'=>$date,'y' => $sum==0?0: round($activity_value[$date]['week']*100/$sum,2),'value' => [$date,$sum==0?0: round($activity_value[$date]['week']*100/$sum,2)]];
+                $data_per_month[]=['name'=>$date,'y' => $sum==0?0: round($activity_value[$date]['month']*100/$sum,2),'value' => [$date,$sum==0?0: round($activity_value[$date]['month']*100/$sum,2)]];
             }
 
             if($chart==1){
                 foreach($data_health as $k=>$v){
                     $series['health'][] = ['type' => 'column', 'name' => HealthData::$List['health'][$k], 'data' => $v,'color'=> HealthData::$List['health_color'][$k]];
-                }
-                $series['health'][] = ['type' => 'spline', 'name' => '健康率', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];   
+                }              
+                $series['health'][] = ['type' => 'spline', 'name' => '健康度', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];
+                
+                $series['activity'][] = ['type' => 'column', 'name' => '总企业数', 'data' => $data_activity['total'],'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
+                $series['activity'][] = ['type' => 'column', 'name' => '月活跃企业数', 'data' => $data_activity['month'],'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
+                $series['activity'][] = ['type' => 'column', 'name' => '周活跃企业数', 'data' => $data_activity['week'],'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
+                $series['activity'][] = ['type' => 'column', 'name' => '日活跃企业数', 'data' => $data_activity['day'],'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
+                
+                $series['activity'][] = ['type' => 'spline', 'name' => '日活跃率', 'data' => $data_per_day,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];
+                $series['activity'][] = ['type' => 'spline', 'name' => '周活跃率', 'data' => $data_per_week,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];
+                $series['activity'][] = ['type' => 'spline', 'name' => '月活跃率', 'data' => $data_per_month,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];
+                
+                
             }else{
                 foreach($data_health as $k=>$v){
                     $series['health'][] = ['type' => 'bar', 'name' => HealthData::$List['health'][$k],'stack'=>'健康度', 'data' => $v,'color'=> HealthData::$List['health_color'][$k],'label'=>['show'=>true]];
                 }
-                $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => '健康率', 'data' => $data_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];  
+                $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => '健康度', 'data' => $data_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];  
+                
+                $series['activity'][] = ['type' => 'bar', 'name' => '总企业数', 'data' => $data_activity['total'],'label'=>['show'=>true,'position'=>'top']];
+                $series['activity'][] = ['type' => 'bar', 'name' => '月活跃企业数', 'data' => $data_activity['month'],'label'=>['show'=>true],'barGap'=>'-100%'];
+                $series['activity'][] = ['type' => 'bar', 'name' => '周活跃企业数', 'data' => $data_activity['week'],'label'=>['show'=>true],'barGap'=>'-100%'];
+                $series['activity'][] = ['type' => 'bar', 'name' => '日活跃企业数', 'data' => $data_activity['day'],'label'=>['show'=>true],'barGap'=>'-100%'];
+                
+                $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => '日活跃率', 'data' => $data_per_day,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];
+                $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => '周活跃率', 'data' => $data_per_week,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];
+                $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => '月活跃率', 'data' => $data_per_month,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];
             }
         }else{
             
@@ -819,7 +862,7 @@ class StatisticsController extends Controller {
                     $health_5=isset($health_value[$date][$key][HealthData::HEALTH_H5])?$health_value[$date][$key][HealthData::HEALTH_H5]:0;
                     $health_4=isset($health_value[$date][$key][HealthData::HEALTH_H4])?$health_value[$date][$key][HealthData::HEALTH_H4]:0;
                     $sum= isset($health_value[$date][$key])?array_sum($health_value[$date][$key]):0;
-                    $y_health=$health_4+$health_5;
+                    $y_health=$health_5;//$health_4+$health_5;
                     $y_per=$sum?round($y_health/$sum*100,2):0;
                     $data_health[$key][]=['name' => $date, 'y' => $y_health ,'value'=>[$date,$y_health]];
                     $data_per[$key][]=['name' => $date, 'y' =>$y_per,'value'=>[$date,$y_per]];
@@ -834,6 +877,7 @@ class StatisticsController extends Controller {
                 foreach ($data_per as $gid=>$per){
                      $series['health'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
                 }
+                $series['activity'][] =[];
             }else{
                 foreach ($data_health as $gid=>$data){
                     $series['health'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
@@ -842,6 +886,7 @@ class StatisticsController extends Controller {
                 foreach ($data_per as $gid=>$per){
                     $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
                 }
+                $series['activity'][] =[];
             }
             
         }
