@@ -133,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->uid==Yii::$app->user->identity->id&&in_array($model->train_stat,array(Train::STAT_CREATED, Train::STAT_ORDER))?Html::a('<i class="fa fa-pencil"></i> 修改', ['#'], ['data-toggle' => 'modal', 'data-target' => '#train-modal','class' => 'btn btn-primary btn-xs train-update',]):'';
                         },
                         'end' => function($url, $model, $key) {
-                                    return $model->train_stat==Train::STAT_ORDER&&in_array(Yii::$app->user->identity->id,TrainUser::get_userid($model->id,'sa'))?Html::a('<i class="fa fa-hand-peace-o"></i> 完成', ['#'], ['data-toggle' => 'modal', 'data-target' => '#train-modal','class' => 'btn btn-warning btn-xs train-end',]):'';
+                                    return in_array($model->train_stat,[Train::STAT_ORDER, Train::STAT_END])&&in_array(Yii::$app->user->identity->id,TrainUser::get_userid($model->id,'sa'))?Html::a('<i class="fa fa-hand-peace-o"></i> '.$model->train_stat==Train::STAT_ORDER?'完成':'变更', ['#'], ['data-toggle' => 'modal', 'data-target' => '#train-modal','class' => 'btn btn-warning btn-xs train-end',]):'';
                         },
                         'cancel' => function($url, $model, $key) {
                                     return $model->uid==Yii::$app->user->identity->id&&in_array($model->train_stat,array(Train::STAT_CREATED, Train::STAT_ORDER))||($model->train_stat==Train::STAT_ORDER&&in_array(Yii::$app->user->identity->id,TrainUser::get_userid($model->id,'sa')))?Html::a('<i class="fa fa-trash-o"></i> 取消', ['cancel', 'id' => $key], ['class' => 'btn btn-danger btn-xs']):'';

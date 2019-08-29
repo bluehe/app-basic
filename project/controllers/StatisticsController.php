@@ -920,16 +920,22 @@ class StatisticsController extends Controller {
             $data_train_num = [];            
             if($sum==1){
                 //天
-                for ($i = ($train_num===true?strtotime(key($train_num)):$start); $i < $end; $i = $i + 86400) {
+                for ($i = ($train_num?strtotime(key($train_num))-86400:$start); $i < $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
-                    $j = $end-($train_num===true?strtotime(key($train_num)):$start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);
+                    $j = $end-($train_num?strtotime(key($train_num))-86400:$start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);
                     $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0, 'value' => [$j,isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0]];          
                 }
             }elseif($sum==2){
                 //周
-                for ($i = ($train_num?strtotime(key($train_num)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
-                    $k=strftime("%Y-W%W",$i);
-                    $j = $end-($train_num?strtotime(key($train_num)):strtotime(strftime("%Y-W%W",$start)))>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $i + 86400*7-1):date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
+                
+                $start_w1=$start-((date('w',$start)==0?7:date('w',$start))-1)*86400;//获取周一
+                
+                for ($i = ($train_num?strtotime(key($train_num)):$start_w1); $i < $end; $i = $i + 86400*7) {
+                    
+                    $k= strtotime(strftime("%Y-W%W",$i))==$i?strftime("%Y-W%W",$i):strftime("%Y-W%W",$i+86400*7);//strftime函数可能会相差一周，此处进行调整
+                    $s=$i<$start?$start:$i;//优化开始日期显示，日期显示更精确
+                    $e=$i+86400*7>$end?$end:$i+86400*7-1;
+                    $j = $end-($train_num?strtotime(key($train_num)):$start_w1)>=365*86400?date('Y.n.j', $s).'-'.date('Y.n.j', $e):date('n.j', $s).'-'.date('n.j', $e);
                     $data_train_num[] = ['name' => $j, 'y' => isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0, 'value' =>[$j, isset($train_num[$k]) ? (int) $train_num[$k]['num'] : 0]];          
                 }
             }else{
@@ -970,25 +976,28 @@ class StatisticsController extends Controller {
                 $data_num_total[$num['time']][$num['user_id']]=$num['num'];
             }
             if($sum==1){
-                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):$start); $i < $end; $i = $i + 86400) {
+                for ($i = ($data_num_total?strtotime(key($data_num_total)):$start); $i < $end; $i = $i + 86400) {
                     $k=date('Y-m-d', $i);
-                    $j = $end-($data_num_total===true?strtotime(key($data_num_total)):$start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);
+                    $j = $end-($data_num_total?strtotime(key($data_num_total)):$start)>=365*86400?date('Y.n.j', $i):date('n.j', $i);
                     foreach($users_num as $user){
                         $y_train_num=isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0;
                         $data_train_num[$user][] = ['name' => $j, 'y' => $y_train_num,'value'=>[$j,$y_train_num]];
                     }
                 }
             }elseif($sum==2){
-                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):strtotime(strftime("%Y-W%W",$start))); $i < $end; $i = $i + 86400*7) {
-                    $k=strftime("%Y-W%W",$i);
-                    $j = $end-($data_num_total===true?strtotime(key($data_num_total)):strtotime(strftime("%Y-W%W",$start)))>=365*86400?date('Y.n.j', $i).'-'.date('Y.n.j', $i + 86400*7-1):date('n.j', $i).'-'.date('n.j', $i + 86400*7-1);
+                $start_w1=$start-((date('w',$start)==0?7:date('w',$start))-1)*86400;//获取周一
+                for ($i = ($data_num_total?strtotime(key($data_num_total)):$start_w1); $i < $end; $i = $i + 86400*7) {
+                    $k=strtotime(strftime("%Y-W%W",$i))==$i?strftime("%Y-W%W",$i):strftime("%Y-W%W",$i+86400*7);//strftime函数可能会相差一周，此处进行调整
+                    $s=$i<$start?$start:$i;//优化开始日期显示，日期显示更精确
+                    $e=$i+86400*7>$end?$end:$i+86400*7-1;
+                    $j = $end-($data_num_total?strtotime(key($data_num_total)):$start_w1)>=365*86400?date('Y.n.j', $s).'-'.date('Y.n.j', $e):date('n.j', $s).'-'.date('n.j', $e);
                     foreach($users_num as $user){
                         $y_train_num=isset($data_num_total[$k][$user]) ? (int) $data_num_total[$k][$user] : 0;
                         $data_train_num[$user][] = ['name' => $j, 'y' => $y_train_num,'value'=>[$j,$y_train_num]];                    
                     }      
                 }
             }else{
-                for ($i = ($data_num_total===true?strtotime(key($data_num_total)):strtotime(date("Y-m",$start))); $i < $end; $i= strtotime('+1 months',$i)) {
+                for ($i = ($data_num_total?strtotime(key($data_num_total)):strtotime(date("Y-m",$start))); $i < $end; $i= strtotime('+1 months',$i)) {
                     $k=date("Y-m",$i);
                     $j = date('Y.n', $i);
                     foreach($users_num as $user){
