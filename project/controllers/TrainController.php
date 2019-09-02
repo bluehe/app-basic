@@ -322,7 +322,13 @@ class TrainController extends Controller {
                 if (count($other_t3) > 0) {
                      TrainUser::deleteAll(['train_id' => $model->id, 'user_id' => $other_t3]);
                 }
-               
+                                
+                //企业地址同步
+               $corporation = \project\models\Corporation::findOne($model->corporation_id);
+               if($corporation->contact_address==''){
+                   $corporation->contact_address==$model->train_address;
+                   $corporation->save(false);
+               }
               
                 $transaction->commit();
                 Yii::$app->session->setFlash('success', '操作成功。');
