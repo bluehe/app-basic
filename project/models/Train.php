@@ -46,6 +46,7 @@ class Train extends \yii\db\ActiveRecord
     const TYPE_CUSTOM_TRAIN=13;
     const TYPE_CUSTOM_LIVING=14;
     const TYPE_CUSTOM_SOLVE=15;
+    const TYPE_CUSTOM_SURVEY=16;
     const TYPE_INSIDE_SHARE=21;
     const TYPE_INSIDE_THIRD=22;
     const TYPE_ACTIVE_YZ=31;
@@ -170,6 +171,7 @@ class Train extends \yii\db\ActiveRecord
             self::TYPE_CUSTOM_TRAIN=>'培训',
             self::TYPE_CUSTOM_LIVING=>'促活',
             self::TYPE_CUSTOM_SOLVE=>'解决问题',
+            self::TYPE_CUSTOM_SURVEY=>'调研',
             self::TYPE_INSIDE_SHARE=>'解决方案分享',
             self::TYPE_INSIDE_THIRD=>'第三方赋能',
             self::TYPE_ACTIVE_YZ=>'云智金陵活动',
@@ -183,6 +185,7 @@ class Train extends \yii\db\ActiveRecord
             self::TYPE_CUSTOM_TRAIN=>'custom',
             self::TYPE_CUSTOM_LIVING=>'custom',
             self::TYPE_CUSTOM_SOLVE=>'custom',
+            self::TYPE_CUSTOM_SURVEY=>'custom',
             self::TYPE_INSIDE_SHARE=>'inside',
             self::TYPE_INSIDE_THIRD=>'inside',
             self::TYPE_ACTIVE_YZ=>'active',
