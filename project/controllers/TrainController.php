@@ -495,7 +495,7 @@ class TrainController extends Controller {
                     ->setCellValue( 'J'.$k, $model->train_result)
                     ->setCellValue( 'K'.$k, $model->train_num)
                     ->setCellValue( 'L'.$k, $model->TrainStat)
-                    ->setCellValue( 'L'.$k, $model->note);
+                    ->setCellValue( 'M'.$k, $model->note);
             
             if($group_count>1){
                 $objectPhpExcel->getActiveSheet()->setCellValue( 'N'.$k, $model->group_id?$model->group->title:$model->group_id);
