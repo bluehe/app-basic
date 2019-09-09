@@ -472,12 +472,13 @@ class TrainController extends Controller {
                 ->setCellValue( 'I1', $searchModel->getAttributeLabel('其他人员'))
                 ->setCellValue( 'J1', $searchModel->getAttributeLabel('train_result'))
                 ->setCellValue( 'K1', $searchModel->getAttributeLabel('train_num'))
-                ->setCellValue( 'L1', $searchModel->getAttributeLabel('train_stat'));
+                ->setCellValue( 'L1', $searchModel->getAttributeLabel('train_stat'))
+                ->setCellValue( 'M1', $searchModel->getAttributeLabel('note'));
         
         $group_count=count(Group::get_user_group(Yii::$app->user->identity->id));
         
         if($group_count>1){
-            $objectPhpExcel->getActiveSheet()->setCellValue( 'M1', $searchModel->getAttributeLabel('group_id'));
+            $objectPhpExcel->getActiveSheet()->setCellValue( 'N1', $searchModel->getAttributeLabel('group_id'));
         }
 
         foreach($models as $key=>$model){
@@ -493,10 +494,11 @@ class TrainController extends Controller {
                     ->setCellValue( 'I'.$k, $model->get_username($model->id,'other'))
                     ->setCellValue( 'J'.$k, $model->train_result)
                     ->setCellValue( 'K'.$k, $model->train_num)
-                    ->setCellValue( 'L'.$k, $model->TrainStat);
+                    ->setCellValue( 'L'.$k, $model->TrainStat)
+                    ->setCellValue( 'L'.$k, $model->note);
             
             if($group_count>1){
-                $objectPhpExcel->getActiveSheet()->setCellValue( 'M'.$k, $model->group_id?$model->group->title:$model->group_id);
+                $objectPhpExcel->getActiveSheet()->setCellValue( 'N'.$k, $model->group_id?$model->group->title:$model->group_id);
             }
                     
         }
