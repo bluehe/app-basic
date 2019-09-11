@@ -16,6 +16,7 @@ use project\models\CloudSubsidy;
 use project\models\UserGroup;
 use yii\web\JsExpression;
 use project\models\HealthData;
+use project\models\ActivityData;
 
 class StatisticsController extends Controller {
 
@@ -653,6 +654,26 @@ class StatisticsController extends Controller {
                 }
             }
                                
+        }
+        
+        
+        //用户数
+        $activity_user= ActivityData::get_user_total($start, $end, $total, $annual, $group, $allocate);
+        foreach($activity_user as $row){
+            $j=date('Y.n.j', $row['statistics_time']);
+            $data_total_num[]=['name' =>$j , 'y' =>  (int) $row['total_num'], 'value' =>  [$j,(int) $row['total_num']]];
+            $data_user_num[]=['name' => $j, 'y' =>  (int) $row['user_num'], 'value' =>  [$j,(int) $row['user_num']]];
+            $data_user_per[]=['name' => $j, 'y' => isset($row['user_num'])&&isset($row['total_num'])&&(int)$row['total_num']>0?round((int)$row['user_num']/(int)$row['total_num']*100,2):0,'value' => [$j,isset($row['user_num'])&&isset($row['total_num'])&&(int)$row['total_num']>0?round((int)$row['user_num']/(int)$row['total_num']*100,2):0]];
+        }
+        
+        if($chart==1){
+            $series['user'][] = ['type' => 'column', 'name' => '下拨用户数', 'data' => $data_total_num,'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
+            $series['user'][] = ['type' => 'column', 'name' => '实际用户数', 'data' => $data_user_num,'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
+            $series['user'][] = ['type' => 'spline', 'name' => '用户占比', 'data' => $data_user_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];   
+        }else{
+            $series['user'][] = ['type' => 'bar', 'name' => '下拨用户数', 'data' => $data_total_num,'label'=>['show'=>true,'position'=>'top']];
+            $series['user'][] = ['type' => 'bar', 'name' => '实际用户数', 'data' => $data_user_num,'label'=>['show'=>true],'barGap'=>'-100%'];
+            $series['user'][] = ['type' => 'line','smooth'=>true, 'name' => '用户占比', 'data' => $data_user_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];   
         }
         
         //活跃项目

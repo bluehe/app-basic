@@ -243,8 +243,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label'=>'用户数',
                         'value' => function($model) use($end) {
                             if(in_array($model->corporation->stat,[Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN, Corporation::STAT_OVERDUE])&&$meal=CorporationMeal::get_allocate($model->corporation_id)){
-                                $m= project\models\ActivityData::get_member_by_time($end, $model->corporation_id);
-                                $m=$m?$m:0;
+                                $m= $meal->devcloud_count*$model->R;//project\models\ActivityData::get_member_by_time($end, $model->corporation_id);
+                                $m=$m?round($m):0;
                                 $u= CorporationAccount::get_corporation_account_num($model->corporation_id);
                                 $max= $meal->devcloud_count+5;
                                 return '<span class='.($m<$max-5?'text-green':($m>=$max-5&&$m<=$max?'text-yellow':'text-red')).'>'.$m.'/'.$max.'</span> ('.$u.')';

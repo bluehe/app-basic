@@ -217,6 +217,60 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                     ?>
                     </section>
+                    <section class="col-md-12">
+                    <?=
+                    Highcharts::widget([
+                        'scripts' => [
+                            'highcharts-more',
+                            'modules/exporting',
+                            'themes/grid-light'
+                        ],
+                        'options' => [
+                            'lang' => [
+                                'printChart' => "打印图表",
+                                'downloadJPEG' => "下载JPEG 图片",
+                                'downloadPDF' => "下载PDF文档",
+                                'downloadPNG' => "下载PNG 图片",
+                                'downloadSVG' => "下载SVG 矢量图",
+                                'exportButtonTitle' => "导出图片"
+                            ],
+                            'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                            'title' => [
+                                'text' => '用户趋势统计',
+                            ],
+                            'legend'=>['itemWidth'=>120],
+                            'xAxis' => [
+                                'type' => 'category'
+                            ],
+                            'yAxis' => [
+                                ['title' => ['text' => '数量'],'min'=>0],
+                                ['title' => ['text' => '占比'],'labels'=>['format'=>'{value} %'],'opposite'=>true,'min'=>0,'max'=>100]
+                            ],
+                            'tooltip' => [
+                                'shared' => true,
+                                'crosshairs' => true
+                            ],
+                            'plotOptions' => [
+                                'spline' => [
+                                    'cursor' => 'pointer',
+                                    'dataLabels' => [
+                                        'enabled' => true,                                      
+                                        'format' => '{y:.2f} %',
+                                        'shadow'=>false,
+                                        'style'=>['textShadow'=>false]
+                                    ],
+                                    'showInLegend' => true,
+                                ],
+                                'column' => [
+                                    'cursor' => 'pointer',
+                                    'dataLabels' => ['enabled' => true,'style'=>['textShadow'=>false]]
+                                ],
+                            ],
+                            'series' => $series['user'],
+                    ]
+                    ]);
+                    ?>
+                    </section>
                     <section class="col-md-6">
                          <?=
                         Highcharts::widget([
@@ -293,6 +347,44 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'trigger' => 'axis',                                  
                                 ],
                                 'series' => $series['activity']
+                            ]
+                        ]
+
+                    ])
+                    ?>
+                    </section>
+                     <section class="col-md-12">
+                    <?=
+                    ECharts::widget([
+                        'theme'=>'light',
+                        'responsive'=>true,
+                        'options' => [
+                            'style'=>'height:400px'
+                        ],
+                        'pluginOptions' => [
+                            'option' => [
+                                'title' => [
+                                    'text' => '用户趋势统计',
+                                    'left'=>'center',
+                                    'top'=>'10px',
+                                ],
+                                'legend'=>['show'=>true,'bottom'=>'10px'],
+                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
+                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
+                                'xAxis' => [                
+                                    'type' => 'category',
+                                    'boundaryGap'=>true,
+                                   
+                                    'splitLine'=>['show'=>true]
+                                ],
+                                'yAxis' => [
+                                    ['type' => 'value','name' => '数量','min'=>0,'splitNumber'=>5],
+                                    ['type' => 'value','name' => '占比','min'=>0,'max'=>100,'splitLine'=>['show'=>false],'axisLabel'=>['formatter'=>'{value}%']]                                    
+                                ],
+                                'tooltip' => [
+                                    'trigger' => 'axis',                                  
+                                ],
+                                'series' => $series['user']
                             ]
                         ]
 

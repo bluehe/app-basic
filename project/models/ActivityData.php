@@ -46,6 +46,10 @@ use yii\helpers\ArrayHelper;
  */
 class ActivityData extends \yii\db\ActiveRecord
 {
+    
+    const MEAL_D = 0;
+    const MEAL_N = -1;
+    
     /**
      * {@inheritdoc}
      */
@@ -139,6 +143,30 @@ class ActivityData extends \yii\db\ActiveRecord
     }
     
     public static function get_member_by_time($statistics_time,$corporation_id) {   
-       return static::find()->where(['corporation_id'=>$corporation_id])->andWhere(['<=','statistics_time',$statistics_time])->limit(1)->select(['projectman_membercount'])->scalar();
+       return static::find()->where(['corporation_id'=>$corporation_id])->andWhere(['<=','statistics_time',$statistics_time])->orderBy(['statistics_time'=>SORT_DESC])->limit(1)->select(['projectman_membercount'])->scalar();
+    }
+    
+    //设定下拨
+    
+    
+    public static function get_user_total($start, $end,$total=1,$annual='',$group_id=null,$allocate=null) {
+              
+        $query = static::find()->alias('d')->andWhere(['d.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->leftJoin(CorporationMeal::tableName(),CorporationMeal::tableName().'.corporation_id=d.corporation_id AND d.statistics_time>='.CorporationMeal::tableName().'.start_time AND d.statistics_time<='.CorporationMeal::tableName().'.end_time')->orderBy(['statistics_time'=>SORT_ASC]);
+        if($annual=='all'){         
+            
+        }elseif($annual){
+            $corporation_id= CorporationMeal::find()->where(['annual'=>$annual])->select(['corporation_id'])->distinct()->column();
+            $query->andFilterWhere(['d.corporation_id'=>$corporation_id]);
+        }
+        if($allocate){
+            $query->andWhere(['>',CorporationMeal::tableName().'.devcloud_count',0]);  
+        }
+        $query->groupBy(['statistics_time']);
+        $query->select(['statistics_time','user_num'=>'SUM(projectman_membercount)','total_num'=>'SUM(devcloud_count)']);
+        
+//        if(!$total){
+//            $query->addGroupBy(['bd_id']);
+//        }
+        return $query->asArray()->all();
     }
 }
