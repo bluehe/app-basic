@@ -39,7 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'visible'=> count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1,
                     ],
                     'name',
-                    'region',
+                    [                      
+                        'attribute' => 'region',
+                        'value'=> function($model, $key) {return $model->Region;},
+                    ],
                     'devcloud_count',
                     'devcloud_amount',
                     'cloud_amount',

@@ -22,6 +22,11 @@ class Meal extends \yii\db\ActiveRecord
     
     const STAT_ACTIVE = 1;
     const STAT_DISABLED = 0;
+    const REGION_NORTHEAST_1 = 'cn-northeast-1';
+    const REGION_NORTH_1 = 'cn-north-1';
+    const REGION_NORTH_4 = 'cn-north-4';
+    const REGION_EAST_2 = 'cn-east-2';
+    const REGION_SOUTH_1 = 'cn-south-1';
     
     /**
      * {@inheritdoc}
@@ -108,12 +113,23 @@ class Meal extends \yii\db\ActiveRecord
         'stat' => [
             self::STAT_ACTIVE => "正常",
             self::STAT_DISABLED => "不可用"
-        ],      
+        ],
+        'region'=>[
+            self::REGION_NORTHEAST_1 => "东北-大连",
+            self::REGION_NORTH_1 => "华北-北京一",
+            self::REGION_NORTH_4 => "华北-北京四",
+            self::REGION_EAST_2 => "华东-上海二",
+            self::REGION_SOUTH_1 => "华南-广州"
+         ]
     ];
 
     public function getStat() {
         $stat = isset(self::$List['stat'][$this->stat]) ? self::$List['stat'][$this->stat] : null;
         return $stat;
+    }
+    public function getRegion() {
+        $region = isset(self::$List['region'][$this->region]) ? self::$List['region'][$this->region] : null;
+        return $region;
     }
     
     public static function get_meal($stat=self::STAT_ACTIVE,$group='') {

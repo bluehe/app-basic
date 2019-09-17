@@ -27,7 +27,7 @@ use project\models\Group;
                 
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'region')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'region')->dropDownList(Meal::$List['region'], ['disabled'=> $model->id?Meal::get_corporationmeal_exist($model->id):false]) ?>
                 
                 <?= $form->field($model, 'devcloud_count')->textInput(['maxlength' => true,'disabled'=> $model->id?Meal::get_corporationmeal_exist($model->id):false]) ?>
                 
