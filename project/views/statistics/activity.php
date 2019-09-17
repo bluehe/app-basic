@@ -353,7 +353,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ])
                     ?>
                     </section>
-                     <section class="col-md-12">
+                    <section class="col-md-12">
                     <?=
                     ECharts::widget([
                         'theme'=>'light',

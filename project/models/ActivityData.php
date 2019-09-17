@@ -151,7 +151,7 @@ class ActivityData extends \yii\db\ActiveRecord
     
     public static function get_user_total($start, $end,$total=1,$annual='',$group_id=null,$allocate=null) {
               
-        $query = static::find()->alias('d')->andWhere(['d.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->leftJoin(CorporationMeal::tableName(),CorporationMeal::tableName().'.corporation_id=d.corporation_id AND d.statistics_time>='.CorporationMeal::tableName().'.start_time AND d.statistics_time<='.CorporationMeal::tableName().'.end_time')->orderBy(['statistics_time'=>SORT_ASC]);
+        $query = static::find()->alias('d')->andWhere(['d.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]]);
         if($annual=='all'){         
             
         }elseif($annual){
@@ -159,14 +159,17 @@ class ActivityData extends \yii\db\ActiveRecord
             $query->andFilterWhere(['d.corporation_id'=>$corporation_id]);
         }
         if($allocate){
-            $query->andWhere(['>',CorporationMeal::tableName().'.devcloud_count',0]);  
+            $query->leftJoin(['m'=>CorporationMeal::tableName()],'m.corporation_id=d.corporation_id AND d.statistics_time>=m.start_time AND d.statistics_time<=m.end_time')->andWhere(['>','m.devcloud_count',0]);  
+        }else{
+            $ids= static::find()->alias('a')->andWhere(['a.group_id'=>$group_id])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.statistics_time>=b.start_time AND a.statistics_time<=b.end_time')])->select(['id'])->column();
+            $query->leftJoin(['m'=>CorporationMeal::tableName()],['and','m.corporation_id=d.corporation_id',['or',['and','d.statistics_time>=m.start_time','d.statistics_time<=m.end_time',['not in','d.id',$ids]],['and',['in','d.id',$ids],['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=m.corporation_id AND b.end_time>m.end_time')]]]]);
         }
-        $query->groupBy(['statistics_time']);
+        $query->orderBy(['statistics_time'=>SORT_ASC])->groupBy(['statistics_time']);
         $query->select(['statistics_time','user_num'=>'SUM(projectman_membercount)','total_num'=>'SUM(devcloud_count)']);
         
-//        if(!$total){
-//            $query->addGroupBy(['bd_id']);
-//        }
+        if(!$total){
+            $query->leftJoin(['bd'=> CorporationBd::tableName()],['and','bd.corporation_id=d.corporation_id',['not exists', CorporationBd::find()->alias('bd2')->where('bd2.corporation_id=bd.corporation_id AND bd2.start_time>bd.start_time AND d.statistics_time>=bd.start_time')]])->addGroupBy(['bd_id'])->addSelect(['bd_id']);
+        }
         return $query->asArray()->all();
     }
 }
