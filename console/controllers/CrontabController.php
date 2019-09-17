@@ -165,7 +165,9 @@ class CrontabController extends Controller
     public function actionProjectClean()
     {
         
-        $ids = CorporationMeal::find()->groupBy(['corporation_id'])->having(['<=','MAX(end_time)',time()+86400*7])->select(['corporation_id'])->column();
+        $t=1;//提前天数
+        
+        $ids = CorporationMeal::find()->groupBy(['corporation_id'])->having(['<=','MAX(end_time)',time()+86400*$t])->select(['corporation_id'])->column();
         $corporation_ids = Corporation::find()->where(['id'=>$ids,'stat'=>[Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN]])->select(['id'])->column();
         if(count($corporation_ids)>0){
             foreach ($corporation_ids as $corporation_id){
