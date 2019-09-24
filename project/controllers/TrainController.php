@@ -337,7 +337,7 @@ class TrainController extends Controller {
 
                 $transaction->rollBack();
 //                throw $e;
-                Yii::$app->session->setFlash('error', $e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
             }                        
             return $this->redirect(Yii::$app->request->referrer);
         }else{

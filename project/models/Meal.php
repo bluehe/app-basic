@@ -98,7 +98,7 @@ class Meal extends \yii\db\ActiveRecord
             'id' => 'ID',
             'group_id' => '项目',
             'name' => '规格',
-            'region' => '地区',
+            'region' => '区域',
             'devcloud_count' => '软开云人数',
             'devcloud_amount' => '软开云金额（元）',
             'cloud_amount' => '公有云金额（元）',
@@ -133,8 +133,12 @@ class Meal extends \yii\db\ActiveRecord
     }
     
     public static function get_meal($stat=self::STAT_ACTIVE,$group='') {
+        $m=[];
         $meals = static::find()->filterWhere(['stat'=> $stat,'group_id'=>$group])->orderBy(['order_sort'=>SORT_ASC,'id'=>SORT_ASC])->all();
-        return ArrayHelper::map($meals, 'id', 'name');
+        foreach($meals as $meal){
+            $m[$meal->id]= self::$List['region'][$meal->region].' '.$meal->name;
+        }
+        return $m;
     }
     
     public static function get_corporationmeal_exist($id) {

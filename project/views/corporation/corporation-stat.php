@@ -43,7 +43,7 @@ use project\models\CorporationMeal;
                     <div class="timeline-body">
                         <dl class="dl-horizontal">
                             <dt><?= $stat->corporation->getAttributeLabel('huawei_account') ?></dt><dd><?= $stat->corporation->huawei_account ?></dd>
-                            <dt><?= $stat->corporation->getAttributeLabel('intent_set') ?></dt><dd><?= $stat->corporation->intentSet->name ?></dd>
+                            <dt><?= $stat->corporation->getAttributeLabel('intent_set') ?></dt><dd><?= $stat->corporation->intentSet->Region.' '.$stat->corporation->intentSet->name ?></dd>
                             <dt><?= $stat->corporation->getAttributeLabel('intent_number') ?></dt><dd><?= $stat->corporation->intent_number ?></dd>
                             <dt><?= $stat->corporation->getAttributeLabel('intent_amount') ?></dt><dd><?= $stat->corporation->intent_amount ?></dd>
         
@@ -56,7 +56,7 @@ use project\models\CorporationMeal;
                         <dl class="dl-horizontal">
                             <dt><?= $allocate->getAttributeLabel('huawei_account') ?></dt><dd><?= $allocate->huawei_account ?></dd>
                             <dt><?= $allocate->getAttributeLabel('bd') ?></dt><dd><?= $allocate->bd?User::get_nickname($allocate->bd):'<span class="not-set">系统</span>' ?></dd>
-                            <dt><?= $allocate->getAttributeLabel('meal_id') ?></dt><dd><?= $allocate->meal_id?$allocate->meal->name:'其他' ?></dd>
+                            <dt><?= $allocate->getAttributeLabel('meal_id') ?></dt><dd><?= $allocate->meal_id?$allocate->meal->Region.' '.$allocate->meal->name:'其他' ?></dd>
                             <dt><?= $allocate->getAttributeLabel('number') ?></dt><dd><?= $allocate->number ?></dd>
                             <dt><?= $allocate->getAttributeLabel('amount') ?></dt><dd><?= $allocate->amount ?></dd>
                             <dt><?= $allocate->getAttributeLabel('start_time') ?></dt><dd><?= date('Y-m-d',$allocate->start_time) ?></dd>

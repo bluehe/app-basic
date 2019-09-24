@@ -13,6 +13,7 @@ use project\models\UserGroup;
  */
 class CorporationMealSearch extends CorporationMeal
 {
+    public $region;
     /**
      * {@inheritdoc}
      */
@@ -21,7 +22,7 @@ class CorporationMealSearch extends CorporationMeal
         return [
             [['id','group_id','meal_id', 'number', 'bd', 'user_id', 'created_at','stat'], 'integer'],
             [['amount'], 'number'],
-            [['corporation_id','huawei_account', 'start_time', 'end_time','annual'], 'safe'],
+            [['corporation_id','huawei_account', 'start_time', 'end_time','annual','region'], 'safe'],
         ];
     }
 
@@ -90,6 +91,7 @@ class CorporationMealSearch extends CorporationMeal
             'annual' => $this->annual,
             'user_id' => $this->user_id,
             CorporationMeal::tableName().'.created_at' => $this->created_at,
+            Meal::tableName(). '.region'=>$this->region,
         ]);
 
         $query->andFilterWhere(['like', CorporationMeal::tableName(). '.huawei_account', $this->huawei_account]);

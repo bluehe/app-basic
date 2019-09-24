@@ -39,7 +39,7 @@ use project\models\UserGroup;
         <?= $form->field($model, 'bd')->dropDownList(User::get_bd(User::STATUS_ACTIVE,UserGroup::get_group_userid($model->group_id)), ['prompt' => '']) ?>
         
         <?= $form->field($model, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
-
+        
         <?= $form->field($model, 'meal_id')->dropDownList(Meal::get_meal(Meal::STAT_ACTIVE,$model->group_id), ['prompt' => '其他']) ?>
 
         <?= $form->field($model, 'number', ['options' =>['class' => 'form-group','style' => 'display: none;']])->textInput() ?>

@@ -73,7 +73,7 @@ use project\models\UserGroup;
                 <div class="stat_c stat_intent"> 
                 <?= $form->field($model, 'huawei_account')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'intent_set')->dropDownList(Meal::get_meal(), ['prompt' => '']) ?>
+                <?= $form->field($model, 'intent_set')->dropDownList(Meal::get_meal(Meal::STAT_ACTIVE,$model->group_id), ['prompt' => '']) ?>
 
                 <?= $form->field($model, 'intent_number')->textInput() ?>
                 </div>
@@ -85,7 +85,7 @@ use project\models\UserGroup;
                     
                 <?= $form->field($allocate, 'annual')->dropDownList(Parameter::get_type('allocate_annual'), ['prompt' => '']) ?>
 
-                <?= $form->field($allocate, 'meal_id')->dropDownList(Meal::get_meal(), ['prompt' => '其他']) ?>
+                <?= $form->field($allocate, 'meal_id')->dropDownList(Meal::get_meal(Meal::STAT_ACTIVE,$model->group_id), ['prompt' => '其他']) ?>
 
                 <?= $form->field($allocate, 'number')->textInput() ?>
 

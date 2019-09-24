@@ -114,6 +114,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         'visible'=> is_array($column)&&in_array('annual',$column),
                     ],
                     [
+                        'attribute' => 'region',                      
+                        'value' => 
+                            function($model) {
+                                return $model->meal_id?$model->meal->Region:'其他';
+                            },
+                        'filter' => Meal::$List['region'],
+                        'visible'=> is_array($column)&&in_array('region',$column),  
+                    ],
+                    [
                         'attribute' => 'meal_id',
                         'value' => 
                             function($model) {

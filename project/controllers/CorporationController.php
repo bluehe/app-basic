@@ -143,7 +143,7 @@ class CorporationController extends Controller
         //$model->scenario='industry';               
         if($model !== null&&Yii::$app->user->can('企业修改',['id'=>$id])){
             $model->base_industry =$old_industry= CorporationIndustry::get_corporation_industryid($model->id);
-            $allocate = in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])?CorporationMeal::get_allocate($model->id):null;
+            $allocate = in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])?CorporationMeal::get_allocate($model->id):null;           
             if($allocate){
                 $allocate->start_time=$allocate->start_time>0?date('Y-m-d',$allocate->start_time):'';
                 $allocate->end_time=$allocate->end_time>0?date('Y-m-d',$allocate->end_time):'';
@@ -153,7 +153,7 @@ class CorporationController extends Controller
                 
                 if($allocate){
                     $allocate->load(Yii::$app->request->post());
-                }
+                }              
                 if (Yii::$app->request->isAjax) {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                     if($allocate){         
@@ -388,6 +388,13 @@ class CorporationController extends Controller
                         Corporation::updateAll(['base_bd'=>$pre->bd_id], ['id'=>$pre->corporation_id]);//更新企业BD为上一条
                         $bd= ['corporation_id'=>$pre->corporation_id,'name'=>User::get_nickname($pre->bd_id)];
                     }
+                    
+                    //处理活跃BD更改
+//                    if($pre!==null){
+//                        
+//                    }else{
+//                        
+//                    }
                     
                     $model->delete();
                     $stat='success';
@@ -640,7 +647,7 @@ class CorporationController extends Controller
                     ->setCellValue( 'F'.$k, $model->get_industry($model->id))
                     ->setCellValue( 'G'.$k, implode(',', Parameter::get_para_value('contact_park',$model->contact_park)))
                     ->setCellValue( 'H'.$k, $model->contact_address)
-                    ->setCellValue( 'I'.$k, $model->intent_set?$model->intentSet->name:$model->intent_set)                   
+                    ->setCellValue( 'I'.$k, $model->intent_set?$model->intentSet->Region.' '.$model->intentSet->name:$model->intent_set)                   
                     ->setCellValue( 'J'.$k, $model->intent_number)
                     ->setCellValue( 'K'.$k, $model->intent_amount)
                     ->setCellValue( 'L'.$k, $model->base_company_scale)

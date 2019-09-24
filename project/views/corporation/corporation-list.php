@@ -140,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filter' => [1=>'是',2=>'否'], 
                         'visible'=> is_array($column)&&in_array('contact_location',$column),
                     ],
-                    ['attribute' =>'intent_set','value' =>function($model) {return $model->intent_set?$model->intentSet->name:$model->intent_set;},'filter' => Meal::get_meal(),'visible'=> is_array($column)&&in_array('intent_set',$column),],
+                    ['attribute' =>'intent_set','value' =>function($model) {return $model->intent_set?$model->intentSet->Region.' '.$model->intentSet->name:$model->intent_set;},'filter' => Meal::get_meal(null,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))),'visible'=> is_array($column)&&in_array('intent_set',$column),],
                     ['attribute' =>'intent_number','visible'=> is_array($column)&&in_array('intent_number',$column),],
                     ['attribute' =>'intent_amount','visible'=> is_array($column)&&in_array('intent_amount',$column),],
                     ['attribute' =>'base_company_scale','visible'=> is_array($column)&&in_array('base_company_scale',$column),],  

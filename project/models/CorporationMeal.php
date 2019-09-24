@@ -25,6 +25,7 @@ use Yii;
  */
 class CorporationMeal extends \yii\db\ActiveRecord
 {
+    public $region;
     
     const STAT_ALLOCATE = 7;
     const STAT_AGAIN = 8;
@@ -55,7 +56,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
             [['bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['bd' => 'id']],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
             [['number'], 'default', 'value' => 1],
-            [['end_time'],'safe'],
+            [['end_time','region'],'safe'],
         ];
     }
     
@@ -121,6 +122,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
             'id' => 'ID',
             'corporation_id' => '企业',
             'group_id' => '项目',
+            'region' => '下拨区域',
             'meal_id' => '下拨套餐',
             'start_time' => '下拨日期',
             'end_time' => '到期时间',
@@ -150,6 +152,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
              'bd' => '下拨经理',
             'annual' => '下拨年度',
 
+            'region' => '下拨区域',
             'meal_id' => '下拨套餐',
             'number' => '下拨数量',
             'amount' => '下拨金额',

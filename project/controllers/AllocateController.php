@@ -17,6 +17,7 @@ use project\models\ColumnSetting;
 use project\models\Group;
 use project\models\ActivityChange;
 use project\models\UserGroup;
+use project\models\CorporationStat;
 
 
 class AllocateController extends Controller { 
@@ -92,20 +93,21 @@ class AllocateController extends Controller {
                 ->setCellValue( 'C1', $searchModel->getAttributeLabel('huawei_account'))
                 ->setCellValue( 'D1', $searchModel->getAttributeLabel('bd'))
                 ->setCellValue( 'E1', $searchModel->getAttributeLabel('annual'))
-                ->setCellValue( 'F1', $searchModel->getAttributeLabel('meal_id'))
-                ->setCellValue( 'G1', $searchModel->getAttributeLabel('number'))
-                ->setCellValue( 'H1', $searchModel->getAttributeLabel('amount'))
-                ->setCellValue( 'I1', $searchModel->getAttributeLabel('start_time'))
-                ->setCellValue( 'J1', $searchModel->getAttributeLabel('end_time'))
-                ->setCellValue( 'K1', $searchModel->getAttributeLabel('devcloud_count'))
-                ->setCellValue( 'L1', $searchModel->getAttributeLabel('devcloud_amount'))
-                ->setCellValue( 'M1', $searchModel->getAttributeLabel('cloud_amount'))
-                ->setCellValue( 'N1', $searchModel->getAttributeLabel('stat'));
+                ->setCellValue( 'F1', $searchModel->getAttributeLabel('region'))
+                ->setCellValue( 'G1', $searchModel->getAttributeLabel('meal_id'))
+                ->setCellValue( 'H1', $searchModel->getAttributeLabel('number'))
+                ->setCellValue( 'I1', $searchModel->getAttributeLabel('amount'))
+                ->setCellValue( 'J1', $searchModel->getAttributeLabel('start_time'))
+                ->setCellValue( 'K1', $searchModel->getAttributeLabel('end_time'))
+                ->setCellValue( 'L1', $searchModel->getAttributeLabel('devcloud_count'))
+                ->setCellValue( 'M1', $searchModel->getAttributeLabel('devcloud_amount'))
+                ->setCellValue( 'N1', $searchModel->getAttributeLabel('cloud_amount'))
+                ->setCellValue( 'O1', $searchModel->getAttributeLabel('stat'));
         
         $group_count=count(Group::get_user_group(Yii::$app->user->identity->id));
         
         if($group_count>1){
-            $objSheet->setCellValue( 'O1', $searchModel->getAttributeLabel('group_id'));
+            $objSheet->setCellValue( 'P1', $searchModel->getAttributeLabel('group_id'));
         }
 
         foreach($models as $key=>$model){
@@ -115,17 +117,18 @@ class AllocateController extends Controller {
                     ->setCellValue( 'C'.$k, $model->huawei_account)
                     ->setCellValue( 'D'.$k, $model->bd?($model->bd0->nickname?$model->bd0->nickname:$model->bd0->username):'')
                     ->setCellValue( 'E'.$k, implode(',', Parameter::get_para_value('allocate_annual',$model->annual)))
-                    ->setCellValue( 'F'.$k, $model->meal_id?$model->meal->name:'其他')
-                    ->setCellValue( 'G'.$k, $model->number)
-                    ->setCellValue( 'H'.$k, $model->amount)
-                    ->setCellValue( 'I'.$k, $model->start_time>0?date('Y-m-d',$model->start_time):'')
-                    ->setCellValue( 'J'.$k, $model->end_time>0?date('Y-m-d',$model->end_time):'')
-                    ->setCellValue( 'K'.$k, $model->devcloud_count)
-                    ->setCellValue( 'L'.$k, $model->devcloud_amount)
-                    ->setCellValue( 'M'.$k, $model->cloud_amount)
-                    ->setCellValue( 'N'.$k, $model->Stat);
+                    ->setCellValue( 'F'.$k, $model->meal_id?$model->meal->Region:'其他')
+                    ->setCellValue( 'G'.$k, $model->meal_id?$model->meal->name:'其他')
+                    ->setCellValue( 'H'.$k, $model->number)
+                    ->setCellValue( 'I'.$k, $model->amount)
+                    ->setCellValue( 'J'.$k, $model->start_time>0?date('Y-m-d',$model->start_time):'')
+                    ->setCellValue( 'K'.$k, $model->end_time>0?date('Y-m-d',$model->end_time):'')
+                    ->setCellValue( 'L'.$k, $model->devcloud_count)
+                    ->setCellValue( 'M'.$k, $model->devcloud_amount)
+                    ->setCellValue( 'N'.$k, $model->cloud_amount)
+                    ->setCellValue( 'O'.$k, $model->Stat);
             if($group_count>1){
-                $objSheet->setCellValue( 'O'.$k, $model->group_id?$model->group->title:$model->group_id);
+                $objSheet->setCellValue( 'P'.$k, $model->group_id?$model->group->title:$model->group_id);
             }
                     
         }
@@ -158,17 +161,18 @@ class AllocateController extends Controller {
                 ->setCellValue( 'C1', $searchModel->getAttributeLabel('huawei_account'))
                 ->setCellValue( 'D1', $searchModel->getAttributeLabel('bd'))
                 ->setCellValue( 'E1', $searchModel->getAttributeLabel('annual'))
-                ->setCellValue( 'F1', $searchModel->getAttributeLabel('meal_id'))
-                ->setCellValue( 'G1', $searchModel->getAttributeLabel('number'))
-                ->setCellValue( 'H1', $searchModel->getAttributeLabel('amount'))
-                ->setCellValue( 'I1', $searchModel->getAttributeLabel('start_time'))
-                ->setCellValue( 'J1', $searchModel->getAttributeLabel('end_time'))
-                ->setCellValue( 'K1', $searchModel->getAttributeLabel('devcloud_count'))
-                ->setCellValue( 'L1', $searchModel->getAttributeLabel('devcloud_amount'))
-                ->setCellValue( 'M1', $searchModel->getAttributeLabel('cloud_amount'));
+                ->setCellValue( 'F1', $searchModel->getAttributeLabel('region'))
+                ->setCellValue( 'G1', $searchModel->getAttributeLabel('meal_id'))
+                ->setCellValue( 'H1', $searchModel->getAttributeLabel('number'))
+                ->setCellValue( 'I1', $searchModel->getAttributeLabel('amount'))
+                ->setCellValue( 'J1', $searchModel->getAttributeLabel('start_time'))
+                ->setCellValue( 'K1', $searchModel->getAttributeLabel('end_time'))
+                ->setCellValue( 'L1', $searchModel->getAttributeLabel('devcloud_count'))
+                ->setCellValue( 'M1', $searchModel->getAttributeLabel('devcloud_amount'))
+                ->setCellValue( 'N1', $searchModel->getAttributeLabel('cloud_amount'));
         
         if(count(Group::get_user_group(Yii::$app->user->identity->id))>1){
-            $objectPhpExcel->getActiveSheet()->setCellValue( 'N1', $searchModel->getAttributeLabel('group_id'));
+            $objectPhpExcel->getActiveSheet()->setCellValue( 'O1', $searchModel->getAttributeLabel('group_id'));
         }
         
         $end_time= microtime(true);
@@ -223,6 +227,7 @@ class AllocateController extends Controller {
                 'huawei_account'=>$searchModel->getAttributeLabel('huawei_account'),
                 'bd'=>$searchModel->getAttributeLabel('bd'),
                 'annual'=>$searchModel->getAttributeLabel('annual'),
+                'region'=>$searchModel->getAttributeLabel('region'),
                 'meal_id'=>$searchModel->getAttributeLabel('meal_id'),
                 'number'=>$searchModel->getAttributeLabel('number'),
                 'amount'=>$searchModel->getAttributeLabel('amount'),
@@ -350,8 +355,8 @@ class AllocateController extends Controller {
                         $allocate->annual= (string)array_search(trim($data[$index['annual']]), $annual);
                     }
 
-                    if(isset($data[$index['meal_id']])&&array_search(trim($data[$index['meal_id']]), $intent_set)){
-                        $allocate->meal_id= array_search(trim($data[$index['meal_id']]), $intent_set);
+                    if(isset($data[$index['region']])&&isset($data[$index['meal_id']])&&array_search(trim($data[$index['region']].' '.$data[$index['meal_id']]), $intent_set)){
+                        $allocate->meal_id= array_search(trim($data[$index['region']].' '.$data[$index['meal_id']]), $intent_set);
                     }
                     if(isset($data[$index['number']])){
                         $allocate->number= trim($data[$index['number']]);
