@@ -325,7 +325,7 @@ class TrainController extends Controller {
                                 
                 //企业地址同步
                $corporation = \project\models\Corporation::findOne($model->corporation_id);
-               if(!$corporation->contact_address){
+               if($corporation&&!$corporation->contact_address){
                    $corporation->contact_address=$model->train_address;
                    $corporation->save(false);                 
                }
