@@ -278,7 +278,7 @@ class TrainController extends Controller {
                         $_v->user_id = $t;
                         $_v->tuser_sort=$k+1;
                         if (!$_v->save(false)) {
-                            throw new \Exception("操作失败");
+                            throw new \Exception("操作失败，SA新增失败");
                         }
                     }
                 }
@@ -287,7 +287,7 @@ class TrainController extends Controller {
                         $_v = TrainUser::findOne(['train_id' => $model->id, 'user_id' => $t]);                       
                         $_v->tuser_sort=$k+1;
                         if (!$_v->save(false)) {
-                            throw new \Exception("操作失败");
+                            throw new \Exception("操作失败,SA变更失败");
                         }
                     }
                 }
@@ -306,7 +306,7 @@ class TrainController extends Controller {
                         $_v->user_id = $t;
                         $_v->tuser_sort=$k+1;
                         if (!$_v->save(false)) {
-                            throw new \Exception("操作失败");
+                            throw new \Exception("操作失败,人员新增失败");
                         }
                     }
                 }
@@ -315,7 +315,7 @@ class TrainController extends Controller {
                         $_v = TrainUser::findOne(['train_id' => $model->id, 'user_id' => $t]);                       
                         $_v->tuser_sort=$k+1;
                         if (!$_v->save(false)) {
-                            throw new \Exception("操作失败");
+                            throw new \Exception("操作失败，人员变更失败");
                         }
                     }
                 }
@@ -337,7 +337,7 @@ class TrainController extends Controller {
 
                 $transaction->rollBack();
 //                throw $e;
-                Yii::$app->session->setFlash('error', '操作失败。');
+                Yii::$app->session->setFlash('error', $e);
             }                        
             return $this->redirect(Yii::$app->request->referrer);
         }else{
