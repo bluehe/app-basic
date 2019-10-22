@@ -974,7 +974,7 @@ class StatisticsController extends Controller {
         
         //用户数
         $data_total_num=$data_user_num=$data_user_per=[];
-        $activity_user= ActivityData::get_user_total($start, $end, $group, $allocate, $total_get, null);
+        $activity_user= HealthData::get_user_total($start, $end, $group, $allocate, $total_get, null);
         if($total_get==1){
             foreach($activity_user as $row){
                 $j=date('Y.n.j', $row['statistics_time']);
