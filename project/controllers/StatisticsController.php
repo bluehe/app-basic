@@ -971,6 +971,69 @@ class StatisticsController extends Controller {
             
         }
         
+        
+        //用户数
+        $data_total_num=$data_user_num=$data_user_per=[];
+        $activity_user= ActivityData::get_user_total($start, $end, $group, $allocate, $total_get, null);
+        if($total_get==1){
+            foreach($activity_user as $row){
+                $j=date('Y.n.j', $row['statistics_time']);
+                $data_total_num[]=['name' =>$j , 'y' =>  (int) $row['total_num'], 'value' =>  [$j,(int) $row['total_num']]];
+                $data_user_num[]=['name' => $j, 'y' =>  (int) $row['user_num'], 'value' =>  [$j,(int) $row['user_num']]];
+                $data_user_per[]=['name' => $j, 'y' => isset($row['user_num'])&&isset($row['total_num'])&&(int)$row['total_num']>0?round((int)$row['user_num']/(int)$row['total_num']*100,2):0,'value' => [$j,isset($row['user_num'])&&isset($row['total_num'])&&(int)$row['total_num']>0?round((int)$row['user_num']/(int)$row['total_num']*100,2):0]];
+            }
+
+            if($chart==1){
+                $series['user'][] = ['type' => 'column', 'name' => '下拨用户数', 'data' => $data_total_num,'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
+                $series['user'][] = ['type' => 'column', 'name' => '实际用户数', 'data' => $data_user_num,'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
+                $series['user'][] = ['type' => 'spline', 'name' => '用户占比', 'data' => $data_user_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];   
+            }else{
+                $series['user'][] = ['type' => 'bar', 'name' => '下拨用户数', 'data' => $data_total_num,'label'=>['show'=>true,'position'=>'top']];
+                $series['user'][] = ['type' => 'bar', 'name' => '实际用户数', 'data' => $data_user_num,'label'=>['show'=>true],'barGap'=>'-100%'];
+                $series['user'][] = ['type' => 'line','smooth'=>true, 'name' => '用户占比', 'data' => $data_user_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];   
+            }
+        }else{
+            $groups = User::get_bd_color();
+
+            foreach($activity_user as $row){
+     
+                $key=date('Y.n.j',$row['statistics_time']);
+             
+                $row['bd_id']=$row['bd_id']?$row['bd_id']:0;
+                $row['user_num']=$row['user_num']>0?(int)$row['user_num']:0;             
+                $y_per=$row['total_num']>0?round($row['user_num']/(int)$row['total_num']*100,2):0;
+                $data_user_num[$row['bd_id']][]=['name' => $key, 'y' => $row['user_num'] ,'value'=>[$key,$row['user_num']]];
+                $data_user_per[$row['bd_id']][]=['name' => $key, 'y' =>$y_per,'value'=>[$key,$y_per]];               
+            }
+            
+            
+            if($chart==1){
+                if($data_user_num){
+                    foreach ($data_user_num as $gid=>$data){
+                        $series['user'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+
+                    }
+                    foreach ($data_user_per as $gid=>$per){
+                        $series['user'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                }else{
+                    $series['user'][] = [];
+                }
+            }else{
+                if($data_user_num){
+                    foreach ($data_user_num as $gid=>$data){
+                        $series['user'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
+
+                    }
+                    foreach ($data_user_per as $gid=>$per){
+                        $series['user'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                }else{
+                    $series['user'][] = [];
+                }
+            }
+        }
+        
         return $this->render('health', ['chart'=>$chart,'series' => $series, 'start' => $start, 'end' => $end,'group'=>$group,'total'=>$total_get,'allocate'=>$allocate]);
     
     }

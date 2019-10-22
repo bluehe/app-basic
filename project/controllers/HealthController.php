@@ -262,7 +262,7 @@ class HealthController extends Controller {
         }
         
 //        CorporationAccount::set_corporation_account_list($id);
-        $auth = CurlHelper::addUser($model,$token);
+        $auth = CurlHelper::createUser($model,$token);
         
         if($auth['code']=='201'){
            
@@ -309,7 +309,7 @@ class HealthController extends Controller {
         $model->add_type= CorporationProject::TYPE_ADD;
         
         $token = CorporationAccount::get_token($corporation_id);
-        $auth = CurlHelper::addProject($model,$token);
+        $auth = CurlHelper::createProject($model,$token);
         if($auth['code']=='200'&&$auth['content']['status']=='success'){
             $model->project_uuid=$auth['content']['result']['project']['project_uuid'];          
         }elseif($auth['code']=='200'&&$auth['content']['status']=='failed'){

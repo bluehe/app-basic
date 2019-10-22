@@ -305,4 +305,32 @@ class HealthData extends \yii\db\ActiveRecord
         return $query->asArray()->all();
     }
     
+    
+    //用户数
+    public static function get_user_total($start, $end,$group_id=null,$allocate=null,$total=1,$annual='') {
+              
+        $query = static::find()->alias('h')->andWhere(['h.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'h.statistics_time', $start],['<=', 'h.statistics_time', $end]]);
+        if($annual=='all'){         
+            
+        }elseif($annual){
+            $corporation_id= CorporationMeal::find()->where(['annual'=>$annual])->select(['corporation_id'])->distinct()->column();
+            $query->andFilterWhere(['h.corporation_id'=>$corporation_id]);
+        }
+//        $query->andFilterWhere(['h.is_allocate'=>$allocate]);
+        if($allocate){
+            $query->leftJoin(['m'=>CorporationMeal::tableName()],'m.corporation_id=h.corporation_id AND h.statistics_time>=m.start_time AND h.statistics_time<=m.end_time')->andWhere(['>','m.devcloud_count',0]);  
+        }else{
+            $ids= static::find()->alias('a')->andWhere(['a.group_id'=>$group_id])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.statistics_time>=b.start_time AND a.statistics_time<=b.end_time')])->select(['id'])->column();
+            $query->leftJoin(['m'=>CorporationMeal::tableName()],['and','m.corporation_id=h.corporation_id',['or',['and','h.statistics_time>=m.start_time','h.statistics_time<=m.end_time',['not in','d.id',$ids]],['and',['in','h.id',$ids],['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=m.corporation_id AND b.end_time>m.end_time')]]]]);
+        }
+        $query->orderBy(['h.statistics_time'=>SORT_ASC])->groupBy(['h.statistics_time']);
+        $query->select(['statistics_time','user_num'=>'SUM(R*devcloud_count)','total_num'=>'SUM(devcloud_count)']);
+        
+        if(!$total){
+//            $query->leftJoin(['bd'=> CorporationBd::tableName()],['and','bd.corporation_id=d.corporation_id',['not exists', CorporationBd::find()->alias('bd2')->where('bd2.corporation_id=bd.corporation_id AND bd2.start_time>bd.start_time AND d.statistics_time>=bd.start_time')]])->addGroupBy(['bd_id'])->addSelect(['bd_id']);
+            $query>addGroupBy(['bd_id'])->addSelect(['bd_id']);
+        }
+        return $query->asArray()->all();
+    }
+    
 }
