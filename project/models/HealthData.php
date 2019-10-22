@@ -316,13 +316,13 @@ class HealthData extends \yii\db\ActiveRecord
             $corporation_id= CorporationMeal::find()->where(['annual'=>$annual])->select(['corporation_id'])->distinct()->column();
             $query->andFilterWhere(['h.corporation_id'=>$corporation_id]);
         }
-//        $query->andFilterWhere(['h.is_allocate'=>$allocate]);
-        if($allocate){
-            $query->leftJoin(['m'=>CorporationMeal::tableName()],'m.corporation_id=h.corporation_id AND h.statistics_time>=m.start_time AND h.statistics_time<=m.end_time')->andWhere(['>','m.devcloud_count',0]);  
-        }else{
+        $query->andFilterWhere(['h.is_allocate'=>$allocate]);
+//        if($allocate){
+//            $query->leftJoin(['m'=>CorporationMeal::tableName()],'m.corporation_id=h.corporation_id AND h.statistics_time>=m.start_time AND h.statistics_time<=m.end_time')->andWhere(['>','m.devcloud_count',0]);  
+//        }else{
             $ids= static::find()->alias('a')->andWhere(['a.group_id'=>$group_id])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.statistics_time>=b.start_time AND a.statistics_time<=b.end_time')])->select(['id'])->column();
             $query->leftJoin(['m'=>CorporationMeal::tableName()],['and','m.corporation_id=h.corporation_id',['or',['and','h.statistics_time>=m.start_time','h.statistics_time<=m.end_time',['not in','h.id',$ids]],['and',['in','h.id',$ids],['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=m.corporation_id AND b.end_time>m.end_time')]]]]);
-        }
+//        }
         $query->orderBy(['h.statistics_time'=>SORT_ASC])->groupBy(['h.statistics_time']);
         $query->select(['statistics_time','user_num'=>'SUM(R*devcloud_count)','total_num'=>'SUM(devcloud_count)']);
         
