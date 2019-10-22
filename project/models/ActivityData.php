@@ -146,7 +146,6 @@ class ActivityData extends \yii\db\ActiveRecord
        return static::find()->where(['corporation_id'=>$corporation_id])->andWhere(['<=','statistics_time',$statistics_time])->orderBy(['statistics_time'=>SORT_DESC])->limit(1)->select(['projectman_membercount'])->scalar();
     }
     
-    //设定下拨
     
     
     public static function get_user_total($start, $end,$total=1,$annual='',$group_id=null,$allocate=null) {

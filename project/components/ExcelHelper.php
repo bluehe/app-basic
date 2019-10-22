@@ -7,7 +7,6 @@ use yii\helpers\ArrayHelper;
 use project\models\User;
 use project\models\Corporation;
 use project\models\Parameter;
-use project\models\Industry;
 use project\models\Meal;
 use project\models\UserGroup;
 use project\models\Group;

@@ -106,6 +106,7 @@ class CommonController extends Controller {
        
         if ($model !== null) {
             $data['bd']=$model->base_bd;
+            $data['address']=$model->contact_address;
             
         }
         return json_encode($data);
