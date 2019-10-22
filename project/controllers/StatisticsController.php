@@ -637,20 +637,28 @@ class StatisticsController extends Controller {
             }
             
             if($chart==1){
-                foreach ($data_change as $gid=>$data){
-                    $series['activity'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                if($data_change){
+                    foreach ($data_change as $gid=>$data){
+                        $series['activity'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
 
-                }
-                foreach ($data_per as $gid=>$per){
-                     $series['activity'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                    foreach ($data_per as $gid=>$per){
+                        $series['activity'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                }else{
+                    $series['activity'][] = [];
                 }
             }else{
-                foreach ($data_change as $gid=>$data){
-                    $series['activity'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
+                if($data_change){
+                    foreach ($data_change as $gid=>$data){
+                        $series['activity'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
 
-                }
-                foreach ($data_per as $gid=>$per){
-                     $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                    foreach ($data_per as $gid=>$per){
+                        $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                }else{
+                    $series['activity'][] = [];
                 }
             }
                                
@@ -658,6 +666,7 @@ class StatisticsController extends Controller {
         
         
         //用户数
+        $data_total_num=$data_user_num=$data_user_per=[];
         $activity_user= ActivityData::get_user_total($start, $end, $total, $annual, $group, $allocate);
         if($total==1){
             foreach($activity_user as $row){
@@ -690,21 +699,30 @@ class StatisticsController extends Controller {
                 $data_user_per[$row['bd_id']][]=['name' => $key, 'y' =>$y_per,'value'=>[$key,$y_per]];               
             }
             
+            
             if($chart==1){
-                foreach ($data_user_num as $gid=>$data){
-                    $series['user'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                if($data_user_num){
+                    foreach ($data_user_num as $gid=>$data){
+                        $series['user'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
 
-                }
-                foreach ($data_user_per as $gid=>$per){
-                    $series['user'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                    foreach ($data_user_per as $gid=>$per){
+                        $series['user'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                }else{
+                    $series['user'][] = [];
                 }
             }else{
-                foreach ($data_user_num as $gid=>$data){
-                    $series['user'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
+                if($data_user_num){
+                    foreach ($data_user_num as $gid=>$data){
+                        $series['user'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
 
-                }
-                foreach ($data_user_per as $gid=>$per){
-                    $series['user'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                    foreach ($data_user_per as $gid=>$per){
+                        $series['user'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                }else{
+                    $series['user'][] = [];
                 }
             }
         }
@@ -865,17 +883,17 @@ class StatisticsController extends Controller {
                 $data_per_week[]=['name'=>$date,'y' => $sum==0?0: round($activity_value[$date]['week']*100/$sum,2),'value' => [$date,$sum==0?0: round($activity_value[$date]['week']*100/$sum,2)]];
                 $data_per_month[]=['name'=>$date,'y' => $sum==0?0: round($activity_value[$date]['month']*100/$sum,2),'value' => [$date,$sum==0?0: round($activity_value[$date]['month']*100/$sum,2)]];
             }
-
+            
             if($chart==1){
                 foreach($data_health as $k=>$v){
                     $series['health'][] = ['type' => 'column', 'name' => HealthData::$List['health'][$k], 'data' => $v,'color'=> HealthData::$List['health_color'][$k]];
                 }              
                 $series['health'][] = ['type' => 'spline', 'name' => '健康度', 'data' => $data_per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];
                 
-                $series['activity'][] = ['type' => 'column', 'name' => '总企业数', 'data' => $data_activity['total'],'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
-                $series['activity'][] = ['type' => 'column', 'name' => '月活跃企业数', 'data' => $data_activity['month'],'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
-                $series['activity'][] = ['type' => 'column', 'name' => '周活跃企业数', 'data' => $data_activity['week'],'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
-                $series['activity'][] = ['type' => 'column', 'name' => '日活跃企业数', 'data' => $data_activity['day'],'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
+                $series['activity'][] = ['type' => 'column', 'name' => '总企业数', 'data' => isset($data_activity['total'])?$data_activity['total']:[],'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
+                $series['activity'][] = ['type' => 'column', 'name' => '月活跃企业数', 'data' => isset($data_activity['month'])?$data_activity['month']:[],'grouping'=>false,'borderWidth'=>0,'shadow'=>false];
+                $series['activity'][] = ['type' => 'column', 'name' => '周活跃企业数', 'data' => isset($data_activity['week'])?$data_activity['week']:[],'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
+                $series['activity'][] = ['type' => 'column', 'name' => '日活跃企业数', 'data' => isset($data_activity['day'])?$data_activity['day']:[],'grouping'=>false,'borderWidth'=>0,'shadow'=>false,'dataLabels'=>['inside'=>true]];
                 
                 $series['activity'][] = ['type' => 'spline', 'name' => '日活跃率', 'data' => $data_per_day,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];
                 $series['activity'][] = ['type' => 'spline', 'name' => '周活跃率', 'data' => $data_per_week,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1, 'dataLabels'=>['allowOverlap'=>true]];
@@ -888,10 +906,10 @@ class StatisticsController extends Controller {
                 }
                 $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => '健康度', 'data' => $data_per,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];  
                 
-                $series['activity'][] = ['type' => 'bar', 'name' => '总企业数', 'data' => $data_activity['total'],'label'=>['show'=>true,'position'=>'top']];
-                $series['activity'][] = ['type' => 'bar', 'name' => '月活跃企业数', 'data' => $data_activity['month'],'label'=>['show'=>true],'barGap'=>'-100%'];
-                $series['activity'][] = ['type' => 'bar', 'name' => '周活跃企业数', 'data' => $data_activity['week'],'label'=>['show'=>true],'barGap'=>'-100%'];
-                $series['activity'][] = ['type' => 'bar', 'name' => '日活跃企业数', 'data' => $data_activity['day'],'label'=>['show'=>true],'barGap'=>'-100%'];
+                $series['activity'][] = ['type' => 'bar', 'name' => '总企业数', 'data' => isset($data_activity['total'])?$data_activity['total']:[],'label'=>['show'=>true,'position'=>'top']];
+                $series['activity'][] = ['type' => 'bar', 'name' => '月活跃企业数', 'data' => isset($data_activity['month'])?$data_activity['month']:[],'label'=>['show'=>true],'barGap'=>'-100%'];
+                $series['activity'][] = ['type' => 'bar', 'name' => '周活跃企业数', 'data' => isset($data_activity['week'])?$data_activity['week']:[],'label'=>['show'=>true],'barGap'=>'-100%'];
+                $series['activity'][] = ['type' => 'bar', 'name' => '日活跃企业数', 'data' => isset($data_activity['day'])?$data_activity['day']:[],'label'=>['show'=>true],'barGap'=>'-100%'];
                 
                 $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => '日活跃率', 'data' => $data_per_day,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];
                 $series['activity'][] = ['type' => 'line','smooth'=>true, 'name' => '周活跃率', 'data' => $data_per_week,'yAxisIndex'=>1,'label'=>['show'=>true,'formatter'=>"{@[1]}%",'color'=>'#000']];
@@ -924,21 +942,29 @@ class StatisticsController extends Controller {
             }          
             
             if($chart==1){
-                foreach ($data_health as $gid=>$data){
-                    $series['health'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','stacking'=>false];
+                if($data_health){
+                    foreach ($data_health as $gid=>$data){
+                        $series['health'][] = ['type' => 'column', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','stacking'=>false];
 
-                }
-                foreach ($data_per as $gid=>$per){
-                     $series['health'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                    foreach ($data_per as $gid=>$per){
+                        $series['health'][] = ['type' => 'spline', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'tooltip'=>['valueSuffix'=>'%'],'yAxis'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                }else{
+                    $series['health'][]=[];
                 }
                 $series['activity'][] =[];
             }else{
-                foreach ($data_health as $gid=>$data){
-                    $series['health'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
+                if($data_health){
+                    foreach ($data_health as $gid=>$data){
+                        $series['health'][] = ['type' => 'bar', 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $data,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000','label'=>['show'=>true]];
 
-                }
-                foreach ($data_per as $gid=>$per){
-                    $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                    foreach ($data_per as $gid=>$per){
+                        $series['health'][] = ['type' => 'line','smooth'=>true, 'name' => $gid&&isset($groups[$gid]['name'])?$groups[$gid]['name']:'未分配', 'data' => $per,'yAxisIndex'=>1,'color'=>$gid&&isset($groups[$gid]['color'])?'#'.$groups[$gid]['color']:'#FF0000'];
+                    }
+                }else{
+                    $series['health'][]=[];
                 }
                 $series['activity'][] =[];
             }
