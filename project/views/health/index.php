@@ -246,8 +246,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $m= $meal->devcloud_count*$model->R;//project\models\ActivityData::get_member_by_time($end, $model->corporation_id);
                                 $m=$m?round($m):0;
                                 $u= CorporationAccount::get_corporation_account_num($model->corporation_id);
-                                $max= $meal->devcloud_count+5;
-                                return '<span class='.($m<$max-5?'text-green':($m>=$max-5&&$m<=$max?'text-yellow':'text-red')).'>'.$m.'/'.$max.'</span> ('.$u.')';
+                                $max= $meal->devcloud_count;
+                                return '<span class='.($m<$max?'text-green':($m==$max?'text-yellow':'text-red')).'>'.$m.'/'.$max.'</span> ('.$u.')';
                             }else{
                                 return '';
                             }
