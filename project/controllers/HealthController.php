@@ -44,7 +44,7 @@ class HealthController extends Controller {
                     }
 
                     $searchModel = new HealthSearch();
-                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$start-86400,$end,$sum,$annual);
+                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$start-86399,$end,$sum,$annual);
 
                     $column= ColumnSetting::get_column_content(Yii::$app->user->identity->id,'health');
                     return [  
