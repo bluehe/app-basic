@@ -123,9 +123,11 @@ class ActivityController extends Controller {
             ->setCellValue( $r++.'1', '公司')
             ->setCellValue( $r++.'1', $searchModel->getAttributeLabel('is_act'));
         
-        foreach($column as $c){
-            $objSheet->setCellValue( $r.'1', $searchModel->getAttributeLabel($c));
-            $r++;
+        if($column){
+            foreach($column as $c){
+                $objSheet->setCellValue( $r.'1', $searchModel->getAttributeLabel($c));
+                $r++;
+            }
         }
                 
       
