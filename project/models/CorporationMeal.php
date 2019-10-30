@@ -310,4 +310,11 @@ class CorporationMeal extends \yii\db\ActiveRecord
         return static::find()->andWhere(['group_id'=>$group])->select(['corporation_id'])->column();     
     }
     
+    public static function get_region_by_id($id) {
+        $now=time();
+        $meal=static::find()->andWhere(['corporation_id'=>$id])->andFilterWhere(['and',['<=', 'start_time', $now],['>=', 'end_time', $now]])->orderBy(['end_time'=>SORT_DESC])->one();
+       
+        return $meal?$meal->meal->region:null;
+    }
+    
 }

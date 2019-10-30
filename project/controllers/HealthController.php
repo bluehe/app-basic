@@ -21,6 +21,7 @@ use project\models\UserGroup;
 use project\models\Group;
 use project\models\CorporationBd;
 use project\models\ColumnSetting;
+use project\models\CorporationMeal;
 
 
 class HealthController extends Controller { 
@@ -304,16 +305,17 @@ class HealthController extends Controller {
         
         $model = new CorporationProject();       
         $model->corporation_id=$corporation_id;
-        $model->name='demo2019';
+        $model->name='demo'.date('Y',time());
         $model->description= '';
         $model->add_type= CorporationProject::TYPE_ADD;
-        
+        $model->region= CorporationMeal::get_region_by_id($corporation_id);
+          
         $token = CorporationAccount::get_token($corporation_id);
         $auth = CurlHelper::createProject($model,$token);
         if($auth['code']=='200'&&$auth['content']['status']=='success'){
             $model->project_uuid=$auth['content']['result']['project']['project_uuid'];          
         }elseif($auth['code']=='200'&&$auth['content']['status']=='failed'){
-            $auth1 = CurlHelper::listProject($token);
+            $auth1 = CurlHelper::listProject($model,$token);
             if($auth1['code']=='200'){
                 foreach ($auth1['content']['result']['projects'] as $project){
                     if($project['name']=='demo2019'){
@@ -341,11 +343,11 @@ class HealthController extends Controller {
     
     public function actionMemberList($corporation_id) {
             
-        $model = CorporationProject::findOne(['corporation_id'=>$corporation_id]);
+        $model = CorporationProject::findOne(['corporation_id'=>$corporation_id,'region'=>CorporationMeal::get_region_by_id($corporation_id)]);
         
         $members=[];
         $token = CorporationAccount::get_token($corporation_id);
-        $auth_member= CurlHelper::listMember($model->project_uuid, $token);
+        $auth_member= CurlHelper::listMember($model, $token);
         if($auth_member['code']=='200'&&$auth_member['content']['status']=='success'){
             
             foreach ($auth_member['content']['result']['members'] as $member){
@@ -368,7 +370,7 @@ class HealthController extends Controller {
             if(count($add_members)>0){
                 foreach ($add_members as $add){                 
                     $account = CorporationAccount::findOne(['user_id'=>$add]);
-                    $auth=CurlHelper::addMember($model->project_uuid, $account, $token);
+                    $auth=CurlHelper::addMember($model, $account, $token);
                     if($auth['code']=='200'&&$auth['content']['status']=='success'){
                         ++$num_success;
                     }else{
@@ -381,7 +383,7 @@ class HealthController extends Controller {
             if(count($delete_members)>0){
                 foreach ($delete_members as $delete){
                     if($members[$delete]!=3){
-                        $auth=CurlHelper::deleteMember($model->project_uuid, $delete, $token);
+                        $auth=CurlHelper::deleteMember($model, $delete, $token);
                         if($auth['code']=='200'&&$auth['content']['status']=='success'){
                             ++$num_success;
                         }else{
@@ -408,7 +410,7 @@ class HealthController extends Controller {
     
     public function actionCodehubCreate($corporation_id) {
        
-        $project = CorporationProject::findOne(['corporation_id'=>$corporation_id]);
+        $project = CorporationProject::findOne(['corporation_id'=>$corporation_id,'region'=>CorporationMeal::get_region_by_id($corporation_id)]);
         
         $model = new CorporationCodehub(); 
         $model->loadDefaultValues();
@@ -418,11 +420,11 @@ class HealthController extends Controller {
         $model->project_uuid=$project->project_uuid;
                    
         $token = CorporationAccount::get_token($corporation_id);
-        $auth = CurlHelper::addCodehub($project->project_uuid,$model->repository_name,$token);
+        $auth = CurlHelper::createCodehub($project,$model->repository_name,$token);
         if($auth['code']=='200'&&$auth['content']['status']=='success'){
             $model->repository_uuid=$auth['content']['result']['repository_uuid'];
             sleep(2);
-            $auth1 = CurlHelper::getCodehub($model->repository_uuid, $token);
+            $auth1 = CurlHelper::getCodehub($project,$model->repository_uuid, $token);
             if($auth1['code']=='200'&&$auth1['content']['status']=='success'){
 
                 $model->https_url=$auth1['content']['result']['https_url'];
@@ -433,7 +435,7 @@ class HealthController extends Controller {
                 $model->updated_at=0;
                 $model->ci= CorporationCodehub::CI_NO;
             }else{
-                CurlHelper::deleteCodehub($model->repository_uuid,$token);
+                CurlHelper::deleteCodehub($project,$model->repository_uuid,$token);
             }
         }
         

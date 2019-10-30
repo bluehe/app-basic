@@ -157,10 +157,11 @@ class CorporationCodehub extends \yii\db\ActiveRecord
     }
     
     public static function set_corporation_codehub_list($corporation_id) {
-        $project = CorporationProject::findOne(['corporation_id'=>$corporation_id]);
+        $region = CorporationMeal::get_region_by_id($corporation_id);
+        $project = CorporationProject::findOne(['corporation_id'=>$corporation_id,'region'=>$region]);
         $token = CorporationAccount::get_token($corporation_id);
-        if($project&&$token){
-            $auth= CurlHelper::listCodehub($project->project_uuid,$token);
+        if($region&&$project&&$token){
+            $auth= CurlHelper::listCodehub($project,$token);
             if($auth['code']=='200'){
                 $codehubs = static::find()->where(['project_id'=>$project->id])->indexBy('repository_uuid')->asArray()->all();
                 foreach($auth['content']['result']['repositories'] as $codehub){
@@ -209,12 +210,14 @@ class CorporationCodehub extends \yii\db\ActiveRecord
     }
     
     public static function get_codehub_sum($corporation_id,$ci=null) {
-        $sum= static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['ci'=>$ci])->sum('total_num');
+        $region = CorporationMeal::get_region_by_id($corporation_id);
+        $sum= static::find()->alias('c')->joinWith(['project p'])->where(['c.corporation_id'=>$corporation_id])->andFilterWhere(['ci'=>$ci,'p.region'=>$region])->sum('total_num');
         return $sum?$sum:0;
     }
     
     public static function get_codehub_num($corporation_id,$ci=null) {
-        return static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['ci'=>$ci])->count();
+        $region = CorporationMeal::get_region_by_id($corporation_id);
+        return static::find()->alias('c')->joinWith(['project p'])->where(['c.corporation_id'=>$corporation_id])->andFilterWhere(['ci'=>$ci,'p.region'=>$region])->count();
     }
     
     public static function codehub_exec($id) {
@@ -270,7 +273,8 @@ class CorporationCodehub extends \yii\db\ActiveRecord
             }
             $auth['code']='200';
             if($model->add_type== CorporationCodehub::TYPE_SYSTEM){
-                $auth=CurlHelper::deleteCodehub($model->repository_uuid,CorporationAccount::get_token($model->corporation_id));
+                $project= CorporationProject::findOne(['id'=>$model->project_id]);
+                $auth=CurlHelper::deleteCodehub($project,$model->repository_uuid,CorporationAccount::get_token($model->corporation_id));
             }
             if($status==0&&$auth['code']=='200'&&$model->delete()){
                 $stat=true;

@@ -4,7 +4,6 @@ namespace project\components;
 
 use Yii;
 use project\models\System;
-use project\models\CorporationCodehub;
 
 class CommonHelper {
 

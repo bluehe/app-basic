@@ -105,9 +105,9 @@ class CurlHelper {
         
         $info['code'] = $status;
         if($returnHeader){
-            list($header, $body) = explode("\r\n\r\n", $output, 2);           
-            $info['header']=$header;
-            $info['content'] = json_decode($body,true);
+            $out =explode("\r\n\r\n", $output, 2);          
+            $info['header']=$out[0];
+            $info['content'] = json_decode(isset($out[1])?$out[1]:'',true);
         }else{
             $info['content'] = json_decode($output,true);
         }
@@ -181,23 +181,38 @@ class CurlHelper {
     }
     
     public static function createProject($project,$token){
-        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects';
+        if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/pcedge/v1/projects';
         $params='{"name":"'.$project->name.'", "description": "'.$project->description.'", "type": "normal", "homepage": ""}';
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::posturl($url, $params,$headerArray);      
         return $data;
     }
     
-    public static function listProject($token){
-        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects?1,100';      
+    public static function listProject($project,$token){
+        if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/pcedge/v1/projects?1,100';      
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::geturl($url,$headerArray);       
         return $data;
 
     }
     
-    public static function addMember($project_uuid,$account,$token){
-        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects/'.$project_uuid.'/members';
+    public static function addMember($project,$account,$token){
+       if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/pcedge/v1/projects/'.$project->project_uuid.'/members';
         $params='{
             "user_id": "'.$account->user_id.'",
             "user_name": "'.$account->user_name.'",
@@ -210,44 +225,74 @@ class CurlHelper {
         return $data;
     }
     
-    public static function deleteMember($project_uuid,$user_id,$token){
-        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects/'.$project_uuid.'/members/'.$user_id;      
+    public static function deleteMember($project,$user_id,$token){
+        if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/pcedge/v1/projects/'.$project->project_uuid.'/members/'.$user_id;      
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::delurl($url,'',$headerArray);       
         return $data;
     }
     
-    public static function listMember($project_uuid,$token){
-        $url='https://api.devcloud.huaweicloud.com/pcedge/v1/projects/'.$project_uuid.'/members';      
+    public static function listMember($project,$token){
+        if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/pcedge/v1/projects/'.$project->project_uuid.'/members';      
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::geturl($url,$headerArray);       
         return $data;
     }
     
-    public static function addCodehub($project_uuid,$repository_name,$token){
-        $url='https://api.devcloud.huaweicloud.com/codehub/v1/repositories';
-        $params='{"name":"'.$repository_name.'", "template_id": "283823", "project_uuid": "'.$project_uuid.'", "import_members": 0}';
+    public static function createCodehub($project,$repository_name,$token){
+        if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/codehub/v1/repositories';
+        $params='{"name":"'.$repository_name.'", "template_id": "283823", "project_uuid": "'.$project->project_uuid.'", "import_members": 0}';
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::posturl($url, $params,$headerArray);      
         return $data;
     }
     
-    public static function deleteCodehub($repository_uuid,$token){
-        $url='https://api.devcloud.huaweicloud.com/codehub/v1/repositories/'.$repository_uuid;      
+    public static function deleteCodehub($project,$repository_uuid,$token){
+        if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/codehub/v1/repositories/'.$repository_uuid;      
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::delurl($url,'',$headerArray);       
         return $data;
     }
     
-    public static function listCodehub($project_uuid,$token){
-        $url='https://api.devcloud.huaweicloud.com/codehub/v2/projects/'.$project_uuid.'/repositories?1,100';      
+    public static function listCodehub($project,$token){
+        if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/codehub/v2/projects/'.$$project->project_uuid.'/repositories?1,100';      
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::geturl($url,$headerArray);       
         return $data;
     }
     
-    public static function getCodehub($repository_uuid,$token){
-        $url='https://api.devcloud.huaweicloud.com/codehub/v2/repositories/'.$repository_uuid;      
+    public static function getCodehub($project,$repository_uuid,$token){
+        if(isset($this->region[$project->region])){
+            $api=$this->region[$project->region];
+        }else{
+            return ['code'=>0];
+        }
+        $url=$api.'/codehub/v2/repositories/'.$repository_uuid;      
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::geturl($url,$headerArray);       
         return $data;

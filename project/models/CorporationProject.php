@@ -39,7 +39,7 @@ class CorporationProject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corporation_id','project_uuid','name'], 'required'],
+            [['corporation_id','region','project_uuid','name'], 'required'],
             [['corporation_id', 'add_type'], 'integer'],
             [['name', 'description', 'project_uuid'], 'string', 'max' => 32],
             [['member'], 'safe'],
@@ -55,6 +55,7 @@ class CorporationProject extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'corporation_id' => '企业ID',
+            'region' => '区域',
             'name' => '名称',
             'description' => '项目描述',
             'project_uuid' => '项目UUID',
@@ -86,7 +87,8 @@ class CorporationProject extends \yii\db\ActiveRecord
     }
     
     public static function get_corporationproject_exist($id) {
-        return static::find()->where(['corporation_id'=>$id])->exists();
+        $region = CorporationMeal::get_region_by_id($id);
+        return static::find()->where(['corporation_id'=>$id])->andFilterWhere(['region'=>$region])->exists();
     }
     
     public static function project_delete($corporation_id){
@@ -96,7 +98,7 @@ class CorporationProject extends \yii\db\ActiveRecord
         if ($model !== null) {
             
             //删除仓库
-            $codehubs = CorporationCodehub::find()->where(['corporation_id'=>$corporation_id])->all();
+            $codehubs = CorporationCodehub::find()->where(['corporation_id'=>$corporation_id,'region'=>$model->region])->all();
             if($codehubs!==null){
                 //存在仓库
                 foreach ($codehubs as $codehub){
@@ -108,7 +110,7 @@ class CorporationProject extends \yii\db\ActiveRecord
             //移除项目成员
             $members=[];
             $token = CorporationAccount::get_token($corporation_id);
-            $auth_member= CurlHelper::listMember($model->project_uuid, $token);
+            $auth_member= CurlHelper::listMember($model, $token);
             if($auth_member['code']=='200'&&$auth_member['content']['status']=='success'){
 
                 foreach ($auth_member['content']['result']['members'] as $member){
@@ -119,7 +121,7 @@ class CorporationProject extends \yii\db\ActiveRecord
             if(count($delete_members)>1){
                 foreach ($delete_members as $delete){
                     if($members[$delete]!=3){
-                        $auth=CurlHelper::deleteMember($model->project_uuid, $delete, $token);                      
+                        $auth=CurlHelper::deleteMember($model, $delete, $token);                      
                     }
                 }
                 Yii::info($corporation_id.'移除成员', 'projectclean');               
