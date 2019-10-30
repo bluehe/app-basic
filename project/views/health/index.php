@@ -247,7 +247,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $m=$m?round($m):0;
                                 $u= CorporationAccount::get_corporation_account_num($model->corporation_id);
                                 $max= $meal->devcloud_count;
-                                return '<span class='.($m<$max?'text-green':($m==$max?'text-yellow':'text-red')).'>'.$m.'/'.$max.'</span>'.Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)?' ('.$u.')':'';
+                                return '<span class='.($m<$max?'text-green':($m==$max?'text-yellow':'text-red')).'>'.$m.'/'.$max.'</span>'.(Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)?' ('.$u.')':'');
                             }else{
                                 return '';
                             }
