@@ -247,7 +247,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $m=$m?round($m):0;
                                 $u= CorporationAccount::get_corporation_account_num($model->corporation_id);
                                 $max= $meal->devcloud_count;
-                                return '<span class='.($m<$max?'text-green':($m==$max?'text-yellow':'text-red')).'>'.$m.'/'.$max.'</span> ('.$u.')';
+                                return '<span class='.($m<$max?'text-green':($m==$max?'text-yellow':'text-red')).'>'.$m.'/'.$max.'</span>'.Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id)?' ('.$u.')':'';
                             }else{
                                 return '';
                             }
@@ -261,6 +261,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return $num>0?$num.'|'.CorporationCodehub::get_codehub_sum($model->corporation_id).'('.CorporationCodehub::get_codehub_sum($model->corporation_id, CorporationCodehub::CI_YES).')':0;
                         },
                         'format' => 'raw',
+                        'visible'=> Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),
                     ],
                                 
                     ['class' => 'yii\grid\ActionColumn',
