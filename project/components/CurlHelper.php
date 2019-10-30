@@ -6,7 +6,7 @@ use Yii;
 
 class CurlHelper {
     
-    private $region=[
+    public static $region=[
         'cn-northeast-1'=>'https://devcloud.cn-northeast-1.myhuaweicloud.com',
         'cn-north-1'=>'https://devcloud.cn-north-1.myhuaweicloud.com',
         'cn-north-4'=>'https://devcloud.cn-north-4.myhuaweicloud.com',
@@ -181,8 +181,8 @@ class CurlHelper {
     }
     
     public static function createProject($project,$token){
-        if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+        if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }
@@ -194,8 +194,8 @@ class CurlHelper {
     }
     
     public static function listProject($project,$token){
-        if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+        if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }
@@ -207,8 +207,8 @@ class CurlHelper {
     }
     
     public static function addMember($project,$account,$token){
-       if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+       if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }
@@ -226,8 +226,8 @@ class CurlHelper {
     }
     
     public static function deleteMember($project,$user_id,$token){
-        if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+        if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }
@@ -238,8 +238,8 @@ class CurlHelper {
     }
     
     public static function listMember($project,$token){
-        if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+        if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }
@@ -250,8 +250,8 @@ class CurlHelper {
     }
     
     public static function createCodehub($project,$repository_name,$token){
-        if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+        if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }
@@ -263,8 +263,8 @@ class CurlHelper {
     }
     
     public static function deleteCodehub($project,$repository_uuid,$token){
-        if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+        if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }
@@ -275,8 +275,8 @@ class CurlHelper {
     }
     
     public static function listCodehub($project,$token){
-        if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+        if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }
@@ -287,8 +287,8 @@ class CurlHelper {
     }
     
     public static function getCodehub($project,$repository_uuid,$token){
-        if(isset($this->region[$project->region])){
-            $api=$this->region[$project->region];
+        if(isset(self::$region[$project->region])){
+            $api=self::$region[$project->region];
         }else{
             return ['code'=>0];
         }

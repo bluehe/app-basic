@@ -88,7 +88,7 @@ class CorporationProject extends \yii\db\ActiveRecord
     
     public static function get_corporationproject_exist($id) {
         $region = CorporationMeal::get_region_by_id($id);
-        return static::find()->where(['corporation_id'=>$id])->andFilterWhere(['region'=>$region])->exists();
+        return static::find()->where(['corporation_id'=>$id,'region'=>$region])->exists();
     }
     
     public static function project_delete($corporation_id){
