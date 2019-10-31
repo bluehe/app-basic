@@ -20,7 +20,8 @@ class m190516_140200_create_corporation_project extends Migration {
         }
         $this->createTable($table, [
             'id' => $this->primaryKey(),
-            'corporation_id' => $this->integer()->comment('企业ID'),           
+            'corporation_id' => $this->integer()->comment('企业ID'),
+            'region' => $this->string(32)->comment('区域'),
             'name' => $this->string(32)->comment('名称'),
             'description' => $this->string(32)->comment('项目描述'),
             'project_uuid' => $this->string(32)->comment('项目UUID'),

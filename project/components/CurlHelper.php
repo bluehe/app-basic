@@ -280,7 +280,7 @@ class CurlHelper {
         }else{
             return ['code'=>0];
         }
-        $url=$api.'/codehub/v2/projects/'.$$project->project_uuid.'/repositories?1,100';      
+        $url=$api.'/codehub/v2/projects/'.$project->project_uuid.'/repositories?1,100';      
         $headerArray =array("Content-type:application/json;","X-Auth-Token:".$token);
         $data= self::geturl($url,$headerArray);       
         return $data;

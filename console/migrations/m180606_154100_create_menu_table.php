@@ -59,7 +59,7 @@ class m180606_154100_create_menu_table extends \yii\db\Migration {
             [37, '补贴管理', 30, '/subsidy/subsidy-list', 7, '{"icon":"fa fa-tint"}'],
             [38, '培训咨询', 30, '/train/index', 8, '{"icon":"fa fa-calendar"}'],
             
-            [40, '数据中心', NULL, '/field/index', 4, '{"icon":"fa fa-wrench"}'],
+            [40, '数据中心', NULL, '/activity/index', 4, '{"icon":"fa fa-wrench"}'],
             [41, '活跃标准', 40, '/standard/index', 1, '{"icon":"fa fa-balance-scale"}'],
             [42, '字段管理', 40, '/field/index', 2, '{"icon":"fa fa-suitcase"}'],
             [43, '数据导入', 40, '/import/index', 3, '{"icon":"fa fa-upload"}'],
