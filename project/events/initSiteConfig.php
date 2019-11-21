@@ -43,7 +43,7 @@ class initSiteConfig extends Event {
         $system = $cache->get('system');
         
         //系统状态-关闭
-        if($system!== false&&$system['system_stat']=='0'){
+        if($system!== false&&$system['system_stat']['value']=='0'){
                  
             $is_admin=false;
             if(!Yii::$app->user->isGuest){

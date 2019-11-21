@@ -4,7 +4,9 @@ use yii\widgets\Breadcrumbs;
 use dmstr\widgets\Alert;
 use yii\helpers\Url;
 
-$system = Yii::$app->cache->get('system_info');
+$system = Yii::$app->cache->get('system');
+
+
 ?>
 <div class="content-wrapper">
     <section class="content-header">
@@ -50,6 +52,6 @@ $system = Yii::$app->cache->get('system_info');
         <b>Version</b> <?= Yii::$app->version ?>
     </div>
     <strong>&copy; 2017-<?= date('Y', time()) ?> <a target="_blank" href="http://www.wzgxpt.com">网址共享平台</a>.</strong> All rights reserved.
-    <a href = "http://www.miibeian.gov.cn/" target = "_blank"><?= $system['system_icp']; ?></a>
-    <?= $system['system_statcode']; ?>
+    <a href = "http://www.miibeian.gov.cn/" target = "_blank"><?= Yii::$app->siteConfig->system_icp;//$system['system_icp']['value']; ?></a>
+    <?= Yii::$app->siteConfig->system_statcode;//$system['system_statcode']['value']; ?>
 </footer>
