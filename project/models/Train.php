@@ -80,7 +80,7 @@ class Train extends \yii\db\ActiveRecord
             [['group_id','uid', 'created_at', 'updated_at', 'corporation_id', 'train_num', 'reply_uid', 'reply_at', 'train_stat'], 'integer'],
             [['group_id','uid','train_type','train_start','train_end'], 'required'],
             [['train_result'], 'required', 'on' => 'trainEnd'],
-            [['sa'], 'requiredBySelfsa','skipOnEmpty' => false,'on' => ['trainStart','trainEnd']],
+//            [['sa'], 'requiredBySelfsa','skipOnEmpty' => false,'on' => ['trainStart','trainEnd']],
             [['other'], 'requiredBySelfother','skipOnEmpty' => false,'on' => ['trainStart','trainEnd']],
             [['train_name'],'requiredByCompanyid','skipOnEmpty' => false],
             [['train_result', 'train_note'], 'string'],
