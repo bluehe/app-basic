@@ -118,7 +118,7 @@ class Train extends \yii\db\ActiveRecord
     {
         $auth = Yii::$app->authManager;
         $Role_admin = $auth->getRole('superadmin');
-        if (Yii::$app->user->identity->role== User::ROLE_SA&&(!$this->$attribute||!in_array(Yii::$app->user->identity->id,$this->$attribute))||!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)){
+        if (Yii::$app->user->identity->role== User::ROLE_SA&&(!$this->$attribute||!in_array(Yii::$app->user->identity->id,$this->$attribute))&&!$auth->getAssignment($Role_admin->name, Yii::$app->user->identity->id)){
                 $this->addError($attribute,'必须包含自己');            
         }        
     }
