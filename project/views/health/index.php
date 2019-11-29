@@ -261,7 +261,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return $num>0?$num.'|'.CorporationCodehub::get_codehub_sum($model->corporation_id).'('.CorporationCodehub::get_codehub_sum($model->corporation_id, CorporationCodehub::CI_YES).')':0;
                         },
                         'format' => 'raw',
-                        'visible'=> Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),
+                        'visible'=> Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('sa')->name, Yii::$app->user->identity->id),
                     ],
                                 
                     ['class' => 'yii\grid\ActionColumn',
@@ -276,7 +276,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                            
                         ],
-                        'visible'=> Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('superadmin')->name, Yii::$app->user->identity->id),
+                        'visible'=> Yii::$app->authManager->getAssignment(Yii::$app->authManager->getRole('sa')->name, Yii::$app->user->identity->id),
                        
                     ],
                 ],
