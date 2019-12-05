@@ -186,9 +186,9 @@ class ExcelHelper {
     public static function execute_array_label($sheetData) {
         $keys = ArrayHelper::remove($sheetData, '1');
         
-        //中文括号转化为英文括号
+        //中文括号转化为英文括号,去除前后空格
         foreach($keys as $k=>$key){
-            $keys[$k]= strtr($key, ['（'=>'(','）'=>')']);
+            $keys[$k]= trim(strtr($key, ['（'=>'(','）'=>')']));
         }
 
         $new_data = [];
