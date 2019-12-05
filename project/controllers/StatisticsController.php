@@ -849,7 +849,7 @@ class StatisticsController extends Controller {
             $data_per = [];
             $groups = User::get_bd_color();
 
-            foreach ($activity_week as $one) {
+            foreach ($activity_month as $one) {
                 $activity[$one['statistics_time']][$one['bd_id']]['week'] = $one['num'];
             }
 
