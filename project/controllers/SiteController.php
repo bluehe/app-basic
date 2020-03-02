@@ -5,11 +5,13 @@ namespace project\controllers;
 use Yii;
 use yii\web\Controller;
 use project\models\User;
+use yii\web\JsExpression;
 use project\models\System;
 use yii\filters\VerbFilter;
 use project\models\UserAuth;
 use project\models\LoginForm;
 use project\models\UserGroup;
+use project\models\HealthData;
 use project\models\SignupForm;
 use yii\filters\AccessControl;
 use project\models\Corporation;
@@ -20,7 +22,6 @@ use project\models\PasswordFindForm;
 use project\models\PasswordResetForm;
 use project\models\ResetPasswordForm;
 use project\models\PasswordResetRequestForm;
-use yii\web\JsExpression;
 
 /**
  * Site controller
@@ -206,11 +207,128 @@ class SiteController extends Controller
         foreach ($allocate_cnum as $allocate) {
             $data_allocate[] = ['name' => floatval($allocate['amount'] / 10000) . '万', 'y' => (int) $allocate['num'], 'value' => (int) $allocate['num']];
         }
-        if ($chart == 1) {
-            $series['allocate_num'][] = ['type' => 'pie', 'innerSize' => '50%', 'name' => '数量', 'data' => $data_allocate];
-        } else {
-            $series['allocate_num'][] = ['type' => 'pie', 'radius' => ['25%', '50%'], 'name' => '数量', 'minAngle' => 10, 'data' => $data_allocate, 'label' => ['formatter' => "{c}家,{d}%", 'color' => '#FFF'], 'color' => ["#065aab", "#066eab", "#0682ab", "#0696ab", "#06a0ab", "#06b4ab", "#06c8ab", "#06dcab", "#06f0ab"]];
+
+        $series['allocate_num'][] = ['type' => 'pie', 'radius' => ['25%', '50%'], 'name' => '数量', 'minAngle' => 10, 'data' => $data_allocate, 'label' => ['formatter' => "{c}家,{d}%", 'color' => '#FFF'], 'color' => ["rgb(149, 206, 255)", "rgb(255, 188, 117)", "rgb(144, 238, 126)", "rgb(119, 152, 191)", "#06a0ab", "#06b4ab", "#06c8ab", "#06dcab", "#06f0ab"]];
+
+
+
+        $month_start = strtotime('-1 months +1 days', $end);
+        $total_get = 1; //Yii::$app->request->get('total', 1); //全体或个人
+        $is_allocate = HealthData::ALLOCATE_Y; //Yii::$app->request->get('allocate', HealthData::ALLOCATE_Y) ? HealthData::ALLOCATE_Y : null;
+        if (!$group) {
+            $group_id = UserGroup::get_user_groupid(Yii::$app->user->identity->id);
+            if (count($group_id) > 0) {
+                $group = $group_id[0];
+            }
         }
+
+        if (Yii::$app->request->get('range')) {
+            $range = explode('~', Yii::$app->request->get('range'));
+            $month_start = isset($range[0]) ? strtotime($range[0]) : $month_start;
+            $end = isset($range[1]) && (strtotime($range[1]) < $end) ? strtotime($range[1]) : $end;
+        }
+
+        //健康度
+        $series['health'] = [];
+        $data_health = $data_per = $health_value = $health_key = [];
+        $data_activity = $data_per_day = $data_per_week = $data_per_month = $activity = $activity_value = [];
+        $health_total = HealthData::get_health($month_start - 86400, $end, $group, $is_allocate, $total_get);
+        $activity_day = HealthData::get_activity($month_start - 86400, $end, $group, $is_allocate, $total_get, 'activity_day');
+        $activity_week = HealthData::get_activity($month_start - 86400, $end, $group, $is_allocate, $total_get, 'activity_week');
+        $activity_month = HealthData::get_activity($month_start - 86400, $end, $group, $is_allocate, $total_get, 'activity_month');
+
+        foreach ($activity_day as $one) {
+            $activity[$one['statistics_time']]['day'] = $one['num'];
+        }
+        foreach ($activity_week as $one) {
+            $activity[$one['statistics_time']]['week'] = $one['num'];
+        }
+        foreach ($activity_month as $one) {
+            $activity[$one['statistics_time']]['month'] = $one['num'];
+        }
+        foreach ($health_total as $total) {
+            $key = $end - $month_start >= 365 * 86400 ? date('Y.n.j', $total['statistics_time']) : date('n.j', $total['statistics_time']);
+            $health_value[$key][$total['health']] = (int) $total['num'];
+            if (!in_array($total['health'], $health_key)) {
+                $health_key[] = $total['health'];
+            }
+            $activity_value[$key]['day'] = isset($activity[$total['statistics_time']]['day']) ? (int) $activity[$total['statistics_time']]['day'] : 0;
+            $activity_value[$key]['week'] = isset($activity[$total['statistics_time']]['week']) ? (int) $activity[$total['statistics_time']]['week'] : 0;
+            $activity_value[$key]['month'] = isset($activity[$total['statistics_time']]['month']) ? (int) $activity[$total['statistics_time']]['month'] : 0;
+        }
+        asort($health_key);
+        foreach ($health_value as $date => $value) {
+            $sum = 0;
+            foreach ($health_key as $key) {
+                $y_health = isset($health_value[$date][$key]) ? $health_value[$date][$key] : 0;
+                $sum += $y_health;
+                $data_health[$key][] = ['name' => $date, 'y' => $y_health, 'value' => [$date, $y_health]];
+            }
+            $health_5 = isset($health_value[$date][HealthData::HEALTH_H5]) ? $health_value[$date][HealthData::HEALTH_H5] : 0;
+            //$health_4 = isset($health_value[$date][HealthData::HEALTH_H4]) ? $health_value[$date][HealthData::HEALTH_H4] : 0;
+            $data_per[] = ['name' => $date, 'y' => $sum == 0 ? 0 : round(($health_5) * 100 / $sum, 2), 'value' => [$date, $sum == 0 ? 0 : round(($health_5) * 100 / $sum, 2)]];
+            $data_activity['day'][] = ['name' => $date, 'y' => $activity_value[$date]['day'], 'value' => [$date, $activity_value[$date]['day']]];
+            $data_activity['week'][] = ['name' => $date, 'y' => $activity_value[$date]['week'], 'value' => [$date, $activity_value[$date]['week']]];
+            $data_activity['month'][] = ['name' => $date, 'y' => $activity_value[$date]['month'], 'value' => [$date, $activity_value[$date]['month']]];
+            $data_activity['total'][] = ['name' => $date, 'y' => $sum, 'value' => [$date, $sum]];
+            $data_per_day[] = ['name' => $date, 'y' => $sum == 0 ? 0 : round($activity_value[$date]['day'] * 100 / $sum, 2), 'value' => [$date, $sum == 0 ? 0 : round($activity_value[$date]['day'] * 100 / $sum, 2)]];
+            $data_per_week[] = ['name' => $date, 'y' => $sum == 0 ? 0 : round($activity_value[$date]['week'] * 100 / $sum, 2), 'value' => [$date, $sum == 0 ? 0 : round($activity_value[$date]['week'] * 100 / $sum, 2)]];
+            $data_per_month[] = ['name' => $date, 'y' => $sum == 0 ? 0 : round($activity_value[$date]['month'] * 100 / $sum, 2), 'value' => [$date, $sum == 0 ? 0 : round($activity_value[$date]['month'] * 100 / $sum, 2)]];
+        }
+
+
+        foreach ($data_health as $k => $v) {
+            $series['health'][] = [
+                'type' => 'bar', 'name' => HealthData::$List['health'][$k],
+
+                'data' => $v,
+                'itemStyle' => [
+                    'normal' => [
+                        'color' => HealthData::$List['health_color'][$k],
+                        'opacity' => 1,
+                        'barBorderRadius' => 5
+                    ]
+                ],
+                //'stack' => '健康度',
+                'label' => ['show' => true, 'position' => 'top']
+            ];
+        }
+        $series['health'][] = [
+            'type' => 'line', 'smooth' => true, 'name' => '健康度', 'data' => $data_per, 'yAxisIndex' => 1,
+            'itemStyle' => [
+                'normal' => [
+                    'color' => "#0184d5",
+                    'borderColor' => "rgba(221, 220, 107, .1)",
+                    'borderWidth' => 12
+                ]
+            ],
+            //'label' => ['show' => true, 'formatter' => "{@[1]}%"]
+        ];
+
+        $series['activity'][] = ['type' => 'bar', 'name' => '总企业数', 'data' => isset($data_activity['total']) ? $data_activity['total'] : [], 'label' => ['show' => true, 'position' => 'top']];
+        $series['activity'][] = ['type' => 'bar', 'name' => '月活跃企业数', 'data' => isset($data_activity['month']) ? $data_activity['month'] : [], 'label' => ['show' => true], 'barGap' => '-100%'];
+        $series['activity'][] = ['type' => 'bar', 'name' => '周活跃企业数', 'data' => isset($data_activity['week']) ? $data_activity['week'] : [], 'label' => ['show' => true], 'barGap' => '-100%'];
+        $series['activity'][] = ['type' => 'bar', 'name' => '日活跃企业数', 'data' => isset($data_activity['day']) ? $data_activity['day'] : [], 'label' => ['show' => true], 'barGap' => '-100%'];
+
+        $series['activity'][] = ['type' => 'line', 'smooth' => true, 'name' => '日活跃率', 'data' => $data_per_day, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
+        $series['activity'][] = ['type' => 'line', 'smooth' => true, 'name' => '周活跃率', 'data' => $data_per_week, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
+        $series['activity'][] = ['type' => 'line', 'smooth' => true, 'name' => '月活跃率', 'data' => $data_per_month, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
+
+
+        //用户数
+        $data_total_num = $data_user_num = $data_user_per = [];
+        $activity_user = HealthData::get_user_total($month_start, $end, $group, $is_allocate, $total_get, null);
+
+        foreach ($activity_user as $row) {
+            $j = date('Y.n.j', $row['statistics_time']);
+            $data_total_num[] = ['name' => $j, 'y' => (int) $row['total_num'], 'value' => [$j, (int) $row['total_num']]];
+            $data_user_num[] = ['name' => $j, 'y' => (int) $row['user_num'], 'value' => [$j, (int) $row['user_num']]];
+            $data_user_per[] = ['name' => $j, 'y' => isset($row['user_num']) && isset($row['total_num']) && (int) $row['total_num'] > 0 ? round((int) $row['user_num'] / (int) $row['total_num'] * 100, 2) : 0, 'value' => [$j, isset($row['user_num']) && isset($row['total_num']) && (int) $row['total_num'] > 0 ? round((int) $row['user_num'] / (int) $row['total_num'] * 100, 2) : 0]];
+        }
+
+        $series['user'][] = ['type' => 'bar', 'name' => '下拨用户数', 'data' => $data_total_num, 'label' => ['show' => true, 'position' => 'top']];
+        $series['user'][] = ['type' => 'bar', 'name' => '实际用户数', 'data' => $data_user_num, 'label' => ['show' => true], 'barGap' => '-100%'];
+        $series['user'][] = ['type' => 'line', 'smooth' => true, 'name' => '用户占比', 'data' => $data_user_per, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
 
         return $this->render('index', ['allocate_num' => $allocate_num, 'allocate_amount' => $allocate_amount, 'series' => $series,]);
     }

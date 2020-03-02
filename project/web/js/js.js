@@ -1,5 +1,5 @@
 $(window).on('load', function () {
-    i();
+    //i();
     j();
     //n();
     k();
@@ -8,7 +8,7 @@ $(window).on('load', function () {
     o();
     //p();
 
-    function i() {
+    function i1() {
         var a = echarts.init(document.getElementById("echart1"));
         option = {
             tooltip: {
@@ -179,7 +179,7 @@ $(window).on('load', function () {
     }
 
     function o() {
-        var a = echarts.init(document.getElementById("echart5"));
+        var a = echarts.init(document.getElementById("echart6"));
         option = {
             tooltip: {
                 trigger: "axis",
@@ -411,7 +411,7 @@ $(window).on('load', function () {
     }
 
     function p1() {
-        var b = echarts.init(document.getElementById("echart6"));
+        var b = echarts.init(document.getElementById("echart5"));
         var a = {
             normal: {
                 label: {

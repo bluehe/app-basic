@@ -1,3 +1,114 @@
+function i() {
+    var option = {
+        tooltip: {
+            trigger: "axis",
+            axisPointer: {
+                type: "shadow"
+            }
+        },
+        legend: {
+            top: "0%",
+            textStyle: {
+                color: "rgba(255,255,255,.5)",
+                fontSize: "12",
+            }
+        },
+        grid: {
+            left: "10",
+            top: "40",
+            right: "10",
+            bottom: "10",
+            containLabel: true
+        },
+        xAxis: [{
+            type: "category",
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    color: "rgba(255,255,255,.1)",
+                    width: 1,
+                    type: "solid"
+                },
+            },
+            axisTick: {
+                show: false,
+            },
+            axisLabel: {
+                interval: 0,
+                show: true,
+                splitNumber: 15,
+                textStyle: {
+                    color: "rgba(255,255,255,.6)",
+                    fontSize: "12",
+                },
+            },
+        }],
+        yAxis: [{
+            type: "value",
+            min: 0,
+            // reversedStacks: false,
+            // stackLabels: {
+            //     enabled: true,
+            // },
+            axisLabel: {
+                show: true,
+                textStyle: {
+                    color: "rgba(255,255,255,.6)",
+                    fontSize: "12",
+                },
+            },
+            axisTick: {
+                show: false,
+            },
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    color: "rgba(255,255,255,.1	)",
+                    width: 1,
+                    type: "solid"
+                },
+            },
+            splitLine: {
+                lineStyle: {
+                    color: "rgba(255,255,255,.1)",
+                }
+            }
+        }, {
+            type: "value",
+            opposite: true,
+            min: 0,
+            max: 100,
+            axisLabel: {
+                show: true,
+                textStyle: {
+                    color: "rgba(255,255,255,.6)",
+                    fontSize: "12",
+                },
+                formatter: '{value} %',
+            },
+            axisTick: {
+                show: false,
+            },
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    color: "rgba(255,255,255,.1	)",
+                    width: 1,
+                    type: "solid"
+                },
+            },
+            splitLine: {
+                show: false,
+                lineStyle: {
+                    color: "rgba(255,255,255,.1)",
+                }
+            }
+        }],
+        series: []
+    };
+    return option;
+}
+
 function n() {
     var option = {
         tooltip: {

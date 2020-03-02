@@ -69,16 +69,17 @@ $this->title = '首页';
                     <div class="allnav" id="echart4"></div>
                     <div class="boxfoot"></div>
                 </div>
-                <div class="boxall" style="height: 3.2rem">
-                    <div class="alltitle">模块标题样式</div>
+                <div class="boxall" style="height: 3rem">
+                    <div class="alltitle">下拨套餐占比</div>
                     <div class="allnav" id="echart5"></div>
                     <div class="boxfoot"></div>
                 </div>
-                <div class="boxall" style="height: 3rem">
-                    <div class="alltitle">下拨套餐占比</div>
+                <div class="boxall" style="height: 3.2rem">
+                    <div class="alltitle">模块标题样式</div>
                     <div class="allnav" id="echart6"></div>
                     <div class="boxfoot"></div>
                 </div>
+
             </li>
         </ul>
     </div>
@@ -182,21 +183,28 @@ $this->title = '首页';
 
 
     $(function() {
+        var echart1 = echarts.init(document.getElementById("echart1"));
+        echart1.setOption(i());
+        echart1.setOption({
+            series: <?= json_encode($series['health']) ?>
+        });
+
         var echart4 = echarts.init(document.getElementById("echart4"));
         echart4.setOption(n());
         echart4.setOption({
             series: <?= json_encode($series['amount']) ?>
         });
 
-        var echart6 = echarts.init(document.getElementById("echart6"));
-        echart6.setOption(p());
-        echart6.setOption({
+        var echart5 = echarts.init(document.getElementById("echart5"));
+        echart5.setOption(p());
+        echart5.setOption({
             series: <?= json_encode($series['allocate_num']) ?>
         });
 
         window.addEventListener("resize", function() {
+            echart1.resize();
             echart4.resize();
-            echart6.resize()
+            echart5.resize()
         })
     })
 
