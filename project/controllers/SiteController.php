@@ -16,6 +16,7 @@ use project\models\SignupForm;
 use yii\filters\AccessControl;
 use project\models\Corporation;
 use project\models\CloudSubsidy;
+use project\models\ActivityChange;
 use project\models\CorporationMeal;
 use yii\base\InvalidParamException;
 use project\models\PasswordFindForm;
@@ -167,6 +168,9 @@ class SiteController extends Controller
                     'borderWidth' => 12
                 ]
             ],
+            'label' => [
+                'show' => true
+            ],
             'data' => $data_num
         ];
 
@@ -196,6 +200,9 @@ class SiteController extends Controller
                     'borderWidth' => 12
                 ]
             ],
+            'label' => [
+                'show' => true
+            ],
             'yAxisIndex' => 1,
             'data' => $data_amount
         ];
@@ -208,7 +215,7 @@ class SiteController extends Controller
             $data_allocate[] = ['name' => floatval($allocate['amount'] / 10000) . '万', 'y' => (int) $allocate['num'], 'value' => (int) $allocate['num']];
         }
 
-        $series['allocate_num'][] = ['type' => 'pie', 'radius' => ['25%', '50%'], 'name' => '数量', 'minAngle' => 10, 'data' => $data_allocate, 'label' => ['formatter' => "{c}家,{d}%", 'color' => '#FFF'], 'color' => ["rgb(149, 206, 255)", "rgb(255, 188, 117)", "rgb(144, 238, 126)", "rgb(119, 152, 191)", "#06a0ab", "#06b4ab", "#06c8ab", "#06dcab", "#06f0ab"]];
+        $series['allocate_num'][] = ['type' => 'pie', 'radius' => ['25%', '50%'], 'name' => '数量', 'minAngle' => 10, 'data' => $data_allocate, 'label' => ['formatter' => "{c}家,{d}%", 'color' => '#FFF'], 'color' => ["#0184d5", "rgb(255, 188, 117)", "rgb(144, 238, 126)", "rgb(119, 152, 191)", "#06a0ab", "#06b4ab", "#06c8ab", "#06dcab", "#06f0ab"]];
 
 
 
@@ -302,17 +309,67 @@ class SiteController extends Controller
                     'borderWidth' => 12
                 ]
             ],
-            //'label' => ['show' => true, 'formatter' => "{@[1]}%"]
+            'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#fff']
         ];
 
-        $series['activity'][] = ['type' => 'bar', 'name' => '总企业数', 'data' => isset($data_activity['total']) ? $data_activity['total'] : [], 'label' => ['show' => true, 'position' => 'top']];
-        $series['activity'][] = ['type' => 'bar', 'name' => '月活跃企业数', 'data' => isset($data_activity['month']) ? $data_activity['month'] : [], 'label' => ['show' => true], 'barGap' => '-100%'];
-        $series['activity'][] = ['type' => 'bar', 'name' => '周活跃企业数', 'data' => isset($data_activity['week']) ? $data_activity['week'] : [], 'label' => ['show' => true], 'barGap' => '-100%'];
-        $series['activity'][] = ['type' => 'bar', 'name' => '日活跃企业数', 'data' => isset($data_activity['day']) ? $data_activity['day'] : [], 'label' => ['show' => true], 'barGap' => '-100%'];
+        $series['activity'][] = [
+            'type' => 'bar', 'name' => '总企业数', 'barWidth' => "35%",
+            'itemStyle' => [
+                'normal' => [
+                    'color' => '#0184d5',
+                    'opacity' => 1,
+                    'barBorderRadius' => 5
+                ]
+            ],
+            'data' => isset($data_activity['total']) ? $data_activity['total'] : [], 'label' => ['show' => true, 'position' => 'top', 'color' => '#fff']
+        ];
+        $series['activity'][] = [
+            'type' => 'bar', 'name' => '月活跃企业数', 'barWidth' => "35%",
+            'itemStyle' => [
+                'normal' => [
+                    'color' => 'rgb(247, 163, 92)',
+                    'opacity' => 1,
+                    'barBorderRadius' => 5
+                ]
+            ],
+            'data' => isset($data_activity['month']) ? $data_activity['month'] : [], 'label' => ['show' => true], 'barGap' => '-100%'
+        ];
+        // $series['activity'][] = [
+        //     'type' => 'bar', 'name' => '周活跃企业数', 'barWidth' => "35%",
+        //     'itemStyle' => [
+        //         'normal' => [
+        //             'color' => '#00d887',
+        //             'opacity' => 1,
+        //             'barBorderRadius' => 5
+        //         ]
+        //     ],
+        //     'data' => isset($data_activity['week']) ? $data_activity['week'] : [], 'label' => ['show' => true], 'barGap' => '-100%'
+        // ];
+        // $series['activity'][] = [
+        //     'type' => 'bar', 'name' => '日活跃企业数', 'barWidth' => "35%",
+        //     'itemStyle' => [
+        //         'normal' => [
+        //             'color' => 'rgb(119, 152, 191)',
+        //             'opacity' => 1,
+        //             'barBorderRadius' => 5
+        //         ]
+        //     ],
+        //     'data' => isset($data_activity['day']) ? $data_activity['day'] : [], 'label' => ['show' => true], 'barGap' => '-100%'
+        // ];
 
-        $series['activity'][] = ['type' => 'line', 'smooth' => true, 'name' => '日活跃率', 'data' => $data_per_day, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
-        $series['activity'][] = ['type' => 'line', 'smooth' => true, 'name' => '周活跃率', 'data' => $data_per_week, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
-        $series['activity'][] = ['type' => 'line', 'smooth' => true, 'name' => '月活跃率', 'data' => $data_per_month, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
+        // $series['activity'][] = ['type' => 'line', 'smooth' => true, 'name' => '日活跃率', 'data' => $data_per_day, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
+        // $series['activity'][] = ['type' => 'line', 'smooth' => true, 'name' => '周活跃率', 'data' => $data_per_week, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
+        $series['activity'][] = [
+            'type' => 'line', 'smooth' => true, 'name' => '月活跃率', 'data' => $data_per_month, 'yAxisIndex' => 1,
+            'itemStyle' => [
+                'normal' => [
+                    'color' => "#dd4b39",
+                    'borderColor' => "rgba(221, 220, 107, .1)",
+                    'borderWidth' => 12
+                ]
+            ],
+            'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#fff']
+        ];
 
 
         //用户数
@@ -326,9 +383,68 @@ class SiteController extends Controller
             $data_user_per[] = ['name' => $j, 'y' => isset($row['user_num']) && isset($row['total_num']) && (int) $row['total_num'] > 0 ? round((int) $row['user_num'] / (int) $row['total_num'] * 100, 2) : 0, 'value' => [$j, isset($row['user_num']) && isset($row['total_num']) && (int) $row['total_num'] > 0 ? round((int) $row['user_num'] / (int) $row['total_num'] * 100, 2) : 0]];
         }
 
-        $series['user'][] = ['type' => 'bar', 'name' => '下拨用户数', 'data' => $data_total_num, 'label' => ['show' => true, 'position' => 'top']];
-        $series['user'][] = ['type' => 'bar', 'name' => '实际用户数', 'data' => $data_user_num, 'label' => ['show' => true], 'barGap' => '-100%'];
-        $series['user'][] = ['type' => 'line', 'smooth' => true, 'name' => '用户占比', 'data' => $data_user_per, 'yAxisIndex' => 1, 'label' => ['show' => true, 'formatter' => "{@[1]}%", 'color' => '#000']];
+        $series['user'][] = [
+            'type' => 'bar', 'name' => '下拨用户数', 'data' => $data_total_num,
+            'label' => ['show' => true, 'position' => 'top', 'color' => '#FFF'],
+            'barWidth' => "35%",
+            'itemStyle' => [
+                'normal' => [
+                    'color' => '#0184d5',
+                    'opacity' => 1,
+                    'barBorderRadius' => 5
+                ]
+            ],
+        ];
+        $series['user'][] = [
+            'type' => 'bar', 'name' => '实际用户数', 'data' => $data_user_num, 'label' => ['show' => true], 'barGap' => '-100%',
+            'barWidth' => "35%",
+            'itemStyle' => [
+                'normal' => [
+                    'color' => '#00d887',
+                    'opacity' => 1,
+                    'barBorderRadius' => 5,
+                ]
+            ],
+            'label' => ['show' => true, 'color' => '#fff']
+        ];
+        $series['user'][] = [
+            'type' => 'line', 'smooth' => true, 'name' => '用户占比', 'data' => $data_user_per, 'yAxisIndex' => 1,
+            'itemStyle' => [
+                'normal' => [
+                    'color' => "#dd4b39",
+                    'borderColor' => "rgba(221, 220, 107, .1)",
+                    'borderWidth' => 12
+                ]
+            ],
+            'label' => ['show' => false, 'formatter' => "{@[1]}%", 'color' => '#FFF']
+        ];
+
+        //活跃项目
+        $series['item'] = [];
+        $data_item = [];
+
+        $items = [];
+        $items['项目管理'] = (int) ActivityChange::get_activity_item($start - 86400, $end, ['projectman_projectcount', 'projectman_membercount', 'projectman_issuecount', 'projectman_wiki', 'projectman_docman'], $annual, true, $group, $is_allocate);
+        $items['代码仓库'] = (int) ActivityChange::get_activity_item($start - 86400, $end, ['codehub_repositorycount', 'codehub_commitcount', 'codehub_repositorysize'], $annual, true, $group, $is_allocate);
+        $items['流水线'] = (int) ActivityChange::get_activity_item($start - 86400, $end, ['pipeline_assignmentscount', 'pipeline_elapse_time'], $annual, true, $group, $is_allocate);
+        $items['代码检查'] = (int) ActivityChange::get_activity_item($start - 86400, $end, ['codecheck_taskcount', 'codecheck_codelinecount', 'codecheck_execount'], $annual, true, $group, $is_allocate);
+        $items['编译构建'] = (int) ActivityChange::get_activity_item($start - 86400, $end, ['codeci_buildcount', 'codeci_buildtotaltime'], $annual, true, $group, $is_allocate);
+        $items['测试'] = (int) ActivityChange::get_activity_item($start - 86400, $end, ['testman_casecount', 'testman_execasecount'], $annual, true, $group, $is_allocate);
+        $items['部署'] = (int) ActivityChange::get_activity_item($start - 86400, $end, ['deploy_envcount', 'deploy_execount'], $annual, true, $group, $is_allocate);
+        $items['发布'] = (int) ActivityChange::get_activity_item($start - 86400, $end, ['releaseman_uploadcount', 'releaseman_downloadcount'], $annual, true, $group, $is_allocate);
+        $items['沉默企业'] = (int) ActivityChange::get_activity_item($start - 86400, $end, null, $annual, false, $group, $is_allocate);
+
+        arsort($items);
+        //        $fv= reset($items);
+        //        $fk= key($items);
+        //        unset($items[$fk]);
+        //        $items[$fk]=$fv;
+
+        foreach ($items as $key => $item) {
+            $data_item[] = ['name' => $key, 'y' => $item, 'value' => $item];
+        }
+
+        $series['item'][] = ['type' => 'pie', 'radius' => [0, '60%'], 'selectedMode' => 'single', 'name' => '数量', 'minAngle' => 10, 'data' => $data_item, 'label' => ['color' => '#fff'], 'color' => ["#0184d5", "rgb(255, 188, 117)", "rgb(144, 238, 126)", "rgb(119, 152, 191)", "#aaeeee",  "#06c8ab", "#06dcab", "#06f0ab", "#DF5353", "#ff0066"]];
 
         return $this->render('index', ['allocate_num' => $allocate_num, 'allocate_amount' => $allocate_amount, 'series' => $series,]);
     }

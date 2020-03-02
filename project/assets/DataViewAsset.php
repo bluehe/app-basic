@@ -18,7 +18,6 @@ class DataViewAsset extends AssetBundle
     public $js = [
         'js/jquery.js',
         'js/echarts.min.js',
-        'js/js.js',
         'js/china.js',
         'js/area_echarts.js',
         'js/dataview.js',

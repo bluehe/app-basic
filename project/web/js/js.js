@@ -1,11 +1,11 @@
 $(window).on('load', function () {
     //i();
-    j();
+    //j();
     //n();
-    k();
-    l();
-    m();
-    o();
+    //k();
+    //l();
+    //m();
+    //o();
     //p();
 
     function i1() {
@@ -93,7 +93,7 @@ $(window).on('load', function () {
         })
     }
 
-    function j() {
+    function j1() {
         var a = echarts.init(document.getElementById("echart2"));
         option = {
             tooltip: {
@@ -178,7 +178,7 @@ $(window).on('load', function () {
         })
     }
 
-    function o() {
+    function o1() {
         var a = echarts.init(document.getElementById("echart6"));
         option = {
             tooltip: {

@@ -29,17 +29,16 @@ $this->title = '首页';
                     <div class="boxfoot"></div>
                 </div>
                 <div class="boxall" style="height: 3.2rem">
-                    <div class="alltitle">企业用户数</div>
+                    <div class="alltitle">企业活跃度</div>
                     <div class="allnav" id="echart2"></div>
                     <div class="boxfoot"></div>
                 </div>
+
                 <div class="boxall" style="height: 3.2rem">
-                    <div style="height:100%; width: 100%;">
-                        <div class="sy" id="fb1"></div>
-                        <div class="sy" id="fb2"></div>
-                        <div class="sy" id="fb3"></div>
-                        <div class="boxfoot"></div>
-                    </div>
+                    <div class="alltitle">活跃项目</div>
+                    <div class="allnav" id="echart6"></div>
+                    <div class="boxfoot"></div>
+                </div>
             </li>
             <li>
                 <div class="bar">
@@ -64,6 +63,11 @@ $this->title = '首页';
                 </div>
             </li>
             <li>
+                <div class="boxall" style="height: 3.2rem">
+                    <div class="alltitle">企业用户数</div>
+                    <div class="allnav" id="echart3"></div>
+                    <div class="boxfoot"></div>
+                </div>
                 <div class="boxall" style="height:3.4rem">
                     <div class="alltitle">企业补贴统计</div>
                     <div class="allnav" id="echart4"></div>
@@ -72,11 +76,6 @@ $this->title = '首页';
                 <div class="boxall" style="height: 3rem">
                     <div class="alltitle">下拨套餐占比</div>
                     <div class="allnav" id="echart5"></div>
-                    <div class="boxfoot"></div>
-                </div>
-                <div class="boxall" style="height: 3.2rem">
-                    <div class="alltitle">模块标题样式</div>
-                    <div class="allnav" id="echart6"></div>
                     <div class="boxfoot"></div>
                 </div>
 
@@ -189,6 +188,18 @@ $this->title = '首页';
             series: <?= json_encode($series['health']) ?>
         });
 
+        var echart2 = echarts.init(document.getElementById("echart2"));
+        echart2.setOption(i());
+        echart2.setOption({
+            series: <?= json_encode($series['activity']) ?>
+        });
+
+        var echart3 = echarts.init(document.getElementById("echart3"));
+        echart3.setOption(i());
+        echart3.setOption({
+            series: <?= json_encode($series['user']) ?>
+        });
+
         var echart4 = echarts.init(document.getElementById("echart4"));
         echart4.setOption(n());
         echart4.setOption({
@@ -201,10 +212,19 @@ $this->title = '首页';
             series: <?= json_encode($series['allocate_num']) ?>
         });
 
+        var echart6 = echarts.init(document.getElementById("echart6"));
+        echart6.setOption(m());
+        echart6.setOption({
+            series: <?= json_encode($series['item']) ?>
+        });
+
         window.addEventListener("resize", function() {
             echart1.resize();
+            echart2.resize();
+            echart3.resize();
             echart4.resize();
-            echart5.resize()
+            echart5.resize();
+            echart6.resize();
         })
     })
 
