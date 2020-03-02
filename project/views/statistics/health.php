@@ -25,396 +25,396 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#activity_line" data-toggle="tab">健康度统计</a></li>
-               
+
 
                 <li class="pull-right header">
-                    <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1?Select2::widget([
-                        'name' => 'group',                        
+                    <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id)) > 1 ? Select2::widget([
+                        'name' => 'group',
                         'data' => Group::get_user_group(Yii::$app->user->identity->id),
-                        'value'=>$group,
+                        'value' => $group,
                         'options' => [
                             'placeholder' => '项目',
-                            'id'=>'group',
+                            'id' => 'group',
                         ],
                         'pluginEvents' => [
-                            "change" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
+                            "change" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='" . Url::to(['statistics/health']) . "?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
                         ]
-                    ]):'';?>
-                    
+                    ]) : ''; ?>
+
                 </li>
- 
+
                 <li class="pull-right">
-<!--                    <button type="button" class="btn btn-default pull-right" id="daterange-btn"><span><i class="fa fa-calendar"></i> 时间选择</span><i class="fa fa-caret-down"></i></button>-->
+                    <!--                    <button type="button" class="btn btn-default pull-right" id="daterange-btn"><span><i class="fa fa-calendar"></i> 时间选择</span><i class="fa fa-caret-down"></i></button>-->
                     <?=
-                    DateRangePicker::widget([
-                        'name' => 'daterange',
-                        'useWithAddon' => true,
-                        'presetDropdown' => true,
-                        'convertFormat' => true,
-                        'value' => date('Y-m-d', $start) . '~' . date('Y-m-d', $end),
-//                        'startAttribute' => 'from_date',
-//                        'endAttribute' => 'to_date',
-//                        'startInputOptions' => ['value' => '2017-06-11'],
-//                        'endInputOptions' => ['value' => '2017-07-20'],
-                        'pluginOptions' => [
-                            'timePicker' => false,
-                            'locale' => [
-                                'format' => 'Y-m-d',
-                                'separator' => '~'
+                        DateRangePicker::widget([
+                            'name' => 'daterange',
+                            'useWithAddon' => true,
+                            'presetDropdown' => true,
+                            'convertFormat' => true,
+                            'value' => date('Y-m-d', $start) . '~' . date('Y-m-d', $end),
+                            //                        'startAttribute' => 'from_date',
+                            //                        'endAttribute' => 'to_date',
+                            //                        'startInputOptions' => ['value' => '2017-06-11'],
+                            //                        'endInputOptions' => ['value' => '2017-07-20'],
+                            'pluginOptions' => [
+                                'timePicker' => false,
+                                'locale' => [
+                                    'format' => 'Y-m-d',
+                                    'separator' => '~'
+                                ],
+                                'linkedCalendars' => false,
                             ],
-                            'linkedCalendars' => false,
-                        ],
-                        'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
-                    ]
-                    ]);
+                            'pluginEvents' => [
+                                "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='" . Url::to(['statistics/health']) . "?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
+                            ]
+                        ]);
                     ?>
                 </li>
-                
+
                 <li class="pull-right activity">
                     <?=
-                    SwitchInput::widget([
-                        'name' => 'allocate',
-                        'value'=>$allocate,
-                        'options'=>['class'=>'allocate'],
-                        'pluginOptions'=>[
-                            'onText'=>'下拨',
-                            'offText'=>'全部',
-                            'onColor' => 'success',
-                            'offColor' => 'danger', 
-//                            'size' => 'mini'
-                        ],
-                        'labelOptions' => ['style' => 'font-size: 12px'],
-                        'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
-                    ]
-                    ]);
+                        SwitchInput::widget([
+                            'name' => 'allocate',
+                            'value' => $allocate,
+                            'options' => ['class' => 'allocate'],
+                            'pluginOptions' => [
+                                'onText' => '下拨',
+                                'offText' => '全部',
+                                'onColor' => 'success',
+                                'offColor' => 'danger',
+                                //                            'size' => 'mini'
+                            ],
+                            'labelOptions' => ['style' => 'font-size: 12px'],
+                            'pluginEvents' => [
+                                'switchChange.bootstrapSwitch' => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='" . Url::to(['statistics/health']) . "?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
+                            ]
+                        ]);
                     ?>
                 </li>
-                
+
                 <li class="pull-right activity">
                     <?=
-                    SwitchInput::widget([
-                        'name' => 'total',
-//                        'type' => SwitchInput::RADIO,
-                        'value'=>$total,
-//                        'items' => [
-//                            ['label' => '总和', 'value' => 1],
-//                            ['label' => '个人', 'value' => 2],
-//                        ],
-                        'options'=>['class'=>'total'],
-                        'pluginOptions'=>[
-                            'onText'=>'全员',
-                            'offText'=>'个人',
-                            'onColor' => 'success',
-                            'offColor' => 'danger', 
-//                            'size' => 'mini'
-                        ],
-                        'labelOptions' => ['style' => 'font-size: 12px'],
-                        'pluginEvents' => [
-                            'switchChange.bootstrapSwitch' => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='".Url::to(['statistics/health'])."?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
-                           
-                    ]
-                    ]);
+                        SwitchInput::widget([
+                            'name' => 'total',
+                            //                        'type' => SwitchInput::RADIO,
+                            'value' => $total,
+                            //                        'items' => [
+                            //                            ['label' => '总和', 'value' => 1],
+                            //                            ['label' => '个人', 'value' => 2],
+                            //                        ],
+                            'options' => ['class' => 'total'],
+                            'pluginOptions' => [
+                                'onText' => '全员',
+                                'offText' => '个人',
+                                'onColor' => 'success',
+                                'offColor' => 'danger',
+                                //                            'size' => 'mini'
+                            ],
+                            'labelOptions' => ['style' => 'font-size: 12px'],
+                            'pluginEvents' => [
+                                'switchChange.bootstrapSwitch' => "function(start,end,label) {var v=$('.range-value').val();var g=$('#group').length?$('#group').val():'';t=$('.total').is(':checked')?1:0;allocate=$('.allocate').is(':checked')?1:0; self.location='" . Url::to(['statistics/health']) . "?range='+v+'&group='+g+'&allocate='+allocate+'&total='+t;}",
+
+                            ]
+                        ]);
                     ?>
                 </li>
-                
-                
-                
-                
+
+
+
+
             </ul>
             <div class="tab-content no-padding">
                 <div class="tab-pane row active" id="activity_line">
-                    <?php if($chart==1):?>
-                    <section class="col-md-12">
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            'highcharts-more',
-                            'modules/exporting',
-                            'themes/grid-light'
-                        ],
-                        'options' => [
-                            'lang' => [
-                                'printChart' => "打印图表",
-                                'downloadJPEG' => "下载JPEG 图片",
-                                'downloadPDF' => "下载PDF文档",
-                                'downloadPNG' => "下载PNG 图片",
-                                'downloadSVG' => "下载SVG 矢量图",
-                                'exportButtonTitle' => "导出图片"
-                            ],
-                            'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                            'title' => [
-                                'text' => '健康度',
-                            ],
-                            'legend'=>['itemWidth'=>120],
-                            'xAxis' => [
-                                'type' => 'category'
-                            ],
-                            'yAxis' => [
-                                ['title' => ['text' => '数量'],'min'=>0,'reversedStacks'=>false,'stackLabels'=>['enabled' => true]],
-                                ['title' => ['text' => '健康度'],'labels'=>['format'=>'{value} %'],'opposite'=>true,'min'=>0,'max'=>100]
-                            ],
-                           
-                            'tooltip' => [
-                                'shared' => true,
-                                'crosshairs' => true
-                            ],
-                            'plotOptions' => [
-                                'spline' => [
-                                    'cursor' => 'pointer',
-                                    'dataLabels' => [
-                                        'enabled' => true,                                      
-                                        'format' => '{y:.2f} %',
-                                        'shadow'=>false,
-                                        'style'=>['textShadow'=>false]
+                    <?php if ($chart == 1) : ?>
+                        <section class="col-md-12">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'themes/grid-light'
                                     ],
-                                    'showInLegend' => true,
-                                ],
-                                'column' => [
-                                    'cursor' => 'pointer',                                   
-                                    'stacking'=>'normal',
-                                    'dataLabels' => [
-                                        'enabled' => true,
-                                        'formatter'=>new JsExpression("function () {if(this.y>0){return this.y;}}"),
-                                        'style'=>['textShadow'=>false]
+                                    'options' => [
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
+                                        ],
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '健康度',
+                                        ],
+                                        'legend' => ['itemWidth' => 120],
+                                        'xAxis' => [
+                                            'type' => 'category'
+                                        ],
+                                        'yAxis' => [
+                                            ['title' => ['text' => '数量'], 'min' => 0, 'reversedStacks' => false, 'stackLabels' => ['enabled' => true]],
+                                            ['title' => ['text' => '健康度'], 'labels' => ['format' => '{value} %'], 'opposite' => true, 'min' => 0, 'max' => 100]
+                                        ],
+
+                                        'tooltip' => [
+                                            'shared' => true,
+                                            'crosshairs' => true
+                                        ],
+                                        'plotOptions' => [
+                                            'spline' => [
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'format' => '{y:.2f} %',
+                                                    'shadow' => false,
+                                                    'style' => ['textShadow' => false]
+                                                ],
+                                                'showInLegend' => true,
+                                            ],
+                                            'column' => [
+                                                'cursor' => 'pointer',
+                                                'stacking' => 'normal',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'formatter' => new JsExpression("function () {if(this.y>0){return this.y;}}"),
+                                                    'style' => ['textShadow' => false]
+                                                ]
+                                            ],
+
+                                        ],
+                                        'series' => $series['health'],
                                     ]
-                                ],
-                   
-                            ],
-                            'series' => $series['health'],
-                    ]
-                    ]);
-                    ?>
-                    </section>
-                    <section class="col-md-12">
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            'highcharts-more',
-                            'modules/exporting',
-                            'themes/grid-light'
-                        ],
-                        'options' => [
-                            'lang' => [
-                                'printChart' => "打印图表",
-                                'downloadJPEG' => "下载JPEG 图片",
-                                'downloadPDF' => "下载PDF文档",
-                                'downloadPNG' => "下载PNG 图片",
-                                'downloadSVG' => "下载SVG 矢量图",
-                                'exportButtonTitle' => "导出图片"
-                            ],
-                            'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                            'title' => [
-                                'text' => '活跃企业趋势统计',
-                            ],
-                            'legend'=>['itemWidth'=>120],
-                            'xAxis' => [
-                                'type' => 'category'
-                            ],
-                            'yAxis' => [
-                                ['title' => ['text' => '数量'],'min'=>0],
-                                ['title' => ['text' => '活跃率'],'labels'=>['format'=>'{value} %'],'opposite'=>true,'min'=>0,'max'=>100]
-                            ],
-                            'tooltip' => [
-                                'shared' => true,
-                                'crosshairs' => true
-                            ],
-                            'plotOptions' => [
-                                'spline' => [
-                                    'cursor' => 'pointer',
-                                    'dataLabels' => [
-                                        'enabled' => true,                                      
-                                        'format' => '{y:.2f} %',
-                                        'shadow'=>false,
-                                        'style'=>['textShadow'=>false]
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-12">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'themes/grid-light'
                                     ],
-                                    'showInLegend' => true,
-                                ],
-                                'column' => [
-                                    'cursor' => 'pointer',
-                                    'dataLabels' => ['enabled' => true,'style'=>['textShadow'=>false]]
-                                ],
-                            ],
-                            'series' => $series['activity'],
-                    ]
-                    ]);
-                    ?>
-                    </section>
-                    <section class="col-md-12">
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            'highcharts-more',
-                            'modules/exporting',
-                            'themes/grid-light'
-                        ],
-                        'options' => [
-                            'lang' => [
-                                'printChart' => "打印图表",
-                                'downloadJPEG' => "下载JPEG 图片",
-                                'downloadPDF' => "下载PDF文档",
-                                'downloadPNG' => "下载PNG 图片",
-                                'downloadSVG' => "下载SVG 矢量图",
-                                'exportButtonTitle' => "导出图片"
-                            ],
-                            'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                            'title' => [
-                                'text' => '用户趋势统计',
-                            ],
-                            'legend'=>['itemWidth'=>120],
-                            'xAxis' => [
-                                'type' => 'category'
-                            ],
-                            'yAxis' => [
-                                ['title' => ['text' => '数量'],'min'=>0],
-                                ['title' => ['text' => '占比'],'labels'=>['format'=>'{value} %'],'opposite'=>true,'min'=>0,'max'=>100]
-                            ],
-                            'tooltip' => [
-                                'shared' => true,
-                                'crosshairs' => true
-                            ],
-                            'plotOptions' => [
-                                'spline' => [
-                                    'cursor' => 'pointer',
-                                    'dataLabels' => [
-                                        'enabled' => true,                                      
-                                        'format' => '{y:.2f} %',
-                                        'shadow'=>false,
-                                        'style'=>['textShadow'=>false]
+                                    'options' => [
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
+                                        ],
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '活跃企业趋势统计',
+                                        ],
+                                        'legend' => ['itemWidth' => 120],
+                                        'xAxis' => [
+                                            'type' => 'category'
+                                        ],
+                                        'yAxis' => [
+                                            ['title' => ['text' => '数量'], 'min' => 0],
+                                            ['title' => ['text' => '活跃率'], 'labels' => ['format' => '{value} %'], 'opposite' => true, 'min' => 0, 'max' => 100]
+                                        ],
+                                        'tooltip' => [
+                                            'shared' => true,
+                                            'crosshairs' => true
+                                        ],
+                                        'plotOptions' => [
+                                            'spline' => [
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'format' => '{y:.2f} %',
+                                                    'shadow' => false,
+                                                    'style' => ['textShadow' => false]
+                                                ],
+                                                'showInLegend' => true,
+                                            ],
+                                            'column' => [
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => ['enabled' => true, 'style' => ['textShadow' => false]]
+                                            ],
+                                        ],
+                                        'series' => $series['activity'],
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-12">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'themes/grid-light'
                                     ],
-                                    'showInLegend' => true,
-                                ],
-                                'column' => [
-                                    'cursor' => 'pointer',
-                                    'dataLabels' => ['enabled' => true,'style'=>['textShadow'=>false]]
-                                ],
-                            ],
-                            'series' => $series['user'],
-                    ]
-                    ]);
-                    ?>
-                    </section>
-                    <?php else:?>
-                    <section class="col-md-12">
-                    <?=
-                        ECharts::widget([
-                            'theme'=>'light',
-                            'responsive'=>true,
-                            'options' => [
-                                'style'=>'height:400px'
-                            ],
-                            'pluginOptions' => [
-                                'option' => [
-                                    'title' => [
-                                        'text' => '健康度',
-                                        'left'=>'center',
-                                        'top'=>'10px',
+                                    'options' => [
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
+                                        ],
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '用户趋势统计',
+                                        ],
+                                        'legend' => ['itemWidth' => 120],
+                                        'xAxis' => [
+                                            'type' => 'category'
+                                        ],
+                                        'yAxis' => [
+                                            ['title' => ['text' => '数量'], 'min' => 0],
+                                            ['title' => ['text' => '占比'], 'labels' => ['format' => '{value} %'], 'opposite' => true, 'min' => 0]
+                                        ],
+                                        'tooltip' => [
+                                            'shared' => true,
+                                            'crosshairs' => true
+                                        ],
+                                        'plotOptions' => [
+                                            'spline' => [
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'format' => '{y:.2f} %',
+                                                    'shadow' => false,
+                                                    'style' => ['textShadow' => false]
+                                                ],
+                                                'showInLegend' => true,
+                                            ],
+                                            'column' => [
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => ['enabled' => true, 'style' => ['textShadow' => false]]
+                                            ],
+                                        ],
+                                        'series' => $series['user'],
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                    <?php else : ?>
+                        <section class="col-md-12">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
                                     ],
-                                    'legend'=>['show'=>true,'bottom'=>'10px'],
-                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[],'magicType'=>['type'=>['stack', 'tiled']]]],                         
-                                    'xAxis' => [
-                                        'type' => 'category',
-                                        'boundaryGap'=>true,                                  
-                                        'splitLine'=>['show'=>true]
-                                    ],
-                                    'yAxis' => [                
-                                        ['type' => 'value','name' => '数量','min'=>0],
-                                        ['type' => 'value','name' => '健康度','min'=>0,'max'=>100,'splitLine'=>['show'=>false],'axisLabel'=>['formatter'=>'{value}%']]                                    
-                                    ],
-                                    
-                                    'tooltip' => [
-                                        'trigger' => 'axis',
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '健康度',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => [], 'magicType' => ['type' => ['stack', 'tiled']]]],
+                                            'xAxis' => [
+                                                'type' => 'category',
+                                                'boundaryGap' => true,
+                                                'splitLine' => ['show' => true]
+                                            ],
+                                            'yAxis' => [
+                                                ['type' => 'value', 'name' => '数量', 'min' => 0],
+                                                ['type' => 'value', 'name' => '健康度', 'min' => 0, 'max' => 100, 'splitLine' => ['show' => false], 'axisLabel' => ['formatter' => '{value}%']]
+                                            ],
 
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
+
+                                            ],
+                                            'series' => $series['health']
+                                        ]
+                                    ]
+
+                                ])
+                            ?>
+                        </section>
+                        <section class="col-md-12">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
                                     ],
-                                    'series' => $series['health']
-                                ]
-                            ]
-                            
-                        ])
-                    ?> 
-                </section>
-                     <section class="col-md-12">
-                    <?=
-                    ECharts::widget([
-                        'theme'=>'light',
-                        'responsive'=>true,
-                        'options' => [
-                            'style'=>'height:400px'
-                        ],
-                        'pluginOptions' => [
-                            'option' => [
-                                'title' => [
-                                    'text' => '活跃企业趋势统计',
-                                    'left'=>'center',
-                                    'top'=>'10px',
-                                ],
-                                'legend'=>['show'=>true,'bottom'=>'10px'],
-                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
-                                'xAxis' => [                
-                                    'type' => 'category',
-                                    'boundaryGap'=>true,
-                                   
-                                    'splitLine'=>['show'=>true]
-                                ],
-                                'yAxis' => [
-                                    ['type' => 'value','name' => '数量','min'=>0,'splitNumber'=>5],
-                                    ['type' => 'value','name' => '活跃率','min'=>0,'max'=>100,'splitLine'=>['show'=>false],'axisLabel'=>['formatter'=>'{value}%']]                                    
-                                ],
-                                'tooltip' => [
-                                    'trigger' => 'axis',                                  
-                                ],
-                                'series' => $series['activity']
-                            ]
-                        ]
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '活跃企业趋势统计',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => []]],
+                                            'xAxis' => [
+                                                'type' => 'category',
+                                                'boundaryGap' => true,
 
-                    ])
-                    ?>
-                    </section>
-                    <section class="col-md-12">
-                    <?=
-                    ECharts::widget([
-                        'theme'=>'light',
-                        'responsive'=>true,
-                        'options' => [
-                            'style'=>'height:400px'
-                        ],
-                        'pluginOptions' => [
-                            'option' => [
-                                'title' => [
-                                    'text' => '用户趋势统计',
-                                    'left'=>'center',
-                                    'top'=>'10px',
-                                ],
-                                'legend'=>['show'=>true,'bottom'=>'10px'],
-                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
-                                'xAxis' => [                
-                                    'type' => 'category',
-                                    'boundaryGap'=>true,
-                                   
-                                    'splitLine'=>['show'=>true]
-                                ],
-                                'yAxis' => [
-                                    ['type' => 'value','name' => '数量','min'=>0,'splitNumber'=>5],
-                                    ['type' => 'value','name' => '占比','min'=>0,'max'=>100,'splitLine'=>['show'=>false],'axisLabel'=>['formatter'=>'{value}%']]                                    
-                                ],
-                                'tooltip' => [
-                                    'trigger' => 'axis',                                  
-                                ],
-                                'series' => $series['user']
-                            ]
-                        ]
+                                                'splitLine' => ['show' => true]
+                                            ],
+                                            'yAxis' => [
+                                                ['type' => 'value', 'name' => '数量', 'min' => 0, 'splitNumber' => 5],
+                                                ['type' => 'value', 'name' => '活跃率', 'min' => 0, 'max' => 100, 'splitLine' => ['show' => false], 'axisLabel' => ['formatter' => '{value}%']]
+                                            ],
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
+                                            ],
+                                            'series' => $series['activity']
+                                        ]
+                                    ]
 
-                    ])
-                    ?>
-                    </section>
-                <?php endif;?>
+                                ])
+                            ?>
+                        </section>
+                        <section class="col-md-12">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
+                                    ],
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '用户趋势统计',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => []]],
+                                            'xAxis' => [
+                                                'type' => 'category',
+                                                'boundaryGap' => true,
+
+                                                'splitLine' => ['show' => true]
+                                            ],
+                                            'yAxis' => [
+                                                ['type' => 'value', 'name' => '数量', 'min' => 0, 'splitNumber' => 5],
+                                                ['type' => 'value', 'name' => '占比', 'min' => 0, 'splitLine' => ['show' => false], 'axisLabel' => ['formatter' => '{value}%']]
+                                            ],
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
+                                            ],
+                                            'series' => $series['user']
+                                        ]
+                                    ]
+
+                                ])
+                            ?>
+                        </section>
+                    <?php endif; ?>
                 </div>
-               
-                
+
+
             </div>
         </div>
         <?php Pjax::end(); ?>
@@ -423,6 +423,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <!-- /.row (main row) -->
 <?php
-$cssString = '.header .form-group {margin-bottom:0;}';  
-$this->registerCss($cssString); 
+$cssString = '.header .form-group {margin-bottom:0;}';
+$this->registerCss($cssString);
 ?>
