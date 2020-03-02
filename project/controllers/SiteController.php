@@ -1,30 +1,36 @@
 <?php
+
 namespace project\controllers;
 
 use Yii;
-use yii\base\InvalidParamException;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use project\models\System;
-use project\models\LoginForm;
-use project\models\SignupForm;
-use project\models\PasswordResetRequestForm;
-use project\models\ResetPasswordForm;
-use project\models\PasswordResetForm;
-use project\models\PasswordFindForm;
-use project\models\UserAuth;
 use project\models\User;
+use project\models\System;
+use yii\filters\VerbFilter;
+use project\models\UserAuth;
+use project\models\LoginForm;
+use project\models\UserGroup;
+use project\models\SignupForm;
+use yii\filters\AccessControl;
+use project\models\Corporation;
+use project\models\CloudSubsidy;
+use project\models\CorporationMeal;
+use yii\base\InvalidParamException;
+use project\models\PasswordFindForm;
+use project\models\PasswordResetForm;
+use project\models\ResetPasswordForm;
+use project\models\PasswordResetRequestForm;
+use yii\web\JsExpression;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
-    
+
     public $attempts = 3; // allowed 3 attempts
     public $counter;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -34,7 +40,7 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'index'],
-                'rules' => [                    
+                'rules' => [
                     [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
@@ -63,7 +69,7 @@ class SiteController extends Controller
             'auth' => [
                 'class' => 'yii\authclient\AuthAction',
                 'successCallback' => [$this, 'successCallback'],
-//                'cancelCallback' => [$this, 'cancelCallback'],
+                //                'cancelCallback' => [$this, 'cancelCallback'],
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
@@ -81,7 +87,132 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        //补贴企业数
+        $meal_c_id = CorporationMeal::find()->select(['corporation_id'])->column();
+        $subside_c_id = CloudSubsidy::find()->select(['corporation_id'])->column();
+        $allocate_num = (int) Corporation::find()->where(['group_id' => 1])->andWhere(['id' => array_unique(array_merge($meal_c_id, $subside_c_id))])->count();
+        $meal_amount = CorporationMeal::find()->where(['group_id' => 1])->sum('amount');
+        $subside_amount = CloudSubsidy::find()->where(['group_id' => 1])->sum('subsidy_amount');
+        $allocate_amount = round(($meal_amount + $subside_amount) / 10000, 2);
+
+
+        //下拨额
+        $series['amount'] = [];
+        $annual = ''; //Yii::$app->request->get('annual', null);
+        $group = ''; //Yii::$app->request->get('group', null);
+        $chart = 2;
+
+        $end = strtotime('today');
+        $start = strtotime('-1 year', $end);
+        $sum = 1; //Yii::$app->request->get('sum', 1);//1-天；2-周；3-月
+
+        $allocate_total = CorporationMeal::get_amount_total($start, $end, $sum, 0, $annual, $group);
+        $base_allocate = (float) CorporationMeal::get_amount_base($start, $annual, $group);
+        $num_allocate = (int) CorporationMeal::get_num_base($start, $annual, $group);
+
+        $cloud_total = CloudSubsidy::get_amount_total($start, $end, $sum, $annual, $group);
+        $base_cloud = (float) CloudSubsidy::get_amount_base($start, $annual, $group);
+        $num_cloud = (int) CloudSubsidy::get_num_base($start, $annual, $group);
+
+
+        $data_amount = [];
+
+        //天
+        $allocate_start = $allocate_total ? strtotime(key($allocate_total)) : $start; //下拨最早日期
+        $cloud_start = $cloud_total ? strtotime(key($cloud_total)) : $allocate_start; //公有云补贴最早日期
+        $amount_start = ($allocate_start < $cloud_start ? $allocate_start : $cloud_start) - 86400; //补贴最早日期
+
+        for ($i = $amount_start; $i <= $end; $i = $i + 86400) {
+            $k = date('Y-m-d', $i);
+            $j = $end - $amount_start >= 365 * 86400 ? date('Y.n.j', $i) : date('n.j', $i);
+            //下拨
+            $base_allocate = isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount'] + $base_allocate : $base_allocate;
+            $num_allocate = isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] + $num_allocate : $num_allocate;
+            //$y_allocate_amount = $base_amount / 10000;
+            //公有云
+            $base_cloud = isset($cloud_total[$k]['amount']) ? (float) $cloud_total[$k]['amount'] + $base_cloud : $base_cloud;
+            $num_cloud = isset($cloud_total[$k]['num']) ? (float) $cloud_total[$k]['num'] + $num_cloud : $num_cloud;
+            //$y_cloud_amount = $base_cloud / 10000;
+            $y_amount = ($base_allocate + $base_cloud) / 10000;
+            $y_num = $num_allocate + $num_cloud;
+
+            $data_amount[] = ['name' => $j, 'y' => $y_amount, 'value' => [$j, $y_amount]];
+            $data_num[] = ['name' => $j, 'y' => $y_num, 'value' => [$j, $y_num]];
+        }
+
+        $series['amount'][] = [
+            'name' => "累计补贴数",
+            'type' => "line",
+            'smooth' => true,
+            'symbol' => "circle",
+            'symbolSize' => 5,
+            'showSymbol' => false,
+            'lineStyle' => [
+                'normal' => [
+                    'color' => "#00d887",
+                    'width' => 2
+                ]
+            ],
+            'areaStyle' => [
+                'normal' => [
+                    'color' => "rgba(0, 216, 135, 0.4)",
+                    'shadowColor' => "rgba(0, 0, 0, 0.1)",
+                ]
+            ],
+            'itemStyle' => [
+                'normal' => [
+                    'color' => "#00d887",
+                    'borderColor' => "rgba(221, 220, 107, .1)",
+                    'borderWidth' => 12
+                ]
+            ],
+            'data' => $data_num
+        ];
+
+        $series['amount'][] = [
+            'name' => "累计补贴额",
+            'type' => "line",
+            'smooth' => true,
+            'symbol' => "circle",
+            'symbolSize' => 5,
+            'showSymbol' => false,
+            'lineStyle' => [
+                'normal' => [
+                    'color' => "#0184d5",
+                    'width' => 2
+                ]
+            ],
+            'areaStyle' => [
+                'normal' => [
+                    'color' => "rgba(1, 132, 213, 0.4)",
+                    'shadowColor' => "rgba(0, 0, 0, 0.1)",
+                ]
+            ],
+            'itemStyle' => [
+                'normal' => [
+                    'color' => "#0184d5",
+                    'borderColor' => "rgba(221, 220, 107, .1)",
+                    'borderWidth' => 12
+                ]
+            ],
+            'yAxisIndex' => 1,
+            'data' => $data_amount
+        ];
+
+        //下拨套餐百分比
+        $series['allocate_num'] = [];
+        $data_allocate = [];
+        $allocate_cnum = CorporationMeal::get_allocate_num($start, $end, $annual, $group);
+        foreach ($allocate_cnum as $allocate) {
+            $data_allocate[] = ['name' => floatval($allocate['amount'] / 10000) . '万', 'y' => (int) $allocate['num'], 'value' => (int) $allocate['num']];
+        }
+        if ($chart == 1) {
+            $series['allocate_num'][] = ['type' => 'pie', 'innerSize' => '50%', 'name' => '数量', 'data' => $data_allocate];
+        } else {
+            $series['allocate_num'][] = ['type' => 'pie', 'radius' => ['25%', '50%'], 'name' => '数量', 'minAngle' => 10, 'data' => $data_allocate, 'label' => ['formatter' => "{c}家,{d}%", 'color' => '#FFF'], 'color' => ["#065aab", "#066eab", "#0682ab", "#0696ab", "#06a0ab", "#06b4ab", "#06c8ab", "#06dcab", "#06f0ab"]];
+        }
+
+        return $this->render('index', ['allocate_num' => $allocate_num, 'allocate_amount' => $allocate_amount, 'series' => $series,]);
     }
 
     /**
@@ -91,18 +222,18 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (System::getValue('system_stat')=='0') {
-            $notice=System::getValue('system_close');
-            Yii::$app->session->setFlash('warning', $notice?$notice:'管理员临时关闭本站');
-            if(!Yii::$app->user->isGuest){
-                Yii::$app->user->logout();               
+        if (System::getValue('system_stat') == '0') {
+            $notice = System::getValue('system_close');
+            Yii::$app->session->setFlash('warning', $notice ? $notice : '管理员临时关闭本站');
+            if (!Yii::$app->user->isGuest) {
+                Yii::$app->user->logout();
             }
         }
-        
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        
+
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->login()) {
@@ -121,7 +252,7 @@ class SiteController extends Controller
 
         $this->layout = '//main-login';
         return $this->render('login', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -136,13 +267,14 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
-    
+
     /**
      * Signs user up.
      *
      * @return mixed
      */
-    public function actionSignup() {
+    public function actionSignup()
+    {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -151,7 +283,7 @@ class SiteController extends Controller
             return $this->goHome();
         }
         $model = new SignupForm();
-        $model->agreement=1;
+        $model->agreement = 1;
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -169,29 +301,30 @@ class SiteController extends Controller
         }
         $this->layout = '//main-login';
         return $this->render('signup', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
-    
-    public function actionAgreement($code) {
-        $model= System::getValue('agreement_'.$code);
-        if($model==null){
+
+    public function actionAgreement($code)
+    {
+        $model = System::getValue('agreement_' . $code);
+        if ($model == null) {
             return false;
-        }else{
+        } else {
             return $this->renderAjax('agreement', [
-                        'model' => $model,
-                ]);
+                'model' => $model,
+            ]);
         }
-        
     }
-    
+
     //发送邮件方式
     /**
      * Requests password reset.
      *
      * @return mixed
      */
-    public function actionRequestPasswordReset() {
+    public function actionRequestPasswordReset()
+    {
         $model = new PasswordResetRequestForm();
         $model->load(Yii::$app->request->post());
         if (Yii::$app->request->isAjax) {
@@ -212,7 +345,7 @@ class SiteController extends Controller
         }
         $this->layout = '//main-login';
         return $this->render('requestPasswordResetToken', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -223,14 +356,15 @@ class SiteController extends Controller
      * @return mixed
      * @throws BadRequestHttpException
      */
-    public function actionResetPassword($token) {
+    public function actionResetPassword($token)
+    {
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
             Yii::$app->session->setFlash('danger', '链接已过期，请重新操作。');
 
             return $this->goHome();
-//throw new BadRequestHttpException($e->getMessage());
+            //throw new BadRequestHttpException($e->getMessage());
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
@@ -243,22 +377,23 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-    
+
     //验证码方式
-     /**
+    /**
      * Requests password reset.
      *
      * @return mixed
      */
-    public function actionPasswordReset() {
+    public function actionPasswordReset()
+    {
         $model = new PasswordResetForm();
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return \yii\bootstrap\ActiveForm::validate($model);
             }
-            if ($model->validate()&&$model->setSession()) {              
-                return $this->redirect(['password-find']);        
+            if ($model->validate() && $model->setSession()) {
+                return $this->redirect(['password-find']);
             }
         }
         if (System::existValue('captcha_open', '3')) {
@@ -266,38 +401,39 @@ class SiteController extends Controller
         }
         $this->layout = '//main-login';
         return $this->render('passwordReset', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
-    
-    public function actionPasswordFind() {
-        $token=Yii::$app->session->get('find_password_token');
+
+    public function actionPasswordFind()
+    {
+        $token = Yii::$app->session->get('find_password_token');
         try {
             $model = new PasswordFindForm($token);
-            $model->type=Yii::$app->request->get('type','email');
+            $model->type = Yii::$app->request->get('type', 'email');
         } catch (InvalidParamException $e) {
             Yii::$app->session->setFlash('danger', $e->getMessage());
-            return $this->redirect(['password-reset']); 
+            return $this->redirect(['password-reset']);
         }
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return \yii\bootstrap\ActiveForm::validate($model);
             }
-            if ($model->validate()&&$model->resetPassword()) {   
+            if ($model->validate() && $model->resetPassword()) {
                 Yii::$app->session->setFlash('success', '新密码已经被保存。');
-                return $this->goHome();        
+                return $this->goHome();
             }
         }
         $this->layout = '//main-login';
         return $this->render('passwordFind', [
-                    'model' => $model,
+            'model' => $model,
         ]);
-        
     }
-    
+
     //第三方回调
-    public function successCallback($client) {
+    public function successCallback($client)
+    {
         $type = $client->getId(); // qq | weibo | github
         $attributes = $client->getUserAttributes(); // basic info
 
@@ -353,19 +489,20 @@ class SiteController extends Controller
 
         // user login or signup comes here
     }
-    
-//    public function cancelCallback($client) {
-//        $type = $client->getId(); // qq | weibo | github |weixin
-//        $attributes = $client->getUserAttributes(); // basic info
-//
-//        $auth = UserAuth::find()->where(['type' => $type, 'open_id' => $attributes['id']])->one();
-//        if($auth!==null){
-//            $auth->delete();
-//        }
-//        return $this->goHome();
-//    }
-    
-    public function actionComplete() {
+
+    //    public function cancelCallback($client) {
+    //        $type = $client->getId(); // qq | weibo | github |weixin
+    //        $attributes = $client->getUserAttributes(); // basic info
+    //
+    //        $auth = UserAuth::find()->where(['type' => $type, 'open_id' => $attributes['id']])->one();
+    //        if($auth!==null){
+    //            $auth->delete();
+    //        }
+    //        return $this->goHome();
+    //    }
+
+    public function actionComplete()
+    {
         if (!Yii::$app->user->isGuest) {
             //创建第三方记录
             $auth = new UserAuth();
@@ -393,7 +530,7 @@ class SiteController extends Controller
         }
         $model_l = new LoginForm();
         $model_s = new SignupForm();
-        $model_s->agreement=1;
+        $model_s->agreement = 1;
         if (Yii::$app->request->isPost) {
 
             if (Yii::$app->request->post('type') === 'bind') {
@@ -476,16 +613,4 @@ class SiteController extends Controller
         $this->layout = '//main-login';
         return $this->render('complete', ['model_l' => $model_l, 'model_s' => $model_s,]);
     }
-    
-    public function actionTest() {
-        $target = dirname(dirname(__DIR__)); // 生产环境web目录
-        $cmd = "cd $target && git pull";
-        $res = shell_exec($cmd);
-        $res_log = 'Success:'.PHP_EOL;
-        $res_log .= $content['head_commit']['author']['name'] . ' 在' . date('Y-m-d H:i:s') . '向' . $content['repository']['name'] . '项目的' . $content['ref'] . '分支push了' . count($content['commits']) . '个commit：' . PHP_EOL;
-        $res_log .= $res.PHP_EOL;
-        $res_log .= '======================================================================='.PHP_EOL;
-        echo $res_log;
-    }
-    
 }

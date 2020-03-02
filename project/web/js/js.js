@@ -1,12 +1,12 @@
-$(window).on('load',function () {
+$(window).on('load', function () {
     i();
     j();
-    n();
+    //n();
     k();
     l();
     m();
     o();
-    p();
+    //p();
 
     function i() {
         var a = echarts.init(document.getElementById("echart1"));
@@ -263,7 +263,7 @@ $(window).on('load',function () {
         })
     }
 
-    function n() {
+    function n1() {
         var a = echarts.init(document.getElementById("echart4"));
         option = {
             tooltip: {
@@ -410,7 +410,7 @@ $(window).on('load',function () {
         })
     }
 
-    function p() {
+    function p1() {
         var b = echarts.init(document.getElementById("echart6"));
         var a = {
             normal: {

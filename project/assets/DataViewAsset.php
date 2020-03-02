@@ -7,7 +7,8 @@ use yii\web\AssetBundle;
 /**
  * Main rky application asset bundle.
  */
-class DataViewAsset extends AssetBundle {
+class DataViewAsset extends AssetBundle
+{
 
     public $basePath = '@webroot';
     public $baseUrl = '@web';
@@ -20,9 +21,9 @@ class DataViewAsset extends AssetBundle {
         'js/js.js',
         'js/china.js',
         'js/area_echarts.js',
+        'js/dataview.js',
     ];
     public $depends = [
         'project\assets\AppAsset',
     ];
-
 }

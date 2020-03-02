@@ -24,12 +24,12 @@ $this->title = '首页';
         <ul class="clearfix">
             <li>
                 <div class="boxall" style="height: 3.2rem">
-                    <div class="alltitle">模块标题样式</div>
+                    <div class="alltitle">企业健康度</div>
                     <div class="allnav" id="echart1"></div>
                     <div class="boxfoot"></div>
                 </div>
                 <div class="boxall" style="height: 3.2rem">
-                    <div class="alltitle">模块标题样式</div>
+                    <div class="alltitle">企业用户数</div>
                     <div class="allnav" id="echart2"></div>
                     <div class="boxfoot"></div>
                 </div>
@@ -51,8 +51,8 @@ $this->title = '首页';
                     </div>
                     <div class="barbox2">
                         <ul class="clearfix">
-                            <li class="pulll_left">累计下拨企业（家）</li>
-                            <li class="pulll_left">累计下拨金额（万元）</li>
+                            <li class="pulll_left">累计补贴企业（家）</li>
+                            <li class="pulll_left">累计补贴金额（万元）</li>
                         </ul>
                     </div>
                 </div>
@@ -65,7 +65,7 @@ $this->title = '首页';
             </li>
             <li>
                 <div class="boxall" style="height:3.4rem">
-                    <div class="alltitle">下拨消耗统计</div>
+                    <div class="alltitle">企业补贴统计</div>
                     <div class="allnav" id="echart4"></div>
                     <div class="boxfoot"></div>
                 </div>
@@ -75,7 +75,7 @@ $this->title = '首页';
                     <div class="boxfoot"></div>
                 </div>
                 <div class="boxall" style="height: 3rem">
-                    <div class="alltitle">模块标题样式</div>
+                    <div class="alltitle">下拨套餐占比</div>
                     <div class="allnav" id="echart6"></div>
                     <div class="boxfoot"></div>
                 </div>
@@ -168,6 +168,7 @@ $this->title = '首页';
 
     //监听window是否全屏，并进行相应的操作,支持esc键退出
     window.addEventListener("resize", function() {
+        //全屏
         var isFull = !!(document.webkitIsFullScreen || document.mozFullScreen ||
             document.msFullscreenElement || document.fullscreenElement
         ); //!document.webkitIsFullScreen都为true。因此用!!
@@ -176,6 +177,27 @@ $this->title = '首页';
         } else {
             $("#fullScreen span").attr("class", "glyphicon glyphicon-resize-small");
         }
+    })
+
+
+
+    $(function() {
+        var echart4 = echarts.init(document.getElementById("echart4"));
+        echart4.setOption(n());
+        echart4.setOption({
+            series: <?= json_encode($series['amount']) ?>
+        });
+
+        var echart6 = echarts.init(document.getElementById("echart6"));
+        echart6.setOption(p());
+        echart6.setOption({
+            series: <?= json_encode($series['allocate_num']) ?>
+        });
+
+        window.addEventListener("resize", function() {
+            echart4.resize();
+            echart6.resize()
+        })
     })
 
     <?php $this->endBlock() ?>

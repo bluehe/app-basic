@@ -26,621 +26,621 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#amount_line" data-toggle="tab">企业统计</a></li>
-                
+
                 <li class="pull-right header">
-                    <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id))>1?Select2::widget([
-                        'name' => 'group',                        
+                    <?= count(UserGroup::get_user_groupid(Yii::$app->user->identity->id)) > 1 ? Select2::widget([
+                        'name' => 'group',
                         'data' => Group::get_user_group(Yii::$app->user->identity->id),
-                        'value'=>$group,
+                        'value' => $group,
                         'options' => [
                             'placeholder' => '项目',
-                            'id'=>'group',
+                            'id' => 'group',
                         ],
                         'pluginOptions' => [
                             'allowClear' => true,
                             'width' => '110%'
                         ],
                         'pluginEvents' => [
-                            "change" => "function() {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():'';self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
+                            "change" => "function() {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():'';self.location='" . Url::to(['statistics/corporation']) . "?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
                         ]
-                    ]):'';?>
-                    
+                    ]) : ''; ?>
+
                 </li>
-                
+
                 <li class="pull-right header">
                     <?= Select2::widget([
-                        'name' => 'annual',                        
+                        'name' => 'annual',
                         'data' => Parameter::get_type('allocate_annual'),
-                        'value'=>$annual,
+                        'value' => $annual,
                         'options' => [
                             'placeholder' => '下拨年度',
-                            'id'=>'annual',
+                            'id' => 'annual',
                         ],
                         'pluginOptions' => [
                             'allowClear' => true,
                             'width' => '110%'
                         ],
                         'pluginEvents' => [
-                            "change" => "function() {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():'';self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
+                            "change" => "function() {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():'';self.location='" . Url::to(['statistics/corporation']) . "?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
                         ]
-                    ]);?>
-                    
+                    ]); ?>
+
                 </li>
                 <li class="pull-right headers">
                     <?=
-                    DateRangePicker::widget([
-                        'name' => 'daterange',
-                        'useWithAddon' => true,
-                        'presetDropdown' => true,
-                        'convertFormat' => true,
-                        'value' => date('Y-m-d', $start) . '~' . date('Y-m-d', $end),
-                        'pluginOptions' => [
-                            'timePicker' => false,
-                            'locale' => [
-                                'format' => 'Y-m-d',
-                                'separator' => '~'
+                        DateRangePicker::widget([
+                            'name' => 'daterange',
+                            'useWithAddon' => true,
+                            'presetDropdown' => true,
+                            'convertFormat' => true,
+                            'value' => date('Y-m-d', $start) . '~' . date('Y-m-d', $end),
+                            'pluginOptions' => [
+                                'timePicker' => false,
+                                'locale' => [
+                                    'format' => 'Y-m-d',
+                                    'separator' => '~'
+                                ],
+                                'linkedCalendars' => false,
                             ],
-                            'linkedCalendars' => false,
-                        ],
-                        'pluginEvents' => [
-                            "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val(); var g=$('#group').length?$('#group').val():'';self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
-                    ]
-                    ]);
+                            'pluginEvents' => [
+                                "apply.daterangepicker" => "function(start,end,label) {var v=$('.range-value').val();var s=$('input[name=sum]:checked').val();var a=$('#annual').val(); var g=$('#group').length?$('#group').val():'';self.location='" . Url::to(['statistics/corporation']) . "?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
+                            ]
+                        ]);
                     ?>
                 </li>
-                
+
                 <li class="pull-right headers header">
-                     <?=
-                    SwitchInput::widget([
-                        'name' => 'sum',
-                        'type' => SwitchInput::RADIO,
-                        'value'=>$sum,
-                        'items' => [
-                            ['label' => '天', 'value' => 1],
-                            ['label' => '周', 'value' => 2],
-                            ['label' => '月', 'value' => 3],
-                        ],
-                        'pluginOptions'=>[
-                            'onText'=>'是',
-                            'offText'=>'否',
-                            'onColor' => 'success',
-                            'offColor' => 'danger', 
-                            'size' => 'mini'
-                        ],
-                        'labelOptions' => ['style' => 'font-size: 12px'],
-                        'pluginEvents' => [
-                        'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='".Url::to(['statistics/corporation'])."?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
-                    ]
-                    ]);
+                    <?=
+                        SwitchInput::widget([
+                            'name' => 'sum',
+                            'type' => SwitchInput::RADIO,
+                            'value' => $sum,
+                            'items' => [
+                                ['label' => '天', 'value' => 1],
+                                ['label' => '周', 'value' => 2],
+                                ['label' => '月', 'value' => 3],
+                            ],
+                            'pluginOptions' => [
+                                'onText' => '是',
+                                'offText' => '否',
+                                'onColor' => 'success',
+                                'offColor' => 'danger',
+                                'size' => 'mini'
+                            ],
+                            'labelOptions' => ['style' => 'font-size: 12px'],
+                            'pluginEvents' => [
+                                'switchChange.bootstrapSwitch' => "function(e,data) {var v=$('.range-value').val();s=$('input[name=sum]:checked').val();var a=$('#annual').val();var g=$('#group').length?$('#group').val():''; self.location='" . Url::to(['statistics/corporation']) . "?range='+v+'&sum='+s+'&annual='+a+'&group='+g;}",
+                            ]
+                        ]);
                     ?>
                 </li>
-                
-                
+
+
 
             </ul>
             <div class="tab-content no-padding">
                 <div class="tab-pane row active" id="amount_line">
-                <?php if($chart==1):?>
-                    <section class="col-md-12">                    
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            'highcharts-more',
-                            'modules/exporting',
-                            'themes/grid-light'
-                        ],
-                        'options' => [
-                            'lang' => [
-                                'printChart' => "打印图表",
-                                'downloadJPEG' => "下载JPEG 图片",
-                                'downloadPDF' => "下载PDF文档",
-                                'downloadPNG' => "下载PNG 图片",
-                                'downloadSVG' => "下载SVG 矢量图",
-                                'exportButtonTitle' => "导出图片"
-                            ],
-                            'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                            'title' => [
-                                'text' => '下拨消耗统计',
-                            ],
-                            'xAxis' => [
-                                'type' => 'category'
-                            ],
-                            'yAxis' => [
-                                ['title' => ['text' => '金额（万元）'],'min'=>0,],
-                                ['title' => ['text' => '数量'],'opposite'=>true,'min'=>0]
-                            ],
-                            'tooltip' => [
-                                'shared' => true,
-                                'crosshairs' => true
-                            ],
-                            'plotOptions' => [
-                                'area' => [
-                                    'dataLabels' => [
-                                        'enabled' => true,
-//                                        'format' => '{y:.2f}',
-                                        'formatter'=>new JsExpression("function () {if(this.y>0){return this.y;}}"),
-                                        'shadow'=>false,
-                                        
-                                        'style'=>['textShadow'=>false]
+                    <?php if ($chart == 1) : ?>
+                        <section class="col-md-12">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'themes/grid-light'
                                     ],
-                                    'showInLegend' => true,
-                                    'marker'=>[
-                                        'enabled'=>false,
-					'symbol'=>'circle',
-					'radius'=>2,
-                                    ],
-                                ],
-                                'areaspline' => [
-                                    'dataLabels' => [
-                                        'enabled' => true,
-//                                        'format' => '{y:.2f}',
-                                        'formatter'=>new JsExpression("function () {if(this.y>0){return this.y;}}"),
-                                        'shadow'=>false,
-                                        
-                                        'style'=>['textShadow'=>false]
-                                    ],
-                                    'showInLegend' => true,
-                                    'marker'=>[
-                                        'enabled'=>false,
-					'symbol'=>'circle',
-					'radius'=>2,
-                                    ],
-                                ],
-                                'column' => [
-                                    'cursor' => 'pointer',
-                                    'dataLabels' => [
-                                        'enabled' => true,
-                                        'formatter'=>new JsExpression("function () {if(this.y>0){return this.y;}}"),
-                                        'style'=>['textShadow'=>false]
-                                    ]
-                                ],
-                                'line' => [
-                                    'cursor' => 'pointer',
-                                    'dataLabels' => [
-                                        'enabled' => true,                                      
-                                        'formatter'=>new JsExpression("function () {if(this.y>0){return this.y;}}"),
-                                        'shadow'=>false,
-                                        'style'=>['textShadow'=>false]
-                                    ],
-                                    'showInLegend' => true,
-                                ],
-                                'spline' => [
-                                    'cursor' => 'pointer',
-                                    'dataLabels' => [
-                                        'enabled' => true,                                      
-                                        'formatter'=>new JsExpression("function () {if(this.y>0){return this.y;}}"),
-                                        'shadow'=>false,
-                                        'style'=>['textShadow'=>false]
-                                    ],
-                                    'showInLegend' => true,
-                                ],
-                            ],
-                            'series' => $series['amount'],
-                    ]
-                    ]);
-                    ?>                   
-                    </section>
-                    <section class="col-md-6">                    
-                    <?=
-                        Highcharts::widget([
-                            'scripts' => [
-                                'highcharts-more',
-                                'modules/exporting',
-                                'themes/grid-light'
-                            ],
-                            'options' => [
-                                'lang' => [
-                                    'printChart' => "打印图表",
-                                    'downloadJPEG' => "下载JPEG 图片",
-                                    'downloadPDF' => "下载PDF文档",
-                                    'downloadPNG' => "下载PNG 图片",
-                                    'downloadSVG' => "下载SVG 矢量图",
-                                    'exportButtonTitle' => "导出图片"
-                                ],
-                                'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                                'title' => [
-                                    'text' => '企业下拨金额',
-                                ],
-                                'legend'=>['itemWidth'=>80,'width'=>240],
-                                'tooltip' => [
-                                    'formatter' => new JsExpression("function () {return '<b>' + this.point.name + '</b><br/>' +this.series.name + ' : ' + this.y;
-                                }")
-                                ],
-                                'plotOptions' => [
-                                    'pie' => [
-                                        'allowPointSelect' => true,
-                                        'cursor' => 'pointer',
-                                        'dataLabels' => [
-                                            'enabled' => true,                                        
-                                            'format' => '{point.y}家 , {point.percentage:.2f} %',                                            
+                                    'options' => [
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
                                         ],
-                                        'showInLegend' => true,
-                                    ]
-                                ],
-                                'series' => $series['allocate_num'],
-                            ]
-                        ]);
-                        ?>
-                    </section>
-                    <section class="col-md-6">                   
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            'highcharts-more',
-                            'modules/exporting',
-                            'themes/grid-light'
-                        ],
-                        'options' => [
-                            'lang' => [
-                                'printChart' => "打印图表",
-                                'downloadJPEG' => "下载JPEG 图片",
-                                'downloadPDF' => "下载PDF文档",
-                                'downloadPNG' => "下载PNG 图片",
-                                'downloadSVG' => "下载SVG 矢量图",
-                                'exportButtonTitle' => "导出图片"
-                            ],
-                            'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                            'title' => [
-                                'text' => '下拨金额',
-                            ],
-                            'xAxis' => [
-                                'type' => 'category'
-                            ],
-                            'yAxis' => [
-                                'title' => ['text' => '金额（万元）'],'min'=>0,'reversedStacks'=>false,
-                                'stackLabels'=>['enabled' => true],
-                            ],
-                           
-                            'tooltip' => [
-                                'shared' => true,
-                                'crosshairs' => true
-                            ],
-                            'plotOptions' => [
-                                'bar' => [
-                                    'cursor' => 'pointer',
-                                    'stacking'=>'normal',
-                                    'dataLabels' => [
-                                        'enabled' => false,
-                                        'formatter'=>new JsExpression("function () {if(this.y>0){return this.y;}}"),
-                                        'style'=>['textShadow'=>false]
-                                    ]
-                                ],
-                   
-                            ],
-                            'series' => $series['allocate_bd'],
-                    ]
-                    ]);
-                    ?>
-                    </section>
-                    <section class="col-md-6">
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            'highcharts-more',
-                            'modules/exporting',
-                            'modules/drilldown',
-                            'themes/grid-light'
-                        ],
-                        'options' => [
-                            'chart'=>['type'=>'pie'],
-                            'lang' => [
-                                'printChart' => "打印图表",
-                                'downloadJPEG' => "下载JPEG 图片",
-                                'downloadPDF' => "下载PDF文档",
-                                'downloadPNG' => "下载PNG 图片",
-                                'downloadSVG' => "下载SVG 矢量图",
-                                'exportButtonTitle' => "导出图片"
-                            ],
-                            'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                            'title' => [
-                                'text' => '企业行业分布',
-                            ],
-                           'subtitle'=>['text'=>'单击每个分类获得二级分类信息'],
-                            'tooltip' => [
-                                    'formatter' => new JsExpression("function () {return '<b>' + this .point.name+ ' : ' + this . y + '</b><br/>';
-                                }")
-                            ],
-                            'legend'=>['itemWidth'=>100,'width'=>400],
-                            'plotOptions' => [
-                                'pie' => [
-                                        'allowPointSelect' => true,
-                                        'cursor' => 'pointer',
-                                        'dataLabels' => [
-                                            'enabled' => true,
-                                            'format' => '<b>{point.name}</b>: {point.y}  , {point.percentage:.1f} %',
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '下拨消耗统计',
                                         ],
-                                        'showInLegend' => true,
-                                ]
-                            ],
-                            'series' => $series['industry'],
-                            'drilldown'=>$drilldown['industry'],
-                        ]
-                    ]);
-                    ?>
-                    </section>
-                    <section class="col-md-3">                        
-                          <?=
-                        Highcharts::widget([
-                            'scripts' => [
-                                'highcharts-more',
-                                'modules/exporting',
-                                'themes/grid-light'
-                            ],
-                            'options' => [
-                                'lang' => [
-                                    'printChart' => "打印图表",
-                                    'downloadJPEG' => "下载JPEG 图片",
-                                    'downloadPDF' => "下载PDF文档",
-                                    'downloadPNG' => "下载PNG 图片",
-                                    'downloadSVG' => "下载SVG 矢量图",
-                                    'exportButtonTitle' => "导出图片"
-                                ],
-                                'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                                'title' => [
-                                    'text' => '企业注册资金',
-                                ],
-                                'legend'=>['itemWidth'=>120,'width'=>240],
-                                'tooltip' => [
-                                    'formatter' => new JsExpression("function () {return '<b>' + this .point.name + '</b><br/>' +
+                                        'xAxis' => [
+                                            'type' => 'category'
+                                        ],
+                                        'yAxis' => [
+                                            ['title' => ['text' => '金额（万元）'], 'min' => 0,],
+                                            ['title' => ['text' => '数量'], 'opposite' => true, 'min' => 0]
+                                        ],
+                                        'tooltip' => [
+                                            'shared' => true,
+                                            'crosshairs' => true
+                                        ],
+                                        'plotOptions' => [
+                                            'area' => [
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    //                                        'format' => '{y:.2f}',
+                                                    'formatter' => new JsExpression("function () {if(this.y>0){return this.y;}}"),
+                                                    'shadow' => false,
+
+                                                    'style' => ['textShadow' => false]
+                                                ],
+                                                'showInLegend' => true,
+                                                'marker' => [
+                                                    'enabled' => false,
+                                                    'symbol' => 'circle',
+                                                    'radius' => 2,
+                                                ],
+                                            ],
+                                            'areaspline' => [
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    //                                        'format' => '{y:.2f}',
+                                                    'formatter' => new JsExpression("function () {if(this.y>0){return this.y;}}"),
+                                                    'shadow' => false,
+
+                                                    'style' => ['textShadow' => false]
+                                                ],
+                                                'showInLegend' => true,
+                                                'marker' => [
+                                                    'enabled' => false,
+                                                    'symbol' => 'circle',
+                                                    'radius' => 2,
+                                                ],
+                                            ],
+                                            'column' => [
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'formatter' => new JsExpression("function () {if(this.y>0){return this.y;}}"),
+                                                    'style' => ['textShadow' => false]
+                                                ]
+                                            ],
+                                            'line' => [
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'formatter' => new JsExpression("function () {if(this.y>0){return this.y;}}"),
+                                                    'shadow' => false,
+                                                    'style' => ['textShadow' => false]
+                                                ],
+                                                'showInLegend' => true,
+                                            ],
+                                            'spline' => [
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'formatter' => new JsExpression("function () {if(this.y>0){return this.y;}}"),
+                                                    'shadow' => false,
+                                                    'style' => ['textShadow' => false]
+                                                ],
+                                                'showInLegend' => true,
+                                            ],
+                                        ],
+                                        'series' => $series['amount'],
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-6">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'themes/grid-light'
+                                    ],
+                                    'options' => [
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
+                                        ],
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '企业下拨金额',
+                                        ],
+                                        'legend' => ['itemWidth' => 80, 'width' => 240],
+                                        'tooltip' => [
+                                            'formatter' => new JsExpression("function () {return '<b>' + this.point.name + '</b><br/>' +this.series.name + ' : ' + this.y;
+                                }")
+                                        ],
+                                        'plotOptions' => [
+                                            'pie' => [
+                                                'allowPointSelect' => true,
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'format' => '{point.y}家 , {point.percentage:.2f} %',
+                                                ],
+                                                'showInLegend' => true,
+                                            ]
+                                        ],
+                                        'series' => $series['allocate_num'],
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-6">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'themes/grid-light'
+                                    ],
+                                    'options' => [
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
+                                        ],
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '下拨金额',
+                                        ],
+                                        'xAxis' => [
+                                            'type' => 'category'
+                                        ],
+                                        'yAxis' => [
+                                            'title' => ['text' => '金额（万元）'], 'min' => 0, 'reversedStacks' => false,
+                                            'stackLabels' => ['enabled' => true],
+                                        ],
+
+                                        'tooltip' => [
+                                            'shared' => true,
+                                            'crosshairs' => true
+                                        ],
+                                        'plotOptions' => [
+                                            'bar' => [
+                                                'cursor' => 'pointer',
+                                                'stacking' => 'normal',
+                                                'dataLabels' => [
+                                                    'enabled' => false,
+                                                    'formatter' => new JsExpression("function () {if(this.y>0){return this.y;}}"),
+                                                    'style' => ['textShadow' => false]
+                                                ]
+                                            ],
+
+                                        ],
+                                        'series' => $series['allocate_bd'],
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-6">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'modules/drilldown',
+                                        'themes/grid-light'
+                                    ],
+                                    'options' => [
+                                        'chart' => ['type' => 'pie'],
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
+                                        ],
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '企业行业分布',
+                                        ],
+                                        'subtitle' => ['text' => '单击每个分类获得二级分类信息'],
+                                        'tooltip' => [
+                                            'formatter' => new JsExpression("function () {return '<b>' + this .point.name+ ' : ' + this . y + '</b><br/>';
+                                }")
+                                        ],
+                                        'legend' => ['itemWidth' => 100, 'width' => 400],
+                                        'plotOptions' => [
+                                            'pie' => [
+                                                'allowPointSelect' => true,
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'format' => '<b>{point.name}</b>: {point.y}  , {point.percentage:.1f} %',
+                                                ],
+                                                'showInLegend' => true,
+                                            ]
+                                        ],
+                                        'series' => $series['industry'],
+                                        'drilldown' => $drilldown['industry'],
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-3">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'themes/grid-light'
+                                    ],
+                                    'options' => [
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
+                                        ],
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '企业注册资金',
+                                        ],
+                                        'legend' => ['itemWidth' => 120, 'width' => 240],
+                                        'tooltip' => [
+                                            'formatter' => new JsExpression("function () {return '<b>' + this .point.name + '</b><br/>' +
                                             this . series . name + ' : ' + this . y;
                                 }")
-                                ],
-                                'plotOptions' => [
-                                    'pie' => [
-                                        'allowPointSelect' => true,
-                                        'cursor' => 'pointer',
-                                        'dataLabels' => [
-                                            'enabled' => true,
-                                        
-                                            'format' => '<b>{point.percentage:.1f} %',
-                                            
                                         ],
-                                        'showInLegend' => true,
+                                        'plotOptions' => [
+                                            'pie' => [
+                                                'allowPointSelect' => true,
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+
+                                                    'format' => '<b>{point.percentage:.1f} %',
+
+                                                ],
+                                                'showInLegend' => true,
+                                            ]
+                                        ],
+                                        'series' => $series['capital'],
                                     ]
-                                ],
-                                'series' => $series['capital'],
-                            ]
-                        ]);
-                        ?>                      
-                    </section>
-                    <section class="col-md-3">                       
-                         <?=
-                        Highcharts::widget([
-                            'scripts' => [
-                                'highcharts-more',
-                                'modules/exporting',
-                                'themes/grid-light'
-                            ],
-                            'options' => [
-                                'lang' => [
-                                    'printChart' => "打印图表",
-                                    'downloadJPEG' => "下载JPEG 图片",
-                                    'downloadPDF' => "下载PDF文档",
-                                    'downloadPNG' => "下载PNG 图片",
-                                    'downloadSVG' => "下载SVG 矢量图",
-                                    'exportButtonTitle' => "导出图片"
-                                ],
-                                'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
-                                'title' => [
-                                    'text' => '企业研发规模',
-                                ],
-                                'legend'=>['itemWidth'=>100,'width'=>200],
-                                'tooltip' => [
-                                    'formatter' => new JsExpression("function () {return '<b>' + this .point.name + '</b><br/>' +
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-3">
+                            <?=
+                                Highcharts::widget([
+                                    'scripts' => [
+                                        'highcharts-more',
+                                        'modules/exporting',
+                                        'themes/grid-light'
+                                    ],
+                                    'options' => [
+                                        'lang' => [
+                                            'printChart' => "打印图表",
+                                            'downloadJPEG' => "下载JPEG 图片",
+                                            'downloadPDF' => "下载PDF文档",
+                                            'downloadPNG' => "下载PNG 图片",
+                                            'downloadSVG' => "下载SVG 矢量图",
+                                            'exportButtonTitle' => "导出图片"
+                                        ],
+                                        'credits' => ['enabled' => true, 'text' => Yii::$app->request->hostInfo, 'href' => Yii::$app->request->hostInfo],
+                                        'title' => [
+                                            'text' => '企业研发规模',
+                                        ],
+                                        'legend' => ['itemWidth' => 100, 'width' => 200],
+                                        'tooltip' => [
+                                            'formatter' => new JsExpression("function () {return '<b>' + this .point.name + '</b><br/>' +
                                             this . series . name + ' : ' + this . y;
                                 }")
-                                ],
-                                'plotOptions' => [
-                                    'pie' => [
-                                        'allowPointSelect' => true,
-                                        'cursor' => 'pointer',
-                                        'dataLabels' => [
-                                            'enabled' => true,
-                                            'format' => '{point.percentage:.1f} %',
                                         ],
-                                        'showInLegend' => true,
+                                        'plotOptions' => [
+                                            'pie' => [
+                                                'allowPointSelect' => true,
+                                                'cursor' => 'pointer',
+                                                'dataLabels' => [
+                                                    'enabled' => true,
+                                                    'format' => '{point.percentage:.1f} %',
+                                                ],
+                                                'showInLegend' => true,
+                                            ]
+                                        ],
+                                        'series' => $series['scale'],
                                     ]
-                                ],
-                                'series' => $series['scale'],
-                            ]
-                        ]);
-                        ?>
-                    </section>
-                    <?php else:?>
-                    <section class="col-md-12">
-                    <?=
-                        ECharts::widget([
-                            'theme'=>'light',
-                            'responsive'=>true,
-                            'options' => [
-                                'style'=>'height:400px'
-                            ],
-                            'pluginOptions' => [
-                                'option' => [
-                                    'title' => [
-                                        'text' => '下拨消耗统计',
-                                        'left'=>'center',
-                                        'top'=>'10px',
+                                ]);
+                            ?>
+                        </section>
+                    <?php else : ?>
+                        <section class="col-md-12">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
                                     ],
-                                    'legend'=>['show'=>true,'bottom'=>'10px'],
-                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
-                                    'xAxis' => [                
-                                        'type' => 'category',
-                                        'boundaryGap'=>true,
-                                        'axisLabel'=>['rotate'=>45],
-                                        'splitLine'=>['show'=>true]
-                                    ],
-                                    'yAxis' => [
-                                        ['type' => 'value','name' => '金额（万元）','min'=>0],
-                                        ['type' => 'value','name' => '数量','min'=>0,'splitLine'=>['show'=>false]]                                    
-                                    ],
-                                    'tooltip' => [
-                                        'trigger' => 'axis',
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '下拨消耗统计',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => []]],
+                                            'xAxis' => [
+                                                'type' => 'category',
+                                                'boundaryGap' => true,
+                                                'axisLabel' => ['rotate' => 45],
+                                                'splitLine' => ['show' => true]
+                                            ],
+                                            'yAxis' => [
+                                                ['type' => 'value', 'name' => '金额（万元）', 'min' => 0],
+                                                ['type' => 'value', 'name' => '数量', 'min' => 0, 'splitLine' => ['show' => false]]
+                                            ],
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
 
-                                    ],
-                                    'series' => $series['amount']
-                                ]
-                            ]
-                            
-                        ])
-                    ?>
-                    </section>
-                    <section class="col-md-6">
-                        <?=
-                        ECharts::widget([
-                            'theme'=>'light',
-                            'responsive'=>true,
-                            'options' => [
-                                'style'=>'height:400px'
-                            ],
-                            'pluginOptions' => [
-                                'option' => [
-                                    'title' => [
-                                        'text' => '企业下拨金额',
-                                        'left'=>'center',
-                                        'top'=>'10px',
-                                    ],
-                                    'legend'=>['show'=>true,'bottom'=>'10px'],
-                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
-                          
-                                    'tooltip' => [
-                                        'trigger' => 'axis',
+                                            ],
+                                            'series' => $series['amount']
+                                        ]
+                                    ]
 
+                                ])
+                            ?>
+                        </section>
+                        <section class="col-md-6">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
                                     ],
-                                    'series' => $series['allocate_num']
-                                ]
-                            ]
-                            
-                        ])
-                    ?>                    
-                    </section>
-                    <section class="col-md-6">
-                       <?=
-                        ECharts::widget([
-                            'theme'=>'light',
-                            'responsive'=>true,
-                            'options' => [
-                                'style'=>'height:400px'
-                            ],
-                            'pluginOptions' => [
-                                'option' => [
-                                    'title' => [
-                                        'text' => '下拨金额',
-                                        'left'=>'center',
-                                        'top'=>'10px',
-                                    ],
-                                    'legend'=>['show'=>true,'bottom'=>'10px'],
-                                    'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                    'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[],'magicType'=>['type'=>['stack', 'tiled']]]],                         
-                                    'xAxis' => [
-                                        'type' => 'value',
-                                        'name' => '金额（万元）',
-                                        'min'=>0,
-                                        'nameLocation'=>'middle'
-                                        
-                                    ],
-                                    'yAxis' => [                
-                                        'type' => 'category',
-                                        'splitLine'=>['show'=>true]
-                                    ],
-                                    
-                                    'tooltip' => [
-                                        'trigger' => 'axis',
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '企业下拨金额',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => []]],
 
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
+
+                                            ],
+                                            'series' => $series['allocate_num']
+                                        ]
+                                    ]
+
+                                ])
+                            ?>
+                        </section>
+                        <section class="col-md-6">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
                                     ],
-                                    'series' => $series['allocate_bd']
-                                ]
-                            ]
-                            
-                        ])
-                    ?> 
-                    </section>
-                    <section class="col-md-6">
-                    <?=
-                    ECharts::widget([
-                        'theme'=>'light',
-                        'responsive'=>true,
-                        'options' => [
-                            'style'=>'height:400px'
-                        ],
-                        'pluginOptions' => [
-                            'option' => [
-                                'title' => [
-                                    'text' => '企业行业分布',
-                                    'left'=>'center',
-                                    'top'=>'10px',
-                                ],
-                                'legend'=>['show'=>true,'bottom'=>'10px'],
-                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
-                                'tooltip' => [
-                                    'trigger' => 'axis',
-                                ],
-                                'series' => $series['industry']
-                            ]
-                        ]
-                    ]);
-                    ?>
-                    </section>
-                    <section class="col-md-3">
-                    <?=
-                    ECharts::widget([
-                        'theme'=>'light',
-                        'responsive'=>true,
-                        'options' => [
-                            'style'=>'height:400px'
-                        ],
-                        'pluginOptions' => [
-                            'option' => [
-                                'title' => [
-                                    'text' => '企业注册资金',
-                                    'left'=>'center',
-                                    'top'=>'10px',
-                                ],
-                                'legend'=>['show'=>true,'bottom'=>'10px'],
-                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
-                                'tooltip' => [
-                                    'trigger' => 'axis',
-                                ],
-                                'series' => $series['capital']
-                            ]
-                        ]
-                    ]);
-                    ?>                       
-                    </section>
-                    <section class="col-md-3">
-                    <?=
-                    ECharts::widget([
-                        'theme'=>'light',
-                        'responsive'=>true,
-                        'options' => [
-                            'style'=>'height:400px'
-                        ],
-                        'pluginOptions' => [
-                            'option' => [
-                                'title' => [
-                                    'text' => '企业研发规模',
-                                    'left'=>'center',
-                                    'top'=>'10px',
-                                ],
-                                'legend'=>['show'=>true,'bottom'=>'10px'],
-                                'grid'=>['containLabel'=>true,'left'=>'3%','right'=>'3%','top'=>'15%'],
-                                'toolbox'=>['right'=>20, 'feature'=>['saveAsImage'=>[],'dataView'=>[]]],
-                                'tooltip' => [
-                                    'trigger' => 'axis',
-                                ],
-                                'series' => $series['scale']
-                            ]
-                        ]
-                    ]);
-                    ?>                       
-                    </section>
-                    <?php endif;?>
-                                                    
-                 </div>              
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '下拨金额',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => [], 'magicType' => ['type' => ['stack', 'tiled']]]],
+                                            'xAxis' => [
+                                                'type' => 'value',
+                                                'name' => '金额（万元）',
+                                                'min' => 0,
+                                                'nameLocation' => 'middle'
+
+                                            ],
+                                            'yAxis' => [
+                                                'type' => 'category',
+                                                'splitLine' => ['show' => true]
+                                            ],
+
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
+
+                                            ],
+                                            'series' => $series['allocate_bd']
+                                        ]
+                                    ]
+
+                                ])
+                            ?>
+                        </section>
+                        <section class="col-md-6">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
+                                    ],
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '企业行业分布',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => []]],
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
+                                            ],
+                                            'series' => $series['industry']
+                                        ]
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-3">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
+                                    ],
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '企业注册资金',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => []]],
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
+                                            ],
+                                            'series' => $series['capital']
+                                        ]
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                        <section class="col-md-3">
+                            <?=
+                                ECharts::widget([
+                                    'theme' => 'light',
+                                    'responsive' => true,
+                                    'options' => [
+                                        'style' => 'height:400px'
+                                    ],
+                                    'pluginOptions' => [
+                                        'option' => [
+                                            'title' => [
+                                                'text' => '企业研发规模',
+                                                'left' => 'center',
+                                                'top' => '10px',
+                                            ],
+                                            'legend' => ['show' => true, 'bottom' => '10px'],
+                                            'grid' => ['containLabel' => true, 'left' => '3%', 'right' => '3%', 'top' => '15%'],
+                                            'toolbox' => ['right' => 20, 'feature' => ['saveAsImage' => [], 'dataView' => []]],
+                                            'tooltip' => [
+                                                'trigger' => 'axis',
+                                            ],
+                                            'series' => $series['scale']
+                                        ]
+                                    ]
+                                ]);
+                            ?>
+                        </section>
+                    <?php endif; ?>
+
+                </div>
             </div>
         </div>
         <?php Pjax::end(); ?>
@@ -649,6 +649,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <!-- /.row (main row) -->
 <?php
-$cssString = '.header .form-group {margin-bottom:0;}';  
-$this->registerCss($cssString); 
+$cssString = '.header .form-group {margin-bottom:0;}';
+$this->registerCss($cssString);
 ?>
