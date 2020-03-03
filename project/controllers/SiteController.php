@@ -18,6 +18,7 @@ use project\models\Corporation;
 use project\models\CloudSubsidy;
 use project\models\ActivityChange;
 use project\models\CorporationMeal;
+use project\models\Group;
 use yii\base\InvalidParamException;
 use project\models\PasswordFindForm;
 use project\models\PasswordResetForm;
@@ -445,6 +446,18 @@ class SiteController extends Controller
         }
 
         $series['item'][] = ['type' => 'pie', 'radius' => [0, '60%'], 'selectedMode' => 'single', 'name' => '数量', 'minAngle' => 10, 'data' => $data_item, 'label' => ['color' => '#fff'], 'color' => ["#0184d5", "rgb(255, 188, 117)", "rgb(144, 238, 126)", "rgb(119, 152, 191)", "#aaeeee",  "#06c8ab", "#06dcab", "#06f0ab", "#DF5353", "#ff0066"]];
+
+
+        //地图
+        $series['geo'] = [];
+        $groups = Group::find()->select(['id', 'title', 'location'])->all();
+        foreach ($groups as $one) {
+            $group_num = (int) Corporation::find()->where(['group_id' => $one->id])->count();
+            $l = $one->location ? explode(',', $one->location) : [];
+            array_push($l, $group_num);
+            $location[] = ['name' => $one->title, 'value' => $l];
+        }
+        $series['geo'][] = ['data' => $location];
 
         return $this->render('index', ['allocate_num' => $allocate_num, 'allocate_amount' => $allocate_amount, 'series' => $series,]);
     }

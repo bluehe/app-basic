@@ -1,5 +1,5 @@
 $(window).on('load', function () {
-    b();
+    //b();
 
     function b() {
         var h = echarts.init(document.getElementById("map_1"));

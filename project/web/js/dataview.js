@@ -468,3 +468,61 @@ function m() {
     };
     return option;
 }
+
+function b() {
+    var option = {
+        tooltip: {
+            trigger: "item",
+            formatter: function (c) {
+                if (typeof (c.value)[2] == "undefined") {
+                    return c.name + " : " + c.value
+                } else {
+                    return c.name + " : " + c.value[2]
+                }
+            }
+        },
+        geo: {
+            map: "china",
+            label: {
+                emphasis: {
+                    show: false
+                }
+            },
+            roam: false,
+            itemStyle: {
+                normal: {
+                    areaColor: "#4c60ff",
+                    borderColor: "#002097"
+                },
+                emphasis: {
+                    areaColor: "#293fff"
+                }
+            }
+        },
+        series: [{
+            name: "补贴企业数",
+            type: "scatter",
+            coordinateSystem: "geo",
+            data: [],
+            symbolSize: function (c) {
+                return 20; //c[2] / 15
+            },
+            label: {
+                normal: {
+                    formatter: "{b}",
+                    position: "right",
+                    show: true
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: "#ffeb7b"
+                }
+            }
+        }]
+    };
+    return option;
+}

@@ -218,6 +218,12 @@ $this->title = '首页';
             series: <?= json_encode($series['item']) ?>
         });
 
+        var map = echarts.init(document.getElementById("map_1"));
+        map.setOption(b());
+        map.setOption({
+            series: <?= json_encode($series['geo']) ?>
+        });
+
         window.addEventListener("resize", function() {
             echart1.resize();
             echart2.resize();
@@ -225,6 +231,7 @@ $this->title = '首页';
             echart4.resize();
             echart5.resize();
             echart6.resize();
+            map.resize();
         })
     })
 
