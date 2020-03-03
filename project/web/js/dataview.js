@@ -501,11 +501,11 @@ function b() {
         },
         series: [{
             name: "补贴企业数",
-            type: "scatter",
+            type: "effectScatter",
             coordinateSystem: "geo",
             data: [],
             symbolSize: function (c) {
-                return 20; //c[2] / 15
+                return 15; //c[2] / 15
             },
             label: {
                 normal: {
