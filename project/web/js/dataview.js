@@ -499,30 +499,7 @@ function b() {
                 }
             }
         },
-        series: [{
-            name: "补贴企业数",
-            type: "effectScatter",
-            coordinateSystem: "geo",
-            data: [],
-            symbolSize: function (c) {
-                return 15; //c[2] / 15
-            },
-            label: {
-                normal: {
-                    formatter: "{b}",
-                    position: "right",
-                    show: true
-                },
-                emphasis: {
-                    show: true
-                }
-            },
-            itemStyle: {
-                normal: {
-                    color: "#ffeb7b"
-                }
-            }
-        }]
+        series: []
     };
     return option;
 }

@@ -457,7 +457,56 @@ class SiteController extends Controller
             array_push($l, $group_num);
             $location[] = ['name' => $one->title, 'value' => $l];
         }
-        $series['geo'][] = ['data' => $location];
+        $series['geo'][] = [
+            'name' => "联创中心",
+            'type' => "effectScatter",
+            'coordinateSystem' => "geo",
+            'symbolSize' => 15,
+            'label' => [
+                'normal' => [
+                    'formatter' => "{b}",
+                    'position' => "right",
+                    'show' => true
+                ],
+                'emphasis' => [
+                    'show' => true
+                ]
+            ],
+            'itemStyle' => [
+                'normal' => [
+                    'color' => "#ffeb7b"
+                ]
+            ],
+            'data' => $location
+        ];
+        // $corporations = Corporation::find()->select(['base_company_name', 'contact_location'])->all();
+        // foreach ($corporations as $one) {
+        //     $l = $one->contact_location ? explode(',', $one->contact_location) : [];
+        //     array_push($l, 1);
+        //     $corporation_location[] = ['name' => $one->base_company_name, 'value' => $l];
+        // }
+        // $series['geo'][] = [
+        //     'name' => "补贴企业",
+        //     'type' => "scatter",
+        //     'coordinateSystem' => "geo",
+        //     'symbolSize' => 5,
+        //     'label' => [
+        //         'normal' => [
+        //             'formatter' => "{b}",
+        //             'position' => "right",
+        //             'show' => false
+        //         ],
+        //         'emphasis' => [
+        //             'show' => true
+        //         ]
+        //     ],
+        //     'itemStyle' => [
+        //         'normal' => [
+        //             'color' => "#ffeb7b"
+        //         ]
+        //     ],
+        //     'data' => $corporation_location
+        // ];
 
         return $this->render('index', ['allocate_num' => $allocate_num, 'allocate_amount' => $allocate_amount, 'series' => $series,]);
     }
