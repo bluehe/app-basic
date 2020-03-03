@@ -378,7 +378,7 @@ class SiteController extends Controller
         $activity_user = HealthData::get_user_total($month_start, $end, $group, $is_allocate, $total_get, null);
 
         foreach ($activity_user as $row) {
-            $j = date('Y.n.j', $row['statistics_time']);
+            $j = date('n.j', $row['statistics_time']);
             $data_total_num[] = ['name' => $j, 'y' => (int) $row['total_num'], 'value' => [$j, (int) $row['total_num']]];
             $data_user_num[] = ['name' => $j, 'y' => (int) $row['user_num'], 'value' => [$j, (int) $row['user_num']]];
             $data_user_per[] = ['name' => $j, 'y' => isset($row['user_num']) && isset($row['total_num']) && (int) $row['total_num'] > 0 ? round((int) $row['user_num'] / (int) $row['total_num'] * 100, 2) : 0, 'value' => [$j, isset($row['user_num']) && isset($row['total_num']) && (int) $row['total_num'] > 0 ? round((int) $row['user_num'] / (int) $row['total_num'] * 100, 2) : 0]];
@@ -449,35 +449,90 @@ class SiteController extends Controller
 
 
         //地图
-        $series['geo'] = [];
+        $series['geo'] = $location = $lines = [];
         $groups = Group::find()->select(['id', 'title', 'location'])->all();
         foreach ($groups as $one) {
             $group_num = (int) Corporation::find()->where(['group_id' => $one->id])->count();
-            $l = $one->location ? explode(',', $one->location) : [];
+            $fromCoord = $l = $one->location ? explode(',', $one->location) : [];
             array_push($l, $group_num);
             $location[] = ['name' => $one->title, 'value' => $l];
+            foreach ($groups as $two) {
+                $toCoord = $two->location ? explode(',', $two->location) : [];
+                //$lines[] = ['coords' => [$fromCoord, $toCoord]];
+                $lines[] = [['coord' => $fromCoord], ['coord' => $toCoord]];
+            }
         }
-        $series['geo'][] = [
-            'name' => "联创中心",
-            'type' => "effectScatter",
-            'coordinateSystem' => "geo",
-            'symbolSize' => 15,
-            'label' => [
-                'normal' => [
-                    'formatter' => "{b}",
-                    'position' => "right",
-                    'show' => true
+        $planePath = 'path://M.6,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705';
+        //$planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';//飞机
+
+        $series['geo'] = [
+            [
+                'name' => '联动',
+                'type' => 'lines',
+                'zlevel' => 1,
+                'effect' => [
+                    'show' => true,
+                    'period' => 6,
+                    'trailLength' => 0.7,
+                    'color' => '#fff',
+                    'symbolSize' => 3
                 ],
-                'emphasis' => [
-                    'show' => true
-                ]
+                'lineStyle' => [
+                    'normal' => [
+                        'color' => '#ffeb7b',
+                        'width' => 0,
+                        'curveness' => 0.2
+                    ]
+                ],
+                'data' => $lines
             ],
-            'itemStyle' => [
-                'normal' => [
-                    'color' => "#ffeb7b"
-                ]
+            [
+                'name' => '联动',
+                'type' => 'lines',
+                'zlevel' => 2,
+                'effect' => [
+                    'show' => true,
+                    'period' => 6,
+                    'trailLength' => 0,
+                    'symbol' => $planePath,
+                    'symbolSize' => 15
+                ],
+                'label' => ['show' => false],
+                'lineStyle' => [
+                    'normal' => [
+                        'color' => '#ffeb7b',
+                        'width' => 1,
+                        'opacity' => 0.4,
+                        'curveness' => 0.2
+                    ]
+                ],
+                'data' => $lines
             ],
-            'data' => $location
+            [
+                'name' => "联创中心",
+                'type' => "effectScatter",
+                'coordinateSystem' => "geo",
+                'rippleEffect' => [
+                    'brushType' => 'stroke'
+                ],
+                'symbolSize' => 15,
+                'label' => [
+                    'normal' => [
+                        'formatter' => "{b}",
+                        'position' => "right",
+                        'show' => true
+                    ],
+                    'emphasis' => [
+                        'show' => true
+                    ]
+                ],
+                'itemStyle' => [
+                    'normal' => [
+                        'color' => "#ffeb7b"
+                    ]
+                ],
+                'data' => $location
+            ]
         ];
         // $corporations = Corporation::find()->select(['base_company_name', 'contact_location'])->all();
         // foreach ($corporations as $one) {

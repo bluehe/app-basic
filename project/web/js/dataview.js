@@ -472,7 +472,7 @@ function m() {
 function b() {
     var option = {
         tooltip: {
-            trigger: "item",
+            trigger: "none",
             formatter: function (c) {
                 if (typeof (c.value)[2] == "undefined") {
                     return c.name + " : " + c.value
