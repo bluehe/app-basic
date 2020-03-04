@@ -99,74 +99,34 @@ $this->title = '看板';
         $url_allocate = '<?= Url::toRoute(['data-view/allocate']) ?>';
         $url_meal = '<?= Url::toRoute(['data-view/meal']) ?>';
         $url_map = '<?= Url::toRoute(['data-view/map']) ?>';
-        //补贴数据
-        $.get($url_cloud, function(result) {
-            $('#cloud_num').html(result.data.cloud_num);
-            $('#cloud_amount').html(result.data.cloud_amount);
-        }, 'json');
 
         //企业健康度
         var echart1 = echarts.init(document.getElementById("echart1"));
         echart1.setOption(bar());
-        $.get($url_health, function(result) {
-            echart1.setOption({
-                series: result.data
-            });
-        }, 'json');
 
         //企业月活跃率
         var echart2 = echarts.init(document.getElementById("echart2"));
         echart2.setOption(bar());
-        $.get($url_activity, function(result) {
-            echart2.setOption({
-                series: result.data
-            });
-        }, 'json');
 
         //使用项目
         var echart3 = echarts.init(document.getElementById("echart3"));
         echart3.setOption(pie());
-        $.get($url_item, function(result) {
-            echart3.setOption({
-                series: result.data
-            });
-        }, 'json');
 
         //企业项目成员数
         var echart4 = echarts.init(document.getElementById("echart4"));
         echart4.setOption(bar());
-        $.get($url_user, function(result) {
-            echart4.setOption({
-                series: result.data
-            });
-        }, 'json');
 
         //企业补贴
         var echart5 = echarts.init(document.getElementById("echart5"));
         echart5.setOption(line());
-        $.get($url_allocate, function(result) {
-            echart5.setOption({
-                series: result.data
-            });
-        }, 'json');
 
         //下拨套餐
         var echart6 = echarts.init(document.getElementById("echart6"));
         echart6.setOption(pie());
-        $.get($url_meal, function(result) {
-            echart6.setOption({
-                series: result.data
-            });
-        }, 'json');
 
         //地图
         var map = echarts.init(document.getElementById("map1"));
         map.setOption(bmap());
-        $.get($url_map, function(result) {
-            map.setOption({
-                series: result.data
-            });
-        }, 'json');
 
         window.addEventListener("resize", function() {
             echart1.resize();
@@ -177,8 +137,56 @@ $this->title = '看板';
             echart6.resize();
             map.resize();
         })
+        data_flush();
+
+        function data_flush() {
+            //补贴数据
+            $.get($url_cloud, function(result) {
+                $('#cloud_num').html(result.data.cloud_num);
+                $('#cloud_amount').html(result.data.cloud_amount);
+            }, 'json');
+            $.get($url_health, function(result) {
+                echart1.setOption({
+                    series: result.data
+                });
+            }, 'json');
+            $.get($url_activity, function(result) {
+                echart2.setOption({
+                    series: result.data
+                });
+            }, 'json');
+            $.get($url_item, function(result) {
+                echart3.setOption({
+                    series: result.data
+                });
+            }, 'json');
+            $.get($url_user, function(result) {
+                echart4.setOption({
+                    series: result.data
+                });
+            }, 'json');
+            $.get($url_allocate, function(result) {
+                echart5.setOption({
+                    series: result.data
+                });
+            }, 'json');
+            $.get($url_meal, function(result) {
+                echart6.setOption({
+                    series: result.data
+                });
+            }, 'json');
+            $.get($url_map, function(result) {
+                map.setOption({
+                    series: result.data
+                });
+            }, 'json');
+        }
+
+        setInterval(data_flush, 1000 * 60);
 
     })
+
+
 
     <?php $this->endBlock() ?>
 </script>
