@@ -22,6 +22,6 @@ class KanBanAsset extends AssetBundle
         'js/kanban.js',
     ];
     public $depends = [
-        'project\assets\AppAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }
