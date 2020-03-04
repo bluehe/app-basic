@@ -245,6 +245,8 @@ class SiteController extends Controller
         $activity_week = HealthData::get_activity($month_start - 86400, $end, $group, $is_allocate, $total_get, 'activity_week');
         $activity_month = HealthData::get_activity($month_start - 86400, $end, $group, $is_allocate, $total_get, 'activity_month');
 
+        // var_dump($health_total);
+
         foreach ($activity_day as $one) {
             $activity[$one['statistics_time']]['day'] = $one['num'];
         }
@@ -564,6 +566,12 @@ class SiteController extends Controller
         // ];
 
         return $this->render('index', ['allocate_num' => $allocate_num, 'allocate_amount' => $allocate_amount, 'series' => $series,]);
+    }
+
+    public function actionKanban()
+    {
+        $this->layout = '//main-kanban';
+        return $this->render('kanban');
     }
 
     /**

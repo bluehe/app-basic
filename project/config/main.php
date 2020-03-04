@@ -27,8 +27,8 @@ return [
         'redactor' => [
             'class' => 'yii\redactor\RedactorModule',
             'uploadDir' => '@webroot/upload',
-            'uploadUrl' => '@web/upload',            
-            'imageAllowExtensions'=>['jpg','png','gif']
+            'uploadUrl' => '@web/upload',
+            'imageAllowExtensions' => ['jpg', 'png', 'gif']
         ],
     ],
     'aliases' => [
@@ -50,72 +50,72 @@ return [
                 'dmstr\web\AdminLteAsset' => [
                     'skin' => 'skin-blue',
                 ],
-                project\assets\AppAsset::className() =>[
+                project\assets\AppAsset::className() => [
                     'sourcePath' => '@project/web',
-                    'baseUrl'=>'@web',
-                    'css'=>[
-                        'a'=>'css/site.css',
-                    ]                   
-                ],
-                project\assets\CookieAsset::className() =>[
-                    'sourcePath' => '@project/web',
-                    'baseUrl'=>'@web',
-                    'js'=>[
-                        'a'=>'js/sendcookie.js',
-                    ]                   
-                ],
-                project\assets\ParticlesAsset::className() =>[
-                    'sourcePath' => '@project/web',
-                    'baseUrl'=>'@web',
-                    'js'=>[
-                        'a'=>'js/jquery.particleground.min.js',
-                    ]                   
-                ],
-                project\assets\SupersizedAsset::className() =>[
-                    'sourcePath' => '@project/web',
-                    'baseUrl'=>'@web',
-                    'css'=>[
-                        'a'=>'css/supersized.css',
-                    ],
-                    'js'=>[
-                        'a'=>'js/supersized.3.2.7.min.js',
-                    ]                   
-                ],
-                project\assets\ColorAsset::className() =>[
-                    'sourcePath' => '@project/web',
-                    'baseUrl'=>'@web',
-                    'css'=>[
-                        'a'=>'css/colpick.css',
-                    ],
-                    'js'=>[
-                        'a'=>'js/colpick.js',
-                    ]                   
-                ],
-                project\assets\CommonAsset::className() =>[
-                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
-                    'js'=>[
-                        'a'=>'jquery-slimscroll/jquery.slimscroll.min.js',
-                        'b'=>'fastclick/lib/fastclick.js',
-                    ]                   
-                ],
-                project\assets\Select2Asset::className() =>[
-                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
-                    'css'=>[
-                        'a'=>'select2/dist/css/select2.min.css',
-                    ],
-                    'js'=>[
-                        'a'=>'select2/dist/js/select2.full.min.js',
-                        
+                    'baseUrl' => '@web',
+                    'css' => [
+                        'a' => 'css/site.css',
                     ]
                 ],
-                project\assets\SparklineAsset::className() =>[
-                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
-                    'js'=>[
-                        'a'=>'jquery-sparkline/dist/jquery.sparkline.min.js',
-                        
+                project\assets\CookieAsset::className() => [
+                    'sourcePath' => '@project/web',
+                    'baseUrl' => '@web',
+                    'js' => [
+                        'a' => 'js/sendcookie.js',
                     ]
                 ],
-                
+                project\assets\ParticlesAsset::className() => [
+                    'sourcePath' => '@project/web',
+                    'baseUrl' => '@web',
+                    'js' => [
+                        'a' => 'js/jquery.particleground.min.js',
+                    ]
+                ],
+                project\assets\SupersizedAsset::className() => [
+                    'sourcePath' => '@project/web',
+                    'baseUrl' => '@web',
+                    'css' => [
+                        'a' => 'css/supersized.css',
+                    ],
+                    'js' => [
+                        'a' => 'js/supersized.3.2.7.min.js',
+                    ]
+                ],
+                project\assets\ColorAsset::className() => [
+                    'sourcePath' => '@project/web',
+                    'baseUrl' => '@web',
+                    'css' => [
+                        'a' => 'css/colpick.css',
+                    ],
+                    'js' => [
+                        'a' => 'js/colpick.js',
+                    ]
+                ],
+                project\assets\CommonAsset::className() => [
+                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
+                    'js' => [
+                        'a' => 'jquery-slimscroll/jquery.slimscroll.min.js',
+                        'b' => 'fastclick/lib/fastclick.js',
+                    ]
+                ],
+                project\assets\Select2Asset::className() => [
+                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
+                    'css' => [
+                        'a' => 'select2/dist/css/select2.min.css',
+                    ],
+                    'js' => [
+                        'a' => 'select2/dist/js/select2.full.min.js',
+
+                    ]
+                ],
+                project\assets\SparklineAsset::className() => [
+                    'sourcePath' => '@vendor/almasaeed2010/adminlte/bower_components',
+                    'js' => [
+                        'a' => 'jquery-sparkline/dist/jquery.sparkline.min.js',
+
+                    ]
+                ],
+
             ],
         ],
         'authManager' => [
@@ -133,7 +133,7 @@ return [
         'session' => [
             // this is the name of the session cookie used for login on the app
             'name' => 'docker-project',
-//            'timeout' => 1440,
+            //            'timeout' => 1440,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -142,33 +142,32 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
-                [
-                    'class' => yii\log\EmailTarget::className(),//当触发levels配置的错误级别时，发送到message to配置的邮箱中（请改成自己的邮箱）
-                    'levels' => ['error', 'warning'],
-                    /*'categories' => [//默认匹配所有分类。启用此项后，仅匹配数组中的分类信息会触发邮件提醒（白名单）
-                        'yii\db\*',
-                        'yii\web\HttpException:*',
-                    ],*/
-                    'except' => [//以下配置，除了匹配数组中的分类信息都会触发邮件提醒（黑名单）
-                        'yii\web\HttpException:404',
-                        'yii\web\HttpException:403',
-                        'yii\debug\Module::checkAccess',
-                    ],
-                    'message' => [
-                        'to' => ['179611207@qq.com'],//此处修改成自己接收错误的邮箱
-                        'subject' => '来自 APP 的新日志消息',
-                    ],
-                ],
+                // [
+                //     'class' => yii\log\EmailTarget::className(),//当触发levels配置的错误级别时，发送到message to配置的邮箱中（请改成自己的邮箱）
+                //     'levels' => ['error', 'warning'],
+                //     /*'categories' => [//默认匹配所有分类。启用此项后，仅匹配数组中的分类信息会触发邮件提醒（白名单）
+                //         'yii\db\*',
+                //         'yii\web\HttpException:*',
+                //     ],*/
+                //     'except' => [//以下配置，除了匹配数组中的分类信息都会触发邮件提醒（黑名单）
+                //         'yii\web\HttpException:404',
+                //         'yii\web\HttpException:403',
+                //         'yii\debug\Module::checkAccess',
+                //     ],
+                //     'message' => [
+                //         'to' => ['179611207@qq.com'],//此处修改成自己接收错误的邮箱
+                //         'subject' => '来自 APP 的新日志消息',
+                //     ],
+                // ],
             ],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,          
+            'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'rules' => [],
         ],
         'formatter' => [
             'dateFormat' => 'yyyy-MM-dd',
@@ -187,7 +186,8 @@ return [
             //这里是允许访问的action
             'common/*',
             'site/*',
-//            'api/*',
+            'data-view/*',
+            //            'api/*',
             'debug/*',
             'admin/*',
             'gii/*'

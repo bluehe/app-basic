@@ -30,7 +30,7 @@ use Yii;
  */
 class HealthData extends \yii\db\ActiveRecord
 {
-    
+
     const ALLOCATE_D = 0;
     const ALLOCATE_N = 1;
     const ALLOCATE_Y = 2;
@@ -47,10 +47,10 @@ class HealthData extends \yii\db\ActiveRecord
     const HEALTH_H3 = 3;
     const HEALTH_H4 = 4;
     const HEALTH_H5 = 5;
-    
+
     public $start_time;
     public $end_time;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -65,15 +65,15 @@ class HealthData extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['log_id', 'group_id', 'corporation_id','bd_id', 'statistics_time','activity_day',  'activity_week', 'activity_month', 'level', 'act_trend', 'health_trend','is_allocate','start_time','end_time'], 'integer'],
+            [['log_id', 'group_id', 'corporation_id', 'bd_id', 'statistics_time', 'activity_day',  'activity_week', 'activity_month', 'level', 'act_trend', 'health_trend', 'is_allocate', 'start_time', 'end_time'], 'integer'],
             [['corporation_id', 'statistics_time', 'level'], 'required'],
-            [['H','V', 'D', 'C', 'I', 'A', 'R'], 'number'],
-            [['corporation_id', 'statistics_time'], 'unique', 'targetAttribute' => ['corporation_id', 'statistics_time'],'message'=>'已经存在此项数据'], 
+            [['H', 'V', 'D', 'C', 'I', 'A', 'R'], 'number'],
+            [['corporation_id', 'statistics_time'], 'unique', 'targetAttribute' => ['corporation_id', 'statistics_time'], 'message' => '已经存在此项数据'],
             [['log_id'], 'exist', 'skipOnError' => true, 'targetClass' => HealthLog::className(), 'targetAttribute' => ['log_id' => 'id']],
             [['corporation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corporation::className(), 'targetAttribute' => ['corporation_id' => 'id']],
             [['bd_id'], 'exist', 'skipOnError' => true, 'targetClass' => CorporationBd::className(), 'targetAttribute' => ['bd_id' => 'id']],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
-            [['activity_day', 'activity_week', 'activity_month','level','act_trend', 'health_trend','is_allocate','H','V', 'D', 'C', 'I', 'A', 'R'],'default','value'=>0]
+            [['activity_day', 'activity_week', 'activity_month', 'level', 'act_trend', 'health_trend', 'is_allocate', 'H', 'V', 'D', 'C', 'I', 'A', 'R'], 'default', 'value' => 0]
         ];
     }
 
@@ -93,7 +93,7 @@ class HealthData extends \yii\db\ActiveRecord
             'activity_week' => '周活',
             'activity_month' => '月活',
             'level' => '健康度',
-            'H' => 'H',          
+            'H' => 'H',
             'C' => 'C',
             'I' => 'I',
             'A' => 'A',
@@ -105,8 +105,8 @@ class HealthData extends \yii\db\ActiveRecord
             'is_allocate' => '是否下拨',
         ];
     }
-    
-     public static $List = [
+
+    public static $List = [
         'is_allocate' => [
             self::ALLOCATE_Y => "是",
             self::ALLOCATE_N => "否"
@@ -136,15 +136,15 @@ class HealthData extends \yii\db\ActiveRecord
             self::HEALTH_H4 => "#90ee7e",
             self::HEALTH_H5 => "#00a65a"
         ],
-        'column'=>[
+        'column' => [
             'is_allocate' => '是否下拨',
             'activity_month' => '月活',
             'activity_week' => '周活',
             'activity_day' => '日活',
             'act_trend' => '活跃趋势',
-            'level' => '健康度',           
+            'level' => '健康度',
             'health_trend' => '健康度趋势',
-            'H' => 'H',          
+            'H' => 'H',
             'C' => 'C',
             'I' => 'I',
             'A' => 'A',
@@ -153,33 +153,39 @@ class HealthData extends \yii\db\ActiveRecord
             'D' => 'D',
         ]
     ];
-    
-    public function getAllocate() {
+
+    public function getAllocate()
+    {
         $is_allocate = isset(self::$List['is_allocate'][$this->is_allocate]) ? self::$List['is_allocate'][$this->is_allocate] : null;
         return $is_allocate;
     }
-    
-     public function getActDay() {
+
+    public function getActDay()
+    {
         $act = isset(self::$List['is_act'][$this->activity_day]) ? self::$List['is_act'][$this->activity_day] : null;
         return $act;
     }
-    
-    public function getActWeek() {
+
+    public function getActWeek()
+    {
         $act = isset(self::$List['is_act'][$this->activity_week]) ? self::$List['is_act'][$this->activity_week] : null;
         return $act;
     }
-    
-     public function getActMonth() {
+
+    public function getActMonth()
+    {
         $act = isset(self::$List['is_act'][$this->activity_month]) ? self::$List['is_act'][$this->activity_month] : null;
         return $act;
     }
-    
-    public function getHealth() {
+
+    public function getHealth()
+    {
         $health = isset(self::$List['health'][$this->level]) ? self::$List['health'][$this->level] : null;
         return $health;
     }
-    
-    public function getHealthColor() {
+
+    public function getHealthColor()
+    {
         $health_color = isset(self::$List['health_color'][$this->health]) ? self::$List['health_color'][$this->health] : null;
         return $health_color;
     }
@@ -207,130 +213,146 @@ class HealthData extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Group::className(), ['id' => 'group_id']);
     }
-    
+
     public function getBd()
     {
         return $this->hasOne(User::className(), ['id' => 'bd_id']);
     }
-    
+
     //健康度趋势
-    public static function get_health_line($corporation_id,$start, $end) {
-        $data=static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->orderBy(['statistics_time'=>SORT_ASC])->select(['level'])->column();
+    public static function get_health_line($corporation_id, $start, $end)
+    {
+        $data = static::find()->where(['corporation_id' => $corporation_id])->andFilterWhere(['and', ['>=', 'statistics_time', $start], ['<=', 'statistics_time', $end]])->orderBy(['statistics_time' => SORT_ASC])->select(['level'])->column();
         return implode(',', $data);
     }
-    
+
     //活跃度趋势
-    public static function get_act_line($corporation_id,$start, $end) {
-        $data=static::find()->where(['corporation_id'=>$corporation_id])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->orderBy(['statistics_time'=>SORT_ASC])->select(["(CASE WHEN activity_week=2 THEN 1 WHEN activity_week=1 THEN -1 ELSE 0 END)"])->column();
+    public static function get_act_line($corporation_id, $start, $end)
+    {
+        $data = static::find()->where(['corporation_id' => $corporation_id])->andFilterWhere(['and', ['>=', 'statistics_time', $start], ['<=', 'statistics_time', $end]])->orderBy(['statistics_time' => SORT_ASC])->select(["(CASE WHEN activity_week=2 THEN 1 WHEN activity_week=1 THEN -1 ELSE 0 END)"])->column();
         return implode(',', $data);
     }
-    
-    public static function get_pre_time($statistics_time='',$group_id=null,$corporation_id='') {   
-       return static::find()->andFilterWhere(['<','statistics_time',$statistics_time])->andFilterWhere(['corporation_id'=>$corporation_id,'group_id'=>$group_id])->select(['statistics_time'])->orderBy(['statistics_time'=>SORT_DESC])->distinct()->scalar();
 
+    public static function get_pre_time($statistics_time = '', $group_id = null, $corporation_id = '')
+    {
+        return static::find()->andFilterWhere(['<', 'statistics_time', $statistics_time])->andFilterWhere(['corporation_id' => $corporation_id, 'group_id' => $group_id])->select(['statistics_time'])->orderBy(['statistics_time' => SORT_DESC])->distinct()->scalar();
     }
-    
-    public static function get_next_time($statistics_time='',$group_id=null,$corporation_id='') {   
-       return static::find()->andFilterWhere(['>','statistics_time',$statistics_time])->andFilterWhere(['corporation_id'=>$corporation_id,'group_id'=>$group_id])->select(['statistics_time'])->orderBy(['statistics_time'=>SORT_ASC])->distinct()->scalar();
 
+    public static function get_next_time($statistics_time = '', $group_id = null, $corporation_id = '')
+    {
+        return static::find()->andFilterWhere(['>', 'statistics_time', $statistics_time])->andFilterWhere(['corporation_id' => $corporation_id, 'group_id' => $group_id])->select(['statistics_time'])->orderBy(['statistics_time' => SORT_ASC])->distinct()->scalar();
     }
-    
+
     //设定趋势
-    public static function set_activity_trend() {
-        
-        $datas = static::find()->where(['act_trend'=>self::TREND_WA])->all();
-        foreach($datas as $data){
-            $model_old= static::find()->where(['corporation_id'=>$data->corporation_id])->andWhere(['<','statistics_time',$data->statistics_time])->orderBy(['statistics_time'=>SORT_DESC])->one();
-            $old=$model_old==null?self::ACT_N:$model_old->activity_week;
-            $v=$data->activity_week-$old;
-            switch ($v){
-                case 0:$data->act_trend=self::TREND_UC;break;
-                case 1:$data->act_trend=self::TREND_IN;break;
-                case -1:$data->act_trend=self::TREND_DE;break;
-                default:$data->act_trend=self::TREND_WA;
+    public static function set_activity_trend()
+    {
+
+        $datas = static::find()->where(['act_trend' => self::TREND_WA])->all();
+        foreach ($datas as $data) {
+            $model_old = static::find()->where(['corporation_id' => $data->corporation_id])->andWhere(['<', 'statistics_time', $data->statistics_time])->orderBy(['statistics_time' => SORT_DESC])->one();
+            $old = $model_old == null ? self::ACT_N : $model_old->activity_week;
+            $v = $data->activity_week - $old;
+            switch ($v) {
+                case 0:
+                    $data->act_trend = self::TREND_UC;
+                    break;
+                case 1:
+                    $data->act_trend = self::TREND_IN;
+                    break;
+                case -1:
+                    $data->act_trend = self::TREND_DE;
+                    break;
+                default:
+                    $data->act_trend = self::TREND_WA;
             }
-            static::updateAll(['act_trend'=>$data->act_trend], ['id'=>$data->id]);
-           // $data->save();
-            
+            static::updateAll(['act_trend' => $data->act_trend], ['id' => $data->id]);
+            // $data->save();
+
         }
         return true;
     }
-    
+
     //设定趋势
-    public static function set_health_trend() {
-        
-        $datas = static::find()->where(['health_trend'=>self::TREND_WA])->all();
-        foreach($datas as $data){
-            $model_old= static::find()->where(['corporation_id'=>$data->corporation_id])->andWhere(['<','statistics_time',$data->statistics_time])->orderBy(['statistics_time'=>SORT_DESC])->one();
-            $old=$model_old==null?self::ACT_N:$model_old->level;
-            $v=$data->level-$old;
-            if($v==0){
-                $data->health_trend=self::TREND_UC;
-            }elseif($v>0){
-                $data->health_trend=self::TREND_IN;
-            }elseif($v<0){
-                $data->health_trend=self::TREND_DE;
-            }else{
-                $data->health_trend=self::TREND_WA;
+    public static function set_health_trend()
+    {
+
+        $datas = static::find()->where(['health_trend' => self::TREND_WA])->all();
+        foreach ($datas as $data) {
+            $model_old = static::find()->where(['corporation_id' => $data->corporation_id])->andWhere(['<', 'statistics_time', $data->statistics_time])->orderBy(['statistics_time' => SORT_DESC])->one();
+            $old = $model_old == null ? self::ACT_N : $model_old->level;
+            $v = $data->level - $old;
+            if ($v == 0) {
+                $data->health_trend = self::TREND_UC;
+            } elseif ($v > 0) {
+                $data->health_trend = self::TREND_IN;
+            } elseif ($v < 0) {
+                $data->health_trend = self::TREND_DE;
+            } else {
+                $data->health_trend = self::TREND_WA;
             }
-            static::updateAll(['health_trend'=>$data->health_trend], ['id'=>$data->id]);
-           // $data->save();
-            
+            static::updateAll(['health_trend' => $data->health_trend], ['id' => $data->id]);
+            // $data->save();
+
         }
         return true;
     }
-    
+
     //设定下拨
-    public static function set_allocate() {
-        $ids=static::find()->alias('a')->andWhere(['is_allocate'=> self::ALLOCATE_D])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.statistics_time>=b.start_time AND a.statistics_time<=b.end_time')])->select(['id'])->column();
-          
-        static::updateAll(['is_allocate'=> self::ALLOCATE_N], ['id'=>$ids]);
-        static::updateAll(['is_allocate'=> self::ALLOCATE_Y],['is_allocate'=> self::ALLOCATE_D]);
+    public static function set_allocate()
+    {
+        $ids = static::find()->alias('a')->andWhere(['is_allocate' => self::ALLOCATE_D])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.statistics_time>=b.start_time AND a.statistics_time<=b.end_time')])->select(['id'])->column();
+        static::updateAll(['is_allocate' => self::ALLOCATE_N], ['id' => $ids]);
+        static::updateAll(['is_allocate' => self::ALLOCATE_Y], ['is_allocate' => self::ALLOCATE_D]);
         return true;
     }
-    
-    public static function get_health($start, $end,$group_id=null,$allocate=null,$total=1) {
-        $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['is_allocate'=>$allocate])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->orderBy(['statistics_time'=>SORT_ASC,'level'=>SORT_ASC])->select(['statistics_time','num'=>'count(level)','health'=>'MAX(level)','bd_id'=>'MAX(bd_id)'])->groupBy(['statistics_time','level']);
-        if(!$total){
+
+    public static function get_health($start, $end, $group_id = null, $allocate = null, $total = 1)
+    {
+        $query = static::find()->andWhere(['group_id' => $group_id])->andFilterWhere(['is_allocate' => $allocate])->andFilterWhere(['and', ['>=', 'statistics_time', $start], ['<=', 'statistics_time', $end]])->orderBy(['statistics_time' => SORT_ASC, 'level' => SORT_ASC])->select(['statistics_time', 'num' => 'count(level)', 'health' => 'MAX(level)', 'bd_id' => 'MAX(bd_id)'])->groupBy(['statistics_time', 'level']);
+        if (!$total) {
             $query->addGroupBy(['bd_id']);
         }
         return $query->asArray()->all();
     }
-    
-    public static function get_activity($start, $end,$group_id=null,$allocate=null,$total=1,$type='activity_week') {
-        $query = static::find()->andWhere(['group_id'=>$group_id])->andFilterWhere(['is_allocate'=>$allocate,$type=>self::ACT_Y])->andFilterWhere(['and',['>=', 'statistics_time', $start],['<=', 'statistics_time', $end]])->orderBy(['statistics_time'=>SORT_ASC])->select(['statistics_time','num'=>'count(distinct corporation_id)','bd_id'=>'MAX(bd_id)'])->groupBy(['statistics_time']);
-        if(!$total){
+
+    public static function get_activity($start, $end, $group_id = null, $allocate = null, $total = 1, $type = 'activity_week')
+    {
+        $query = static::find()->andWhere(['group_id' => $group_id])->andFilterWhere(['is_allocate' => $allocate])->andFilterWhere(['and', ['>=', 'statistics_time', $start], ['<=', 'statistics_time', $end]])->orderBy(['statistics_time' => SORT_ASC])->select(['statistics_time', 'num' => 'count(distinct corporation_id)', 'bd_id' => 'MAX(bd_id)'])->groupBy(['statistics_time']);;
+        if ($type) {
+            $query->andFilterWhere([$type => self::ACT_Y]);
+        }
+        if (!$total) {
             $query->addGroupBy(['bd_id']);
         }
         return $query->asArray()->all();
     }
-    
-    
+
+
     //用户数
-    public static function get_user_total($start, $end,$group_id=null,$allocate=null,$total=1,$annual='') {
-              
-        $query = static::find()->alias('h')->andWhere(['h.group_id'=>$group_id])->andFilterWhere(['and',['>=', 'h.statistics_time', $start],['<=', 'h.statistics_time', $end]]);
-        if($annual=='all'){         
-            
-        }elseif($annual){
-            $corporation_id= CorporationMeal::find()->where(['annual'=>$annual])->select(['corporation_id'])->distinct()->column();
-            $query->andFilterWhere(['h.corporation_id'=>$corporation_id]);
+    public static function get_user_total($start, $end, $group_id = null, $allocate = null, $total = 1, $annual = '')
+    {
+
+        $query = static::find()->alias('h')->andWhere(['h.group_id' => $group_id])->andFilterWhere(['and', ['>=', 'h.statistics_time', $start], ['<=', 'h.statistics_time', $end]]);
+        if ($annual == 'all') {
+        } elseif ($annual) {
+            $corporation_id = CorporationMeal::find()->where(['annual' => $annual])->select(['corporation_id'])->distinct()->column();
+            $query->andFilterWhere(['h.corporation_id' => $corporation_id]);
         }
-        $query->andFilterWhere(['h.is_allocate'=>$allocate]);
-//        if($allocate){
-//            $query->leftJoin(['m'=>CorporationMeal::tableName()],'m.corporation_id=h.corporation_id AND h.statistics_time>=m.start_time AND h.statistics_time<=m.end_time')->andWhere(['>','m.devcloud_count',0]);  
-//        }else{
-            $ids= static::find()->alias('a')->andWhere(['a.group_id'=>$group_id])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.statistics_time>=b.start_time AND a.statistics_time<=b.end_time')])->select(['id'])->column();
-            $query->leftJoin(['m'=>CorporationMeal::tableName()],['and','m.corporation_id=h.corporation_id',['or',['and','h.statistics_time>=m.start_time','h.statistics_time<=m.end_time',['not in','h.id',$ids]],['and',['in','h.id',$ids],['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=m.corporation_id AND b.end_time>m.end_time')]]]]);
-//        }
-        $query->orderBy(['h.statistics_time'=>SORT_ASC])->groupBy(['h.statistics_time']);
-        $query->select(['statistics_time','user_num'=>'SUM(R*devcloud_count)','total_num'=>'SUM(devcloud_count)']);
-        
-        if(!$total){
-//            $query->leftJoin(['bd'=> CorporationBd::tableName()],['and','bd.corporation_id=h.corporation_id',['not exists', CorporationBd::find()->alias('bd2')->where('bd2.corporation_id=bd.corporation_id AND bd2.start_time>bd.start_time AND h.statistics_time>=bd.start_time')]])->addGroupBy(['bd_id'])->addSelect(['bd_id']);
+        $query->andFilterWhere(['h.is_allocate' => $allocate]);
+        //        if($allocate){
+        //            $query->leftJoin(['m'=>CorporationMeal::tableName()],'m.corporation_id=h.corporation_id AND h.statistics_time>=m.start_time AND h.statistics_time<=m.end_time')->andWhere(['>','m.devcloud_count',0]);  
+        //        }else{
+        $ids = static::find()->alias('a')->andWhere(['a.group_id' => $group_id])->andWhere(['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=a.corporation_id AND a.statistics_time>=b.start_time AND a.statistics_time<=b.end_time')])->select(['id'])->column();
+        $query->leftJoin(['m' => CorporationMeal::tableName()], ['and', 'm.corporation_id=h.corporation_id', ['or', ['and', 'h.statistics_time>=m.start_time', 'h.statistics_time<=m.end_time', ['not in', 'h.id', $ids]], ['and', ['in', 'h.id', $ids], ['not exists', CorporationMeal::find()->alias('b')->where('b.corporation_id=m.corporation_id AND b.end_time>m.end_time')]]]]);
+        //        }
+        $query->leftJoin(['d' => ActivityData::tableName()], ['and', 'd.corporation_id=h.corporation_id', 'd.statistics_time=h.statistics_time']);
+        $query->orderBy(['h.statistics_time' => SORT_ASC])->groupBy(['h.statistics_time']);
+        $query->select(['statistics_time' => 'h.statistics_time', 'user_num' => 'SUM(CASE WHEN d.projectman_membercount>0 THEN d.projectman_membercount ELSE R*devcloud_count END)', 'total_num' => 'SUM(devcloud_count)']);
+
+        if (!$total) {
+            //            $query->leftJoin(['bd'=> CorporationBd::tableName()],['and','bd.corporation_id=h.corporation_id',['not exists', CorporationBd::find()->alias('bd2')->where('bd2.corporation_id=bd.corporation_id AND bd2.start_time>bd.start_time AND h.statistics_time>=bd.start_time')]])->addGroupBy(['bd_id'])->addSelect(['bd_id']);
             $query->addGroupBy(['bd_id'])->addSelect(['bd_id']);
         }
         return $query->asArray()->all();
     }
-    
 }
