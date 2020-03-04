@@ -85,10 +85,6 @@ $this->title = '看板';
 <script>
     <?php $this->beginBlock('dataview') ?>
 
-
-
-
-
     $(function() {
 
         $url_cloud = '<?= Url::toRoute(['data-view/cloud']) ?>';
