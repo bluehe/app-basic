@@ -3,14 +3,15 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Url;
+use project\components\CommonHelper;
 
 $this->title = '看板';
 ?>
 <div class="dataview" id="dataview">
 
-    <div class="canvas" style="opacity: .2"><iframe frameborder="0" src="/js/index.html" style="width: 100%; height: 100%"></iframe></div>
+    <div class="canvas" style="opacity: .2"><iframe frameborder="0" src="<?= CommonHelper::getImage('/js/index.html') ?>" style="width: 100%; height: 100%"></iframe></div>
     <div class="loading" style="display: none;">
-        <div class="loadbox"><img src="/image/dataview/loading.gif">页面加载中...</div>
+        <div class="loadbox"><img src="<?= CommonHelper::getImage('/image/dataview/loading.gif') ?>">页面加载中...</div>
     </div>
     <div class="head">
         <h1>中软国际-华为云创新中心运营看板</h1>
@@ -54,9 +55,9 @@ $this->title = '看板';
                     </div>
                 </div>
                 <div class="map">
-                    <div class="map1"><img src="/image/dataview/lbx.png"></div>
-                    <div class="map2"><img src="/image/dataview/jt.png"></div>
-                    <div class="map3"><img src="/image/dataview/map.png"></div>
+                    <div class="map1"><img src="<?= CommonHelper::getImage('/image/dataview/lbx.png') ?>"></div>
+                    <div class="map2"><img src="<?= CommonHelper::getImage('/image/dataview/jt.png') ?>"></div>
+                    <div class="map3"><img src="<?= CommonHelper::getImage('/image/dataview/map.png') ?>"></div>
                     <div class="map4" id="map1"></div>
                 </div>
             </li>
