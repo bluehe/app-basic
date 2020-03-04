@@ -3,18 +3,19 @@
 /* @var $this yii\web\View */
 
 use project\assets\AppAsset;
+use project\components\CommonHelper;
 
 project\assets\DataViewAsset::register($this);
 
 $this->title = '首页';
 ?>
-<div class="dataview" id="dataview">
+<div class="dataview" id="dataview" style="background:#000d4a url(<?= CommonHelper::getImage('/image/dataview/bg.jpg') ?>)  center top">
 
     <div class="canvas" style="opacity: .2"><iframe frameborder="0" src="/js/index.html" style="width: 100%; height: 100%"></iframe></div>
     <div class="loading" style="display: none;">
-        <div class="loadbox"><img src="/image/dataview/loading.gif">页面加载中...</div>
+        <div class="loadbox"><img src="<?= CommonHelper::getImage('/image/dataview/loading.gif') ?>">页面加载中...</div>
     </div>
-    <div class="head">
+    <div class="head" style="background: url(<?= CommonHelper::getImage('/image/dataview/head_bg.png') ?>) no-repeat center center;">
         <h1>中软国际-华为云创新中心运营看板</h1>
         <div class="weather"><span id="showTime"></span></div>
         <div class="fullscreen" id="fullScreen"><span class="glyphicon glyphicon-fullscreen" title="全屏"></span></div>
@@ -56,9 +57,9 @@ $this->title = '首页';
                     </div>
                 </div>
                 <div class="map">
-                    <div class="map1"><img src="/image/dataview/lbx.png"></div>
-                    <div class="map2"><img src="/image/dataview/jt.png"></div>
-                    <div class="map3"><img src="/image/dataview/map.png"></div>
+                    <div class="map1"><img src="<?= CommonHelper::getImage('/image/dataview/lbx.png') ?>"></div>
+                    <div class="map2"><img src="<?= CommonHelper::getImage('/image/dataview/jt.png') ?>"></div>
+                    <div class="map3"><img src="<?= CommonHelper::getImage('/image/dataview/map.png') ?>"></div>
                     <div class="map4" id="map_1"></div>
                 </div>
             </li>

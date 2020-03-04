@@ -19,7 +19,7 @@
 }
 
 .dataview {
-    background: #000d4a url(../image/dataview/bg.jpg) center top;
+    /* background: #000d4a url(../image/dataview/bg.jpg) center top; */
     background-size: cover;
     color: #666;
     font-size: .1rem;
@@ -159,7 +159,7 @@ h6 {
 
 .head {
     height: 1.05rem;
-    background: url(../image/dataview/head_bg.png) no-repeat center center;
+    /* background: url(../image/dataview/head_bg.png) no-repeat center center; */
     background-size: 100% 100%;
     position: relative;
     z-index: 100;

@@ -7,13 +7,13 @@ use project\components\CommonHelper;
 
 $this->title = '看板';
 ?>
-<div class="dataview" id="dataview">
+<div class="dataview" id="dataview" style="background:#000d4a url(<?= CommonHelper::getImage('/image/dataview/bg.jpg') ?>)  center top">
 
     <div class="canvas" style="opacity: .2"><iframe frameborder="0" src="<?= CommonHelper::getImage('/js/index.html') ?>" style="width: 100%; height: 100%"></iframe></div>
     <div class="loading" style="display: none;">
         <div class="loadbox"><img src="<?= CommonHelper::getImage('/image/dataview/loading.gif') ?>">页面加载中...</div>
     </div>
-    <div class="head">
+    <div class="head" style="background: url(<?= CommonHelper::getImage('/image/dataview/head_bg.png') ?>) no-repeat center center;">
         <h1>中软国际-华为云创新中心运营看板</h1>
         <div class="weather"><span id="showTime"></span></div>
         <div class="fullscreen" id="fullScreen"><span class="glyphicon glyphicon-fullscreen" title="全屏"></span></div>
