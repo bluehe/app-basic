@@ -167,7 +167,9 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [],
+            'rules' => [
+                'http://kb.wzgxpt.com' => 'site/kanban'
+            ],
         ],
         'formatter' => [
             'dateFormat' => 'yyyy-MM-dd',
