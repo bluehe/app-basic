@@ -83,6 +83,12 @@ $this->title = '看板';
     </div>
     <div class="back"></div>
 </div>
+<?php
+$this->registerJsFile(CommonHelper::getImage('/js/jquery.js'), ['depends' => ['project\assets\KanBanAsset']]);
+$this->registerJsFile(CommonHelper::getImage('/js/echarts.min.js'), ['depends' => ['project\assets\KanBanAsset']]);
+$this->registerJsFile(CommonHelper::getImage('/js/china.js'), ['depends' => ['project\assets\KanBanAsset']]);
+$this->registerJsFile(CommonHelper::getImage('/js/kanban.js'), ['depends' => ['project\assets\KanBanAsset']]);
+?>
 <script>
     <?php $this->beginBlock('dataview') ?>
 

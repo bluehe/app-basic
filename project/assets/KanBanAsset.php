@@ -15,12 +15,7 @@ class KanBanAsset extends AssetBundle
     public $css = [
         'css/dataview_common.css', //css
     ];
-    public $js = [
-        'js/jquery.js',
-        'js/echarts.min.js',
-        'js/china.js',
-        'js/kanban.js',
-    ];
+    public $js = [];
     public $depends = [
         'yii\bootstrap\BootstrapAsset',
     ];

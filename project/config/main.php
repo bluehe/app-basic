@@ -118,12 +118,6 @@ return [
                     'baseUrl' => '@web',
                     'css' => [
                         'a' => 'css/dataview_common.css',
-                    ],
-                    'js' => [
-                        'a' => 'js/jquery.js',
-                        'b' => 'js/echarts.min.js',
-                        'c' => 'js/china.js',
-                        'd' => 'js/kanban.js',
                     ]
                 ],
             ],
