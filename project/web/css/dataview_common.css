@@ -213,7 +213,7 @@ h6 {
     cursor: pointer;
 }
 
-.fullscreen:hover span {
+.head:hover .fullscreen span {
     opacity: 100;
 }
 
