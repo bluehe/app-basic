@@ -16,8 +16,8 @@ $this->title = '首页';
         <div class="loadbox"><img src="<?= CommonHelper::getImage('/image/dataview/loading.gif') ?>">页面加载中...</div>
     </div>
     <div class="head" style="background: url(<?= CommonHelper::getImage('/image/dataview/head_bg.png') ?>) no-repeat center center;">
-        <h1>中软国际-华为云创新中心运营看板</h1>
-        <div class="weather"><span id="showTime"></span></div>
+        <h1>中软国际-华为云创新中心运营看板</h1><span id="showTime"></span>
+        <div class="weather"></div>
         <div class="fullscreen" id="fullScreen"><span class="glyphicon glyphicon-fullscreen" title="全屏"></span></div>
 
     </div>
