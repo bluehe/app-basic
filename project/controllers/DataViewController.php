@@ -424,7 +424,7 @@ class DataViewController extends Controller
                     'barBorderRadius' => 5,
                 ]
             ],
-            'label' => ['show' => true, 'color' => '#fff', 'position' => 'top']
+            'label' => ['show' => true, 'color' => '#fff']
         ];
         $series['amount'][] = [
             'type' => 'line', 'name' => '当期下拨额', 'data' => $data_amount, 'yAxisIndex' => 1,
