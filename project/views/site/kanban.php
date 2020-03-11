@@ -61,8 +61,8 @@ $this->title = '看板';
                     <div class="map4" id="map1"></div>
                 </div>
                 <div class="boxall" style="height:3.2rem">
-                    <div class="alltitle">企业下拨</div>
-                    <div class="allnav" id="echart7"></div>
+                    <div class="alltitle">企业补贴</div>
+                    <div class="allnav" id="echart5"></div>
                     <div class="boxfoot"></div>
                 </div>
             </li>
@@ -73,8 +73,8 @@ $this->title = '看板';
                     <div class="boxfoot"></div>
                 </div>
                 <div class="boxall" style="height:3.2rem">
-                    <div class="alltitle">企业补贴</div>
-                    <div class="allnav" id="echart5"></div>
+                    <div class="alltitle">企业下拨</div>
+                    <div class="allnav" id="echart7"></div>
                     <div class="boxfoot"></div>
                 </div>
                 <div class="boxall" style="height: 3.2rem">

@@ -198,16 +198,16 @@ function bar2() {
                 type: "shadow"
             }
         },
-        legend: {
-            top: "0%",
-            textStyle: {
-                color: "rgba(255,255,255,.5)",
-                fontSize: "12",
-            }
-        },
+        // legend: {
+        //     top: "0%",
+        //     textStyle: {
+        //         color: "rgba(255,255,255,.5)",
+        //         fontSize: "12",
+        //     }
+        // },
         grid: {
             left: "10",
-            top: "40",
+            top: "10",
             right: "10",
             bottom: "0",
             containLabel: true
