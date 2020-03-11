@@ -69,12 +69,12 @@ $this->title = '首页';
                     <div class="allnav" id="echart3"></div>
                     <div class="boxfoot"></div>
                 </div>
-                <div class="boxall" style="height:3.4rem">
+                <div class="boxall" style="height:3.2rem">
                     <div class="alltitle">企业补贴</div>
                     <div class="allnav" id="echart4"></div>
                     <div class="boxfoot"></div>
                 </div>
-                <div class="boxall" style="height: 3rem">
+                <div class="boxall" style="height: 3.2rem">
                     <div class="alltitle">下拨套餐</div>
                     <div class="allnav" id="echart5"></div>
                     <div class="boxfoot"></div>

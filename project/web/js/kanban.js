@@ -266,14 +266,12 @@ function bar2() {
             type: "value",
             opposite: true,
             min: 0,
-            max: 100,
             axisLabel: {
                 show: true,
                 textStyle: {
                     color: "rgba(255,255,255,.6)",
                     fontSize: "12",
                 },
-                formatter: '{value} %',
             },
             axisTick: {
                 show: false,

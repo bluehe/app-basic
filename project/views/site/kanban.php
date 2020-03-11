@@ -60,6 +60,11 @@ $this->title = '看板';
                     <div class="map3"><img src="<?= CommonHelper::getImage('/image/dataview/map.png') ?>"></div>
                     <div class="map4" id="map1"></div>
                 </div>
+                <div class="boxall" style="height:3.2rem">
+                    <div class="alltitle">企业下拨</div>
+                    <div class="allnav" id="echart7"></div>
+                    <div class="boxfoot"></div>
+                </div>
             </li>
             <li>
                 <div class="boxall" style="height: 3.2rem">
@@ -67,12 +72,12 @@ $this->title = '看板';
                     <div class="allnav" id="echart4"></div>
                     <div class="boxfoot"></div>
                 </div>
-                <div class="boxall" style="height:3.4rem">
-                    <div class="alltitle">企业补贴统计</div>
+                <div class="boxall" style="height:3.2rem">
+                    <div class="alltitle">企业补贴</div>
                     <div class="allnav" id="echart5"></div>
                     <div class="boxfoot"></div>
                 </div>
-                <div class="boxall" style="height: 3rem">
+                <div class="boxall" style="height: 3.2rem">
                     <div class="alltitle">下拨套餐占比</div>
                     <div class="allnav" id="echart6"></div>
                     <div class="boxfoot"></div>
@@ -84,6 +89,7 @@ $this->title = '看板';
     <div class="back"></div>
 </div>
 <?php
+$this->registerCssFile(CommonHelper::getImage('/css/kanban.css'), ['depends' => ['project\assets\KanBanAsset']]);
 $this->registerJsFile(CommonHelper::getImage('/js/jquery.js'), ['depends' => ['project\assets\KanBanAsset']]);
 $this->registerJsFile(CommonHelper::getImage('/js/echarts.min.js'), ['depends' => ['project\assets\KanBanAsset']]);
 $this->registerJsFile(CommonHelper::getImage('/js/china.js'), ['depends' => ['project\assets\KanBanAsset']]);
@@ -99,8 +105,9 @@ $this->registerJsFile(CommonHelper::getImage('/js/kanban.js'), ['depends' => ['p
         $url_activity = '<?= Url::toRoute(['data-view/activity']) ?>';
         $url_item = '<?= Url::toRoute(['data-view/item']) ?>';
         $url_user = '<?= Url::toRoute(['data-view/user']) ?>';
-        $url_allocate = '<?= Url::toRoute(['data-view/allocate']) ?>';
+        $url_subsidy = '<?= Url::toRoute(['data-view/subsidy']) ?>';
         $url_meal = '<?= Url::toRoute(['data-view/meal']) ?>';
+        $url_allocate = '<?= Url::toRoute(['data-view/allocate']) ?>';
         $url_map = '<?= Url::toRoute(['data-view/map']) ?>';
 
         //企业健康度
@@ -127,6 +134,10 @@ $this->registerJsFile(CommonHelper::getImage('/js/kanban.js'), ['depends' => ['p
         var echart6 = echarts.init(document.getElementById("echart6"));
         echart6.setOption(pie());
 
+        //企业下拨
+        var echart7 = echarts.init(document.getElementById("echart7"));
+        echart7.setOption(bar2());
+
         //地图
         var map = echarts.init(document.getElementById("map1"));
         map.setOption(bmap());
@@ -138,6 +149,7 @@ $this->registerJsFile(CommonHelper::getImage('/js/kanban.js'), ['depends' => ['p
             echart4.resize();
             echart5.resize();
             echart6.resize();
+            echart7.resize();
             map.resize();
         })
         data_flush();
@@ -168,13 +180,32 @@ $this->registerJsFile(CommonHelper::getImage('/js/kanban.js'), ['depends' => ['p
                     series: result.data
                 });
             }, 'json');
-            $.get($url_allocate, function(result) {
+            $.get($url_subsidy, function(result) {
                 echart5.setOption({
                     series: result.data
                 });
             }, 'json');
             $.get($url_meal, function(result) {
                 echart6.setOption({
+                    series: result.data
+                });
+            }, 'json');
+            $.get($url_allocate, function(result) {
+                result.data[0].label.formatter = function(params) {
+                    if (params.value[1] > 0) {
+                        return params.value[1];
+                    } else {
+                        return ''
+                    }
+                };
+                result.data[1].label.formatter = function(params) {
+                    if (params.value[1] > 0) {
+                        return params.value[1];
+                    } else {
+                        return ''
+                    }
+                };
+                echart7.setOption({
                     series: result.data
                 });
             }, 'json');

@@ -10,6 +10,7 @@ use project\models\Corporation;
 use project\models\CloudSubsidy;
 use project\models\ActivityChange;
 use project\models\CorporationMeal;
+use yii\web\JsExpression;
 
 
 class DataViewController extends Controller
@@ -265,7 +266,7 @@ class DataViewController extends Controller
     }
 
     //获取企业补贴
-    public function actionAllocate()
+    public function actionSubsidy()
     {
         $info = ['code' => 200, 'message' => '', 'data' => []];
 
@@ -375,6 +376,68 @@ class DataViewController extends Controller
             'yAxisIndex' => 1,
             'data' => $data_amount
         ];
+        $info['data'] = $series['amount'];
+        return json_encode($info);
+    }
+
+    //获取企业下拨
+    public function actionAllocate()
+    {
+        $info = ['code' => 200, 'message' => '', 'data' => []];
+
+        $end = strtotime('today');
+        $start = strtotime('-1 year', $end);
+        $group = 1;
+        $annual = '';
+        $sum = 3;
+
+        //下拨
+        $series['amount'] = [];
+
+        $allocate_total = CorporationMeal::get_amount_total($start, $end, $sum, 0, $annual, $group);
+
+        $data_amount = [];
+
+        //月
+        $allocate_start = $allocate_total ? strtotime(key($allocate_total)) : $start; //下拨最早日期
+
+        for ($i = $allocate_start; $i <= $end; $i = strtotime('+1 months', $i)) {
+            $k = date('Y-m', $i);
+            $j = date('y.n', $i);
+            //下拨
+            $y_allocate_amount = isset($allocate_total[$k]['amount']) ? (float) $allocate_total[$k]['amount'] / 10000 : 0;
+            $y_allocate_num = isset($allocate_total[$k]['num']) ? (float) $allocate_total[$k]['num'] : 0;
+
+            $data_amount[] = ['value' => [$j, $y_allocate_amount]];
+            $data_num[] = ['value' => [$j, $y_allocate_num]];
+        }
+
+        // $series['amount'][] = ['type' => 'line', 'z' => 3, 'name' => '当期下拨额', 'data' => $data_allocate_amount];
+        // $series['amount'][] = ['type' => 'bar', 'z' => 1, 'name' => '当期下拨数', 'label' => ['show' => true, 'color' => '#000', 'position' => 'top', 'formatter' => new JsExpression("function(params) {if (params.value[1] > 0) {return params.value[1];} else {return ''}}")], 'data' => $data_allocate_num, 'yAxisIndex' => 1,];
+
+        $series['amount'][] = [
+            'type' => 'bar', 'name' => '当期下拨数', 'data' => $data_num, 'label' => ['show' => true],
+            'itemStyle' => [
+                'normal' => [
+                    'color' => '#0184d5',
+                    'opacity' => 1,
+                    'barBorderRadius' => 5,
+                ]
+            ],
+            'label' => ['show' => true, 'color' => '#fff', 'position' => 'top']
+        ];
+        $series['amount'][] = [
+            'type' => 'line', 'name' => '当期下拨额', 'data' => $data_amount, 'yAxisIndex' => 1,
+            'itemStyle' => [
+                'normal' => [
+                    'color' => "#00d887",
+                    'borderColor' => "rgba(221, 220, 107, .1)",
+                    'borderWidth' => 12
+                ]
+            ],
+            'label' => ['show' => true, 'formatter' => "{@[1]}万", 'color' => '#FFF']
+        ];
+
         $info['data'] = $series['amount'];
         return json_encode($info);
     }
