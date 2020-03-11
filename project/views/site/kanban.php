@@ -43,8 +43,8 @@ $this->title = '看板';
                 <div class="bar">
                     <div class="barbox">
                         <ul class="clearfix">
-                            <li class="pulll_left counter" id="cloud_num"></li>
-                            <li class="pulll_left counter" id="cloud_amount"></li>
+                            <li class="pulll_left counter" id="cloud_num">0</li>
+                            <li class="pulll_left counter" id="cloud_amount">0</li>
                         </ul>
                     </div>
                     <div class="barbox2">
