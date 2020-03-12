@@ -404,6 +404,7 @@ function line() {
                 },
             },
             splitLine: {
+                show: false,
                 lineStyle: {
                     color: "rgba(255,255,255,.1)"
                 }
