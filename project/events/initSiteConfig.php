@@ -63,7 +63,6 @@ class initSiteConfig extends Event
                 return false;
             }
         }
-
         //        if ($system === false) {
         //            $system = System::getChildrenValue('system');
         //            if (!$system['system_name']) {
