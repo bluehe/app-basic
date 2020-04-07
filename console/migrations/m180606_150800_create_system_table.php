@@ -5,12 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `system`.
  */
-class m180606_150800_create_system_table extends Migration {
+class m180606_150800_create_system_table extends Migration
+{
 
     /**
      * @inheritdoc
      */
-    public function up() {
+    public function up()
+    {
         $table = '{{%system}}';
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -29,7 +31,7 @@ class m180606_150800_create_system_table extends Migration {
             'value' => $this->text()->notNull()->comment('值'),
             'sort_order' => $this->smallInteger(3)->notNull()->defaultValue(1)->comment('排序'),
             "FOREIGN KEY ([[parent_id]]) REFERENCES {$table}([[id]]) ON DELETE CASCADE ON UPDATE CASCADE",
-                ], $tableOptions);
+        ], $tableOptions);
         $this->createIndex('parent_id', $table, 'parent_id');
 
         //插入数据
@@ -46,7 +48,7 @@ class m180606_150800_create_system_table extends Migration {
             [103, 1, 'system_register', '允许注册', 'radio', '{"0":"否","1":"是"}', '', '1', 3],
             [104, 1, 'system_loginimg', '登录背景图', 'radio', '{"0":"关闭","1":"启用"}', '', '1', 4],
             [105, 1, 'system_name', '网站名称', 'text', '', '', '', 5],
-            [106, 1, 'system_title', '网站标题', 'text', '', '', '',6],
+            [106, 1, 'system_title', '网站标题', 'text', '', '', '', 6],
             [107, 1, 'system_keywords', '关键字', 'textarea', '3', '', '', 7],
             [108, 1, 'system_desc', '网站描述', 'textarea', '3', '', '', 8],
             [109, 1, 'system_icp', '备案信息', 'text', '', '', '', 9],
@@ -64,10 +66,10 @@ class m180606_150800_create_system_table extends Migration {
             [303, 3, 'captcha_length', '验证码长度', 'text', '', '', '6', 3],
             [401, 4, 'sms_service', '启用短信', 'radio', '{"0":"否","1":"是"}', '', '0', 1],
             [402, 4, 'sms_platform', '短信平台', 'radio', '{"aliyun":"阿里云","cloudsmser":"中国云信","submail":"赛邮"}', '', 'aliyun', 2],
-//            [403, 4, 'sms_key', 'Key', 'text', '', '', '', 3],
-//            [404, 4, 'sms_secret', 'Secret', 'password', '', '', '', 4],
-//            [405, 4, 'sms_sign', '短信签名', 'text', '', '', '', 5],
-//            [406, 4, 'sms_captcha', '验证码模板', 'text', '', '', '', 6],
+            //            [403, 4, 'sms_key', 'Key', 'text', '', '', '', 3],
+            //            [404, 4, 'sms_secret', 'Secret', 'password', '', '', '', 4],
+            //            [405, 4, 'sms_sign', '短信签名', 'text', '', '', '', 5],
+            //            [406, 4, 'sms_captcha', '验证码模板', 'text', '', '', '', 6],
             [411, 4, 'aliyun_sms_key', 'AccessKey ID', 'text', '', '', '', 3],
             [412, 4, 'aliyun_sms_secret', 'Access Key Secret', 'password', '', '', '', 4],
             [413, 4, 'aliyun_sms_sign', '短信签名', 'text', '', '', '', 5],
@@ -79,13 +81,13 @@ class m180606_150800_create_system_table extends Migration {
             [432, 4, 'submail_sms_secret', 'APPKEY', 'password', '', '', '', 4],
             [433, 4, 'submail_sms_captcha', '验证码模板', 'text', '', '', '', 5],
             [501, 5, 'cdn_service', '启用CDN', 'radio', '{"0":"否","1":"是"}', '', '0', 1],
-            [502, 5, 'cdn_platform', 'CDN平台', 'radio', '{"Alioss":"阿里云","Qiniu":"七牛","Qcloud":"腾讯云","Netease":"网易云"}', '', 'Alioss', 2],
-//            [503, 5, 'cdn_appid', 'appId', 'text', '', '', '', 3],
-//            [504, 5, 'cdn_key', 'accessKey', 'text', '', '', '', 4],
-//            [505, 5, 'cdn_secret', 'accessSecret', 'password', '', '', '', 5],
-//            [506, 5, 'cdn_point', 'endPoint', 'text', '', '', '', 6],
-//            [507, 5, 'cdn_bucket', 'bucket', 'text', '', '', '', 7],
-//            [508, 5, 'cdn_host', 'host', 'text', '', '', '', 8],
+            [502, 5, 'cdn_platform', 'CDN平台', 'radio', '{"Alioss":"阿里云","Huawei":"华为云","Qiniu":"七牛","Qcloud":"腾讯云","Netease":"网易云"}', '', 'Alioss', 2],
+            //            [503, 5, 'cdn_appid', 'appId', 'text', '', '', '', 3],
+            //            [504, 5, 'cdn_key', 'accessKey', 'text', '', '', '', 4],
+            //            [505, 5, 'cdn_secret', 'accessSecret', 'password', '', '', '', 5],
+            //            [506, 5, 'cdn_point', 'endPoint', 'text', '', '', '', 6],
+            //            [507, 5, 'cdn_bucket', 'bucket', 'text', '', '', '', 7],
+            //            [508, 5, 'cdn_host', 'host', 'text', '', '', '', 8],
             [512, 5, 'Alioss_cdn_key', 'AccessKey ID', 'text', '', '', '', 4],
             [513, 5, 'Alioss_cdn_secret', 'Access Key Secret', 'password', '', '', '', 5],
             [514, 5, 'Alioss_cdn_point', 'EndPoint', 'text', '', '', '', 6],
@@ -106,18 +108,23 @@ class m180606_150800_create_system_table extends Migration {
             [544, 5, 'Netease_cdn_point', 'endPoint', 'text', '', '', '', 6],
             [545, 5, 'Netease_cdn_bucket', 'bucket', 'text', '', '', '', 7],
             [546, 5, 'Netease_cdn_host', 'host', 'text', '', '', '', 8],
+            [552, 5, 'Huawei_cdn_key', 'key', 'text', '', '', '', 4],
+            [553, 5, 'Huawei_cdn_secret', 'secret', 'password', '', '', '', 5],
+            [554, 5, 'Huawei_cdn_point', 'endpoint', 'text', '', '', '', 6],
+            [555, 5, 'Huawei_cdn_bucket', '桶名称', 'text', '', '', '', 7],
+            [556, 5, 'Huawei_cdn_host', '访问域名', 'text', '', '', '', 8],
             [601, 6, 'agreement_open', '启用协议', 'radio', '{"0":"否","1":"是"}', '', '1', 1],
             [602, 6, 'agreement_service', '服务协议', 'editor', '', '', '', 2],
             [603, 6, 'agreement_privacy', '隐私声明', 'editor', '', '', '', 3],
-//            [701, 7, 'business_area', '区域', 'text', '', '', '', 1],
+            //            [701, 7, 'business_area', '区域', 'text', '', '', '', 1],
             [701, 7, 'business_charts', '数据图表', 'radio', '{"1":"Highcharts","2":"ECharts"}', '', '1', 1],
-            [702, 7, 'business_parameter', '企业导入添加参数', 'radio', '{"0":"不允许","1":"允许"}', '', '0', 2],            
+            [702, 7, 'business_parameter', '企业导入添加参数', 'radio', '{"0":"不允许","1":"允许"}', '', '0', 2],
             [703, 7, 'business_activity_search', '活跃汇总筛选', 'radio', '{"1":"分条/历史","2":"汇总/最新"}', '分条/历史筛选会对单次原数据进行条件筛选；汇总/最新会对汇总数据（展现数据）进行筛选', '1', 3],
             [704, 7, 'business_activity_statistics', '活跃统计标准', 'radio', '{"1":"历史标准","2":"最新标准"}', '按照分次计算，不参考汇总数据', '2', 4],
-           
+
         ]);
-        
-        $this->update($table, ['value'=>'<p><strong>本站服务协议</strong>
+
+        $this->update($table, ['value' => '<p><strong>本站服务协议</strong>
 </p>
 <p>为获得本站提供的全面服务，服务使用人（以下简称“用户”）应当同意本协议的全部条款，并按照页面上的提示完成全部的注册程序。用户在进行注册程序的过程中选择“同意”按钮，即表示用户完全接受本协议下的全部条款，并与本站达成协议。
 </p>
@@ -272,9 +279,9 @@ class m180606_150800_create_system_table extends Migration {
 <p>38．本站向用户发出的通知，将采用页面公告的形式进行，该通知于发送之日视为已送达收件人。用户对于本站的通知应当通过本站对外正式公布的通信地址、传真号码、电子邮件地址等联系信息进行送达。
 </p>
 <p>39．本站在法律允许最大范围拥有对本协议的解释权与修改权。用户对服务的任何部分或本服务条款任何部分的意见及建议可通过客户服务部门与本站联系。
-</p>'],['code'=>'agreement_service']);
-        
-        $this->update($table, ['value'=>'<p><strong>本站隐私政策</strong>
+</p>'], ['code' => 'agreement_service']);
+
+        $this->update($table, ['value' => '<p><strong>本站隐私政策</strong>
 </p>
 <p>本站郑重声明，本站尊重并严格保护所有使用本站提供的在线网络服务的个人隐私。请您认真阅读以下条款，以了解我们的政策。本政策的条款可能会不定时更改，请注意定期查阅。
 </p>
@@ -445,14 +452,14 @@ class m180606_150800_create_system_table extends Migration {
 <p>十六、生效时间
 </p>
 <p>本隐私政策自2018年6月1日生效。
-</p>'],['code'=>'agreement_privacy']);
+</p>'], ['code' => 'agreement_privacy']);
     }
-   
+
     /**
      * @inheritdoc
      */
-    public function down() {
+    public function down()
+    {
         $this->dropTable('{{%system}}');
     }
-
 }
