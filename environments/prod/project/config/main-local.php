@@ -5,15 +5,15 @@ return [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '',
         ],
-         'db' => [
+        'db' => [
             'class' => 'yii\db\Connection',
             'enableSchemaCache' => true,
             'schemaCacheDuration' => 24 * 3600,
             'charset' => 'utf8',
             'tablePrefix' => '',
-            'dsn' => 'mysql:host=localhost;dbname=rky_test',
-            'username' => 'rky_test',
-            'password' => 'rky_test',
+            'dsn' => 'mysql:host=127.0.0.1;dbname=hwyzx',
+            'username' => 'hwyzx',
+            'password' => 'Huawei@123',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -45,11 +45,11 @@ return [
                     'clientId' => '1908461907',
                     'clientSecret' => 'ee01aaf40a55769dd866650ad754ed2d',
                 ],
-//                'qq' => [
-//                    'class' => 'common\widgets\QQClient',
-//                    'clientId' => '101389884',
-//                    'clientSecret' => '0f7af7103526adaff8904219831b101f',
-//                ],
+                //                'qq' => [
+                //                    'class' => 'common\widgets\QQClient',
+                //                    'clientId' => '101389884',
+                //                    'clientSecret' => '0f7af7103526adaff8904219831b101f',
+                //                ],
             ],
         ],
     ],
