@@ -172,7 +172,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '//kb.hwyzx.com' => 'site/kanban'
+                '//kb.hwyzx.com' => 'site/kanban',
+                '//kb.wzgxpt.com' => 'site/kanban'
             ],
         ],
         'formatter' => [
