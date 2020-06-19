@@ -677,36 +677,25 @@ class HealthController extends Controller
 
                         if (isset($data['最近一天是否活跃'])) {
                             $activity_day = $data['最近一天是否活跃'] == '活跃' ? HealthData::ACT_Y : HealthData::ACT_N;
+                        } elseif (isset($data['日活跃与否'])) {
+                            $activity_day = $data['日活跃与否'] == '✔' ? HealthData::ACT_Y : HealthData::ACT_N;
                         } else {
                             $activity_day = HealthData::ACT_D;
                         }
                         if (isset($data['最近一周是否活跃'])) {
                             $activity_week = $data['最近一周是否活跃'] == '活跃' ? HealthData::ACT_Y : HealthData::ACT_N;
+                        } elseif (isset($data['周活跃与否'])) {
+                            $activity_week = $data['周活跃与否'] == '✔' ? HealthData::ACT_Y : HealthData::ACT_N;
                         } else {
                             $activity_week = HealthData::ACT_D;
                         }
                         if (isset($data['最近一月是否活跃'])) {
                             $activity_month = $data['最近一月是否活跃'] == '活跃' ? HealthData::ACT_Y : HealthData::ACT_N;
-                        } else {
-                            $activity_month = HealthData::ACT_D;
-                        }
-
-                        if (isset($data['日活跃与否'])) {
-                            $activity_day = $data['日活跃与否'] == '✔' ? HealthData::ACT_Y : HealthData::ACT_N;
-                        } else {
-                            $activity_day = HealthData::ACT_D;
-                        }
-                        if (isset($data['周活跃与否'])) {
-                            $activity_week = $data['周活跃与否'] == '✔' ? HealthData::ACT_Y : HealthData::ACT_N;
-                        } else {
-                            $activity_week = HealthData::ACT_D;
-                        }
-                        if (isset($data['月活跃与否'])) {
+                        } elseif (isset($data['月活跃与否'])) {
                             $activity_month = $data['月活跃与否'] == '✔' ? HealthData::ACT_Y : HealthData::ACT_N;
                         } else {
                             $activity_month = HealthData::ACT_D;
                         }
-
 
                         if (isset($data['成长等级H'])) {
                             switch (substr($data['成长等级H'], 0, 2)) {
