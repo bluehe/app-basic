@@ -43,7 +43,7 @@ class DataViewController extends Controller
         $group = 1;
         $is_allocate = HealthData::ALLOCATE_Y;
         $total_get = 1;
-        $series = $health_key = $data_health = $data_per = [];
+        $series = $health_key = $data_health = $data_per =$health_value= [];
         $health_total = HealthData::get_health($month_start - 86400, $end, $group, $is_allocate, $total_get);
 
         foreach ($health_total as $total) {
