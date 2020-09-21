@@ -68,7 +68,7 @@ class Corporation extends \yii\db\ActiveRecord
         return '{{%corporation}}';
     }
     
-     /**
+    /**
      * {@inheritdoc}
      */
     public function behaviors()

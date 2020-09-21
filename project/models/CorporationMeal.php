@@ -101,7 +101,7 @@ class CorporationMeal extends \yii\db\ActiveRecord
 
     public function requiredByNoSetid($attribute, $params)
     {
-        if (!$this->meal_id && !$this->$attribute) {
+        if (!$this->meal_id && !$this->$attribute&&$this->$attribute!=0) {
             $this->addError($attribute, '不能为空。');
         }
     }

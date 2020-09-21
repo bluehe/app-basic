@@ -46,70 +46,71 @@ class CorporationController extends Controller
             ],
         ];
     }
-    
-     public function actions()
+
+    public function actions()
     {
         return [
             'corporation-list' => [
                 'class' => IndexAction::className(),
-                'data' => function(){
+                'data' => function () {
                     $searchModel = new CorporationSearch();
                     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-                    $column= ColumnSetting::get_column_content(Yii::$app->user->identity->id,'corporation');
+                    $column = ColumnSetting::get_column_content(Yii::$app->user->identity->id, 'corporation');
                     return [
                         'dataProvider' => $dataProvider,
                         'searchModel' => $searchModel,
-                        'column'=>$column,
+                        'column' => $column,
                     ];
                 }
             ],
             'corporation-delete' => [
                 'class' => DeleteAction::className(),
                 'modelClass' => Corporation::className(),
-                'auth_group'=>true,
+                'auth_group' => true,
             ],
             'corporation-view' => [
                 'class' => ViewAction::className(),
                 'modelClass' => Corporation::className(),
-                'viewFile'=>'corporation-view',
-                'ajax'=>true,
-                'auth_group'=>true,
+                'viewFile' => 'corporation-view',
+                'ajax' => true,
+                'auth_group' => true,
             ],
         ];
     }
-    
-    public function actionCorporationCreate() {
+
+    public function actionCorporationCreate()
+    {
         $model = new Corporation();
         //$model->scenario='industry';
         $model->loadDefaultValues();
         $group = Group::get_user_group(Yii::$app->user->identity->id);
-        if(count($group)==1){
-            $model->group_id= key($group);   
+        if (count($group) == 1) {
+            $model->group_id = key($group);
         }
         if ($model->load(Yii::$app->request->post())) {
-            
+
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return \yii\bootstrap\ActiveForm::validate($model);
             }
-                                               
+
             $rw = Yii::$app->request->post('Corporation');
-            $industrys = $rw['base_industry']&&!is_array($rw['base_industry']) ? explode(',',$rw['base_industry']) : array();
-            $model->develop_language = $rw['develop_language'] ? implode(',',$rw['develop_language']) : '';
-            
-                       
+            $industrys = $rw['base_industry'] && !is_array($rw['base_industry']) ? explode(',', $rw['base_industry']) : array();
+            $model->develop_language = $rw['develop_language'] ? implode(',', $rw['develop_language']) : '';
+
+
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                
-                $model->base_registered_time= strtotime($model->base_registered_time);
-//                $model->allocate_time= $model->stat== Corporation::STAT_ALLOCATE?strtotime($model->allocate_time):null;               
+
+                $model->base_registered_time = strtotime($model->base_registered_time);
+                //                $model->allocate_time= $model->stat== Corporation::STAT_ALLOCATE?strtotime($model->allocate_time):null;               
                 $model->save(false);
-                                               
+
                 if (count($industrys) > 0) {
                     $industry = new CorporationIndustry();
                     $industry->corporation_id = $model->id;
                     foreach ($industrys as $t) {
-                        $_industry = clone $industry;                 
+                        $_industry = clone $industry;
                         $_industry->industry_id = $t;
                         if (!$_industry->save()) {
                             throw new \Exception("操作失败");
@@ -118,80 +119,76 @@ class CorporationController extends Controller
                 }
                 $transaction->commit();
                 Yii::$app->session->setFlash('success', '操作成功。');
-               
-             } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
                 $transaction->rollBack();
-//                throw $e;
+                //                throw $e;
                 Yii::$app->session->setFlash('error', '操作失败。');
             }
             return $this->redirect(Yii::$app->request->referrer);
-            
-        }else{                        
-            $model->base_bd=Yii::$app->user->identity->id;
+        } else {
+            $model->base_bd = Yii::$app->user->identity->id;
             return $this->renderAjax('corporation-create', [
-                        'model' => $model,
-                'allocate'=>null,
-        ]);
-            
+                'model' => $model,
+                'allocate' => null,
+            ]);
         }
-        
     }
-    
-    public function actionCorporationUpdate($id) {
+
+    public function actionCorporationUpdate($id)
+    {
         $model = Corporation::findOne($id);
         //$model->scenario='industry';               
-        if($model !== null&&Yii::$app->user->can('企业修改',['id'=>$id])){
-            $model->base_industry =$old_industry= CorporationIndustry::get_corporation_industryid($model->id);
-            $allocate = in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN])?CorporationMeal::get_allocate($model->id):null;           
-            if($allocate){
-                $allocate->start_time=$allocate->start_time>0?date('Y-m-d',$allocate->start_time):'';
-                $allocate->end_time=$allocate->end_time>0?date('Y-m-d',$allocate->end_time):'';
+        if ($model !== null && Yii::$app->user->can('企业修改', ['id' => $id])) {
+            $model->base_industry = $old_industry = CorporationIndustry::get_corporation_industryid($model->id);
+            $allocate = in_array($model->stat, [Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN]) ? CorporationMeal::get_allocate($model->id) : null;
+            if ($allocate) {
+                $allocate->start_time = $allocate->start_time > 0 ? date('Y-m-d', $allocate->start_time) : '';
+                $allocate->end_time = $allocate->end_time > 0 ? date('Y-m-d', $allocate->end_time) : '';
             }
-           
+
             if ($model->load(Yii::$app->request->post())) {
-                
-                if($allocate){
+
+                if ($allocate) {
                     $allocate->load(Yii::$app->request->post());
-                }              
+                }
                 if (Yii::$app->request->isAjax) {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                    if($allocate){         
+                    if ($allocate) {
                         $re = \yii\widgets\ActiveForm::validate($allocate);
-                        if($re){
+                        if ($re) {
                             return $re;
                         }
-                    }                     
-                    
+                    }
+
                     return \yii\widgets\ActiveForm::validate($model);
-                    
                 }
-            
-                
+
+
                 $rw = Yii::$app->request->post('Corporation');
-                $industrys = $rw['base_industry']&&!is_array($rw['base_industry']) ? explode(',',$rw['base_industry']) : array();
-                $model->develop_language = $rw['develop_language'] ? implode(',',$rw['develop_language']) : '';
-           
-            
+                $industrys = $rw['base_industry'] && !is_array($rw['base_industry']) ? explode(',', $rw['base_industry']) : array();
+                $model->develop_language = $rw['develop_language'] ? implode(',', $rw['develop_language']) : '';
+
+
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
-                    if($allocate){
-                        $allocate->start_time=strtotime($allocate->start_time);
-                        $allocate->end_time = $allocate->end_time?strtotime($allocate->end_time)+86399:strtotime('+1 year', $allocate->start_time)-1;                     
+                    if ($allocate) {
+                        $allocate->start_time = strtotime($allocate->start_time);
+                        $allocate->end_time = $allocate->end_time ? strtotime($allocate->end_time) + 86399 : strtotime('+1 year', $allocate->start_time) - 1;
                         $allocate->user_id = Yii::$app->user->identity->id;
                         $allocate->save(false);
-                        ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D,'health'=> ActivityChange::HEALTH_WA], ['corporation_id'=>$allocate->corporation_id]);
+                        ActivityChange::updateAll(['is_allocate' => ActivityChange::ALLOCATE_D, 'health' => ActivityChange::HEALTH_WA], ['corporation_id' => $allocate->corporation_id]);
                         ActivityChange::set_allocate();
                         ActivityChange::set_health();
-                        $model->huawei_account=$allocate->huawei_account;
+                        $model->huawei_account = $allocate->huawei_account;
                     }
-                    $model->base_registered_time= strtotime($model->base_registered_time);
+                    $model->base_registered_time = strtotime($model->base_registered_time);
                     //$model->allocate_time= $model->stat== Corporation::STAT_ALLOCATE?strtotime($model->allocate_time):null;               
                     $model->save(false);
-                
+
                     $t1 = array_diff($industrys, $old_industry); //新增
                     $t2 = array_diff($old_industry, $industrys); //删除
-                
+
                     if (count($t1) > 0) {
                         $industry = new CorporationIndustry();
                         $industry->corporation_id = $model->id;
@@ -206,121 +203,120 @@ class CorporationController extends Controller
                     if (count($t2) > 0) {
                         CorporationIndustry::deleteAll(['corporation_id' => $model->id, 'industry_id' => $t2]);
                     }
-                
-                    $transaction->commit();                   
+
+                    $transaction->commit();
                     Yii::$app->session->setFlash('success', '修改成功。');
                 } catch (\Exception $e) {
 
                     $transaction->rollBack();
-//                throw $e;
+                    //                throw $e;
                     Yii::$app->session->setFlash('error', '修改失败。');
                 }
                 return $this->redirect(Yii::$app->request->referrer);
-            }else{
-                $model->base_registered_time= $model->base_registered_time>0?date('Y-m-d',$model->base_registered_time):'';
+            } else {
+                $model->base_registered_time = $model->base_registered_time > 0 ? date('Y-m-d', $model->base_registered_time) : '';
                 //$model->allocate_time= $model->allocate_time>0?date('Y-m-d',$model->allocate_time):'';
                 $model->develop_language = explode(',', $model->develop_language);
             }
             return $this->renderAjax('corporation-update', [
-                    'model' => $model,
-                    'allocate'=>$allocate,
+                'model' => $model,
+                'allocate' => $allocate,
             ]);
-        
-        }else{
+        } else {
             Yii::$app->session->setFlash('error', '企业不存在或权限不足。');
             return $this->redirect(Yii::$app->request->referrer);
         }
     }
-    
-    public function actionCorporationApply($id) {
+
+    public function actionCorporationApply($id)
+    {
         $model = Corporation::findOne($id);
-        if($model !== null&&Yii::$app->user->can('企业修改',['id'=>$id])){
-            $model->stat= Corporation::STAT_APPLY;
-           
+        if ($model !== null && Yii::$app->user->can('企业修改', ['id' => $id])) {
+            $model->stat = Corporation::STAT_APPLY;
+
             if ($model->load(Yii::$app->request->post())) {
-                                     
-                if (Yii::$app->request->isAjax) {                
+
+                if (Yii::$app->request->isAjax) {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                     return \yii\bootstrap\ActiveForm::validate($model);
-                }          
-          
-                if($model->save(false)){
+                }
+
+                if ($model->save(false)) {
                     Yii::$app->session->setFlash('success', '申请成功。');
-                }else{
+                } else {
                     Yii::$app->session->setFlash('error', '申请失败。');
                 }
                 return $this->redirect(Yii::$app->request->referrer);
             }
             return $this->renderAjax('corporation-apply', [
-                    'model' => $model,
+                'model' => $model,
             ]);
-        
-        }else{
+        } else {
             Yii::$app->session->setFlash('error', '企业不存在或权限不足。');
             return $this->redirect(Yii::$app->request->referrer);
         }
     }
-    
-    public function actionCorporationAllocate($id) {
+
+    public function actionCorporationAllocate($id)
+    {
         $corporation = Corporation::findOne($id);
-        if($corporation !== null&&in_array($corporation->stat,[Corporation::STAT_CHECK,Corporation::STAT_ALLOCATE,Corporation::STAT_AGAIN,Corporation::STAT_OVERDUE])&&Yii::$app->user->can('企业修改',['id'=>$id])){
-            $stat =0;
-            if($corporation->stat==Corporation::STAT_AGAIN){
-                $stat=1;
+        if ($corporation !== null && in_array($corporation->stat, [Corporation::STAT_CHECK, Corporation::STAT_ALLOCATE, Corporation::STAT_AGAIN, Corporation::STAT_OVERDUE]) && Yii::$app->user->can('企业修改', ['id' => $id])) {
+            $stat = 0;
+            if ($corporation->stat == Corporation::STAT_AGAIN) {
+                $stat = 1;
             }
-            $corporation->stat= CorporationMeal::get_allocate($corporation->id)?Corporation::STAT_AGAIN:Corporation::STAT_ALLOCATE;
+            $corporation->stat = CorporationMeal::get_allocate($corporation->id) ? Corporation::STAT_AGAIN : Corporation::STAT_ALLOCATE;
             $model = new CorporationMeal();
             $model->loadDefaultValues();
-            $model->corporation_id=$id;
-            $model->group_id=$corporation->group_id;
-            $model->meal_id=$corporation->intent_set;
-            $model->number=$corporation->intent_number;
-            $model->huawei_account=$corporation->huawei_account;
-            $model->stat=$corporation->stat==Corporation::STAT_AGAIN?CorporationMeal::STAT_AGAIN:CorporationMeal::STAT_ALLOCATE;
-           
+            $model->corporation_id = $id;
+            $model->group_id = $corporation->group_id;
+            $model->meal_id = $corporation->intent_set;
+            $model->number = $corporation->intent_number;
+            $model->huawei_account = $corporation->huawei_account;
+            $model->stat = $corporation->stat == Corporation::STAT_AGAIN ? CorporationMeal::STAT_AGAIN : CorporationMeal::STAT_ALLOCATE;
+
             if ($model->load(Yii::$app->request->post())) {
-                                     
-                if (Yii::$app->request->isAjax) {                
+
+                if (Yii::$app->request->isAjax) {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                     return \yii\bootstrap\ActiveForm::validate($model);
-                }          
-          
-                $model->start_time= strtotime($model->start_time);
-                $model->end_time = $model->end_time?strtotime($model->end_time)+86399:strtotime('+1 year', $model->start_time)-1;
+                }
+
+                $model->start_time = strtotime($model->start_time);
+                $model->end_time = $model->end_time ? strtotime($model->end_time) + 86399 : strtotime('+1 year', $model->start_time) - 1;
                 $model->bd = $corporation->base_bd;
                 $model->user_id = Yii::$app->user->identity->id;
                 $model->created_at = time();
-                
-                $corporation->huawei_account=$model->huawei_account;
-                
+
+                $corporation->huawei_account = $model->huawei_account;
+
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
-      
-                    if($stat){
+
+                    if ($stat) {
                         //续拨继续下拨需要手动添加状态
-                        $statModel=new CorporationStat();
-                        $statModel->corporation_id=$corporation->id;
-                        $statModel->stat=$corporation->stat;
-                        $statModel->user_id=Yii::$app->user->identity->id;
-                        $statModel->created_at=$model->created_at;
-                        if(!$statModel->save()){
+                        $statModel = new CorporationStat();
+                        $statModel->corporation_id = $corporation->id;
+                        $statModel->stat = $corporation->stat;
+                        $statModel->user_id = Yii::$app->user->identity->id;
+                        $statModel->created_at = $model->created_at;
+                        if (!$statModel->save()) {
                             throw new \Exception('状态更新失败！');
-                        }       
+                        }
                     }
 
-                    if(!$model->save()){
+                    if (!$model->save()) {
                         throw new \Exception('下拨失败！');
                     }
-                    if(!$corporation->save()){
-                        throw new \Exception('请修改企业信息！');                            
+                    if (!$corporation->save()) {
+                        throw new \Exception('请修改企业信息！');
                     }
-                    ActivityChange::updateAll(['is_allocate'=> ActivityChange::ALLOCATE_D,'health'=> ActivityChange::HEALTH_WA], ['corporation_id'=>$model->corporation_id]);
+                    ActivityChange::updateAll(['is_allocate' => ActivityChange::ALLOCATE_D, 'health' => ActivityChange::HEALTH_WA], ['corporation_id' => $model->corporation_id]);
                     ActivityChange::set_allocate();
                     ActivityChange::set_health();
-                
+
                     $transaction->commit();
                     Yii::$app->session->setFlash('success', '下拨成功。');
-               
                 } catch (\Exception $e) {
                     $transaction->rollBack();
                     Yii::$app->session->setFlash('error', $e->getMessage());
@@ -328,184 +324,181 @@ class CorporationController extends Controller
                 return $this->redirect(Yii::$app->request->referrer);
             }
             return $this->renderAjax('corporation-allocate', [
-                    'model'=>$model,
-                    'corporation'=>$corporation
+                'model' => $model,
+                'corporation' => $corporation
             ]);
-        
-        }else{
+        } else {
             Yii::$app->session->setFlash('error', '企业不存在或权限不足。');
             return $this->redirect(Yii::$app->request->referrer);
         }
     }
-       
-    public function actionCorporationBd($id) {
 
-        $model = CorporationBd::find()->where(['corporation_id'=>$id])->orderBy(['start_time'=>SORT_ASC,'id'=>SORT_ASC])->all();
+    public function actionCorporationBd($id)
+    {
+
+        $model = CorporationBd::find()->where(['corporation_id' => $id])->orderBy(['start_time' => SORT_ASC, 'id' => SORT_ASC])->all();
 
         return $this->renderAjax('corporation-bd', [
-                    'model' => $model,
-        ]);     
-        
+            'model' => $model,
+        ]);
     }
-    
-    public function actionGroupBd($id,$bd_id=null) {
+
+    public function actionGroupBd($id, $bd_id = null)
+    {
 
         $user = UserGroup::get_group_userid($id);
-        
+
         $bds = User::get_bd(User::STATUS_ACTIVE, $user);
 
         $str = Html::tag('option', '', array('value' => ''));
-        if ($user&&$bds) {   
+        if ($user && $bds) {
             foreach ($bds as $value => $name) {
-                $str .= Html::tag('option', Html::encode($name), array('value' => $value,'selected'=>$value==$bd_id));
+                $str .= Html::tag('option', Html::encode($name), array('value' => $value, 'selected' => $value == $bd_id));
             }
         }
-        return $str;  
-        
+        return $str;
     }
-    
+
     public function actionCorporationBdDelete($id)
     {
         $model = CorporationBd::findOne($id);
-        
-        $stat='error';
-        $bd=null;
-        if ($model !== null&&Yii::$app->user->can('企业修改',['id'=>$model->corporation_id])) {
-            $count = CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->count();
-            if($count>1){
+
+        $stat = 'error';
+        $bd = null;
+        if ($model !== null && Yii::$app->user->can('企业修改', ['id' => $model->corporation_id])) {
+            $count = CorporationBd::find()->where(['corporation_id' => $model->corporation_id])->count();
+            if ($count > 1) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
-               
-                    $pre = CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['<','start_time',$model->start_time])->orderBy(['start_time'=>SORT_DESC])->one();
-                    if($pre!==null){
+
+                    $pre = CorporationBd::find()->where(['corporation_id' => $model->corporation_id])->andWhere(['<', 'start_time', $model->start_time])->orderBy(['start_time' => SORT_DESC])->one();
+                    if ($pre !== null) {
                         //非第一条
-                        $pre->end_time=$model->end_time;
+                        $pre->end_time = $model->end_time;
                         $pre->save();
                     }
-                    $next=CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['>','start_time',$model->start_time])->orderBy(['start_time'=>SORT_ASC])->one();
-                    if($next==null){
+                    $next = CorporationBd::find()->where(['corporation_id' => $model->corporation_id])->andWhere(['>', 'start_time', $model->start_time])->orderBy(['start_time' => SORT_ASC])->one();
+                    if ($next == null) {
                         //最后一条
-                        Corporation::updateAll(['base_bd'=>$pre->bd_id], ['id'=>$pre->corporation_id]);//更新企业BD为上一条
-                        $bd= ['corporation_id'=>$pre->corporation_id,'name'=>User::get_nickname($pre->bd_id)];
+                        Corporation::updateAll(['base_bd' => $pre->bd_id], ['id' => $pre->corporation_id]); //更新企业BD为上一条
+                        $bd = ['corporation_id' => $pre->corporation_id, 'name' => User::get_nickname($pre->bd_id)];
                     }
-                    
+
                     //处理活跃BD更改
-//                    if($pre!==null){
-//                        
-//                    }else{
-//                        
-//                    }
-                    
+                    //                    if($pre!==null){
+                    //                        
+                    //                    }else{
+                    //                        
+                    //                    }
+
                     $model->delete();
-                    $stat='success';
+                    $stat = 'success';
                     $transaction->commit();
-                    
-               
                 } catch (\Exception $e) {
                     $transaction->rollBack();
-                    $stat='fail';
+                    $stat = 'fail';
                 }
-            }else{
-                $stat='fail';
+            } else {
+                $stat = 'fail';
             }
-        }        
-        return json_encode(['stat' => $stat,'bd'=>$bd]);
+        }
+        return json_encode(['stat' => $stat, 'bd' => $bd]);
     }
-    
-    public function actionCorporationBdUpdate($id) {
+
+    public function actionCorporationBdUpdate($id)
+    {
         $model = CorporationBd::findOne($id);
-        if($model !== null&&Yii::$app->user->can('企业修改',['id'=>$model->corporation_id])){
+        if ($model !== null && Yii::$app->user->can('企业修改', ['id' => $model->corporation_id])) {
             $_model = clone $model;
-            
-           
+
+
             if ($model->load(Yii::$app->request->post())) {
-                                     
-                if (Yii::$app->request->isAjax) {                
+
+                if (Yii::$app->request->isAjax) {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                     return \yii\bootstrap\ActiveForm::validate($model);
-                }          
-          
-                $model->start_time= strtotime($model->start_time);
-                $pre = CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['<','start_time',$_model->start_time])->orderBy(['start_time'=>SORT_DESC])->one();
-                $next=CorporationBd::find()->where(['corporation_id'=>$model->corporation_id])->andWhere(['>','start_time',$_model->start_time])->orderBy(['start_time'=>SORT_ASC])->one();
-                
-                if($pre!==null){
+                }
+
+                $model->start_time = strtotime($model->start_time);
+                $pre = CorporationBd::find()->where(['corporation_id' => $model->corporation_id])->andWhere(['<', 'start_time', $_model->start_time])->orderBy(['start_time' => SORT_DESC])->one();
+                $next = CorporationBd::find()->where(['corporation_id' => $model->corporation_id])->andWhere(['>', 'start_time', $_model->start_time])->orderBy(['start_time' => SORT_ASC])->one();
+
+                if ($pre !== null) {
                     //不是第一条
-                    if($model->bd_id==$pre->bd_id){
-                        $model->start_time=$pre->start_time;
+                    if ($model->bd_id == $pre->bd_id) {
+                        $model->start_time = $pre->start_time;
                         $pre->delete();
-                    }else{
-                        $pre->end_time=$model->start_time;
+                    } else {
+                        $pre->end_time = $model->start_time;
                         $pre->save();
                     }
                 }
-                
-                if($next!==null){
-                    if($model->bd_id==$next->bd_id){
-                    //不是最后一条,且BD相同
-                        $model->end_time=null;
+
+                if ($next !== null) {
+                    if ($model->bd_id == $next->bd_id) {
+                        //不是最后一条,且BD相同
+                        $model->end_time = null;
                         $next->delete();
-                    }                                      
-                }elseif($_model->bd_id!=$model->bd_id){
+                    }
+                } elseif ($_model->bd_id != $model->bd_id) {
                     //最后一条且BD修改
-                    Corporation::updateAll(['base_bd'=>$model->bd_id], ['id'=>$model->corporation_id]);//更新企业BD
+                    Corporation::updateAll(['base_bd' => $model->bd_id], ['id' => $model->corporation_id]); //更新企业BD
                 }
                 $model->save();
-                
+
                 return $this->redirect(Yii::$app->request->referrer);
             }
-            $model->start_time=date('Y-m-d',$model->start_time);
+            $model->start_time = date('Y-m-d', $model->start_time);
             return $this->renderAjax('corporation-bd-update', [
-                    'model' => $model,
+                'model' => $model,
             ]);
-        
-        }else{
+        } else {
             return $this->redirect(Yii::$app->request->referrer);
         }
     }
-    
-    public function actionCorporationStat($id) {
 
-        $model = CorporationStat::find()->where(['corporation_id'=>$id])->orderBy(['created_at'=>SORT_ASC])->all();
+    public function actionCorporationStat($id)
+    {
+
+        $model = CorporationStat::find()->where(['corporation_id' => $id])->orderBy(['created_at' => SORT_ASC])->all();
 
         return $this->renderAjax('corporation-stat', [
-                    'model' => $model,
-        ]);     
-        
+            'model' => $model,
+        ]);
     }
-    
-    public function actionCorporationUpdateStat($id,$stat) {
-        
+
+    public function actionCorporationUpdateStat($id, $stat)
+    {
+
 
         $model = Corporation::findOne($id);
-        if($model!=null&&Yii::$app->user->can('企业修改',['id'=>$id])){
-            $model->stat=$stat;
-            if($model->save()){
+        if ($model != null && Yii::$app->user->can('企业修改', ['id' => $id])) {
+            $model->stat = $stat;
+            if ($model->save()) {
                 Yii::$app->session->setFlash('success', '状态更改成功。');
-            }else{
-                Yii::$app->session->setFlash('error', '状态更改失败，'. current($model->getFirstErrors()));
+            } else {
+                Yii::$app->session->setFlash('error', '状态更改失败，' . current($model->getFirstErrors()));
             }
-        }else{
+        } else {
             Yii::$app->session->setFlash('error', '企业不存在或权限不足。');
         }
 
-        return $this->redirect(Yii::$app->getRequest()->headers['referer']); 
-        
+        return $this->redirect(Yii::$app->getRequest()->headers['referer']);
     }
-    
-    public function actionCorporationColumn() {
 
-        $model=ColumnSetting::get_column(Yii::$app->user->identity->id,'corporation');
-        if($model==null){
-            $model=new ColumnSetting();
-            $model->uid=Yii::$app->user->identity->id;
-            $model->type='corporation';
-            
+    public function actionCorporationColumn()
+    {
+
+        $model = ColumnSetting::get_column(Yii::$app->user->identity->id, 'corporation');
+        if ($model == null) {
+            $model = new ColumnSetting();
+            $model->uid = Yii::$app->user->identity->id;
+            $model->type = 'corporation';
         }
         if ($model->load(Yii::$app->request->post())) {
-            
+
             $column = Yii::$app->request->post('ColumnSetting');
-            $model->content= json_encode($column['content']);
+            $model->content = json_encode($column['content']);
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', '操作成功。');
@@ -514,195 +507,195 @@ class CorporationController extends Controller
             }
             return $this->redirect(Yii::$app->request->referrer);
         } else {
-          
-            $model->content= json_decode($model->content);
-                
+
+            $model->content = json_decode($model->content);
+
             return $this->renderAjax('corporation-column', [
                 'model' => $model,
             ]);
-      
         }
     }
 
-    public function actionCorporationTemple() {
-        
-        $start_time= microtime(true);
-        
-        $fileName= Yii::getAlias('@webroot').'/excel/corporation_temple.xlsx';
+    public function actionCorporationTemple()
+    {
+
+        $start_time = microtime(true);
+
+        $fileName = Yii::getAlias('@webroot') . '/excel/corporation_temple.xlsx';
         $format = \PHPExcel_IOFactory::identify($fileName);
         $objectreader = \PHPExcel_IOFactory::createReader($format);
         $objectPhpExcel = $objectreader->load($fileName);
-  
+
         $objSheet = $objectPhpExcel->getSheetByName('企业信息'); //这一句为要设置数据有效性的单元格  
         ExcelHelper::set_corporation_excel($objSheet);
         $searchModel = new CorporationSearch();
-        $objSheet->setCellValue( 'A1', '序号')
-                ->setCellValue( 'B1', $searchModel->getAttributeLabel('base_company_name'))
-                ->setCellValue( 'C1', $searchModel->getAttributeLabel('stat'))
-                ->setCellValue( 'D1', $searchModel->getAttributeLabel('base_bd'))
-                ->setCellValue( 'E1', $searchModel->getAttributeLabel('huawei_account'))
-                ->setCellValue( 'F1', $searchModel->getAttributeLabel('base_industry'))
-                ->setCellValue( 'G1', $searchModel->getAttributeLabel('contact_park'))
-                ->setCellValue( 'H1', $searchModel->getAttributeLabel('contact_address'))
-                ->setCellValue( 'I1', $searchModel->getAttributeLabel('intent_set'))
-                ->setCellValue( 'J1', $searchModel->getAttributeLabel('intent_number'))
-                ->setCellValue( 'K1', $searchModel->getAttributeLabel('intent_amount'))
-                ->setCellValue( 'L1', $searchModel->getAttributeLabel('base_company_scale'))
-                ->setCellValue( 'M1', $searchModel->getAttributeLabel('base_registered_capital'))
-                ->setCellValue( 'N1', $searchModel->getAttributeLabel('base_registered_time'))
-                ->setCellValue( 'O1', $searchModel->getAttributeLabel('base_main_business'))
-                ->setCellValue( 'P1', $searchModel->getAttributeLabel('base_last_income'))
-                ->setCellValue( 'Q1', $searchModel->getAttributeLabel('contact_business_name'))
-                ->setCellValue( 'R1', $searchModel->getAttributeLabel('contact_business_job'))
-                ->setCellValue( 'S1', $searchModel->getAttributeLabel('contact_business_tel'))
-                ->setCellValue( 'T1', $searchModel->getAttributeLabel('contact_technology_name'))
-                ->setCellValue( 'U1', $searchModel->getAttributeLabel('contact_technology_job'))
-                ->setCellValue( 'V1', $searchModel->getAttributeLabel('contact_technology_tel'))
-                ->setCellValue( 'W1', $searchModel->getAttributeLabel('develop_scale'))
-                ->setCellValue( 'X1', $searchModel->getAttributeLabel('develop_pattern'))
-                ->setCellValue( 'Y1', $searchModel->getAttributeLabel('develop_scenario'))
-                ->setCellValue( 'Z1', $searchModel->getAttributeLabel('develop_science'))
-                ->setCellValue( 'AA1', $searchModel->getAttributeLabel('develop_language'))
-                ->setCellValue( 'AB1', $searchModel->getAttributeLabel('develop_IDE'))
-                ->setCellValue( 'AC1', $searchModel->getAttributeLabel('develop_current_situation'))
-                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'));
-        
-        if(count(Group::get_user_group(Yii::$app->user->identity->id))>1){
-            $objSheet->setCellValue( 'AE1', $searchModel->getAttributeLabel('group_id'));
+        $objSheet->setCellValue('A1', '序号')
+            ->setCellValue('B1', $searchModel->getAttributeLabel('base_company_name'))
+            ->setCellValue('C1', $searchModel->getAttributeLabel('stat'))
+            ->setCellValue('D1', $searchModel->getAttributeLabel('base_bd'))
+            ->setCellValue('E1', $searchModel->getAttributeLabel('huawei_account'))
+            ->setCellValue('F1', $searchModel->getAttributeLabel('base_industry'))
+            ->setCellValue('G1', $searchModel->getAttributeLabel('contact_park'))
+            ->setCellValue('H1', $searchModel->getAttributeLabel('contact_address'))
+            ->setCellValue('I1', $searchModel->getAttributeLabel('intent_set'))
+            ->setCellValue('J1', $searchModel->getAttributeLabel('intent_number'))
+            ->setCellValue('K1', $searchModel->getAttributeLabel('intent_amount'))
+            ->setCellValue('L1', $searchModel->getAttributeLabel('base_company_scale'))
+            ->setCellValue('M1', $searchModel->getAttributeLabel('base_registered_capital'))
+            ->setCellValue('N1', $searchModel->getAttributeLabel('base_registered_time'))
+            ->setCellValue('O1', $searchModel->getAttributeLabel('base_main_business'))
+            ->setCellValue('P1', $searchModel->getAttributeLabel('base_last_income'))
+            ->setCellValue('Q1', $searchModel->getAttributeLabel('contact_business_name'))
+            ->setCellValue('R1', $searchModel->getAttributeLabel('contact_business_job'))
+            ->setCellValue('S1', $searchModel->getAttributeLabel('contact_business_tel'))
+            ->setCellValue('T1', $searchModel->getAttributeLabel('contact_technology_name'))
+            ->setCellValue('U1', $searchModel->getAttributeLabel('contact_technology_job'))
+            ->setCellValue('V1', $searchModel->getAttributeLabel('contact_technology_tel'))
+            ->setCellValue('W1', $searchModel->getAttributeLabel('develop_scale'))
+            ->setCellValue('X1', $searchModel->getAttributeLabel('develop_pattern'))
+            ->setCellValue('Y1', $searchModel->getAttributeLabel('develop_scenario'))
+            ->setCellValue('Z1', $searchModel->getAttributeLabel('develop_science'))
+            ->setCellValue('AA1', $searchModel->getAttributeLabel('develop_language'))
+            ->setCellValue('AB1', $searchModel->getAttributeLabel('develop_IDE'))
+            ->setCellValue('AC1', $searchModel->getAttributeLabel('develop_current_situation'))
+            ->setCellValue('AD1', $searchModel->getAttributeLabel('develop_weakness'));
+
+        if (count(Group::get_user_group(Yii::$app->user->identity->id)) > 1) {
+            $objSheet->setCellValue('AE1', $searchModel->getAttributeLabel('group_id'));
         }
-        
-        $end_time= microtime(true);
-        if($end_time-$start_time<1){
+
+        $end_time = microtime(true);
+        if ($end_time - $start_time < 1) {
             sleep(1);
         }
-        
-        ExcelHelper::excel_set_headers($format,'企业信息模板');
-        
+
+        ExcelHelper::excel_set_headers($format, '企业信息模板');
+
         $objectwriter = \PHPExcel_IOFactory::createWriter($objectPhpExcel, $format);
         $path = 'php://output';
-        $objectwriter->save($path);        
+        $objectwriter->save($path);
         exit();
-        
     }
 
-    public function actionCorporationExport() {
-        $start_time= microtime(true);
+    public function actionCorporationExport()
+    {
+        $start_time = microtime(true);
         $searchModel = new CorporationSearch();
-        $models = $searchModel->search(Yii::$app->request->queryParams,1000)->getModels();
-//        $model = RepairOrder::find()->joinWith('type')->joinWith('area')->joinWith('worker')->all();
-//        var_dump(Yii::$app->request->queryParams);
-//        exit;
-        $fileName= Yii::getAlias('@webroot').'/excel/corporation_temple.xlsx';
+        $models = $searchModel->search(Yii::$app->request->queryParams, 1000)->getModels();
+        //        $model = RepairOrder::find()->joinWith('type')->joinWith('area')->joinWith('worker')->all();
+        //        var_dump(Yii::$app->request->queryParams);
+        //        exit;
+        $fileName = Yii::getAlias('@webroot') . '/excel/corporation_temple.xlsx';
         $format = \PHPExcel_IOFactory::identify($fileName);
         $objectreader = \PHPExcel_IOFactory::createReader($format);
         $objectPhpExcel = $objectreader->load($fileName);
-  
+
         $objSheet = $objectPhpExcel->getSheetByName('企业信息'); //这一句为要设置数据有效性的单元格  
         ExcelHelper::set_corporation_excel($objSheet);
-        
-        $objSheet->setCellValue( 'A1', '序号')
-                ->setCellValue( 'B1', $searchModel->getAttributeLabel('base_company_name'))
-                ->setCellValue( 'C1', $searchModel->getAttributeLabel('stat'))
-                ->setCellValue( 'D1', $searchModel->getAttributeLabel('base_bd'))
-                ->setCellValue( 'E1', $searchModel->getAttributeLabel('huawei_account'))
-                ->setCellValue( 'F1', $searchModel->getAttributeLabel('base_industry'))
-                ->setCellValue( 'G1', $searchModel->getAttributeLabel('contact_park'))
-                ->setCellValue( 'H1', $searchModel->getAttributeLabel('contact_address'))
-                ->setCellValue( 'I1', $searchModel->getAttributeLabel('intent_set'))
-                ->setCellValue( 'J1', $searchModel->getAttributeLabel('intent_number'))
-                ->setCellValue( 'K1', $searchModel->getAttributeLabel('intent_amount'))
-                ->setCellValue( 'L1', $searchModel->getAttributeLabel('base_company_scale'))
-                ->setCellValue( 'M1', $searchModel->getAttributeLabel('base_registered_capital'))
-                ->setCellValue( 'N1', $searchModel->getAttributeLabel('base_registered_time'))
-                ->setCellValue( 'O1', $searchModel->getAttributeLabel('base_main_business'))
-                ->setCellValue( 'P1', $searchModel->getAttributeLabel('base_last_income'))
-                ->setCellValue( 'Q1', $searchModel->getAttributeLabel('contact_business_name'))
-                ->setCellValue( 'R1', $searchModel->getAttributeLabel('contact_business_job'))
-                ->setCellValue( 'S1', $searchModel->getAttributeLabel('contact_business_tel'))
-                ->setCellValue( 'T1', $searchModel->getAttributeLabel('contact_technology_name'))
-                ->setCellValue( 'U1', $searchModel->getAttributeLabel('contact_technology_job'))
-                ->setCellValue( 'V1', $searchModel->getAttributeLabel('contact_technology_tel'))
-                ->setCellValue( 'W1', $searchModel->getAttributeLabel('develop_scale'))
-                ->setCellValue( 'X1', $searchModel->getAttributeLabel('develop_pattern'))
-                ->setCellValue( 'Y1', $searchModel->getAttributeLabel('develop_scenario'))
-                ->setCellValue( 'Z1', $searchModel->getAttributeLabel('develop_science'))
-                ->setCellValue( 'AA1', $searchModel->getAttributeLabel('develop_language'))
-                ->setCellValue( 'AB1', $searchModel->getAttributeLabel('develop_IDE'))
-                ->setCellValue( 'AC1', $searchModel->getAttributeLabel('develop_current_situation'))
-                ->setCellValue( 'AD1', $searchModel->getAttributeLabel('develop_weakness'));
-               
-        $group_count=count(Group::get_user_group(Yii::$app->user->identity->id));
-        
-        if($group_count>1){
-            $objSheet->setCellValue( 'AE1', $searchModel->getAttributeLabel('group_id'));
+
+        $objSheet->setCellValue('A1', '序号')
+            ->setCellValue('B1', $searchModel->getAttributeLabel('base_company_name'))
+            ->setCellValue('C1', $searchModel->getAttributeLabel('stat'))
+            ->setCellValue('D1', $searchModel->getAttributeLabel('base_bd'))
+            ->setCellValue('E1', $searchModel->getAttributeLabel('huawei_account'))
+            ->setCellValue('F1', $searchModel->getAttributeLabel('base_industry'))
+            ->setCellValue('G1', $searchModel->getAttributeLabel('contact_park'))
+            ->setCellValue('H1', $searchModel->getAttributeLabel('contact_address'))
+            ->setCellValue('I1', $searchModel->getAttributeLabel('intent_set'))
+            ->setCellValue('J1', $searchModel->getAttributeLabel('intent_number'))
+            ->setCellValue('K1', $searchModel->getAttributeLabel('intent_amount'))
+            ->setCellValue('L1', $searchModel->getAttributeLabel('base_company_scale'))
+            ->setCellValue('M1', $searchModel->getAttributeLabel('base_registered_capital'))
+            ->setCellValue('N1', $searchModel->getAttributeLabel('base_registered_time'))
+            ->setCellValue('O1', $searchModel->getAttributeLabel('base_main_business'))
+            ->setCellValue('P1', $searchModel->getAttributeLabel('base_last_income'))
+            ->setCellValue('Q1', $searchModel->getAttributeLabel('contact_business_name'))
+            ->setCellValue('R1', $searchModel->getAttributeLabel('contact_business_job'))
+            ->setCellValue('S1', $searchModel->getAttributeLabel('contact_business_tel'))
+            ->setCellValue('T1', $searchModel->getAttributeLabel('contact_technology_name'))
+            ->setCellValue('U1', $searchModel->getAttributeLabel('contact_technology_job'))
+            ->setCellValue('V1', $searchModel->getAttributeLabel('contact_technology_tel'))
+            ->setCellValue('W1', $searchModel->getAttributeLabel('develop_scale'))
+            ->setCellValue('X1', $searchModel->getAttributeLabel('develop_pattern'))
+            ->setCellValue('Y1', $searchModel->getAttributeLabel('develop_scenario'))
+            ->setCellValue('Z1', $searchModel->getAttributeLabel('develop_science'))
+            ->setCellValue('AA1', $searchModel->getAttributeLabel('develop_language'))
+            ->setCellValue('AB1', $searchModel->getAttributeLabel('develop_IDE'))
+            ->setCellValue('AC1', $searchModel->getAttributeLabel('develop_current_situation'))
+            ->setCellValue('AD1', $searchModel->getAttributeLabel('develop_weakness'));
+
+        $group_count = count(Group::get_user_group(Yii::$app->user->identity->id));
+
+        if ($group_count > 1) {
+            $objSheet->setCellValue('AE1', $searchModel->getAttributeLabel('group_id'));
         }
-        
-        foreach($models as $key=>$model){
-            $k=$key+2;
-            $objSheet->setCellValue( 'A'.$k, $key+1)
-                    ->setCellValue( 'B'.$k, $model->base_company_name)
-                    ->setCellValue( 'C'.$k, $model->Stat)                    
-                    ->setCellValue( 'D'.$k, $model->base_bd?($model->baseBd->nickname?$model->baseBd->nickname:$model->baseBd->username):'')
-                    ->setCellValue( 'E'.$k, $model->huawei_account)
-                    ->setCellValue( 'F'.$k, $model->get_industry($model->id))
-                    ->setCellValue( 'G'.$k, implode(',', Parameter::get_para_value('contact_park',$model->contact_park)))
-                    ->setCellValue( 'H'.$k, $model->contact_address)
-                    ->setCellValue( 'I'.$k, $model->intent_set?$model->intentSet->Region.' '.$model->intentSet->name:$model->intent_set)                   
-                    ->setCellValue( 'J'.$k, $model->intent_number)
-                    ->setCellValue( 'K'.$k, $model->intent_amount)
-                    ->setCellValue( 'L'.$k, $model->base_company_scale)
-                    ->setCellValue( 'M'.$k, $model->base_registered_capital)
-                    ->setCellValue( 'N'.$k, $model->base_registered_time>0?date('Y-m-d',$model->base_registered_time):'')                
-                    ->setCellValue( 'O'.$k, $model->base_main_business)                   
-                    ->setCellValue( 'P'.$k, $model->base_last_income)                  
-                    ->setCellValue( 'Q'.$k, $model->contact_business_name)
-                    ->setCellValue( 'R'.$k, $model->contact_business_job)
-                    ->setCellValue( 'S'.$k, $model->contact_business_tel)
-                    ->setCellValue( 'T'.$k, $model->contact_technology_name)
-                    ->setCellValue( 'U'.$k, $model->contact_technology_job)
-                    ->setCellValue( 'V'.$k, $model->contact_technology_tel)                  
-                    ->setCellValue( 'W'.$k, $model->develop_scale)
-                    ->setCellValue( 'X'.$k, implode(',', Parameter::get_para_value('develop_pattern',$model->develop_pattern)))
-                    ->setCellValue( 'Y'.$k, implode(',', Parameter::get_para_value('develop_scenario',$model->develop_scenario)))
-                    ->setCellValue( 'Z'.$k, implode(',', Parameter::get_para_value('develop_science',$model->develop_science)))
-                    ->setCellValue( 'AA'.$k, implode(',', Parameter::get_para_value('develop_language',explode(',',$model->develop_language))))
-                    ->setCellValue( 'AB'.$k, implode(',', Parameter::get_para_value('develop_IDE',$model->develop_IDE)))
-                    ->setCellValue( 'AC'.$k, $model->develop_current_situation)
-                    ->setCellValue( 'AD'.$k, $model->develop_weakness);
-            
-            if($group_count>1){
-                $objSheet->setCellValue( 'AE'.$k, $model->group_id?$model->group->title:$model->group_id);
+
+        foreach ($models as $key => $model) {
+            $k = $key + 2;
+            $objSheet->setCellValue('A' . $k, $key + 1)
+                ->setCellValue('B' . $k, $model->base_company_name)
+                ->setCellValue('C' . $k, $model->Stat)
+                ->setCellValue('D' . $k, $model->base_bd ? ($model->baseBd->nickname ? $model->baseBd->nickname : $model->baseBd->username) : '')
+                ->setCellValue('E' . $k, $model->huawei_account)
+                ->setCellValue('F' . $k, $model->get_industry($model->id))
+                ->setCellValue('G' . $k, implode(',', Parameter::get_para_value('contact_park', $model->contact_park)))
+                ->setCellValue('H' . $k, $model->contact_address)
+                ->setCellValue('I' . $k, $model->intent_set ? $model->intentSet->Region . ' ' . $model->intentSet->name : $model->intent_set)
+                ->setCellValue('J' . $k, $model->intent_number)
+                ->setCellValue('K' . $k, $model->intent_amount)
+                ->setCellValue('L' . $k, $model->base_company_scale)
+                ->setCellValue('M' . $k, $model->base_registered_capital)
+                ->setCellValue('N' . $k, $model->base_registered_time > 0 ? date('Y-m-d', $model->base_registered_time) : '')
+                ->setCellValue('O' . $k, $model->base_main_business)
+                ->setCellValue('P' . $k, $model->base_last_income)
+                ->setCellValue('Q' . $k, $model->contact_business_name)
+                ->setCellValue('R' . $k, $model->contact_business_job)
+                ->setCellValue('S' . $k, $model->contact_business_tel)
+                ->setCellValue('T' . $k, $model->contact_technology_name)
+                ->setCellValue('U' . $k, $model->contact_technology_job)
+                ->setCellValue('V' . $k, $model->contact_technology_tel)
+                ->setCellValue('W' . $k, $model->develop_scale)
+                ->setCellValue('X' . $k, implode(',', Parameter::get_para_value('develop_pattern', $model->develop_pattern)))
+                ->setCellValue('Y' . $k, implode(',', Parameter::get_para_value('develop_scenario', $model->develop_scenario)))
+                ->setCellValue('Z' . $k, implode(',', Parameter::get_para_value('develop_science', $model->develop_science)))
+                ->setCellValue('AA' . $k, implode(',', Parameter::get_para_value('develop_language', explode(',', $model->develop_language))))
+                ->setCellValue('AB' . $k, implode(',', Parameter::get_para_value('develop_IDE', $model->develop_IDE)))
+                ->setCellValue('AC' . $k, $model->develop_current_situation)
+                ->setCellValue('AD' . $k, $model->develop_weakness);
+
+            if ($group_count > 1) {
+                $objSheet->setCellValue('AE' . $k, $model->group_id ? $model->group->title : $model->group_id);
             }
-            $line_stat= implode(',', Corporation::get_stat_list($model->stat));
+            $line_stat = implode(',', Corporation::get_stat_list($model->stat));
             //状态选择
-            $objSheet->getCell('C'.$k)->getDataValidation() -> setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)  
-                -> setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)  
-                -> setAllowBlank(false)  
-                -> setShowInputMessage(true)  
-                -> setShowErrorMessage(true)  
-                -> setShowDropDown(true)  
-                -> setErrorTitle('输入的值有误')  
-                -> setError('您输入的值不在下拉框列表内.')  
-                -> setPromptTitle('状态')  
-                -> setFormula1('"'.$line_stat.'"'); 
-                       
+            $objSheet->getCell('C' . $k)->getDataValidation()->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST)
+                ->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION)
+                ->setAllowBlank(false)
+                ->setShowInputMessage(true)
+                ->setShowErrorMessage(true)
+                ->setShowDropDown(true)
+                ->setErrorTitle('输入的值有误')
+                ->setError('您输入的值不在下拉框列表内.')
+                ->setPromptTitle('状态')
+                ->setFormula1('"' . $line_stat . '"');
         }
-        
-        
-        $end_time= microtime(true);
-        if($end_time-$start_time<1){
+
+
+        $end_time = microtime(true);
+        if ($end_time - $start_time < 1) {
             sleep(1);
         }
 
-        ExcelHelper::excel_set_headers($format,'企业信息(' . date('Y-m-d', time()) . ')');
-        
+        ExcelHelper::excel_set_headers($format, '企业信息(' . date('Y-m-d', time()) . ')');
+
         $objectwriter = \PHPExcel_IOFactory::createWriter($objectPhpExcel, $format);
         $path = 'php://output';
-        $objectwriter->save($path);        
+        $objectwriter->save($path);
         exit();
     }
-    
-    public function actionCorporationImport() {
+
+    public function actionCorporationImport()
+    {
         //判断是否Ajax
         if (Yii::$app->request->isAjax) {
 
@@ -716,301 +709,295 @@ class CorporationController extends Controller
             }
 
 
-//            $start_time= microtime(true);
+            //            $start_time= microtime(true);
 
-            $files = $_FILES['files'];  
-            
-            $fileName= $files['tmp_name'][0];
+            $files = $_FILES['files'];
+
+            $fileName = $files['tmp_name'][0];
             //$fileName= Yii::getAlias('@webroot').'/excel/1.xlsx';
             $format = \PHPExcel_IOFactory::identify($fileName);
             $objectreader = \PHPExcel_IOFactory::createReader($format);
             $objectPhpExcel = $objectreader->load($fileName);
-            
+
             $dataArray = $objectPhpExcel->getActiveSheet()->toArray(null, true, true, true);
-            
+
             $datas = ExcelHelper::execute_array_label($dataArray);
-                
+
             $group = Group::get_user_group(Yii::$app->user->identity->id);
-            $bd=User::get_bd(User::STATUS_ACTIVE, UserGroup::get_group_userid(array_keys($group)));
-            $base_industry= Industry::getIndustryName();
-            $intent_set= Meal::get_meal(Meal::STAT_ACTIVE,array_keys($group));
-            $contact_park=Parameter::get_type('contact_park');
-            $develop_pattern=Parameter::get_type('develop_pattern');
-            $develop_scenario=Parameter::get_type('develop_scenario');
-            $develop_science=Parameter::get_type('develop_science');
-            $develop_language=Parameter::get_type('develop_language');
-            $develop_IDE=Parameter::get_type('develop_IDE');
-                           
-            $num=['add'=>0,'update'=>0,'fail'=>0];
-               
-            $notice_error=[];
-            $parameter_add=System::getValue('business_parameter');
+            $bd = User::get_bd(User::STATUS_ACTIVE, UserGroup::get_group_userid(array_keys($group)));
+            $base_industry = Industry::getIndustryName();
+            $intent_set = Meal::get_meal(Meal::STAT_ACTIVE, array_keys($group));
+            $contact_park = Parameter::get_type('contact_park');
+            $develop_pattern = Parameter::get_type('develop_pattern');
+            $develop_scenario = Parameter::get_type('develop_scenario');
+            $develop_science = Parameter::get_type('develop_science');
+            $develop_language = Parameter::get_type('develop_language');
+            $develop_IDE = Parameter::get_type('develop_IDE');
+
+            $num = ['add' => 0, 'update' => 0, 'fail' => 0];
+
+            $notice_error = [];
+            $parameter_add = System::getValue('business_parameter');
             $searchModel = new CorporationSearch();
-            $index=[
-                'base_company_name'=>$searchModel->getAttributeLabel('base_company_name'),
-                'stat'=>$searchModel->getAttributeLabel('stat'),
-                'base_bd'=>$searchModel->getAttributeLabel('base_bd'),
-                'huawei_account'=>$searchModel->getAttributeLabel('huawei_account'),
-                'base_industry'=>$searchModel->getAttributeLabel('base_industry'),
-                'contact_park'=>$searchModel->getAttributeLabel('contact_park'),
-                'contact_address'=>$searchModel->getAttributeLabel('contact_address'),
-                'intent_set'=>$searchModel->getAttributeLabel('intent_set'),
-                'intent_number'=>$searchModel->getAttributeLabel('intent_number'),
-                'intent_amount'=>$searchModel->getAttributeLabel('intent_amount'),
-                'base_company_scale'=>$searchModel->getAttributeLabel('base_company_scale'),
-                'base_registered_capital'=>$searchModel->getAttributeLabel('base_registered_capital'),
-                'base_registered_time'=>$searchModel->getAttributeLabel('base_registered_time'),
-                'base_main_business'=>$searchModel->getAttributeLabel('base_main_business'),
-                'base_last_income'=>$searchModel->getAttributeLabel('base_last_income'),
-                'contact_business_name'=>$searchModel->getAttributeLabel('contact_business_name'),
-                'contact_business_job'=>$searchModel->getAttributeLabel('contact_business_job'),
-                'contact_business_tel'=>$searchModel->getAttributeLabel('contact_business_tel'),
-                'contact_technology_name'=>$searchModel->getAttributeLabel('contact_technology_name'),
-                'contact_technology_job'=>$searchModel->getAttributeLabel('contact_technology_job'),
-                'contact_technology_tel'=>$searchModel->getAttributeLabel('contact_technology_tel'),
-                'develop_scale'=>$searchModel->getAttributeLabel('develop_scale'),
-                'develop_pattern'=>$searchModel->getAttributeLabel('develop_pattern'),
-                'develop_scenario'=>$searchModel->getAttributeLabel('develop_scenario'),
-                'develop_science'=>$searchModel->getAttributeLabel('develop_science'),
-                'develop_language'=>$searchModel->getAttributeLabel('develop_language'),
-                'develop_IDE'=>$searchModel->getAttributeLabel('develop_IDE'),
-                'develop_current_situation'=>$searchModel->getAttributeLabel('develop_current_situation'),
-                'develop_weakness'=>$searchModel->getAttributeLabel('develop_weakness'),
-                'group_id'=>$searchModel->getAttributeLabel('group_id'),
-                ];
-            
+            $index = [
+                'base_company_name' => $searchModel->getAttributeLabel('base_company_name'),
+                'stat' => $searchModel->getAttributeLabel('stat'),
+                'base_bd' => $searchModel->getAttributeLabel('base_bd'),
+                'huawei_account' => $searchModel->getAttributeLabel('huawei_account'),
+                'base_industry' => $searchModel->getAttributeLabel('base_industry'),
+                'contact_park' => $searchModel->getAttributeLabel('contact_park'),
+                'contact_address' => $searchModel->getAttributeLabel('contact_address'),
+                'intent_set' => $searchModel->getAttributeLabel('intent_set'),
+                'intent_number' => $searchModel->getAttributeLabel('intent_number'),
+                'intent_amount' => $searchModel->getAttributeLabel('intent_amount'),
+                'base_company_scale' => $searchModel->getAttributeLabel('base_company_scale'),
+                'base_registered_capital' => $searchModel->getAttributeLabel('base_registered_capital'),
+                'base_registered_time' => $searchModel->getAttributeLabel('base_registered_time'),
+                'base_main_business' => $searchModel->getAttributeLabel('base_main_business'),
+                'base_last_income' => $searchModel->getAttributeLabel('base_last_income'),
+                'contact_business_name' => $searchModel->getAttributeLabel('contact_business_name'),
+                'contact_business_job' => $searchModel->getAttributeLabel('contact_business_job'),
+                'contact_business_tel' => $searchModel->getAttributeLabel('contact_business_tel'),
+                'contact_technology_name' => $searchModel->getAttributeLabel('contact_technology_name'),
+                'contact_technology_job' => $searchModel->getAttributeLabel('contact_technology_job'),
+                'contact_technology_tel' => $searchModel->getAttributeLabel('contact_technology_tel'),
+                'develop_scale' => $searchModel->getAttributeLabel('develop_scale'),
+                'develop_pattern' => $searchModel->getAttributeLabel('develop_pattern'),
+                'develop_scenario' => $searchModel->getAttributeLabel('develop_scenario'),
+                'develop_science' => $searchModel->getAttributeLabel('develop_science'),
+                'develop_language' => $searchModel->getAttributeLabel('develop_language'),
+                'develop_IDE' => $searchModel->getAttributeLabel('develop_IDE'),
+                'develop_current_situation' => $searchModel->getAttributeLabel('develop_current_situation'),
+                'develop_weakness' => $searchModel->getAttributeLabel('develop_weakness'),
+                'group_id' => $searchModel->getAttributeLabel('group_id'),
+            ];
+
             //项目处理
-            if(!$group){
+            if (!$group) {
                 Yii::$app->session->setFlash('error', '没有权限');
                 return false;
             }
-            if(isset($datas[0])){
-                $keys= array_filter(array_keys($datas[0]));
-                if(!in_array($index['base_company_name'], $keys)){
-                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['base_company_name'].'>>字段');
+            if (isset($datas[0])) {
+                $keys = array_filter(array_keys($datas[0]));
+                if (!in_array($index['base_company_name'], $keys)) {
+                    Yii::$app->session->setFlash('error', '文件首行不存在<<' . $index['base_company_name'] . '>>字段');
                     return false;
                 }
-                if(count($group)>1&&!in_array($index['group_id'], $keys)){
-                    Yii::$app->session->setFlash('error', '文件首行不存在<<'.$index['group_id'].'>>字段');
+                if (count($group) > 1 && !in_array($index['group_id'], $keys)) {
+                    Yii::$app->session->setFlash('error', '文件首行不存在<<' . $index['group_id'] . '>>字段');
                     return false;
                 }
-               
-            }else{
+            } else {
                 Yii::$app->session->setFlash('error', '没有有效数据');
                 return false;
             }
-            
-            foreach ($datas as $key=>$data) {
-//                    Yii::$app->session->setFlash('success', json_encode($datas,256));
-//                    return true;                          
-                //数据处理
-                
-                $data= array_filter($data);//去除0值和空值
-                
-               
-                   
-                if(isset($data[$index['base_company_name']])){
-                    $corporation = Corporation::findOne(['base_company_name'=>trim($data[$index['base_company_name']])]);
 
-                    if($corporation===null){
+            foreach ($datas as $key => $data) {
+                //                    Yii::$app->session->setFlash('success', json_encode($datas,256));
+                //                    return true;                          
+                //数据处理
+
+                $data = array_filter($data); //去除0值和空值
+
+
+
+                if (isset($data[$index['base_company_name']])) {
+                    $corporation = Corporation::findOne(['base_company_name' => trim($data[$index['base_company_name']])]);
+
+                    if ($corporation === null) {
                         //不存在
-                        $num_key='add';
-                        $corporation=new Corporation();
+                        $num_key = 'add';
+                        $corporation = new Corporation();
                         $corporation->loadDefaultValues();
-                        $corporation->base_company_name=trim($data[$index['base_company_name']]);
-                    }elseif(Yii::$app->user->can('企业修改',['id'=>$corporation->id])){
-                        $num_key='update';
-                    }else{
+                        $corporation->base_company_name = trim($data[$index['base_company_name']]);
+                    } elseif (Yii::$app->user->can('企业修改', ['id' => $corporation->id])) {
+                        $num_key = 'update';
+                    } else {
                         continue;
                     }
-                    
-                    if(count($group)>1){
-                        if(isset($data[$index['group_id']])&&array_search(trim($data[$index['group_id']]), $group)){
-                            $corporation->group_id= array_search(trim($data[$index['group_id']]), $group);
-                        }else{
+
+                    if (count($group) > 1) {
+                        if (isset($data[$index['group_id']]) && array_search(trim($data[$index['group_id']]), $group)) {
+                            $corporation->group_id = array_search(trim($data[$index['group_id']]), $group);
+                        } else {
                             continue;
                         }
-                    }else{
-                        if(!isset($data[$index['group_id']])||(isset($data[$index['group_id']])&&array_search(trim($data[$index['group_id']]), $group))){
-                            $corporation->group_id= key($group);          
-                        }else{
+                    } else {
+                        if (!isset($data[$index['group_id']]) || (isset($data[$index['group_id']]) && array_search(trim($data[$index['group_id']]), $group))) {
+                            $corporation->group_id = key($group);
+                        } else {
                             continue;
                         }
                     }
-                                      
-//                    if(isset($data[$index['stat']])&&array_search(trim($data[$index['stat']]), $stat)){
-//                        $corporation->stat= array_search(trim($data[$index['stat']]), $stat);
-//                    }
-                    if(isset($data[$index['base_bd']])&&array_search(trim($data[$index['base_bd']]), $bd)){
-                        $corporation->base_bd= array_search(trim($data[$index['base_bd']]), $bd);
-                    }                   
-                    if(isset($data[$index['huawei_account']])){
-                        $corporation->huawei_account= trim($data[$index['huawei_account']]);
+
+                    //                    if(isset($data[$index['stat']])&&array_search(trim($data[$index['stat']]), $stat)){
+                    //                        $corporation->stat= array_search(trim($data[$index['stat']]), $stat);
+                    //                    }
+                    if (isset($data[$index['base_bd']]) && array_search(trim($data[$index['base_bd']]), $bd)) {
+                        $corporation->base_bd = array_search(trim($data[$index['base_bd']]), $bd);
                     }
-                    if(isset($data[$index['contact_park']])){
-                        $data[$index['contact_park']]=trim($data[$index['contact_park']]);
-                        if(array_search($data[$index['contact_park']], $contact_park)){
-                            $corporation->contact_park= array_search($data[$index['contact_park']], $contact_park);
-                        }elseif($parameter_add){
-                            $corporation->contact_park= Parameter::add_type('contact_park', $data[$index['contact_park']]);
-                            $contact_park[$corporation->contact_park]=$data[$index['contact_park']];
+                    if (isset($data[$index['huawei_account']])) {
+                        $corporation->huawei_account = trim($data[$index['huawei_account']]);
+                    }
+                    if (isset($data[$index['contact_park']])) {
+                        $data[$index['contact_park']] = trim($data[$index['contact_park']]);
+                        if (array_search($data[$index['contact_park']], $contact_park)) {
+                            $corporation->contact_park = array_search($data[$index['contact_park']], $contact_park);
+                        } elseif ($parameter_add) {
+                            $corporation->contact_park = Parameter::add_type('contact_park', $data[$index['contact_park']]);
+                            $contact_park[$corporation->contact_park] = $data[$index['contact_park']];
                         }
                     }
-                    if(isset($data[$index['contact_address']])){
-                        $corporation->contact_address= trim($data[$index['contact_address']]);
-                    }                   
-                    if(isset($data[$index['intent_set']])&&array_search(trim($data[$index['intent_set']]), $intent_set)){
-                        $corporation->intent_set= array_search(trim($data[$index['intent_set']]), $intent_set);
+                    if (isset($data[$index['contact_address']])) {
+                        $corporation->contact_address = trim($data[$index['contact_address']]);
                     }
-                    if(isset($data[$index['intent_number']])){
-                        $corporation->intent_number= trim($data[$index['intent_number']]);
-                    }                   
-                    if($corporation->intent_set&&$corporation->intent_number){
-                        $corporation->intent_amount=$corporation->intent_number*Meal::get_meal_amount($corporation->intent_set);
-                    }elseif(isset($data[$index['intent_amount']])){
-                        $corporation->intent_amount=trim($data[$index['intent_amount']]);
+                    if (isset($data[$index['intent_set']]) && array_search(trim($data[$index['intent_set']]), $intent_set)) {
+                        $corporation->intent_set = array_search(trim($data[$index['intent_set']]), $intent_set);
                     }
-                    if(isset($data[$index['base_company_scale']])){
-                        $corporation->base_company_scale= trim($data[$index['base_company_scale']]);
+                    if (isset($data[$index['intent_number']])) {
+                        $corporation->intent_number = trim($data[$index['intent_number']]);
                     }
-                    if(isset($data[$index['base_registered_capital']])){
-                        $corporation->base_registered_capital= trim($data[$index['base_registered_capital']]);
+                    if ($corporation->intent_set && $corporation->intent_number) {
+                        $corporation->intent_amount = $corporation->intent_number * Meal::get_meal_amount($corporation->intent_set);
+                    } elseif (isset($data[$index['intent_amount']])) {
+                        $corporation->intent_amount = trim($data[$index['intent_amount']]);
                     }
-                    if(isset($data[$index['base_registered_time']])&&strtotime($data[$index['base_registered_time']])){
-                        $corporation->base_registered_time= strtotime($data[$index['base_registered_time']]);
+                    if (isset($data[$index['base_company_scale']])) {
+                        $corporation->base_company_scale = trim($data[$index['base_company_scale']]);
                     }
-                    if(isset($data[$index['base_main_business']])){
-                        $corporation->base_main_business= trim($data[$index['base_main_business']]);
-                    }                    
-                    if(isset($data[$index['base_last_income']])){
-                        $corporation->base_last_income= trim($data[$index['base_last_income']]);
-                    }               
-                    if(isset($data[$index['contact_business_name']])){
-                        $corporation->contact_business_name= trim($data[$index['contact_business_name']]);
+                    if (isset($data[$index['base_registered_capital']])) {
+                        $corporation->base_registered_capital = trim($data[$index['base_registered_capital']]);
                     }
-                    if(isset($data[$index['contact_business_job']])){
-                        $corporation->contact_business_job= trim($data[$index['contact_business_job']]);
+                    if (isset($data[$index['base_registered_time']]) && strtotime($data[$index['base_registered_time']])) {
+                        $corporation->base_registered_time = strtotime($data[$index['base_registered_time']]);
                     }
-                    if(isset($data[$index['contact_business_tel']])){
-                        $corporation->contact_business_tel= trim((string)$data[$index['contact_business_tel']]);
+                    if (isset($data[$index['base_main_business']])) {
+                        $corporation->base_main_business = trim($data[$index['base_main_business']]);
                     }
-                    if(isset($data[$index['contact_technology_name']])){
-                        $corporation->contact_technology_name= trim($data[$index['contact_technology_name']]);
+                    if (isset($data[$index['base_last_income']])) {
+                        $corporation->base_last_income = trim($data[$index['base_last_income']]);
                     }
-                    if(isset($data[$index['contact_technology_job']])){
-                        $corporation->contact_technology_job= trim($data[$index['contact_technology_job']]);
+                    if (isset($data[$index['contact_business_name']])) {
+                        $corporation->contact_business_name = trim($data[$index['contact_business_name']]);
                     }
-                    if(isset($data[$index['contact_technology_tel']])){
-                        $corporation->contact_technology_tel= trim((string)$data[$index['contact_technology_tel']]);
-                    }       
-                    if(isset($data[$index['develop_scale']])){
-                        $corporation->develop_scale= trim($data[$index['develop_scale']]);
+                    if (isset($data[$index['contact_business_job']])) {
+                        $corporation->contact_business_job = trim($data[$index['contact_business_job']]);
                     }
-                    
-                    if(isset($data[$index['develop_pattern']])){
-                        $data[$index['develop_pattern']]=trim($data[$index['develop_pattern']]);
-                        if(array_search($data[$index['develop_pattern']], $develop_pattern)){
-                            $corporation->develop_pattern= array_search($data[$index['develop_pattern']], $develop_pattern);
-                        }elseif($parameter_add){
-                            $corporation->develop_pattern= Parameter::add_type('develop_pattern', $data[$index['develop_pattern']]);
-                            $develop_pattern[$corporation->develop_pattern]=$data[$index['develop_pattern']];
+                    if (isset($data[$index['contact_business_tel']])) {
+                        $corporation->contact_business_tel = trim((string)$data[$index['contact_business_tel']]);
+                    }
+                    if (isset($data[$index['contact_technology_name']])) {
+                        $corporation->contact_technology_name = trim($data[$index['contact_technology_name']]);
+                    }
+                    if (isset($data[$index['contact_technology_job']])) {
+                        $corporation->contact_technology_job = trim($data[$index['contact_technology_job']]);
+                    }
+                    if (isset($data[$index['contact_technology_tel']])) {
+                        $corporation->contact_technology_tel = trim((string)$data[$index['contact_technology_tel']]);
+                    }
+                    if (isset($data[$index['develop_scale']])) {
+                        $corporation->develop_scale = trim($data[$index['develop_scale']]);
+                    }
+
+                    if (isset($data[$index['develop_pattern']])) {
+                        $data[$index['develop_pattern']] = trim($data[$index['develop_pattern']]);
+                        if (array_search($data[$index['develop_pattern']], $develop_pattern)) {
+                            $corporation->develop_pattern = array_search($data[$index['develop_pattern']], $develop_pattern);
+                        } elseif ($parameter_add) {
+                            $corporation->develop_pattern = Parameter::add_type('develop_pattern', $data[$index['develop_pattern']]);
+                            $develop_pattern[$corporation->develop_pattern] = $data[$index['develop_pattern']];
                         }
                     }
-                    if(isset($data[$index['develop_scenario']])){
-                        $data[$index['develop_scenario']]=trim($data[$index['develop_scenario']]);
-                        if(array_search($data[$index['develop_scenario']], $develop_scenario)){
-                            $corporation->develop_scenario= array_search($data[$index['develop_scenario']], $develop_scenario);
-                        }elseif($parameter_add){
-                            $corporation->develop_scenario= Parameter::add_type('develop_scenario', $data[$index['develop_scenario']]);
-                            $develop_scenario[$corporation->develop_scenario]=$data[$index['develop_scenario']];
+                    if (isset($data[$index['develop_scenario']])) {
+                        $data[$index['develop_scenario']] = trim($data[$index['develop_scenario']]);
+                        if (array_search($data[$index['develop_scenario']], $develop_scenario)) {
+                            $corporation->develop_scenario = array_search($data[$index['develop_scenario']], $develop_scenario);
+                        } elseif ($parameter_add) {
+                            $corporation->develop_scenario = Parameter::add_type('develop_scenario', $data[$index['develop_scenario']]);
+                            $develop_scenario[$corporation->develop_scenario] = $data[$index['develop_scenario']];
                         }
                     }
-                    if(isset($data[$index['develop_science']])){
-                        $data[$index['develop_science']]=trim($data[$index['develop_science']]);
-                        if(array_search($data[$index['develop_science']], $develop_science)){
-                            $corporation->develop_science= array_search($data[$index['develop_science']], $develop_science);
-                        }elseif($parameter_add){
-                            $corporation->develop_science= Parameter::add_type('develop_science', $data[$index['develop_science']]);
-                            $develop_science[$corporation->develop_science]=$data[$index['develop_science']];
+                    if (isset($data[$index['develop_science']])) {
+                        $data[$index['develop_science']] = trim($data[$index['develop_science']]);
+                        if (array_search($data[$index['develop_science']], $develop_science)) {
+                            $corporation->develop_science = array_search($data[$index['develop_science']], $develop_science);
+                        } elseif ($parameter_add) {
+                            $corporation->develop_science = Parameter::add_type('develop_science', $data[$index['develop_science']]);
+                            $develop_science[$corporation->develop_science] = $data[$index['develop_science']];
                         }
                     }
-                    if(isset($data[$index['develop_language']])){
-                        $ls= explode(',', str_replace('、',',',str_replace('，',',',$data[$index['develop_language']])));
-                        $dl=[];
-                        foreach($ls as $l){
-                            $l=trim($l);
-                            if(array_search($l, $develop_language)){
-                                $dl[]=array_search($l, $develop_language);
-                            }elseif($parameter_add){
-                                $lid=Parameter::add_type('develop_language', $l);
-                                $dl[]=$lid;
-                                $develop_language[$lid]=$l;
+                    if (isset($data[$index['develop_language']])) {
+                        $ls = explode(',', str_replace('、', ',', str_replace('，', ',', $data[$index['develop_language']])));
+                        $dl = [];
+                        foreach ($ls as $l) {
+                            $l = trim($l);
+                            if (array_search($l, $develop_language)) {
+                                $dl[] = array_search($l, $develop_language);
+                            } elseif ($parameter_add) {
+                                $lid = Parameter::add_type('develop_language', $l);
+                                $dl[] = $lid;
+                                $develop_language[$lid] = $l;
                             }
                         }
-                        $corporation->develop_language= implode(',', $dl);
+                        $corporation->develop_language = implode(',', $dl);
                     }
-                    if(isset($data[$index['develop_IDE']])){
-                        $data[$index['develop_IDE']]=trim($data[$index['develop_IDE']]);
-                        if(array_search($data[$index['develop_IDE']], $develop_IDE)){
-                            $corporation->develop_IDE= array_search($data[$index['develop_IDE']], $develop_IDE);
-                        }elseif($parameter_add){
-                            $corporation->develop_IDE= Parameter::add_type('develop_IDE', $data[$index['develop_IDE']]);
-                            $develop_IDE[$corporation->develop_IDE]=$data[$index['develop_IDE']];
+                    if (isset($data[$index['develop_IDE']])) {
+                        $data[$index['develop_IDE']] = trim($data[$index['develop_IDE']]);
+                        if (array_search($data[$index['develop_IDE']], $develop_IDE)) {
+                            $corporation->develop_IDE = array_search($data[$index['develop_IDE']], $develop_IDE);
+                        } elseif ($parameter_add) {
+                            $corporation->develop_IDE = Parameter::add_type('develop_IDE', $data[$index['develop_IDE']]);
+                            $develop_IDE[$corporation->develop_IDE] = $data[$index['develop_IDE']];
                         }
                     }
-                    if(isset($data[$index['develop_current_situation']])){
-                        $corporation->develop_current_situation= trim($data[$index['develop_current_situation']]);
+                    if (isset($data[$index['develop_current_situation']])) {
+                        $corporation->develop_current_situation = trim($data[$index['develop_current_situation']]);
                     }
-                    if(isset($data[$index['develop_weakness']])){
-                        $corporation->develop_weakness= trim($data[$index['develop_weakness']]);
+                    if (isset($data[$index['develop_weakness']])) {
+                        $corporation->develop_weakness = trim($data[$index['develop_weakness']]);
                     }
-                    
-                    if($corporation->save()){
-                       
-                        if(isset($data[$index['base_industry']])){
-                            CorporationIndustry::deleteAll(['corporation_id'=>$corporation->id]);
-                            $industry= new CorporationIndustry();
-                            $industry->corporation_id=$corporation->id;
-                            $industrys= explode(',', str_replace('、',',',str_replace('，',',',$data[$index['base_industry']])));
-                               
-                            foreach($industrys as $i){
-                                $i=trim($i);
-                                if(array_search($i, $base_industry)){
-                                    $_industry =clone $industry;
-                                    $_industry->industry_id=array_search($i, $base_industry);
+
+                    if ($corporation->save()) {
+
+                        if (isset($data[$index['base_industry']])) {
+                            CorporationIndustry::deleteAll(['corporation_id' => $corporation->id]);
+                            $industry = new CorporationIndustry();
+                            $industry->corporation_id = $corporation->id;
+                            $industrys = explode(',', str_replace('、', ',', str_replace('，', ',', $data[$index['base_industry']])));
+
+                            foreach ($industrys as $i) {
+                                $i = trim($i);
+                                if (array_search($i, $base_industry)) {
+                                    $_industry = clone $industry;
+                                    $_industry->industry_id = array_search($i, $base_industry);
                                     $_industry->save();
                                 }
-                            }                              
+                            }
                         }
                         $num[$num_key]++;
-                    }else{
-                        $errors=$corporation->getErrors();
-                   
-                        if($errors){
-                            $error=[];
-                            foreach($errors as $e){
-                                $error[]=$e[0];
+                    } else {
+                        $errors = $corporation->getErrors();
+
+                        if ($errors) {
+                            $error = [];
+                            foreach ($errors as $e) {
+                                $error[] = $e[0];
                             }
-                            $notice_error[]=$data[$index['base_company_name']]. ' {'. implode(' ', $error).'}';
+                            $notice_error[] = $data[$index['base_company_name']] . ' {' . implode(' ', $error) . '}';
                         }
                         $num['fail']++;
                     }
-                }else{
+                } else {
                     $num['fail']++;
                 }
-                                    
             }
-            if($notice_error){
+            if ($notice_error) {
                 Yii::$app->session->setFlash('error', $notice_error);
             }
-            Yii::$app->session->setFlash('warning', '新增'.$num['add'].'家，更新'.$num['update'].'家，失败'.$num['fail'].'家。');
-                  
-         
+            Yii::$app->session->setFlash('warning', '新增' . $num['add'] . '家，更新' . $num['update'] . '家，失败' . $num['fail'] . '家。');
         } else {
             Yii::$app->session->setFlash('error', '上传失败。');
         }
         return true;
-        
     }
-
 }
