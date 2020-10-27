@@ -470,7 +470,7 @@ class TrainController extends Controller
             ->setCellValue('J1', $searchModel->getAttributeLabel('train_result'))
             ->setCellValue('K1', $searchModel->getAttributeLabel('train_num'))
             ->setCellValue('L1', $searchModel->getAttributeLabel('train_stat'))
-            ->setCellValue('M1', $searchModel->getAttributeLabel('note'));
+            ->setCellValue('M1', $searchModel->getAttributeLabel('train_note'));
 
         $group_count = count(Group::get_user_group(Yii::$app->user->identity->id));
 
@@ -492,7 +492,7 @@ class TrainController extends Controller
                 ->setCellValue('J' . $k, $model->train_result)
                 ->setCellValue('K' . $k, $model->train_num)
                 ->setCellValue('L' . $k, $model->TrainStat)
-                ->setCellValue('M' . $k, $model->note);
+                ->setCellValue('M' . $k, $model->train_note);
 
             if ($group_count > 1) {
                 $objectPhpExcel->getActiveSheet()->setCellValue('N' . $k, $model->group_id ? $model->group->title : $model->group_id);

@@ -21,7 +21,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $other_people
  * @property int $train_num
  * @property string $train_result
- * @property string $note
+ * @property string $train_note
  * @property int $reply_uid
  * @property int $reply_at
  * @property int $stat
@@ -159,7 +159,7 @@ class Train extends \yii\db\ActiveRecord
         ];
     }
     
-     public static $List = [
+    public static $List = [
         'train_stat' => [
             self::STAT_CREATED => "创建",
             self::STAT_ORDER => "预约",

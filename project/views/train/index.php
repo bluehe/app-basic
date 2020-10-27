@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filter' => User::get_role('other',User::STATUS_ACTIVE,UserGroup::get_group_userid(array_keys(Group::get_user_group(Yii::$app->user->identity->id)))), 
                     ],
                     //'other',
-                    // 'note:ntext',
+                    // 'train_note:ntext',
                     // 'reply_uid',
                     // 'reply_at',
                     [
