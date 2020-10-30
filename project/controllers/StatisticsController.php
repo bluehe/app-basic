@@ -1099,6 +1099,7 @@ class StatisticsController extends Controller {
                 }
             }
 
+            ksort($data_train_num);
             foreach ($data_train_num as $gid => $data) {
                 $series['num'][] = ['type' => 'line', 'name' => $gid ? $groups[$gid]['name'] : '未分配', 'data' => $data, 'color' => $gid && $groups[$gid]['color'] ? '#' . $groups[$gid]['color'] : ''];
             }
@@ -1121,6 +1122,7 @@ class StatisticsController extends Controller {
                     $data_train_type[$user][] = ['name' => Train::$List['train_type'][$k], 'y' => $y_train_type, 'value' => [Train::$List['train_type'][$k], $y_train_type]];
                 }
             }
+            ksort($data_train_type);
             if ($chart == 1) {
                 foreach ($data_train_type as $gid => $data) {
                     $series['type'][] = ['type' => 'column', 'name' => $gid ? $groups[$gid]['name'] : '未分配', 'data' => $data, 'color' => $gid && $groups[$gid]['color'] ? '#' . $groups[$gid]['color'] : ''];
