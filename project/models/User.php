@@ -1,4 +1,5 @@
 <?php
+
 namespace project\models;
 
 use Yii;
@@ -26,13 +27,13 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-    
+
     const ROLE_PM = 'pm';
     const ROLE_SA = 'sa';
     const ROLE_OB = 'ob';
     const ROLE_OB_DATA = 'ob_data';
     const ROLE_BD = 'bd';
-    
+
     public $group;
 
     /**
@@ -60,10 +61,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'auth_key', 'password_hash'], 'required'],
-            [['point','status', 'created_at', 'updated_at', 'last_login'], 'integer'],
-            [['username', 'email', 'tel','user_color'], 'trim'],
-            [['username', 'email', 'tel','user_color'], 'filter','filter'=>'strtolower'],
-            [['username', 'email', 'tel', 'nickname'], 'unique', 'message' => '{attribute}已经存在'],            
+            [['point', 'status', 'created_at', 'updated_at', 'last_login'], 'integer'],
+            [['username', 'email', 'tel', 'user_color'], 'trim'],
+            [['username', 'email', 'tel', 'user_color'], 'filter', 'filter' => 'strtolower'],
+            [['username', 'email', 'tel', 'nickname'], 'unique', 'message' => '{attribute}已经存在'],
             [['username', 'nickname'], 'string', 'max' => 16],
             [['username'], 'string', 'min' => 4],
             [['nickname'], 'string', 'min' => 2],
@@ -71,11 +72,12 @@ class User extends ActiveRecord implements IdentityInterface
             [['point'], 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            [['role','group'], 'safe'],
+            [['role', 'group'], 'safe'],
         ];
     }
 
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'username' => '用户名',
@@ -85,12 +87,12 @@ class User extends ActiveRecord implements IdentityInterface
             'nickname' => '昵称',
             'email' => 'Email',
             'tel' => '电话',
-            'avatar' => '头像', 
+            'avatar' => '头像',
             'gender' => '性别',
             'role' => '角色',
             'point' => '积分',
             'user_color' => '颜色',
-            'group' => '项目',         
+            'group' => '项目',
             'status' => '状态',
             'last_login' => '上次登录',
             'created_at' => '注册时间',
@@ -112,41 +114,47 @@ class User extends ActiveRecord implements IdentityInterface
         ],
     ];
 
-    public function getStatus() {
+    public function getStatus()
+    {
         $status = isset(self::$List['status'][$this->status]) ? self::$List['status'][$this->status] : null;
         return $status;
     }
-    
-    public function getRole() {
+
+    public function getRole()
+    {
         $role = isset(self::$List['role'][$this->role]) ? self::$List['role'][$this->role] : null;
         return $role;
     }
-      
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserAuths() {
+    public function getUserAuths()
+    {
         return $this->hasMany(UserAuth::className(), ['uid' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserLogs() {
+    public function getUserLogs()
+    {
         return $this->hasMany(UserLog::className(), ['uid' => 'id']);
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserPoints() {
+    public function getUserPoints()
+    {
         return $this->hasMany(UserPoint::className(), ['uid' => 'id']);
     }
- 
+
     /**
      * @inheritdoc
      */
-    public static function findIdentity($id) {
+    public static function findIdentity($id)
+    {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
@@ -168,10 +176,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username]);
     }
-    
+
     public static function findByLoginname($name)
     {
-        return static::find()->where(['or',['username' => $name],['email' => $name],['tel' => $name]])->one();
+        return static::find()->where(['or', ['username' => $name], ['email' => $name], ['tel' => $name]])->one();
     }
 
     /**
@@ -276,71 +284,75 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-    
-    public static function get_avatar($id) {
+
+    public static function get_avatar($id)
+    {
         $user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
         return $user && $user->avatar ? $user->avatar : '@web/image/user.png';
     }
 
-    public static function get_nickname($id) {
+    public static function get_nickname($id)
+    {
         $user = static::findOne(['id' => $id]);
         return $user ? ($user->nickname ? $user->nickname : $user->username) : '';
     }
 
-    public static function exist_nickname($nickname) {
+    public static function exist_nickname($nickname)
+    {
         $user = static::findOne(['nickname' => $nickname]);
         return $user ? $user->id : false;
     }
 
-    public static function get_day_total($a = 'created_at', $start = '', $end = '') {
+    public static function get_day_total($a = 'created_at', $start = '', $end = '')
+    {
 
         $query = static::find()->where(['status' => self::STATUS_ACTIVE])->andFilterWhere(['>=', $a, $start])->andFilterWhere(['<=', $a, $end]);
         return $query->groupBy(["FROM_UNIXTIME($a, '%Y-%m-%d')"])->select(['count(*)', "FROM_UNIXTIME($a,'%Y-%m-%d')"])->indexBy("FROM_UNIXTIME($a,'%Y-%m-%d')")->column();
     }
-    
-    public static function get_bd($stat=null,$id=null) {
-        $data=[];
-        $users = static::find()->where(['role'=>'bd'])->andFilterWhere(['status'=>$stat,'id'=>$id])->all();
-        foreach($users as $user){
-            $data[$user['id']]=$user['nickname']?$user['nickname']:$user['username'];
-        }
-        return $data;
-       
-    }
-    
-    public static function get_bd_color() {
-        $data=[];
-        $users = static::find()->where(['role'=>'bd'])->all();
-        foreach($users as $user){
-            $data[$user['id']]['name']=$user['nickname']?$user['nickname']:$user['username'];
-            $data[$user['id']]['color']=$user['user_color'];
-        }
-        return $data;
-       
-    }
-    
-    public static function get_user_color() {
-        $data=[];
-        $users = static::find()->where(['status'=>self::STATUS_ACTIVE])->all();
-        foreach($users as $user){
-            $data[$user['id']]['name']=$user['nickname']?$user['nickname']:$user['username'];
-            $data[$user['id']]['color']=$user['user_color'];
-        }
-        return $data;
-       
-    }
-    
-    public static function get_role($role='sa',$stat=null,$id=null) {
-        $data=[];
-        if($role=='other'){
-            $users = static::find()->where(['not',['role'=>'sa']])->andFilterWhere(['status'=>$stat,'id'=>$id])->all();       
-        }else{
-            $users = static::find()->where(['role'=>$role])->andFilterWhere(['status'=>$stat,'id'=>$id])->all();
-        }
-        foreach($users as $user){
-            $data[$user['id']]=$user['nickname']?$user['nickname']:$user['username'];
+
+    public static function get_bd($stat = null, $id = null)
+    {
+        $data = [];
+        $users = static::find()->where(['role' => 'bd'])->andFilterWhere(['status' => $stat, 'id' => $id])->all();
+        foreach ($users as $user) {
+            $data[$user['id']] = $user['nickname'] ? $user['nickname'] : $user['username'];
         }
         return $data;
     }
-       
+
+    public static function get_bd_color()
+    {
+        $data = [];
+        $users = static::find()->where(['role' => 'bd'])->all();
+        foreach ($users as $user) {
+            $data[$user['id']]['name'] = $user['nickname'] ? $user['nickname'] : $user['username'];
+            $data[$user['id']]['color'] = $user['user_color'];
+        }
+        return $data;
+    }
+
+    public static function get_user_color()
+    {
+        $data = [];
+        $users = static::find()->all();
+        foreach ($users as $user) {
+            $data[$user['id']]['name'] = $user['nickname'] ? $user['nickname'] : $user['username'];
+            $data[$user['id']]['color'] = $user['user_color'];
+        }
+        return $data;
+    }
+
+    public static function get_role($role = 'sa', $stat = null, $id = null)
+    {
+        $data = [];
+        if ($role == 'other') {
+            $users = static::find()->where(['not', ['role' => 'sa']])->andFilterWhere(['status' => $stat, 'id' => $id])->all();
+        } else {
+            $users = static::find()->where(['role' => $role])->andFilterWhere(['status' => $stat, 'id' => $id])->all();
+        }
+        foreach ($users as $user) {
+            $data[$user['id']] = $user['nickname'] ? $user['nickname'] : $user['username'];
+        }
+        return $data;
+    }
 }
